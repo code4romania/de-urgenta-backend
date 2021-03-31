@@ -1,17 +1,15 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-
-namespace DeUrgenta.Api.Extensions
+﻿namespace DeUrgenta.Api.Extensions
 {
+    using System;
+    using System.IO;
+    using System.Reflection;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.OpenApi.Models;
+    using Swashbuckle.AspNetCore.Filters;
+
     public static class SwaggerExtensions
     {
-        public static IServiceCollection AddSwaggerFor(this IServiceCollection services, IEnumerable<Assembly> assemblies)
+        public static IServiceCollection AddSwaggerFor(this IServiceCollection services, Assembly[] assemblies)
         {
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
@@ -19,19 +17,19 @@ namespace DeUrgenta.Api.Extensions
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "ToDo API",
-                    Description = "A simple example ASP.NET Core Web API",
-                    TermsOfService = new Uri("https://example.com/terms"),
+                    Title = "De Urgenta API",
+                    Description = "The application aims to inform citizens about how to react to the first critical hours in a crysis situation (like that of an earthquake).",
+                    TermsOfService = new Uri("https://github.com/code4romania/de-urgenta-backend"),
                     Contact = new OpenApiContact
                     {
-                        Name = "Shayne Boyer",
+                        Name = "Code4Romania",
                         Email = string.Empty,
-                        Url = new Uri("https://twitter.com/spboyer"),
+                        Url = new Uri("https://code4.ro/"),
                     },
                     License = new OpenApiLicense
                     {
-                        Name = "Use under LICX",
-                        Url = new Uri("https://example.com/license"),
+                        Name = "Use under Mozilla Public License Version 2.0",
+                        Url = new Uri("https://github.com/code4romania/de-urgenta-backend/blob/develop/LICENSE"),
                     }
                 });
 
@@ -47,7 +45,7 @@ namespace DeUrgenta.Api.Extensions
             });
 
 
-            services.AddSwaggerExamplesFromAssemblies(assemblies.ToArray());
+            services.AddSwaggerExamplesFromAssemblies(assemblies);
             return services;
         }
     }

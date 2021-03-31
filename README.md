@@ -41,7 +41,10 @@ PostgreSQL
 
 ## Development Tips
 
-<add here how to start a postgress db in docker or using docker-compose-dep.yml file>
+Start a postgres server
+```
+docker-compose -f docker-compose-dep.yml -d up
+```
 
 Creating a EF Core migration 
 ```

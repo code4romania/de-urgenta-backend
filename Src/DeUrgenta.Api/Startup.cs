@@ -1,20 +1,18 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using DeUrgenta.Api.Extensions;
-using DeUrgenta.Backpack.Api.Controllers;
-using System.Collections.Generic;
-using System.Reflection;
-using DeUrgenta.Certifications.Api.Controller;
-using Hellang.Middleware.ProblemDetails;
-using MediatR;
-using System.Linq;
-
 namespace DeUrgenta.Api
 {
+    using System.Reflection;
+    using Backpack.Api.Controllers;
+    using Certifications.Api.Controller;
+    using Extensions;
+    using Hellang.Middleware.ProblemDetails;
+    using Infra.Extensions;
+    using MediatR;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+
     public class Startup
     {
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
@@ -38,7 +36,7 @@ namespace DeUrgenta.Api
             var applicationAssemblies = GetAssemblies();
 
             services.AddSwaggerFor(applicationAssemblies);
-            services.AddMediatR(applicationAssemblies.ToArray());
+            services.AddMediatR(applicationAssemblies);
 
         }
 
@@ -60,19 +58,19 @@ namespace DeUrgenta.Api
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
 
-        private IEnumerable<Assembly> GetAssemblies()
+        private Assembly[] GetAssemblies()
         {
-            yield return Assembly.GetAssembly(typeof(Startup));
+            return new[]
+            {
+                Assembly.GetAssembly(typeof(Startup)),
 
-            // Application parts
-            yield return typeof(BackpackController).GetTypeInfo().Assembly;
-            yield return typeof(CertificationCotroller).GetTypeInfo().Assembly;
+                // Application parts
+                typeof(BackpackController).GetTypeInfo().Assembly,
+                typeof(CertificationCotroller).GetTypeInfo().Assembly
+            };
         }
     }
 }
