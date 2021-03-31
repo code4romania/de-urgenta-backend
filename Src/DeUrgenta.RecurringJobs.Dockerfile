@@ -7,10 +7,14 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["DeUrgenta.RecurringJobs.csproj", "."]
-RUN dotnet restore "./DeUrgenta.RecurringJobs.csproj"
+COPY ["DeUrgenta.RecurringJobs/DeUrgenta.RecurringJobs.csproj", "DeUrgenta.RecurringJobs/"]
+COPY ["DeUrgenta.Domain/DeUrgenta.Domain.csproj", "DeUrgenta.Domain/"]
+COPY ["DeUrgenta.Infra/DeUrgenta.Infra.csproj", "DeUrgenta.Infra/"]
+
+RUN dotnet restore "DeUrgenta.RecurringJobs/DeUrgenta.RecurringJobs.csproj"
+
 COPY . .
-WORKDIR "/src/."
+WORKDIR "/src/DeUrgenta.RecurringJobs"
 RUN dotnet build "DeUrgenta.RecurringJobs.csproj" -c Release -o /app/build
 
 FROM build AS publish
