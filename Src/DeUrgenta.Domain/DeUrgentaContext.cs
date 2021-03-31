@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using DeUrgenta.Domain.Configurations;
 using DeUrgenta.Domain.Entities;
 
 namespace DeUrgenta.Domain
 {
-    public class DeUrgentaContext: DbContext
+    public class DeUrgentaContext : DbContext
     {
         public DeUrgentaContext(DbContextOptions<DeUrgentaContext> options) : base(options)
         {

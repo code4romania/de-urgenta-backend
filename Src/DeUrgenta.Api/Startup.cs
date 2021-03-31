@@ -1,18 +1,18 @@
+using System.Reflection;
+using DeUrgenta.Backpack.Api.Controllers;
+using DeUrgenta.Certifications.Api.Controller;
+using DeUrgenta.Api.Extensions;
+using Hellang.Middleware.ProblemDetails;
+using DeUrgenta.Infra.Extensions;
+using MediatR;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
 namespace DeUrgenta.Api
 {
-    using System.Reflection;
-    using Backpack.Api.Controllers;
-    using Certifications.Api.Controller;
-    using Extensions;
-    using Hellang.Middleware.ProblemDetails;
-    using Infra.Extensions;
-    using MediatR;
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
-
     public class Startup
     {
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
@@ -58,12 +58,10 @@ namespace DeUrgenta.Api
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
 
-        private Assembly[] GetAssemblies()
-        {
-            return new[]
+        private static Assembly[] GetAssemblies() => new[]
             {
                 Assembly.GetAssembly(typeof(Startup)),
 
@@ -71,6 +69,5 @@ namespace DeUrgenta.Api
                 typeof(BackpackController).GetTypeInfo().Assembly,
                 typeof(CertificationCotroller).GetTypeInfo().Assembly
             };
-        }
     }
 }

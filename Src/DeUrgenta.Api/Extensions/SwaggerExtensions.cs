@@ -1,12 +1,12 @@
-﻿namespace DeUrgenta.Api.Extensions
-{
-    using System;
-    using System.IO;
-    using System.Reflection;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.OpenApi.Models;
-    using Swashbuckle.AspNetCore.Filters;
+﻿using System;
+using System.IO;
+using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
+namespace DeUrgenta.Api.Extensions
+{
     public static class SwaggerExtensions
     {
         public static IServiceCollection AddSwaggerFor(this IServiceCollection services, Assembly[] assemblies)

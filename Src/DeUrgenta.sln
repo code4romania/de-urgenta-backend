@@ -11,7 +11,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Domain", "DeUrgen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Infra", "DeUrgenta.Infra\DeUrgenta.Infra.csproj", "{46600B30-1137-4377-BF2C-A860595F1570}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeUrgenta.Certifications.Api", "DeUrgenta.Certifications.Api\DeUrgenta.Certifications.Api.csproj", "{3E93429F-1F9E-4BAF-92EC-00105E90FE5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Certifications.Api", "DeUrgenta.Certifications.Api\DeUrgenta.Certifications.Api.csproj", "{3E93429F-1F9E-4BAF-92EC-00105E90FE5A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{31BE7F2B-2D48-4877-84B3-3DBBB91A4647}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
