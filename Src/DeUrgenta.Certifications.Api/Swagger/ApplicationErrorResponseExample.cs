@@ -13,7 +13,8 @@ namespace DeUrgenta.Certifications.Api.Swagger
                 Status = 500,
                 Type = "https://httpstatuses.com/500",
                 Title = "Internal Server Error",
-                
+
             };
+        }
     }
 }
