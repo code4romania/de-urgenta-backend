@@ -1,4 +1,4 @@
-﻿using DeUrgenta.Certifications.Api.Commands;
+using DeUrgenta.Certifications.Api.Commands;
 using DeUrgenta.Certifications.Api.Models;
 using DeUrgenta.Certifications.Api.Queries;
 using DeUrgenta.Certifications.Api.Swagger;
@@ -60,6 +60,8 @@ namespace DeUrgenta.Certifications.Api.Controller
         /// <summary>
         /// Updates a certification
         /// </summary>
+        /// <param name="certificationId">certification id</param>
+        /// <param name="certification">certification details</param>
         /// <returns></returns>
         [HttpPut]
         [Route("{certificationId:int}")]
@@ -67,7 +69,7 @@ namespace DeUrgenta.Certifications.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status204NoContent, typeof(void))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
-        public async Task<ActionResult> UpdateCertificationAsync([FromRoute] int certificationId, [FromBody] NewCertificationModel request)
+        public async Task<ActionResult> UpdateCertificationAsync([FromRoute] int certificationId, [FromBody] NewCertificationModel certification)
         {
 
             return NoContent();
@@ -76,6 +78,7 @@ namespace DeUrgenta.Certifications.Api.Controller
         /// <summary>
         /// Delete a certification
         /// </summary>
+        /// <param name="certificationId">certification id</param>
         /// <returns></returns>
         [HttpDelete]
         [Route("{certificationId:int}")]
