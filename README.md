@@ -2,13 +2,15 @@
 
 [![GitHub contributors](https://img.shields.io/github/contributors/code4romania/standard-repo-template.svg?style=for-the-badge)](https://github.com/code4romania/standard-repo-template/graphs/contributors) [![GitHub last commit](https://img.shields.io/github/last-commit/code4romania/standard-repo-template.svg?style=for-the-badge)](https://github.com/code4romania/standard-repo-template/commits/master) [![License: MPL 2.0](https://img.shields.io/badge/license-MPL%202.0-brightgreen.svg?style=for-the-badge)](https://opensource.org/licenses/MPL-2.0)
 
-Insert bullets description of the project if available.
+De Urgență [was prototyped](https://civiclabs.ro/ro/solutions/stay-together) in [Code for Romania](https://code4.ro/ro)'s research project, [Civic Labs](https://civiclabs.ro/ro).
+
+The application aims to inform citizens about how to react to the first critical hours in a crysis situation (like that of an earthquake). 
+
+It also aims to build healthy habits that become ingrained with time, so that, when the critical moment arrives, each person knows what the key first steps to keeping themselves safe are. 
 
 [See the project live](insert_link_here)
 
-Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project.
-
-[Contributing](#contributing) | [Built with](#built-with) | [Repos and projects](#repos-and-projects) | [Deployment](#deployment) | [Feedback](#feedback) | [License](#license) | [About Code4Ro](#about-code4ro)
+[Contributing](#contributing) | [Repos and projects](#repos-and-projects) | [Deployment](#deployment) | [Feedback](#feedback) | [License](#license) | [About Code4Ro](#about-code4ro)
 
 ## Contributing
 
@@ -18,21 +20,24 @@ Help us out by testing this project in the [staging environment](INSERT_LINK_HER
 
 If you would like to suggest new functionality, open an Issue and mark it as a __[Feature request]__. Please be specific about why you think this functionality will be of use. If you can, please include some visual description of what you would like the UI to look like, if you are suggesting new UI elements. 
 
-## Built With
-
 ### Programming languages
 
-### Platforms
-
-### Frontend framework
+.NET 5.0 (C#)
 
 ### Package managers
 
+NuGet
+
 ### Database technology & provider
+
+PostgreSQL
 
 ## Repos and projects
 
-Mention all related repos and projects.
+[Android repo](https://github.com/code4romania/de-urgenta-android)   
+[iOS repo](https://github.com/code4romania/de-urgenta-ios)   
+[Web app - frontend](https://github.com/code4romania/de-urgenta-client)   
+[Web app - backend](https://github.com/code4romania/de-urgenta-backend)   
 
 ## Deployment
 
