@@ -1,5 +1,4 @@
 using Hangfire;
-using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -20,16 +19,7 @@ namespace DeUrgenta.RecurringJobs
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add Hangfire services.
-            services.AddHangfire(configuration => configuration
-                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-                .UseSimpleAssemblyNameTypeSerializer()
-                .UseRecommendedSerializerSettings()
-                .UseMemoryStorage()
-                );
-
-            // Add the processing server as IHostedService
-            services.AddHangfireServer();
+            services.AddHangfireServices();
 
             services.AddControllers();
         }
@@ -44,7 +34,7 @@ namespace DeUrgenta.RecurringJobs
 
             app.UseHttpsRedirection();
 
-            app.UseHangfireDashboard();
+            app.UseAuthenticatedHangfireDashboard(Configuration);
 
             app.UseRouting();
 
