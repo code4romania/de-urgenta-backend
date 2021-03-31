@@ -39,6 +39,18 @@ PostgreSQL
 [Web app - frontend](https://github.com/code4romania/de-urgenta-client)   
 [Web app - backend](https://github.com/code4romania/de-urgenta-backend)   
 
+## Development Tips
+
+Start a postgres server
+```
+docker-compose -f docker-compose-dep.yml -d up
+```
+
+Creating a EF Core migration 
+```
+dotnet ef migrations add <Migration-name> --project DeUrgenta.Domain --startup-project DeUrgenta.Api
+```
+
 ## Deployment
 
 Guide users through getting your code up and running on their own system. In this section you can talk about:
