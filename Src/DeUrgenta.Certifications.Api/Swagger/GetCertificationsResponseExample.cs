@@ -13,9 +13,9 @@ namespace DeUrgenta.Certifications.Api.Swagger
         {
             var certifications = new List<CertificationModel>()
             {
-                new CertificationModel(1,"FA certification 1", new DateTime(2022,11,10)),
-                new CertificationModel(2,"FA certification 2", DateTime.Today),
-                new CertificationModel(3,"FA certification 3", DateTime.Today.AddDays(10))
+                new CertificationModel(Guid.Parse("64d73b37-ab49-4373-b797-2abec9f3c7d7"),"FA certification 1", new DateTime(2022,11,10)),
+                new CertificationModel(Guid.Parse("8dae4066-f859-456e-9519-fd1d34c81921"),"FA certification 2", DateTime.Today),
+                new CertificationModel(Guid.Parse("2c06811b-2130-4b7e-abf4-6e78be879ba2"),"FA certification 3", DateTime.Today.AddDays(10))
             };
 
             return certifications.ToImmutableList();

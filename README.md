@@ -43,7 +43,7 @@ PostgreSQL
 
 Start a postgres server
 ```
-docker-compose -f docker-compose-dep.yml -d up
+docker-compose -f docker-compose-dep.yml up -d
 ```
 
 Creating a EF Core migration 

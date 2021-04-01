@@ -2,5 +2,5 @@
 
 namespace DeUrgenta.Certifications.Api.Models
 {
-    public record CertificationModel(int Id, string Name, DateTime ExpirationDate);
+    public record CertificationModel(Guid Id, string Name, DateTime ExpirationDate);
 }
