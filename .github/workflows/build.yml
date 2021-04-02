@@ -1,0 +1,21 @@
+name: Transfer to dev env and run
+
+on: 
+  push:
+    branches: 
+      - develop
+
+jobs:
+  build:
+    name: Transfer to dev env and run
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: executing remote ssh commands on dev env
+        if: github.ref == 'refs/heads/develop'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEV_SERVER_IP }}
+          username: ${{ secrets.DEV_SERVER_SSH_USERNAME }}
+          key: ${{ secrets.DEV_SERVER_SSH_KEY }}
+          script: "/root/de-urgenta-backend/deploy/run.sh"
