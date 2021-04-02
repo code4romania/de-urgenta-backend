@@ -11,6 +11,20 @@ namespace DeUrgenta.Domain.Configurations
             builder
                 .HasKey(x => x.Id)
                 .HasName("PK_Backpack");
+
+            builder
+                .Property(e => e.Id)
+                .HasDefaultValueSql("uuid_generate_v4()");
+
+            builder
+                .Property(e => e.Name)
+                .HasMaxLength(250)
+                .IsRequired();
+
+            builder
+                .HasOne(e => e.AdminUser)
+                .WithMany(e => e.Backpacks)
+                .HasForeignKey(x => x.AdminUserId);
         }
     }
 }

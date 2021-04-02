@@ -14,4 +14,8 @@
 		<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="6.1.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\DeUrgenta.Domain\DeUrgenta.Domain.csproj" />
+	</ItemGroup>
+
 </Project>

@@ -67,7 +67,7 @@ namespace DeUrgenta.Api
 
                 // Application parts
                 typeof(BackpackController).GetTypeInfo().Assembly,
-                typeof(CertificationCotroller).GetTypeInfo().Assembly
+                typeof(CertificationController).GetTypeInfo().Assembly
             };
     }
 }

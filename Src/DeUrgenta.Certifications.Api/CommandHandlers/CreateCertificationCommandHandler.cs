@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DeUrgenta.Certifications.Api.CommandHandlers
 {
-    public class CreateCertificationCommandHandler : IRequestHandler<CreateCertification, int>
+    public class CreateCertificationCommandHandler : IRequestHandler<CreateCertification, Guid>
     {
         private readonly DeUrgentaContext _context;
 
@@ -16,7 +16,7 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
             _context = context;
         }
 
-        public Task<int> Handle(CreateCertification request, CancellationToken cancellationToken)
+        public Task<Guid> Handle(CreateCertification request, CancellationToken cancellationToken)
         {
 
 
