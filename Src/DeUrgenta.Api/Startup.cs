@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Api
 {
@@ -41,7 +42,7 @@ namespace DeUrgenta.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, DeUrgentaContext dbContext)
+        public void Configure(IApplicationBuilder app, DeUrgenta.Domain.DeUrgentaContext dbContext)
         {
             dbContext.Database.Migrate();
             
