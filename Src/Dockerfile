@@ -10,6 +10,7 @@ WORKDIR /src
 
 COPY ["DeUrgenta.Api/DeUrgenta.Api.csproj", "DeUrgenta.Api/"]
 COPY ["DeUrgenta.Backpack.Api/DeUrgenta.Backpack.Api.csproj", "DeUrgenta.Backpack.Api/"]
+COPY ["DeUrgenta.Certifications.Api/DeUrgenta.Certifications.Api.csproj", "DeUrgenta.Certifications.Api/"]
 COPY ["DeUrgenta.Domain/DeUrgenta.Domain.csproj", "DeUrgenta.Domain/"]
 COPY ["DeUrgenta.Infra/DeUrgenta.Infra.csproj", "DeUrgenta.Infra/"]
 
