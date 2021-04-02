@@ -1,4 +1,4 @@
-cd /root/de-urgenta-backend
+cd /root/de-urgenta-backend/Src
 git pull
 docker-compose build
 docker-compose down
