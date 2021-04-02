@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.RecurringJobs
 {
@@ -27,7 +28,7 @@ namespace DeUrgenta.RecurringJobs
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DeUrgentaContext dbContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DeUrgenta.Domain.DeUrgentaContext dbContext)
         {
             dbContext.Database.Migrate();
             
