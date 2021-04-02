@@ -12,7 +12,10 @@
         - 5432:5432
       volumes:
         - ./postgres_data:/var/lib/postgresql/data
-    de-urgenta.api:
+
+    api:
+      depends_on:
+        - "postgres"
       build:
         context: .
         dockerfile: Dockerfile
@@ -21,7 +24,11 @@
         - ConnectionStrings__DbConnectionString=Server=postgres;Port=5432;Database=de-urgenta-db;User Id=docker;Password=docker;
       ports:
         - 5040:80
-    de-urgenta-recurent-jobs:
+      restart: unless-stopped
+
+    recurent-jobs:
+      depends_on:
+        - "postgres"
       build:
         context: .
         dockerfile: DeUrgenta.RecurringJobs.Dockerfile
@@ -30,3 +37,4 @@
         - ConnectionStrings__DbConnectionString=Server=postgres;Port=5432;Database=de-urgenta-db;User Id=docker;Password=docker;
       ports:
         - 5041:80
+      restart: unless-stopped
