@@ -26,7 +26,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         }
 
         /// <summary>
-        /// Gets items of a backpack item
+        /// Gets items of a category in a backpack
         /// </summary>
         /// <returns></returns>
         [HttpGet]
