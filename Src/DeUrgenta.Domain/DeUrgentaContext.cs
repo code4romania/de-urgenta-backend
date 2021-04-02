@@ -20,7 +20,6 @@ namespace DeUrgenta.Domain
         public DbSet<UserAddress> UserAddresses { get; set; }
         public DbSet<UserToGroup> UsersToGroups { get; set; }
         
-        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
        {
             base.OnModelCreating(modelBuilder);
