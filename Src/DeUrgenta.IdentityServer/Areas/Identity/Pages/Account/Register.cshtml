@@ -6,7 +6,7 @@
 <div class="login-page">
 
     <div class="login-form-wrapper">
-        <img src="~/jurnalmedical.svg" alt="logo" role="logo">
+        <img src="~/de-urgenta.svg" alt="logo" role="logo">
         <div class="container __login-form-container">
             <h1 class="subtitle is-size-2">Creează-ți cont</h1>
             <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
@@ -36,7 +36,7 @@
                             <label class="__checkbox-label" asp-for="Input.AcceptTermsAndConditions">
                                 <input type="checkbox" asp-for="Input.AcceptTermsAndConditions">
                                 <span class="__checkbox-custom"></span>
-                                Declar că am citit și sunt de acord cu <a href="https://jurnalmedical.ro/termeni-si-conditii">Termenii și Condițiile</a> aplicației Jurnal Medical.
+                                Declar că am citit și sunt de acord cu <a href="https://deurgenta.ro/termeni-si-conditii">Termenii și Condițiile</a> aplicației De Urgenta.
                             </label>
                         </div>
                         <span asp-validation-for="Input.AcceptTermsAndConditions" class="text-danger"></span>

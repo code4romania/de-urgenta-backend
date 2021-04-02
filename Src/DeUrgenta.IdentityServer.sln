@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.IdentityServer", "DeUrgenta.IdentityServer\DeUrgenta.IdentityServer.csproj", "{2F3A692A-CD62-41CA-9602-2B44745EED94}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Domain", "DeUrgenta.Domain\DeUrgenta.Domain.csproj", "{1A999BE9-96CB-4124-99C2-27A7739EA466}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{2F3A692A-CD62-41CA-9602-2B44745EED94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F3A692A-CD62-41CA-9602-2B44745EED94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F3A692A-CD62-41CA-9602-2B44745EED94}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1A999BE9-96CB-4124-99C2-27A7739EA466}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1A999BE9-96CB-4124-99C2-27A7739EA466}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1A999BE9-96CB-4124-99C2-27A7739EA466}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1A999BE9-96CB-4124-99C2-27A7739EA466}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

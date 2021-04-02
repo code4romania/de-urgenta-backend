@@ -31,7 +31,7 @@ namespace IdentityServer
         private readonly IDeUrgentaIdentityConfiguration _identityConfiguration;
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services, )
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
             var allowedRedirectUrls = new List<string>();
@@ -78,6 +78,7 @@ namespace IdentityServer
             builder.AddSigningCredential(LoadCertificate(base64EncodedCertificate, password));
 
             services.AddTransient<IEmailBuilderService, EmailBuilderService>();
+            services.AddSingleton<ITemplateFileSelector, TemplateFileSelector>();
 
             services.AddAuthentication();
             var emailType = Configuration.GetValue<EmailingSystemTypes>("EMailingSystem");

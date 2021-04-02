@@ -93,7 +93,7 @@ namespace IdentityServer.Pages.Account
                 Address = Input.Email,
                 PlaceholderContent = new Dictionary<string, string>(),
                 TemplateType = EmailTemplate.AccountConfirmation,
-                SenderName = "Admin Jurnal Medical",
+                SenderName = "Admin De Urgenta",
                 Subject = ""
             };
             email.PlaceholderContent.Add("name", HtmlEncoder.Default.Encode(userName));

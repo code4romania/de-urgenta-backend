@@ -93,7 +93,7 @@ namespace IdentityServer.Pages.Account
                 Address = Input.Email,
                 PlaceholderContent = new Dictionary<string, string>(),
                 TemplateType = EmailTemplate.ResetPassword,
-                SenderName = "Echipa Jurnal Medical",
+                SenderName = "Echipa De Urgenta",
                 Subject = ""
             };
             email.PlaceholderContent.Add("name", userName);
