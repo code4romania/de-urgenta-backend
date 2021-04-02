@@ -30,7 +30,7 @@ namespace DeUrgenta.Domain.Configurations
                 .IsRequired();
 
             builder
-                .Property(e => e.ExpirationDate)
+                .Property(e => e.BackpackCategory)
                 .IsRequired();
         }
     }

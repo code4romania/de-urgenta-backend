@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DeUrgenta.Domain.Migrations
 {
     [DbContext(typeof(DeUrgentaContext))]
-    [Migration("20210402163019_ReworkBackpackItem")]
+    [Migration("20210402163417_ReworkBackpackItem")]
     partial class ReworkBackpackItem
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
