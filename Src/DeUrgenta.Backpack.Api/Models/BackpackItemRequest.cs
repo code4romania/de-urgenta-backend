@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using DeUrgenta.Domain.Entities;
 
 namespace DeUrgenta.Backpack.Api.Models
 {
@@ -16,5 +17,9 @@ namespace DeUrgenta.Backpack.Api.Models
         [Required]
         [DataType(DataType.Date)] 
         public DateTime ExpirationDate { get; init; }
+
+        [Required] 
+        public BackpackCategoryType? CategoryType { get; init; }
+
     }
 }

@@ -89,7 +89,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         /// Gets a list of backpack contributors
         /// </summary>
         [HttpGet]
-        [Route("{backpackId:guid}")]
+        [Route("{backpackId:guid}/contributors")]
 
         [SwaggerResponse(StatusCodes.Status200OK, "List of contributors", typeof(IImmutableList<BackpackContributorModel>))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
@@ -110,7 +110,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         /// Invites a user to contribute to a backpack
         /// </summary>
         [HttpPut]
-        [Route("{backpackId:guid}/{userId:guid}")]
+        [Route("{backpackId:guid}/contributor/{userId:guid}/invite")]
 
         [SwaggerResponse(StatusCodes.Status204NoContent, "Invitation sent", typeof(BackpackModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
@@ -131,7 +131,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         /// Removes a user from contributors of a backpack
         /// </summary>
         [HttpDelete]
-        [Route("{backpackId:guid}/{userId:guid}")]
+        [Route("{backpackId:guid}/contributor/{userId:guid}")]
 
         [SwaggerResponse(StatusCodes.Status204NoContent, "User removed from contributors", typeof(BackpackModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]

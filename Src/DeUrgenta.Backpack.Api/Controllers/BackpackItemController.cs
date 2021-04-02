@@ -13,7 +13,7 @@ using Swashbuckle.AspNetCore.Filters;
 namespace DeUrgenta.Backpack.Api.Controllers
 {
     [ApiController]
-    [Route("backpack-item/{backpackId:guid}/{categoryId:guid}")]
+    [Route("backpack/{backpackId:guid}")]
     [Produces("application/json")]
     [Consumes("application/json")]
     public class BackpackItemController : ControllerBase
@@ -26,17 +26,33 @@ namespace DeUrgenta.Backpack.Api.Controllers
         }
 
         /// <summary>
-        /// Gets items of a category in a backpack
+        /// Gets items in a backpack
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [SwaggerResponse(StatusCodes.Status200OK, "Items from a backpack category", typeof(IImmutableList<BackpackItemModel>))]
+        [HttpGet("items")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Items from a backpack", typeof(IImmutableList<BackpackItemModel>))]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetBackpackItemsResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<IImmutableList<BackpackItemModel>>> GetBackpackItemsAsync([FromRoute] Guid backpackId, [FromRoute] Guid categoryId)
+        public async Task<ActionResult<IImmutableList<BackpackItemModel>>> GetBackpackItemsAsync([FromRoute] Guid backpackId)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets items in a backpack for a specific category
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("{categoryId:int}/items")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Items from a backpack category", typeof(IImmutableList<BackpackItemModel>))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
+
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetCategoryBackpackItemsResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
+        public async Task<ActionResult<IImmutableList<BackpackItemModel>>> GetBackpackCategoryItemsAsync([FromRoute] Guid backpackId, [FromRoute] Guid categoryId)
         {
             throw new NotImplementedException();
         }
@@ -66,7 +82,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPut]
-        [Route("/backpack-item/{itemId:guid}")]
+        [Route("item/{itemId:guid}")]
 
         [SwaggerResponse(StatusCodes.Status200OK, "Updated backpack item", typeof(BackpackItemModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
@@ -87,7 +103,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpDelete]
-        [Route("/backpack-item/{itemId:guid}")]
+        [Route("item/{itemId:guid}")]
 
         [SwaggerResponse(StatusCodes.Status204NoContent, "Backpack item was deleted")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]

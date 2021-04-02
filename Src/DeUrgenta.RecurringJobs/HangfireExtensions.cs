@@ -19,7 +19,6 @@ namespace DeUrgenta.RecurringJobs
                 .UseRecommendedSerializerSettings()
                 .UseMemoryStorage()
                 );
-
             // Add the processing server as IHostedService
             services.AddHangfireServer();
         }

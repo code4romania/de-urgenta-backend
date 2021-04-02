@@ -29,10 +29,9 @@ namespace DeUrgenta.Domain.Configurations
                 .Property(e => e.ExpirationDate)
                 .IsRequired();
 
-            builder.HasOne(d => d.BackpackCategory)
-                .WithMany(p => p.BackpackItems)
-                .HasForeignKey(d => d.BackpackCategoryId)
-                .HasConstraintName("FK_BackpackCategory_BackpackItem");
+            builder
+                .Property(e => e.ExpirationDate)
+                .IsRequired();
         }
     }
 }
