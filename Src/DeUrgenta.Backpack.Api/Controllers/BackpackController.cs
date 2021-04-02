@@ -8,7 +8,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
     [Route("backpack")]
     [Produces("application/json")]
     [Consumes("application/json")]
-    [Authorize("backpackApiAuthenticationScheme")]
+    [Authorize(AuthenticationSchemes = "backpackApiAuthenticationScheme")]
     public class BackpackController : ControllerBase
     {
         /// <summary>

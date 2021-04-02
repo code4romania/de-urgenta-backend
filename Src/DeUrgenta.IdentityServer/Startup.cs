@@ -71,7 +71,7 @@ namespace IdentityServer
                 .AddInMemoryApiResources(_identityConfiguration.Apis())
                 .AddInMemoryClients(_identityConfiguration.Clients)
                 .AddAspNetIdentity<ApplicationUser>();
-
+            services.AddAuthentication();
             var base64EncodedCertificate = Configuration["Certificate:Base64Encoded"];
             var password = Configuration["Certificate:Password"];
 
@@ -80,7 +80,7 @@ namespace IdentityServer
             services.AddTransient<IEmailBuilderService, EmailBuilderService>();
             services.AddSingleton<ITemplateFileSelector, TemplateFileSelector>();
 
-            services.AddAuthentication();
+            
             var emailType = Configuration.GetValue<EmailingSystemTypes>("EMailingSystem");
 
             var sp = services.BuildServiceProvider();
@@ -117,10 +117,11 @@ namespace IdentityServer
             }
 
             services.AddSingleton<PasswordValidationMessages>();
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.Cookie.SameSite = SameSiteMode.None;
-            });
+            if (!_env.IsDevelopment())
+                services.ConfigureApplicationCookie(options =>
+                {
+                    options.Cookie.SameSite = SameSiteMode.None;
+                });
             services.AddCors(options =>
             {
                 // this defines a CORS policy called "default"

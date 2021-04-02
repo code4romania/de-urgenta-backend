@@ -37,7 +37,7 @@ namespace DeUrgenta.Api {
         {
             services.AddControllers();
 
-            var identityUrl = Configuration.GetValue<string>("InternalIdentityServerUrl");
+            var identityUrl = Configuration.GetValue<string>("IdentityServerUrl");
             var apiSchemes = new List<ApiAuthenticationScheme>();
 
             Configuration.GetSection("ApiConfiguration").Bind(apiSchemes);
