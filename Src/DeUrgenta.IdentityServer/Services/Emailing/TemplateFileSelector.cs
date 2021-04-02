@@ -16,7 +16,7 @@ namespace DeUrgenta.IdentityServer.Services.Emailing
         public string GetTemplatePath(EmailTemplate template)
         {
             var targetDirectory = _configuration.GetValue<string>("TemplateFolder");
-            var directory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), targetDirectory);
+            var directory = targetDirectory;
             var filePath = EmailConstants.GetTemplatePath(template);
 
             return Path.Combine(directory, filePath);

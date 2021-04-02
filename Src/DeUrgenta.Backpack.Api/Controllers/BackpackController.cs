@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace DeUrgenta.Backpack.Api.Controllers
@@ -7,6 +8,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
     [Route("backpack")]
     [Produces("application/json")]
     [Consumes("application/json")]
+    [Authorize("backpackApiAuthenticationScheme")]
     public class BackpackController : ControllerBase
     {
         /// <summary>
