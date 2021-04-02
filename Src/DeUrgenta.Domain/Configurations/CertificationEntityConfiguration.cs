@@ -13,9 +13,13 @@ namespace DeUrgenta.Domain.Configurations
                 .HasName("PK_Certification");
 
             builder
+                .Property(e => e.Id)
+                .HasDefaultValueSql("uuid_generate_v4()");
+
+            builder
                 .Property(x => x.Name)
-                .IsRequired()
-                .HasMaxLength(250);
+                .HasMaxLength(250)
+                .IsRequired();
 
             builder
                 .Property(x => x.ExpirationDate)
@@ -23,7 +27,7 @@ namespace DeUrgenta.Domain.Configurations
 
             builder.HasOne(d => d.User)
                 .WithMany(p => p.Certifications)
-                .HasForeignKey(d => d.IdUser)
+                .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK_User_Certification");
         }
     }

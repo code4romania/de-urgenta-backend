@@ -41,8 +41,10 @@ namespace DeUrgenta.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, DeUrgentaContext dbContext)
         {
+            dbContext.Database.Migrate();
+            
             if (WebHostEnvironment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -59,6 +61,7 @@ namespace DeUrgenta.Api
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => endpoints.MapControllers());
+
         }
 
         private static Assembly[] GetAssemblies() => new[]
@@ -67,7 +70,7 @@ namespace DeUrgenta.Api
 
                 // Application parts
                 typeof(BackpackController).GetTypeInfo().Assembly,
-                typeof(CertificationCotroller).GetTypeInfo().Assembly
+                typeof(CertificationController).GetTypeInfo().Assembly
             };
     }
 }

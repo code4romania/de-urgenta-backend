@@ -3,13 +3,13 @@ using System;
 
 namespace DeUrgenta.Certifications.Api.Commands
 {
-    public class CreateCertification : IRequest<int>
+    public class CreateCertification : IRequest<Guid>
     {
-        public int UserId { get; }
+        public Guid UserId { get; }
         public string Name { get; }
         public DateTime ExpirationDate { get; }
 
-        public CreateCertification(int userId, string name, DateTime expirationDate)
+        public CreateCertification(Guid userId, string name, DateTime expirationDate)
         {
             UserId = userId;
             Name = name;
