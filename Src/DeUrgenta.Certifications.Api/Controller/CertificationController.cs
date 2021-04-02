@@ -10,6 +10,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
+using DeUrgenta.Common.Swagger;
 
 namespace DeUrgenta.Certifications.Api.Controller
 {
@@ -31,8 +32,13 @@ namespace DeUrgenta.Certifications.Api.Controller
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetCertificationsResponseExample))]
+
+        [SwaggerResponse(StatusCodes.Status200OK, "User backpacks", typeof(IImmutableList<CertificationModel>))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
+
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetCertificationsResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<IImmutableList<CertificationModel>>> GetCertificationsAsync()
         {
             // TODO: get user id from identity
@@ -46,11 +52,16 @@ namespace DeUrgenta.Certifications.Api.Controller
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [SwaggerRequestExample(typeof(NewCertificationModel), typeof(AddNewCertificationModelExample))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetCertificationsResponseExample))]
+        [SwaggerResponse(StatusCodes.Status200OK, "New certification", typeof(CertificationModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
-        public async Task<ActionResult> CreateNewCertificationAsync([FromBody] NewCertificationModel request)
+
+        [SwaggerRequestExample(typeof(CertificationRequest), typeof(AddOrUpdateCertificationRequestExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateCertificationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
+        public async Task<ActionResult<CertificationModel>> CreateNewCertificationAsync([FromBody] CertificationRequest request)
         {
             // TODO: get user id from identity
             var newCertificationId = await _mediator.Send(new CreateCertification(Guid.NewGuid(), request.Name, request.ExpirationDate));
@@ -61,16 +72,19 @@ namespace DeUrgenta.Certifications.Api.Controller
         /// <summary>
         /// Updates a certification
         /// </summary>
-        /// <param name="certificationId">certification id</param>
-        /// <param name="certification">certification details</param>
-        /// <returns></returns>
         [HttpPut]
         [Route("{certificationId:guid}")]
-        [SwaggerRequestExample(typeof(NewCertificationModel), typeof(AddNewCertificationModelExample))]
-        [SwaggerResponseExample(StatusCodes.Status204NoContent, typeof(void))]
+
+        [SwaggerResponse(StatusCodes.Status200OK, "Updated certification", typeof(CertificationModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
-        public async Task<ActionResult> UpdateCertificationAsync([FromRoute] Guid certificationId, [FromBody] NewCertificationModel certification)
+
+        [SwaggerRequestExample(typeof(CertificationRequest), typeof(AddOrUpdateCertificationRequestExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateCertificationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
+        public async Task<ActionResult<CertificationModel>> UpdateCertificationAsync([FromRoute] Guid certificationId, [FromBody] CertificationRequest certification)
         {
 
             return NoContent();
@@ -79,17 +93,19 @@ namespace DeUrgenta.Certifications.Api.Controller
         /// <summary>
         /// Delete a certification
         /// </summary>
-        /// <param name="certificationId">certification id</param>
-        /// <returns></returns>
         [HttpDelete]
         [Route("{certificationId:guid}")]
-        [SwaggerResponseExample(StatusCodes.Status204NoContent, typeof(void))]
+
+        [SwaggerResponse(StatusCodes.Status204NoContent, "Certification was deleted")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
+
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult> DeleteCertificationAsync([FromRoute] Guid certificationId)
         {
-
-            return NoContent();
+            throw new NotImplementedException();
         }
     }
 }

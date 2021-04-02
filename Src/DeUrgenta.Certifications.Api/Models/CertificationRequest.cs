@@ -3,15 +3,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DeUrgenta.Certifications.Api.Models
 {
-    public record NewCertificationModel
+    public record CertificationRequest
     {
-        /// <summary>
-        /// The name of the product
-        /// </summary>
-        /// <example>Men's basketball shoes</example>
         [Required]
-        [MaxLength(250)]
+        [StringLength(250, MinimumLength = 3)]
         public string Name { get; init; }
+
+        [Required]
+        [StringLength(250, MinimumLength = 3)]
+        public string IssuingAuthority { get; init; }
 
         [Required]
         public DateTime ExpirationDate { get; init; }

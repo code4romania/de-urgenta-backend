@@ -1,13 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace DeUrgenta.Certifications.Api.Swagger
+namespace DeUrgenta.Common.Swagger
 {
+    /// <summary>
+    /// Provides an exaple of application error response
+    /// </summary>
     public class ApplicationErrorResponseExample : IExamplesProvider<ProblemDetails>
     {
         public ProblemDetails GetExamples()
         {
-            return new ProblemDetails()
+            return new()
             {
                 Detail = "There was an unhandled exception in the backend",
                 Status = 500,

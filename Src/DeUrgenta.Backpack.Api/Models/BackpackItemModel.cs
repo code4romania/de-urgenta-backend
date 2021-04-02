@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace DeUrgenta.Certifications.Api.Models
+namespace DeUrgenta.Backpack.Api.Models
 {
-    public sealed record CertificationModel
+    public sealed record BackpackItemModel
     {
         public Guid Id { get; init; }
         public string Name { get; init; }
-        public string IssuingAuthority { get; init; }
+        public uint Amount { get; init; }
         public DateTime ExpirationDate { get; init; }
     }
 }
