@@ -32,10 +32,11 @@ namespace DeUrgenta.Backpack.Api.Controllers
         /// <returns></returns>
         [HttpGet]
         [SwaggerResponse(StatusCodes.Status200OK, "User backpacks", typeof(IImmutableList<BackpackModel>))]
-        [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made", typeof(void))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetBackpacksResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(UnauthorizedResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<IImmutableList<BackpackModel>>> GetBackpacksAsync()
         {
@@ -50,12 +51,13 @@ namespace DeUrgenta.Backpack.Api.Controllers
 
         [SwaggerResponse(StatusCodes.Status200OK, "New backpack", typeof(BackpackModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made", typeof(void))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerRequestExample(typeof(BackpackModelRequest), typeof(AddOrUpdateBackpackRequestExample))]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateBackpackResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(UnauthorizedResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<BackpackModel>> CreateNewBackpackAsync([FromBody] BackpackModelRequest request)
         {
@@ -70,14 +72,77 @@ namespace DeUrgenta.Backpack.Api.Controllers
 
         [SwaggerResponse(StatusCodes.Status200OK, "Updated backpack", typeof(BackpackModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made", typeof(void))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerRequestExample(typeof(BackpackModelRequest), typeof(AddOrUpdateBackpackRequestExample))]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateBackpackResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(UnauthorizedResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<BackpackModel>> UpdateBackpackAsync([FromRoute] Guid backpackId, [FromBody] BackpackModelRequest backpack)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets a list of backpack contributors
+        /// </summary>
+        [HttpGet]
+        [Route("{backpackId:guid}")]
+
+        [SwaggerResponse(StatusCodes.Status200OK, "List of contributors", typeof(IImmutableList<BackpackContributorModel>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made", typeof(void))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
+
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetBackpackContributorsResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(UnauthorizedResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
+        public async Task<ActionResult<IImmutableList<BackpackContributorModel>>> GetBackpackContributorsAsync([FromRoute] Guid backpackId)
+        {
+            return Unauthorized();
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Invites a user to contribute to a backpack
+        /// </summary>
+        [HttpPut]
+        [Route("{backpackId:guid}/{userId:guid}")]
+
+        [SwaggerResponse(StatusCodes.Status204NoContent, "Invitation sent", typeof(BackpackModel))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made", typeof(void))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
+
+        [SwaggerRequestExample(typeof(BackpackModelRequest), typeof(AddOrUpdateBackpackRequestExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetBackpackContributorsResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(UnauthorizedResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
+        public async Task<ActionResult<BackpackModel>> AddContributorAsync([FromRoute] Guid backpackId, [FromRoute] Guid userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Removes a user from contributors of a backpack
+        /// </summary>
+        [HttpDelete]
+        [Route("{backpackId:guid}/{userId:guid}")]
+
+        [SwaggerResponse(StatusCodes.Status204NoContent, "User removed from contributors", typeof(BackpackModel))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made", typeof(void))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
+
+        [SwaggerRequestExample(typeof(BackpackModelRequest), typeof(AddOrUpdateBackpackRequestExample))]
+        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(UnauthorizedResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
+        public async Task<ActionResult<BackpackModel>> RemoveContributorAsync([FromRoute] Guid backpackId, [FromRoute] Guid userId)
         {
             throw new NotImplementedException();
         }
@@ -91,10 +156,11 @@ namespace DeUrgenta.Backpack.Api.Controllers
 
         [SwaggerResponse(StatusCodes.Status204NoContent, "Backpack was deleted")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made", typeof(void))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(UnauthorizedResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult> DeleteBackpackAsync([FromRoute] Guid backpackId)
         {

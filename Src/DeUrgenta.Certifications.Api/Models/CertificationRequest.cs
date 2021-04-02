@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DeUrgenta.Certifications.Api.Models
 {
-    public record CertificationRequest
+    public sealed record CertificationRequest
     {
         [Required]
         [StringLength(250, MinimumLength = 3)]

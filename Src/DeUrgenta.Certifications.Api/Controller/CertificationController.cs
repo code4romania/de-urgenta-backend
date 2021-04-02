@@ -38,6 +38,7 @@ namespace DeUrgenta.Certifications.Api.Controller
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetCertificationsResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(UnauthorizedResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<IImmutableList<CertificationModel>>> GetCertificationsAsync()
         {
@@ -60,11 +61,12 @@ namespace DeUrgenta.Certifications.Api.Controller
         [SwaggerRequestExample(typeof(CertificationRequest), typeof(AddOrUpdateCertificationRequestExample))]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateCertificationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(UnauthorizedResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<CertificationModel>> CreateNewCertificationAsync([FromBody] CertificationRequest request)
+        public async Task<ActionResult<CertificationModel>> CreateNewCertificationAsync([FromBody] CertificationRequest certification)
         {
             // TODO: get user id from identity
-            var newCertificationId = await _mediator.Send(new CreateCertification(Guid.NewGuid(), request.Name, request.ExpirationDate));
+            var newCertificationId = await _mediator.Send(new CreateCertification(Guid.NewGuid(), certification.Name, certification.ExpirationDate));
 
             return Ok(newCertificationId);
         }
@@ -83,6 +85,7 @@ namespace DeUrgenta.Certifications.Api.Controller
         [SwaggerRequestExample(typeof(CertificationRequest), typeof(AddOrUpdateCertificationRequestExample))]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateCertificationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(UnauthorizedResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<CertificationModel>> UpdateCertificationAsync([FromRoute] Guid certificationId, [FromBody] CertificationRequest certification)
         {
@@ -102,6 +105,7 @@ namespace DeUrgenta.Certifications.Api.Controller
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(UnauthorizedResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult> DeleteCertificationAsync([FromRoute] Guid certificationId)
         {

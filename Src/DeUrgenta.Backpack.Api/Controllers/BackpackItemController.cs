@@ -54,8 +54,9 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerRequestExample(typeof(BackpackItemRequest), typeof(AddOrUpdateBackpackItemRequestExample))]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddBackpackItemResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(UnauthorizedResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<BackpackItemModel>> CreateNewBackpackItemAsync([FromRoute] Guid backpackId, [FromBody] BackpackItemRequest request)
+        public async Task<ActionResult<BackpackItemModel>> CreateNewBackpackItemAsync([FromRoute] Guid backpackId, [FromBody] BackpackItemRequest backpackItem)
         {
             throw new NotImplementedException();
         }
@@ -65,7 +66,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPut]
-        [Route("{itemId:guid}")]
+        [Route("/backpack-item/{itemId:guid}")]
 
         [SwaggerResponse(StatusCodes.Status200OK, "Updated backpack item", typeof(BackpackItemModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
@@ -74,8 +75,9 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerRequestExample(typeof(BackpackItemRequest), typeof(AddOrUpdateBackpackItemRequestExample))]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddBackpackItemResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(UnauthorizedResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<BackpackItemModel>> UpdateBackpackItemAsync([FromRoute] Guid backpackId, [FromRoute] Guid categoryId, [FromRoute] Guid itemId, [FromBody] BackpackItemRequest backpack)
+        public async Task<ActionResult<BackpackItemModel>> UpdateBackpackItemAsync([FromRoute] Guid itemId, [FromBody] BackpackItemRequest backpackItem)
         {
             throw new NotImplementedException();
         }
@@ -85,7 +87,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpDelete]
-        [Route("{itemId:guid}")]
+        [Route("/backpack-item/{itemId:guid}")]
 
         [SwaggerResponse(StatusCodes.Status204NoContent, "Backpack item was deleted")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
@@ -93,8 +95,9 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(UnauthorizedResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> DeleteBackpackItemAsync([FromRoute] Guid backpackId, [FromRoute] Guid categoryId, [FromRoute] Guid itemId)
+        public async Task<ActionResult> DeleteBackpackItemAsync([FromRoute] Guid itemId)
         {
             throw new NotImplementedException();
         }
