@@ -16,12 +16,14 @@
     api:
       depends_on:
         - "postgres"
+        - "identityserver"
       build:
         context: .
         dockerfile: Dockerfile
       environment:
         - ASPNETCORE_URLS=http://+:80
         - ConnectionStrings__DbConnectionString=Server=postgres;Port=5432;Database=de-urgenta-db;User Id=docker;Password=docker;
+        - IdentityServerUrl=identityserver
       ports:
         - 5040:80
       restart: unless-stopped
@@ -35,6 +37,24 @@
       environment:
         - ASPNETCORE_URLS=http://+:80
         - ConnectionStrings__DbConnectionString=Server=postgres;Port=5432;Database=de-urgenta-db;User Id=docker;Password=docker;
+        - Hangfire__Dashboard__Username=admin
+        - Hangfire__Dashboard__Password=demo1234
       ports:
         - 5041:80
       restart: unless-stopped
+      
+    identityserver:
+      depends_on:
+        - "postgres"
+      environment:
+        - ASPNETCORE_URLS=http://+:80 
+        - ConnectionStrings__DbConnectionString=Server=postgres;Port=5432;Database=de-urgenta-db;User Id=docker;Password=docker;      
+      build:
+          context: .
+          dockerfile: DeUrgenta.IdentityServer/Dockerfile
+      ports:
+        - 5042:80
+      depends_on:
+        - postgres
+      container_name: identityserver
+      hostname: identityserver

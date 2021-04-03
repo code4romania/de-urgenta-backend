@@ -22,7 +22,7 @@ namespace DeUrgenta.Domain
         public DbSet<BlogPost> Blogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+       {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.HasPostgresExtension("uuid-ossp");
