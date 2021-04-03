@@ -36,6 +36,12 @@
 		<None Update="IdentityServer.db">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="EmailTemplates\accountConfirmationTemplate.html">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="EmailTemplates\resetPasswordTemplate.html">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 
