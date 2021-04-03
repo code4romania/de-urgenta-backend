@@ -35,6 +35,8 @@
       environment:
         - ASPNETCORE_URLS=http://+:80
         - ConnectionStrings__DbConnectionString=Server=postgres;Port=5432;Database=de-urgenta-db;User Id=docker;Password=docker;
+        - Hangfire__Dashboard__Username=admin
+        - Hangfire__Dashboard__Password=demo1234
       ports:
         - 5041:80
       restart: unless-stopped
