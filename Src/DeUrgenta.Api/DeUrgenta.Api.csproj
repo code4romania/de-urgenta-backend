@@ -26,6 +26,7 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\DeUrgenta.Backpack.Api\DeUrgenta.Backpack.Api.csproj" />
 	  <ProjectReference Include="..\DeUrgenta.Certifications.Api\DeUrgenta.Certifications.Api.csproj" />
+	  <ProjectReference Include="..\DeUrgenta.Common\DeUrgenta.Common.csproj" />
 	  <ProjectReference Include="..\DeUrgenta.Domain\DeUrgenta.Domain.csproj" />
 	  <ProjectReference Include="..\DeUrgenta.Infra\DeUrgenta.Infra.csproj" />
 	</ItemGroup>

@@ -19,11 +19,18 @@ namespace DeUrgenta.Certifications.Api.QueryHandlers
             _context = context;
         }
 
-        public async Task<IImmutableList<CertificationModel>> Handle(GetCertifications request, CancellationToken cancellationToken)
+        public async Task<IImmutableList<CertificationModel>> Handle(GetCertifications request,
+            CancellationToken cancellationToken)
         {
             var certifications = await _context.Certifications
                 .Where(x => x.UserId == request.UserId)
-                .Select(x => new CertificationModel(x.Id, x.Name, x.ExpirationDate))
+                .Select(x => new CertificationModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    IssuingAuthority = x.IssuingAuthority,
+                    ExpirationDate = x.ExpirationDate
+                })
                 .ToListAsync(cancellationToken: cancellationToken);
 
             return certifications.ToImmutableList();

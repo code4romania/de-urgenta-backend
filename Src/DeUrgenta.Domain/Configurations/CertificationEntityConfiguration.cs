@@ -22,6 +22,11 @@ namespace DeUrgenta.Domain.Configurations
                 .IsRequired();
 
             builder
+                .Property(x => x.IssuingAuthority)
+                .HasMaxLength(250)
+                .IsRequired();
+
+            builder
                 .Property(x => x.ExpirationDate)
                 .IsRequired();
 

@@ -3,15 +3,17 @@ using System;
 using DeUrgenta.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DeUrgenta.Domain.Migrations
 {
     [DbContext(typeof(DeUrgentaContext))]
-    partial class DeUrgentaContextModelSnapshot : ModelSnapshot
+    [Migration("20210402130922_AddUserAddressCategoryColumn")]
+    partial class AddUserAddressCategoryColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,6 +45,29 @@ namespace DeUrgenta.Domain.Migrations
                     b.ToTable("Backpacks");
                 });
 
+            modelBuilder.Entity("DeUrgenta.Domain.Entities.BackpackCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("uuid_generate_v4()");
+
+                    b.Property<Guid>("BackpackId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
+
+                    b.HasKey("Id")
+                        .HasName("PK_BackpackCategory");
+
+                    b.HasIndex("BackpackId");
+
+                    b.ToTable("BackpackCategories");
+                });
+
             modelBuilder.Entity("DeUrgenta.Domain.Entities.BackpackItem", b =>
                 {
                     b.Property<Guid>("Id")
@@ -53,8 +78,8 @@ namespace DeUrgenta.Domain.Migrations
                     b.Property<long>("Amount")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("BackpackCategory")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("BackpackCategoryId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("timestamp without time zone");
@@ -66,6 +91,8 @@ namespace DeUrgenta.Domain.Migrations
 
                     b.HasKey("Id")
                         .HasName("PK_BackpackItem");
+
+                    b.HasIndex("BackpackCategoryId");
 
                     b.ToTable("BackpackItem");
                 });
@@ -285,6 +312,30 @@ namespace DeUrgenta.Domain.Migrations
                     b.Navigation("AdminUser");
                 });
 
+            modelBuilder.Entity("DeUrgenta.Domain.Entities.BackpackCategory", b =>
+                {
+                    b.HasOne("DeUrgenta.Domain.Entities.Backpack", "Backpack")
+                        .WithMany("Categories")
+                        .HasForeignKey("BackpackId")
+                        .HasConstraintName("FK_Backpack_BackpackCategory")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Backpack");
+                });
+
+            modelBuilder.Entity("DeUrgenta.Domain.Entities.BackpackItem", b =>
+                {
+                    b.HasOne("DeUrgenta.Domain.Entities.BackpackCategory", "BackpackCategory")
+                        .WithMany("BackpackItems")
+                        .HasForeignKey("BackpackCategoryId")
+                        .HasConstraintName("FK_BackpackCategory_BackpackItem")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BackpackCategory");
+                });
+
             modelBuilder.Entity("DeUrgenta.Domain.Entities.BackpackToUser", b =>
                 {
                     b.HasOne("DeUrgenta.Domain.Entities.Backpack", "Backpack")
@@ -376,6 +427,13 @@ namespace DeUrgenta.Domain.Migrations
             modelBuilder.Entity("DeUrgenta.Domain.Entities.Backpack", b =>
                 {
                     b.Navigation("BackpackUsers");
+
+                    b.Navigation("Categories");
+                });
+
+            modelBuilder.Entity("DeUrgenta.Domain.Entities.BackpackCategory", b =>
+                {
+                    b.Navigation("BackpackItems");
                 });
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.Group", b =>
