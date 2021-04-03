@@ -22,6 +22,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Common", "DeUrgen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Admin.Api", "DeUrgenta.Admin.Api\DeUrgenta.Admin.Api.csproj", "{2F65267B-9FCA-4E5C-8F0E-2344F4B27DDF}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Group.Api", "DeUrgenta.Group.Api\DeUrgenta.Group.Api.csproj", "{AAFEC470-79D8-4976-ACEB-94610CB23F28}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -104,6 +106,18 @@ Global
 		{D5497E17-EF2B-4338-9836-4A5B42A9B8B9}.Release|x64.Build.0 = Release|Any CPU
 		{D5497E17-EF2B-4338-9836-4A5B42A9B8B9}.Release|x86.ActiveCfg = Release|Any CPU
 		{D5497E17-EF2B-4338-9836-4A5B42A9B8B9}.Release|x86.Build.0 = Release|Any CPU
+		{AAFEC470-79D8-4976-ACEB-94610CB23F28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAFEC470-79D8-4976-ACEB-94610CB23F28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAFEC470-79D8-4976-ACEB-94610CB23F28}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AAFEC470-79D8-4976-ACEB-94610CB23F28}.Debug|x64.Build.0 = Debug|Any CPU
+		{AAFEC470-79D8-4976-ACEB-94610CB23F28}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AAFEC470-79D8-4976-ACEB-94610CB23F28}.Debug|x86.Build.0 = Debug|Any CPU
+		{AAFEC470-79D8-4976-ACEB-94610CB23F28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAFEC470-79D8-4976-ACEB-94610CB23F28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAFEC470-79D8-4976-ACEB-94610CB23F28}.Release|x64.ActiveCfg = Release|Any CPU
+		{AAFEC470-79D8-4976-ACEB-94610CB23F28}.Release|x64.Build.0 = Release|Any CPU
+		{AAFEC470-79D8-4976-ACEB-94610CB23F28}.Release|x86.ActiveCfg = Release|Any CPU
+		{AAFEC470-79D8-4976-ACEB-94610CB23F28}.Release|x86.Build.0 = Release|Any CPU
 		{2F65267B-9FCA-4E5C-8F0E-2344F4B27DDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2F65267B-9FCA-4E5C-8F0E-2344F4B27DDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F65267B-9FCA-4E5C-8F0E-2344F4B27DDF}.Debug|x64.ActiveCfg = Debug|Any CPU

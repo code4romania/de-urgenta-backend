@@ -35,11 +35,9 @@ namespace DeUrgenta.Admin.Api.Controller
         [AllowAnonymous]
 
         [SwaggerResponse(StatusCodes.Status200OK, "Upcoming events", typeof(PagedResult<EventModel>))]
-        [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetEventsResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(UnauthorizedResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<PagedResult<EventModel>>> GetEventsAsync([FromQuery] PaginationQueryModel pagination)
         {
@@ -53,13 +51,11 @@ namespace DeUrgenta.Admin.Api.Controller
         [HttpPost]
         [SwaggerResponse(StatusCodes.Status200OK, "New event", typeof(EventModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerRequestExample(typeof(EventRequest), typeof(AddOrUpdateEventRequestExample))]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateEventResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(UnauthorizedResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<EventModel>> CreateNewEventAsync([FromBody] EventRequest eventModel)
         {
@@ -74,13 +70,11 @@ namespace DeUrgenta.Admin.Api.Controller
 
         [SwaggerResponse(StatusCodes.Status200OK, "Updated event", typeof(EventModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerRequestExample(typeof(EventRequest), typeof(AddOrUpdateEventRequestExample))]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateEventResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(UnauthorizedResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<EventModel>> UpdateEventAsync([FromRoute] Guid eventId, [FromBody] EventRequest eventModel)
         {
@@ -95,11 +89,9 @@ namespace DeUrgenta.Admin.Api.Controller
 
         [SwaggerResponse(StatusCodes.Status204NoContent, "Event was deleted")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(UnauthorizedResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult> DeleteEventAsync([FromRoute] Guid eventId)
         {

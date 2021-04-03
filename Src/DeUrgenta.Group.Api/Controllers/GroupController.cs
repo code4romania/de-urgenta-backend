@@ -1,156 +1,153 @@
 ﻿using System;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-
 using System.Collections.Immutable;
-using DeUrgenta.Backpack.Api.Models;
-using DeUrgenta.Backpack.Api.Swagger.Backpack;
+using System.Threading.Tasks;
 using DeUrgenta.Common.Swagger;
+using DeUrgenta.Group.Api.Models;
+using DeUrgenta.Group.Api.Swagger;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace DeUrgenta.Backpack.Api.Controllers
+namespace DeUrgenta.Group.Api.Controllers
 {
     [ApiController]
-    [Route("backpack")]
+    [Route("group")]
     [Produces("application/json")]
     [Consumes("application/json")]
-    [Authorize(AuthenticationSchemes = "backpackApiAuthenticationScheme")]
-    public class BackpackController : ControllerBase
+    public class GroupController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public BackpackController(IMediator mediator)
+        public GroupController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
         /// <summary>
-        /// Gets user backpacks
+        /// Gets user groups
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [SwaggerResponse(StatusCodes.Status200OK, "User backpacks", typeof(IImmutableList<BackpackModel>))]
+        [HttpGet("/groups")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Get groups of a user", typeof(IImmutableList<GroupModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetBackpacksResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetGroupsResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<IImmutableList<BackpackModel>>> GetBackpacksAsync()
+        public async Task<ActionResult<IImmutableList<GroupModel>>> GetGroupsAsync()
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Adds a new backpack
+        /// Adds a new group
         /// </summary>
         /// <returns></returns>
         [HttpPost]
 
-        [SwaggerResponse(StatusCodes.Status200OK, "New backpack", typeof(BackpackModel))]
+        [SwaggerResponse(StatusCodes.Status200OK, "New group", typeof(GroupModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
-        
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerRequestExample(typeof(BackpackModelRequest), typeof(AddOrUpdateBackpackRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateBackpackResponseExample))]
+        [SwaggerRequestExample(typeof(GroupModelRequest), typeof(AddOrUpdateGroupRequestExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateGroupResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<BackpackModel>> CreateNewBackpackAsync([FromBody] BackpackModelRequest request)
+        public async Task<ActionResult<GroupModel>> CreateNewGroupAsync([FromBody] GroupModelRequest group)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Updates a backpack
+        /// Updates a group
         /// </summary>
         [HttpPut]
-        [Route("{backpackId:guid}")]
+        [Route("{groupId:guid}")]
 
-        [SwaggerResponse(StatusCodes.Status200OK, "Updated backpack", typeof(BackpackModel))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Updated group", typeof(GroupModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerRequestExample(typeof(BackpackModelRequest), typeof(AddOrUpdateBackpackRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateBackpackResponseExample))]
+        [SwaggerRequestExample(typeof(GroupModelRequest), typeof(AddOrUpdateGroupRequestExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateGroupResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<BackpackModel>> UpdateBackpackAsync([FromRoute] Guid backpackId, [FromBody] BackpackModelRequest backpack)
+        public async Task<ActionResult<GroupModel>> UpdateGroupAsync([FromRoute] Guid groupId, [FromBody] GroupModelRequest group)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Gets a list of backpack contributors
+        /// Gets a list of group members
         /// </summary>
         [HttpGet]
-        [Route("{backpackId:guid}/contributors")]
+        [Route("{groupId:guid}/members")]
 
-        [SwaggerResponse(StatusCodes.Status200OK, "List of contributors", typeof(IImmutableList<BackpackContributorModel>))]
+        [SwaggerResponse(StatusCodes.Status200OK, "List of group members", typeof(IImmutableList<GroupMemberModel>))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetBackpackContributorsResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetGroupMembersResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<IImmutableList<BackpackContributorModel>>> GetBackpackContributorsAsync([FromRoute] Guid backpackId)
+        public async Task<ActionResult<IImmutableList<GroupMemberModel>>> GetGroupMembersAsync([FromRoute] Guid groupId)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Invites a user to contribute to a backpack
+        /// Invites a user as member to a group
         /// </summary>
         [HttpPut]
-        [Route("{backpackId:guid}/contributor/{userId:guid}/invite")]
+        [Route("{groupId:guid}/member/{userId:guid}/invite")]
 
-        [SwaggerResponse(StatusCodes.Status204NoContent, "Invitation sent", typeof(BackpackModel))]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "Invitation sent", typeof(GroupModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerRequestExample(typeof(BackpackModelRequest), typeof(AddOrUpdateBackpackRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetBackpackContributorsResponseExample))]
+        [SwaggerRequestExample(typeof(GroupModelRequest), typeof(AddOrUpdateGroupRequestExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetGroupMembersResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<BackpackModel>> AddContributorAsync([FromRoute] Guid backpackId, [FromRoute] Guid userId)
+        public async Task<ActionResult<GroupModel>> AddMemberAsync([FromRoute] Guid groupId, [FromRoute] Guid userId)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Removes a user from contributors of a backpack
+        /// Removes a user from group members
         /// </summary>
         [HttpDelete]
-        [Route("{backpackId:guid}/contributor/{userId:guid}")]
+        [Route("{groupId:guid}/member/{userId:guid}")]
 
-        [SwaggerResponse(StatusCodes.Status204NoContent, "User removed from contributors", typeof(BackpackModel))]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "User removed from members", typeof(GroupModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerRequestExample(typeof(BackpackModelRequest), typeof(AddOrUpdateBackpackRequestExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<BackpackModel>> RemoveContributorAsync([FromRoute] Guid backpackId, [FromRoute] Guid userId)
+        public async Task<ActionResult<GroupModel>> RemoveMemberAsync([FromRoute] Guid groupId, [FromRoute] Guid userId)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Delete a backpack
+        /// Delete a group
         /// </summary>
         /// <returns></returns>
         [HttpDelete]
-        [Route("{backpackId:guid}")]
+        [Route("{groupId:guid}")]
 
-        [SwaggerResponse(StatusCodes.Status204NoContent, "Backpack was deleted")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "Group was deleted")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> DeleteBackpackAsync([FromRoute] Guid backpackId)
+        public async Task<ActionResult> DeleteGroupAsync([FromRoute] Guid groupId)
         {
             throw new NotImplementedException();
         }
