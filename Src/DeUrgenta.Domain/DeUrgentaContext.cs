@@ -11,7 +11,6 @@ namespace DeUrgenta.Domain
         }
 
         public DbSet<Backpack> Backpacks { get; set; }
-        public DbSet<BackpackCategory> BackpackCategories { get; set; }
         public DbSet<BackpackToUser> BackpacksToUsers { get; set; }
         public DbSet<Certification> Certifications { get; set; }
         public DbSet<Group> Groups { get; set; }
@@ -26,7 +25,6 @@ namespace DeUrgenta.Domain
 
             modelBuilder.HasPostgresExtension("uuid-ossp");
 
-            modelBuilder.ApplyConfiguration(new BackpackCategoryEntityConfiguration());
             modelBuilder.ApplyConfiguration(new BackpackEntityConfiguration());
             modelBuilder.ApplyConfiguration(new BackpackItemEntityConfiguration());
 

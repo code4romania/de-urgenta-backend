@@ -2,5 +2,11 @@
 
 namespace DeUrgenta.Certifications.Api.Models
 {
-    public record CertificationModel(Guid Id, string Name, DateTime ExpirationDate);
+    public sealed record CertificationModel
+    {
+        public Guid Id { get; init; }
+        public string Name { get; init; }
+        public string IssuingAuthority { get; init; }
+        public DateTime ExpirationDate { get; init; }
+    }
 }

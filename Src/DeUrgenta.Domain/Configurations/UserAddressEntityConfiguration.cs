@@ -22,6 +22,11 @@ namespace DeUrgenta.Domain.Configurations
                 .IsRequired();
 
             builder
+                .Property(x => x.Category)
+                .HasMaxLength(100)
+                .IsRequired();
+
+            builder
                 .Property(x => x.Latitude)
                 .IsRequired()
                 .HasMaxLength(100);

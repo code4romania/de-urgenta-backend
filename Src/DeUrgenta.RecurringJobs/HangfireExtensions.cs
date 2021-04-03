@@ -19,7 +19,6 @@ namespace DeUrgenta.RecurringJobs
                 .UseRecommendedSerializerSettings()
                 .UseMemoryStorage()
                 );
-
             // Add the processing server as IHostedService
             services.AddHangfireServer();
         }
@@ -30,7 +29,8 @@ namespace DeUrgenta.RecurringJobs
                         new BasicAuthAuthorizationFilterOptions
                         {
                             // Require secure connection for dashboard
-                            RequireSsl = true,
+                            RequireSsl = false,
+                            SslRedirect = false,
                             // Case sensitive login checking
                             LoginCaseSensitive = true,
                             // Users
