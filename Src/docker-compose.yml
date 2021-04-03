@@ -23,7 +23,7 @@
       environment:
         - ASPNETCORE_URLS=http://+:80
         - ConnectionStrings__DbConnectionString=Server=postgres;Port=5432;Database=de-urgenta-db;User Id=docker;Password=docker;
-        - IdentityServerUrl=http://identityserver/
+        - IdentityServerUrl=https://auth.deurgenta.hostmysite.ro
       ports:
         - 5040:80
       restart: unless-stopped
