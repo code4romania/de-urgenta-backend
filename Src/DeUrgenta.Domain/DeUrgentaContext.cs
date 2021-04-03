@@ -20,7 +20,7 @@ namespace DeUrgenta.Domain
         public DbSet<UserToGroup> UsersToGroups { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+       {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.HasPostgresExtension("uuid-ossp");
