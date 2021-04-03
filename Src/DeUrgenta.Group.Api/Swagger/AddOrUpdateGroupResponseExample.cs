@@ -8,7 +8,7 @@ namespace DeUrgenta.Group.Api.Swagger
     {
         public GroupModel GetExamples()
         {
-            return new() { Id = Guid.NewGuid(), Name = "Ruxacul meu de urgenta" };
+            return new() { Id = Guid.NewGuid(), Name = "Grup nou" };
         }
     }
 }

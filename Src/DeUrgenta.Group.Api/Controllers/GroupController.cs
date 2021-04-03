@@ -41,11 +41,24 @@ namespace DeUrgenta.Group.Api.Controllers
         }
 
         /// <summary>
+        /// Gets groups administered by current user
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("/groups/my")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Get groups of a user", typeof(IImmutableList<GroupModel>))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetGroupsResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
+        public async Task<ActionResult<IImmutableList<GroupModel>>> GetMyGroupsAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Adds a new group
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-
         [SwaggerResponse(StatusCodes.Status200OK, "New group", typeof(GroupModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
@@ -64,10 +77,8 @@ namespace DeUrgenta.Group.Api.Controllers
         /// </summary>
         [HttpPut]
         [Route("{groupId:guid}")]
-
         [SwaggerResponse(StatusCodes.Status200OK, "Updated group", typeof(GroupModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerRequestExample(typeof(GroupModelRequest), typeof(AddOrUpdateGroupRequestExample))]
@@ -84,10 +95,8 @@ namespace DeUrgenta.Group.Api.Controllers
         /// </summary>
         [HttpGet]
         [Route("{groupId:guid}/members")]
-
         [SwaggerResponse(StatusCodes.Status200OK, "List of group members", typeof(IImmutableList<GroupMemberModel>))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetGroupMembersResponseExample))]
@@ -103,7 +112,6 @@ namespace DeUrgenta.Group.Api.Controllers
         /// </summary>
         [HttpPut]
         [Route("{groupId:guid}/member/{userId:guid}/invite")]
-
         [SwaggerResponse(StatusCodes.Status204NoContent, "Invitation sent", typeof(GroupModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
@@ -122,8 +130,7 @@ namespace DeUrgenta.Group.Api.Controllers
         /// </summary>
         [HttpDelete]
         [Route("{groupId:guid}/member/{userId:guid}")]
-
-        [SwaggerResponse(StatusCodes.Status204NoContent, "User removed from members", typeof(GroupModel))]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "User removed from members")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
@@ -135,12 +142,27 @@ namespace DeUrgenta.Group.Api.Controllers
         }
 
         /// <summary>
+        /// Removes current user from group members
+        /// </summary>
+        [HttpPut]
+        [Route("{groupId:guid}/member/leave")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "User removed from members")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
+
+        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
+        public async Task<ActionResult<GroupModel>> LeaveGroupAsync([FromRoute] Guid groupId)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Delete a group
         /// </summary>
         /// <returns></returns>
         [HttpDelete]
         [Route("{groupId:guid}")]
-
         [SwaggerResponse(StatusCodes.Status204NoContent, "Group was deleted")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]

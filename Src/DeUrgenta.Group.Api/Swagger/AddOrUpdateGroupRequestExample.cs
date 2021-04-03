@@ -7,7 +7,7 @@ namespace DeUrgenta.Group.Api.Swagger
     {
         public GroupModelRequest GetExamples()
         {
-            return new() { Name = "Ruxac nou" };
+            return new() { Name = "Grup nou" };
         }
     }
 }

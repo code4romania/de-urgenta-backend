@@ -12,9 +12,9 @@ namespace DeUrgenta.Group.Api.Swagger
         {
             return new List<GroupModel>
             {
-                new (){Name = "Personal", Id = Guid.NewGuid()},
-                new (){Name = "Ruxacul familiei", Id = Guid.NewGuid()},
-                new (){Name = "Ruxacul prietenilor", Id = Guid.NewGuid()}
+                new (){Name = "Grup personal", Id = Guid.NewGuid()},
+                new (){Name = "Grupul familiei", Id = Guid.NewGuid()},
+                new (){Name = "Colegii", Id = Guid.NewGuid()}
             }.ToImmutableList();
         }
     }
