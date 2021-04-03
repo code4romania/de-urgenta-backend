@@ -33,7 +33,7 @@ namespace DeUrgenta.Certifications.Api.Controller
         /// <returns></returns>
         [HttpGet]
 
-        [SwaggerResponse(StatusCodes.Status200OK, "User backpacks", typeof(IImmutableList<CertificationModel>))]
+        [SwaggerResponse(StatusCodes.Status200OK, "User certifications", typeof(IImmutableList<CertificationModel>))]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 

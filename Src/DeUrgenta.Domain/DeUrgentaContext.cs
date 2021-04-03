@@ -18,9 +18,11 @@ namespace DeUrgenta.Domain
         public DbSet<User> Users { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
         public DbSet<UserToGroup> UsersToGroups { get; set; }
-        
+        public DbSet<Event> Events { get; set; }
+        public DbSet<BlogPost> Blogs { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+       {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.HasPostgresExtension("uuid-ossp");
@@ -37,6 +39,9 @@ namespace DeUrgenta.Domain
             modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
 
             modelBuilder.ApplyConfiguration(new UserToGroupEntityConfiguration());
+
+            modelBuilder.ApplyConfiguration(new BlogPostEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new EventEntityConfiguration());
         }
     }
 }

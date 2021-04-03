@@ -99,6 +99,36 @@ namespace DeUrgenta.Domain.Migrations
                     b.ToTable("BackpacksToUsers");
                 });
 
+            modelBuilder.Entity("DeUrgenta.Domain.Entities.BlogPost", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("uuid_generate_v4()");
+
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("ContentBody")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("PublishedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
+
+                    b.HasKey("Id")
+                        .HasName("PK_BlogPost");
+
+                    b.ToTable("Blogs");
+                });
+
             modelBuilder.Entity("DeUrgenta.Domain.Entities.Certification", b =>
                 {
                     b.Property<Guid>("Id")
@@ -128,6 +158,47 @@ namespace DeUrgenta.Domain.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Certifications");
+                });
+
+            modelBuilder.Entity("DeUrgenta.Domain.Entities.Event", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("uuid_generate_v4()");
+
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("ContentBody")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("OccursOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("OrganizedBy")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime>("PublishedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
+
+                    b.HasKey("Id")
+                        .HasName("PK_Event");
+
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.Group", b =>
