@@ -38,12 +38,11 @@ namespace DeUrgenta.RecurringJobs
             }
 
             app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseAuthorization();
+
 
             app.UseAuthenticatedHangfireDashboard(Configuration);
-
-            app.UseRouting();
-
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
