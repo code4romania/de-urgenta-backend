@@ -11,8 +11,10 @@ WORKDIR /src
 COPY ["DeUrgenta.Api/DeUrgenta.Api.csproj", "DeUrgenta.Api/"]
 COPY ["DeUrgenta.Backpack.Api/DeUrgenta.Backpack.Api.csproj", "DeUrgenta.Backpack.Api/"]
 COPY ["DeUrgenta.Certifications.Api/DeUrgenta.Certifications.Api.csproj", "DeUrgenta.Certifications.Api/"]
+COPY ["DeUrgenta.Admin.Api/DeUrgenta.Admin.Api.csproj", "DeUrgenta.Admin.Api/"]
 COPY ["DeUrgenta.Domain/DeUrgenta.Domain.csproj", "DeUrgenta.Domain/"]
 COPY ["DeUrgenta.Infra/DeUrgenta.Infra.csproj", "DeUrgenta.Infra/"]
+COPY ["DeUrgenta.Common/DeUrgenta.Common.csproj", "DeUrgenta.Common/"]
 
 RUN dotnet restore "DeUrgenta.Api/DeUrgenta.Api.csproj"
 

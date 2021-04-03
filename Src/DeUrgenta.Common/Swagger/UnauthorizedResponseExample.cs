@@ -9,7 +9,7 @@ namespace DeUrgenta.Common.Swagger
         {
             return new()
             {
-                Detail = "A business rule was violated. Here you will find a meaningful message of what happened.",
+                Detail = "Unauthorized",
                 Status = 401,
                 Title = "Unauthorized",
                 Type = "https://tools.ietf.org/html/rfc7235#section-3.1",
