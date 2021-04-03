@@ -50,7 +50,7 @@
         AdminFromEmail: ${FROM_EMAIL}
         SendGrid:ApiKey: ${SENDGRID_API_KEY}
         ASPNETCORE_URLS: ${ASPNETCORE_URLS}
-        ConnectionStrings__DbConnectionString: ${DB_CONNECTION_STRING} 
+        ConnectionStrings__ApplicationDbContextConnection: ${DB_CONNECTION_STRING} 
       build:
           context: .
           dockerfile: DeUrgenta.IdentityServer/Dockerfile
