@@ -1,105 +1,99 @@
 using System;
-using DeUrgenta.Certifications.Api.Commands;
-using DeUrgenta.Certifications.Api.Models;
-using DeUrgenta.Certifications.Api.Queries;
-using DeUrgenta.Certifications.Api.Swagger;
+using System.Collections.Immutable;
+using System.Threading.Tasks;
+using DeUrgenta.Admin.Api.Models;
+using DeUrgenta.Admin.Api.Swagger.Events;
+using DeUrgenta.Common.Models;
+using DeUrgenta.Common.Swagger;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
-using System.Collections.Immutable;
-using System.Threading.Tasks;
-using DeUrgenta.Common.Swagger;
 
-namespace DeUrgenta.Certifications.Api.Controller
+namespace DeUrgenta.Admin.Api.Controller
 {
     [ApiController]
     [Produces("application/json")]
     [Consumes("application/json")]
-    [Route("certifications")]
-    public class CertificationController : ControllerBase
+    [Route("event")]
+    public class EventsController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public CertificationController(IMediator mediator)
+        public EventsController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
         /// <summary>
-        /// Gets user certifications
+        /// Gets upcoming events
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("events")]
+        [AllowAnonymous]
 
-        [SwaggerResponse(StatusCodes.Status200OK, "User certifications", typeof(IImmutableList<CertificationModel>))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Upcoming events", typeof(PagedResult<EventModel>))]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetCertificationsResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetEventsResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(UnauthorizedResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<IImmutableList<CertificationModel>>> GetCertificationsAsync()
+        public async Task<ActionResult<PagedResult<EventModel>>> GetEventsAsync([FromQuery] PaginationQueryModel pagination)
         {
-            // TODO: get user id from identity
-            var certifications = await _mediator.Send(new GetCertifications(Guid.NewGuid()));
-
-            return Ok(certifications);
+            throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Adds a new certification
+        /// Adds a new event
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [SwaggerResponse(StatusCodes.Status200OK, "New certification", typeof(CertificationModel))]
+        [SwaggerResponse(StatusCodes.Status200OK, "New event", typeof(EventModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerRequestExample(typeof(CertificationRequest), typeof(AddOrUpdateCertificationRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateCertificationResponseExample))]
+        [SwaggerRequestExample(typeof(EventRequest), typeof(AddOrUpdateEventRequestExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateEventResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(UnauthorizedResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<CertificationModel>> CreateNewCertificationAsync([FromBody] CertificationRequest certification)
+        public async Task<ActionResult<EventModel>> CreateNewEventAsync([FromBody] EventRequest eventModel)
         {
-            // TODO: get user id from identity
-            var newCertificationId = await _mediator.Send(new CreateCertification(Guid.NewGuid(), certification.Name, certification.ExpirationDate));
-
-            return Ok(newCertificationId);
+            throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Updates a certification
+        /// Updates a event
         /// </summary>
         [HttpPut]
-        [Route("{certificationId:guid}")]
+        [Route("{eventId:guid}")]
 
-        [SwaggerResponse(StatusCodes.Status200OK, "Updated certification", typeof(CertificationModel))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Updated event", typeof(EventModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerRequestExample(typeof(CertificationRequest), typeof(AddOrUpdateCertificationRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateCertificationResponseExample))]
+        [SwaggerRequestExample(typeof(EventRequest), typeof(AddOrUpdateEventRequestExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateEventResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(UnauthorizedResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<CertificationModel>> UpdateCertificationAsync([FromRoute] Guid certificationId, [FromBody] CertificationRequest certification)
+        public async Task<ActionResult<EventModel>> UpdateEventAsync([FromRoute] Guid eventId, [FromBody] EventRequest eventModel)
         {
-
-            return NoContent();
+            throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Delete a certification
+        /// Delete a event
         /// </summary>
         [HttpDelete]
-        [Route("{certificationId:guid}")]
+        [Route("{eventId:guid}")]
 
-        [SwaggerResponse(StatusCodes.Status204NoContent, "Certification was deleted")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "Event was deleted")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, "A non authorized request was made")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
@@ -107,7 +101,7 @@ namespace DeUrgenta.Certifications.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status401Unauthorized, typeof(UnauthorizedResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> DeleteCertificationAsync([FromRoute] Guid certificationId)
+        public async Task<ActionResult> DeleteEventAsync([FromRoute] Guid eventId)
         {
             throw new NotImplementedException();
         }

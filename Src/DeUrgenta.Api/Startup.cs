@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Reflection;
+using DeUrgenta.Admin.Api.Controller;
 using DeUrgenta.Backpack.Api.Controllers;
 using DeUrgenta.Certifications.Api.Controller;
 using DeUrgenta.Api.Extensions;
@@ -106,6 +107,7 @@ namespace DeUrgenta.Api {
                 // Application parts
                 typeof(BackpackController).GetTypeInfo().Assembly,
                 typeof(CertificationController).GetTypeInfo().Assembly,
+                typeof(BlogController).GetTypeInfo().Assembly,
 
                 // Common
 
