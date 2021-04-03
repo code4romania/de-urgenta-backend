@@ -1,19 +1,19 @@
+using System.Collections.Generic;
 using System.Reflection;
 using DeUrgenta.Backpack.Api.Controllers;
 using DeUrgenta.Certifications.Api.Controller;
 using DeUrgenta.Api.Extensions;
 using DeUrgenta.Common.Swagger;
-using DeUrgenta.Domain;
 using Hellang.Middleware.ProblemDetails;
 using DeUrgenta.Infra.Extensions;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace DeUrgenta.Api { 
     public class Startup
