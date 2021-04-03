@@ -4,13 +4,14 @@ using System;
 
 namespace DeUrgenta.Certifications.Api.Swagger
 {
-    public class AddNewCertificationModelExample : IExamplesProvider<NewCertificationModel>
+    public class AddOrUpdateCertificationRequestExample : IExamplesProvider<CertificationRequest>
     {
-        public NewCertificationModel GetExamples()
+        public CertificationRequest GetExamples()
         {
             return new()
             {
-                Name = "New FA certificate",
+                Name = "Curs prim ajutor",
+                IssuingAuthority = "Crucea Rosie Romania",
                 ExpirationDate = DateTime.Today.AddDays(365)
             };
         }
