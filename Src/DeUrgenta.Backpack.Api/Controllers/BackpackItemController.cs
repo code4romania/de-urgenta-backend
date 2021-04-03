@@ -31,7 +31,6 @@ namespace DeUrgenta.Backpack.Api.Controllers
         /// <returns></returns>
         [HttpGet("items")]
         [SwaggerResponse(StatusCodes.Status200OK, "Items from a backpack", typeof(IImmutableList<BackpackItemModel>))]
-
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetBackpackItemsResponseExample))]
@@ -47,7 +46,6 @@ namespace DeUrgenta.Backpack.Api.Controllers
         /// <returns></returns>
         [HttpGet("{categoryId:int}/items")]
         [SwaggerResponse(StatusCodes.Status200OK, "Items from a backpack category", typeof(IImmutableList<BackpackItemModel>))]
-
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetCategoryBackpackItemsResponseExample))]

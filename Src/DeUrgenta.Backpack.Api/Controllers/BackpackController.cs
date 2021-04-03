@@ -51,7 +51,6 @@ namespace DeUrgenta.Backpack.Api.Controllers
 
         [SwaggerResponse(StatusCodes.Status200OK, "New backpack", typeof(BackpackModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
-        
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerRequestExample(typeof(BackpackModelRequest), typeof(AddOrUpdateBackpackRequestExample))]
