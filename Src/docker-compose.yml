@@ -49,6 +49,8 @@
       environment:
         - ASPNETCORE_URLS=http://+:80
         - ConnectionStrings__DbConnectionString=Server=postgres;Port=5432;Database=de-urgenta-db;User Id=docker;Password=docker;
+        AdminFromEmail: ${FROM_EMAIL}
+        SendGrid:ApiKey: ${SENDGRID_API_KEY}
       build:
           context: .
           dockerfile: DeUrgenta.IdentityServer/Dockerfile
