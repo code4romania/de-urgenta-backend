@@ -63,11 +63,11 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerRequestExample(typeof(GroupModelRequest), typeof(AddOrUpdateGroupRequestExample))]
+        [SwaggerRequestExample(typeof(GroupRequest), typeof(AddOrUpdateGroupRequestExample))]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateGroupResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<GroupModel>> CreateNewGroupAsync([FromBody] GroupModelRequest group)
+        public async Task<ActionResult<GroupModel>> CreateNewGroupAsync([FromBody] GroupRequest group)
         {
             throw new NotImplementedException();
         }
@@ -81,11 +81,11 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerRequestExample(typeof(GroupModelRequest), typeof(AddOrUpdateGroupRequestExample))]
+        [SwaggerRequestExample(typeof(GroupRequest), typeof(AddOrUpdateGroupRequestExample))]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateGroupResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<GroupModel>> UpdateGroupAsync([FromRoute] Guid groupId, [FromBody] GroupModelRequest group)
+        public async Task<ActionResult<GroupModel>> UpdateGroupAsync([FromRoute] Guid groupId, [FromBody] GroupRequest group)
         {
             throw new NotImplementedException();
         }
@@ -116,7 +116,7 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerRequestExample(typeof(GroupModelRequest), typeof(AddOrUpdateGroupRequestExample))]
+        [SwaggerRequestExample(typeof(GroupRequest), typeof(AddOrUpdateGroupRequestExample))]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetGroupMembersResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
@@ -170,6 +170,78 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult> DeleteGroupAsync([FromRoute] Guid groupId)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets group safe location
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("{groupId:guid}/safe-locations")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Get safe locations of a group", typeof(IImmutableList<SafeLocationModel>))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
+
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetGroupsResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
+        public async Task<ActionResult<IImmutableList<GroupModel>>> GetGroupsAsync([FromRoute] Guid groupId)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Adds a new group safe location
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("{groupId:guid}/safe-location")]
+        [SwaggerResponse(StatusCodes.Status200OK, "New group safe location", typeof(SafeLocationModel))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
+
+        [SwaggerRequestExample(typeof(SafeLocationRequest), typeof(AddOrUpdateSafeLocationRequestExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddSafeLocationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
+        public async Task<ActionResult<SafeLocationModel>> CreateNewSafeLocationAsync([FromRoute] Guid backpackId, [FromBody] SafeLocationRequest SafeLocation)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Updates a group safe location
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("{groupId:guid}/safe-location/{locationId:guid}")]
+
+        [SwaggerResponse(StatusCodes.Status200OK, "Updated group safe location", typeof(SafeLocationModel))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
+
+        [SwaggerRequestExample(typeof(SafeLocationRequest), typeof(AddOrUpdateSafeLocationRequestExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddSafeLocationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
+        public async Task<ActionResult<SafeLocationModel>> UpdateSafeLocationAsync([FromRoute] Guid locationId, [FromBody] SafeLocationRequest safeLocation)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Delete a group safe location
+        /// </summary>
+        /// <returns></returns>
+        [HttpDelete]
+        [Route("safe-location/{locationId:guid}")]
+
+        [SwaggerResponse(StatusCodes.Status204NoContent, "Group safe location was deleted")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
+
+        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
+        public async Task<ActionResult> DeleteSafeLocationAsync([FromRoute] Guid locationId)
         {
             throw new NotImplementedException();
         }

@@ -2,7 +2,7 @@
 
 namespace DeUrgenta.Group.Api.Models
 {
-    public sealed record GroupModelRequest
+    public sealed record GroupRequest
     {
         [Required]
         [StringLength(250, MinimumLength = 3)]

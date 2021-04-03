@@ -3,11 +3,11 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace DeUrgenta.Group.Api.Swagger
 {
-    public class AddOrUpdateGroupRequestExample : IExamplesProvider<GroupModelRequest>
+    public class AddOrUpdateGroupRequestExample : IExamplesProvider<GroupRequest>
     {
-        public GroupModelRequest GetExamples()
+        public GroupRequest GetExamples()
         {
-            return new() { Name = "Grup nou" };
+            return new() {Name = "Grup nou"};
         }
     }
 }
