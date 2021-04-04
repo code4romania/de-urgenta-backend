@@ -22,9 +22,9 @@
         dockerfile: Dockerfile
       environment:
         - ASPNETCORE_URLS=http://+:80
-        - ConnectionStrings__DbConnectionString: ${DB_CONNECTION_STRING}
+        - ConnectionStrings__DbConnectionString=${DB_CONNECTION_STRING}
         #- IdentityServerUrl=https://auth.deurgenta.hostmysite.ro
-        - IdentityServerUrl: ${IDENTITYSERVER_URL}
+        - IdentityServerUrl=${IDENTITYSERVER_URL}
       ports:
         - 5040:80
       restart: unless-stopped
@@ -37,7 +37,7 @@
         dockerfile: DeUrgenta.RecurringJobs.Dockerfile
       environment:
         - ASPNETCORE_URLS=http://+:80
-        - ConnectionStrings__DbConnectionString: ${DB_CONNECTION_STRING}
+        - ConnectionStrings__DbConnectionString=${DB_CONNECTION_STRING}
         - Hangfire__Dashboard__Username=admin
         - Hangfire__Dashboard__Password=demo1234
       ports:
