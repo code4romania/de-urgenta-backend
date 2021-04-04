@@ -79,7 +79,6 @@ namespace DeUrgenta.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, Domain.DeUrgentaContext dbContext)
         {
-
             dbContext.Database.Migrate();
             app.UseCors(_corsPolicyName);
 
