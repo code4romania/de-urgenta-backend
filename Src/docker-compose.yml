@@ -21,9 +21,9 @@
         context: .
         dockerfile: Dockerfile
       environment:
-        - ASPNETCORE_URLS=http://+:80
-        - ConnectionStrings__DbConnectionString=Server=postgres;Port=5432;Database=de-urgenta-db;User Id=docker;Password=docker;
-        - IdentityServerUrl=https://auth.deurgenta.hostmysite.ro
+        ASPNETCORE_URLS: ${ASPNETCORE_URLS}
+        ConnectionStrings__DbConnectionString: ${DB_CONNECTION_STRING}
+        IdentityServerUrl: ${IDENTITYSERVER_URL}
       ports:
         - 5040:80
       restart: unless-stopped
@@ -35,10 +35,10 @@
         context: .
         dockerfile: DeUrgenta.RecurringJobs.Dockerfile
       environment:
-        - ASPNETCORE_URLS=http://+:80
-        - ConnectionStrings__DbConnectionString=Server=postgres;Port=5432;Database=de-urgenta-db;User Id=docker;Password=docker;
-        - Hangfire__Dashboard__Username=admin
-        - Hangfire__Dashboard__Password=demo1234
+        ASPNETCORE_URLS: ${ASPNETCORE_URLS}
+        ConnectionStrings__DbConnectionString: ${DB_CONNECTION_STRING}
+        Hangfire__Dashboard__Username: ${HANGFIRE_USERNAME}
+        Hangfire__Dashboard__Password: ${HANGFIRE_PASSWORD}
       ports:
         - 5041:80
       restart: unless-stopped
@@ -51,6 +51,8 @@
         SendGrid:ApiKey: ${SENDGRID_API_KEY}
         ASPNETCORE_URLS: ${ASPNETCORE_URLS}
         ConnectionStrings__ApplicationDbContextConnection: ${DB_CONNECTION_STRING} 
+        ClientApplications__0__RedirectUris: ${SWAGGER_REDIRECT_URIS}
+        ClientApplications__0__AllowedCorsOrigins: ${SWAGGER_CORS}
       build:
           context: .
           dockerfile: DeUrgenta.IdentityServer/Dockerfile
