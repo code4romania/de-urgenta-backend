@@ -5,6 +5,7 @@ using DeUrgenta.Backpack.Api.Controllers;
 using DeUrgenta.Certifications.Api.Controller;
 using DeUrgenta.Api.Extensions;
 using DeUrgenta.Common.Swagger;
+using DeUrgenta.Group.Api.Controllers;
 using Hellang.Middleware.ProblemDetails;
 using DeUrgenta.Infra.Extensions;
 using MediatR;
@@ -16,7 +17,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
-namespace DeUrgenta.Api { 
+namespace DeUrgenta.Api
+{
     public class Startup
     {
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
@@ -68,7 +70,7 @@ namespace DeUrgenta.Api {
         public void Configure(IApplicationBuilder app, DeUrgenta.Domain.DeUrgentaContext dbContext)
         {
             //dbContext.Database.Migrate();
-            
+
             if (WebHostEnvironment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -108,6 +110,7 @@ namespace DeUrgenta.Api {
                 typeof(BackpackController).GetTypeInfo().Assembly,
                 typeof(CertificationController).GetTypeInfo().Assembly,
                 typeof(BlogController).GetTypeInfo().Assembly,
+                typeof(GroupController).GetTypeInfo().Assembly,
 
                 // Common
 

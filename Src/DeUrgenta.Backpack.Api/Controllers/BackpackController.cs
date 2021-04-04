@@ -96,7 +96,6 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<IImmutableList<BackpackContributorModel>>> GetBackpackContributorsAsync([FromRoute] Guid backpackId)
         {
-            return Unauthorized();
             throw new NotImplementedException();
         }
 
@@ -133,6 +132,23 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<BackpackModel>> RemoveContributorAsync([FromRoute] Guid backpackId, [FromRoute] Guid userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Removes current user from contributors of a backpack
+        /// </summary>
+        [HttpPut]
+        [Route("{backpackId:guid}/contributor/leave")]
+
+        [SwaggerResponse(StatusCodes.Status204NoContent, "User leaved from contributors", typeof(BackpackModel))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
+
+        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
+        public async Task<ActionResult<BackpackModel>> RemoveCurrentContributorAsync([FromRoute] Guid backpackId)
         {
             throw new NotImplementedException();
         }
