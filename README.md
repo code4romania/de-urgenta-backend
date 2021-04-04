@@ -39,12 +39,28 @@ PostgreSQL
 
 ## Development Tips
 
-Start a postgres server
+### Get started with docker-compose
+1. Navigate to `/src`
+2. Copy `.env.example` to `.env`
+3. Build images (optional - they will be built in step `4.` if they don't exist)
+    ```bash
+    docker-compose -p de-urgenta build
+    ```
+4. Start your containers
+    ```bash
+    docker-compose -p de-urgenta up -d
+    ```
+5. Navigate to http://localhost:5040/swagger
+
+> we use `-p de-urgenta` to distinguish this compose project and you can skip it if you want. (it would inherit `src` otherwise - you probably have some of those already running)
+
+> you can also specify a env file at runtime with docker-compose so you don't necessarily need to take step `2.` - more info [here](https://docs.docker.com/compose/environment-variables/#using-the---env-file--option)
+### Start a postgres server
 ```
-docker-compose -d up
+docker-compose -d up postgres
 ```
 
-Creating a EF Core migration 
+### Creating a EF Core migration 
 ```
 dotnet ef migrations add <Migration-name> --project DeUrgenta.Domain --startup-project DeUrgenta.Api
 ```
