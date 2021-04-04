@@ -90,7 +90,7 @@ namespace IdentityServer
             switch (emailType)
             {
                 case EmailingSystemTypes.SendGrid:
-                    services.AddSingleton<IEmailSender>(ctx =>
+                    services.AddSingleton<IEmailSender, SendGridSender>(ctx =>
                         new SendGridSender(
                             emailBuilder,
                             new SendGridOptions
@@ -102,7 +102,7 @@ namespace IdentityServer
                     );
                     break;
                 case EmailingSystemTypes.Smtp:
-                    services.AddSingleton<IEmailSender>(ctx =>
+                    services.AddSingleton<IEmailSender, SmtpSender>(ctx =>
                         new SmtpSender(
                             emailBuilder,
                             new SmtpOptions
