@@ -5,9 +5,9 @@
       image: postgres
       container_name: postgres
       environment:
-        - POSTGRES_PASSWORD=docker
-        - POSTGRES_USER=docker
-        - POSTGRES_DB=postgres
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        POSTGRES_USER: ${POSTGRES_USER}
+        POSTGRES_DB: ${POSTGRES_DB}
       ports:
         - 5432:5432
       volumes:
@@ -50,12 +50,12 @@
         AdminFromEmail: ${FROM_EMAIL}
         SendGrid:ApiKey: ${SENDGRID_API_KEY}
         ASPNETCORE_URLS: ${ASPNETCORE_URLS}
-        ConnectionStrings__ApplicationDbContextConnection: ${DB_CONNECTION_STRING} 
+        ConnectionStrings__ApplicationDbContextConnection: ${DB_CONNECTION_STRING}
         ClientApplications__0__RedirectUris: ${SWAGGER_REDIRECT_URIS}
         ClientApplications__0__AllowedCorsOrigins: ${SWAGGER_CORS}
       build:
-          context: .
-          dockerfile: DeUrgenta.IdentityServer/Dockerfile
+        context: .
+        dockerfile: DeUrgenta.IdentityServer/Dockerfile
       ports:
         - 5042:80
       container_name: identityserver
