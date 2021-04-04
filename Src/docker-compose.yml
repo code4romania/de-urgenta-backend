@@ -22,7 +22,7 @@
         dockerfile: Dockerfile
       environment:
         - ASPNETCORE_URLS=http://+:80
-        - ConnectionStrings__DbConnectionString=Server=postgres;Port=5432;Database=de-urgenta-db;User Id=docker;Password=docker;
+        - ConnectionStrings__DbConnectionString=Server=${DB_CONNECTION_STRING}
         - IdentityServerUrl=https://auth.deurgenta.hostmysite.ro
       ports:
         - 5040:80
@@ -36,7 +36,7 @@
         dockerfile: DeUrgenta.RecurringJobs.Dockerfile
       environment:
         - ASPNETCORE_URLS=http://+:80
-        - ConnectionStrings__DbConnectionString=Server=postgres;Port=5432;Database=de-urgenta-db;User Id=docker;Password=docker;
+        - ConnectionStrings__DbConnectionString=${DB_CONNECTION_STRING}
         - Hangfire__Dashboard__Username=admin
         - Hangfire__Dashboard__Password=demo1234
       ports:
