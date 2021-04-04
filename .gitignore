@@ -335,3 +335,4 @@ ASALocalRun/
 
 # de-urgenta specific
 Src/postgres_data
+.env
