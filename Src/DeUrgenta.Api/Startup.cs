@@ -12,6 +12,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -33,6 +34,7 @@ namespace DeUrgenta.Api
         public List<ApiAuthenticationScheme> AuthSchemes { get; set; }
 
         private string _swaggerClientName;
+        private string _corsPolicyName;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -64,12 +66,22 @@ namespace DeUrgenta.Api
             services.AddSwaggerFor(applicationAssemblies, Configuration);
             services.AddMediatR(applicationAssemblies);
 
+            _corsPolicyName = "MyPolicy";
+            services.AddCors(o => o.AddPolicy(_corsPolicyName, builder =>
+            {
+                builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            }));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, DeUrgenta.Domain.DeUrgentaContext dbContext)
+        public void Configure(IApplicationBuilder app, Domain.DeUrgentaContext dbContext)
         {
-            //dbContext.Database.Migrate();
+
+            dbContext.Database.Migrate();
+            app.UseCors(_corsPolicyName);
 
             if (WebHostEnvironment.IsDevelopment())
             {
