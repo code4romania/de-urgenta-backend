@@ -8,6 +8,7 @@ using DeUrgenta.Common.Swagger;
 using DeUrgenta.Group.Api.Controllers;
 using Hellang.Middleware.ProblemDetails;
 using DeUrgenta.Infra.Extensions;
+using DeUrgenta.User.Api.Controller;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -123,6 +124,7 @@ namespace DeUrgenta.Api
                 typeof(CertificationController).GetTypeInfo().Assembly,
                 typeof(BlogController).GetTypeInfo().Assembly,
                 typeof(GroupController).GetTypeInfo().Assembly,
+                typeof(UserController).GetTypeInfo().Assembly,
 
                 // Common
 

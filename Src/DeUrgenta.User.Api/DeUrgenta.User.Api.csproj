@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+	</PropertyGroup>
+	<PropertyGroup>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);1591</NoWarn>
+	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Remove="Options\**" />
+	  <EmbeddedResource Remove="Options\**" />
+	  <None Remove="Options\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="MediatR" Version="9.0.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="6.1.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\DeUrgenta.Common\DeUrgenta.Common.csproj" />
+		<ProjectReference Include="..\DeUrgenta.Domain\DeUrgenta.Domain.csproj" />
+	</ItemGroup>
+
+</Project>
