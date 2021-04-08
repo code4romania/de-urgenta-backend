@@ -9,13 +9,13 @@ using DeUrgenta.Group.Api.Controllers;
 using Hellang.Middleware.ProblemDetails;
 using DeUrgenta.Infra.Extensions;
 using DeUrgenta.User.Api.Controller;
-using DeUrgenta.User.Api.Extensions;
 using MediatR;
+using Microsoft.Extensions.Hosting;
+using DeUrgenta.User.Api.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace DeUrgenta.Api
 {

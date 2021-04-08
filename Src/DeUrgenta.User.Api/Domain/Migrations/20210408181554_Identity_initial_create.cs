@@ -169,33 +169,6 @@ namespace DeUrgenta.User.Api.Domain.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "RefreshTokens",
-                schema: "identity",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<string>(type: "text", nullable: true),
-                    Token = table.Column<string>(type: "text", nullable: true),
-                    JwtId = table.Column<string>(type: "text", nullable: true),
-                    IsUsed = table.Column<bool>(type: "boolean", nullable: false),
-                    IsRevorked = table.Column<bool>(type: "boolean", nullable: false),
-                    AddedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ExpiryDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RefreshTokens", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RefreshTokens_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalSchema: "identity",
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 schema: "identity",
@@ -239,12 +212,6 @@ namespace DeUrgenta.User.Api.Domain.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RefreshTokens_UserId",
-                schema: "identity",
-                table: "RefreshTokens",
-                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -267,10 +234,6 @@ namespace DeUrgenta.User.Api.Domain.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens",
-                schema: "identity");
-
-            migrationBuilder.DropTable(
-                name: "RefreshTokens",
                 schema: "identity");
 
             migrationBuilder.DropTable(
