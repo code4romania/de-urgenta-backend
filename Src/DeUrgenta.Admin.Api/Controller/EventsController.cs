@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Immutable;
 using System.Threading.Tasks;
 using DeUrgenta.Admin.Api.Models;
 using DeUrgenta.Admin.Api.Swagger.Events;

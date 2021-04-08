@@ -7,20 +7,24 @@
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<NoWarn>$(NoWarn);1591</NoWarn>
 	</PropertyGroup>
-	<ItemGroup>
-	  <Compile Remove="Options\**" />
-	  <EmbeddedResource Remove="Options\**" />
-	  <None Remove="Options\**" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="MediatR" Version="9.0.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="6.1.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.2" />
+		<PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.4" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\DeUrgenta.Common\DeUrgenta.Common.csproj" />
 		<ProjectReference Include="..\DeUrgenta.Domain\DeUrgenta.Domain.csproj" />
+		<ProjectReference Include="..\DeUrgenta.Infra\DeUrgenta.Infra.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Domain\Entities\" />
 	</ItemGroup>
 
 </Project>

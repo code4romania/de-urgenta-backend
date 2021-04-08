@@ -25,7 +25,7 @@ namespace DeUrgenta.Infra.Extensions
             return options;
         }
 
-        public static IServiceCollection ConfigureOptions<T>(this IServiceCollection services, string sectionName) where T : class
+        public static IServiceCollection ConfigureAppOptions<T>(this IServiceCollection services, string sectionName) where T : class
         {
             using var serviceProvider = services.BuildServiceProvider();
             var configuration = serviceProvider.GetRequiredService<IConfiguration>();

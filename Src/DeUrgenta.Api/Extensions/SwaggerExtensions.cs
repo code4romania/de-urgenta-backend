@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using DeUrgenta.Infra.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace DeUrgenta.Api.Extensions
 {
@@ -14,30 +15,17 @@ namespace DeUrgenta.Api.Extensions
     {
         public static IServiceCollection AddSwaggerFor(this IServiceCollection services, Assembly[] assemblies, IConfiguration config)
         {
-            var authorizeEndpoint = $"{config.GetValue<string>("IdentityServerUrl")}/connect/authorize";
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    Flows = new OpenApiOAuthFlows
-                    {
-                        Implicit = new OpenApiOAuthFlow
-                        {
-                            AuthorizationUrl = new Uri(authorizeEndpoint),
-                            Scopes = new Dictionary<string, string>
-                            {
-                                { "usersApi", "Access read operations" },
-                                { "backpackApi", "Access write operations" }
-                            }
-                        }
-                    },
-                    Description =
-                       "JWT Authorization header using the Bearer scheme",
-                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = JwtBearerDefaults.AuthenticationScheme.ToLowerInvariant(),
                     In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.OAuth2,
-                    Scheme = "Bearer"
+                    Name = "Authorization",
+                    BearerFormat = "JWT",
+                    Description = "JWT Authorization header using the Bearer scheme."
                 });
 
                 c.OperationFilter<AuthorizeCheckOperationFilter>();
@@ -72,9 +60,26 @@ namespace DeUrgenta.Api.Extensions
                 c.ExampleFilters();
             });
 
-
             services.AddSwaggerExamplesFromAssemblies(assemblies);
             return services;
+        }
+
+        public static IApplicationBuilder UseConfigureSwagger(this IApplicationBuilder app)
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.ConfigObject = new ConfigObject
+                {
+                    Urls = new[]
+                    {
+                        new UrlDescriptor{Name = "api", Url = "/swagger/v1/swagger.json"}
+                    }
+                };
+
+            });
+
+            return app;
         }
     }
 }
