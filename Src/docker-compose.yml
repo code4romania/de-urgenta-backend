@@ -16,14 +16,13 @@
     api:
       depends_on:
         - "postgres"
-        - "identityserver"
       build:
         context: .
         dockerfile: Dockerfile
       environment:
         ASPNETCORE_URLS: ${ASPNETCORE_URLS}
         ConnectionStrings__DbConnectionString: ${DB_CONNECTION_STRING}
-        IdentityServerUrl: ${IDENTITYSERVER_URL}
+        ConnectionStrings__IdentityDbConnectionString: ${DB_CONNECTION_STRING}
       ports:
         - 5040:80
       restart: unless-stopped
@@ -42,22 +41,3 @@
       ports:
         - 5041:80
       restart: unless-stopped
-
-    identityserver:
-      depends_on:
-        - "postgres"
-      environment:
-        AdminFromEmail: ${FROM_EMAIL}
-        SendGrid:ApiKey: ${SENDGRID_API_KEY}
-        ASPNETCORE_URLS: ${ASPNETCORE_URLS}
-        ConnectionStrings__ApplicationDbContextConnection: ${DB_CONNECTION_STRING}
-        ConnectionStrings__IdentityDbConnectionString: ${DB_CONNECTION_STRING}
-        ClientApplications__0__RedirectUris: ${SWAGGER_REDIRECT_URIS}
-        ClientApplications__0__AllowedCorsOrigins: ${SWAGGER_CORS}
-      build:
-        context: .
-        dockerfile: DeUrgenta.IdentityServer/Dockerfile
-      ports:
-        - 5042:80
-      container_name: identityserver
-      hostname: identityserver
