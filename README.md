@@ -64,6 +64,10 @@ docker-compose -d up postgres
 ```
 dotnet ef migrations add <Migration-name> --project DeUrgenta.Domain --startup-project DeUrgenta.Api
 ```
+### Adding EF Core migration to User.Api
+```
+DeUrgenta.User.Api> dotnet ef migrations add Identity_initial_create --startup-project ..\DeUrgenta.Api\ -o Domain\Migrations --context UserDbContext
+```
 
 ## Feedback
 
