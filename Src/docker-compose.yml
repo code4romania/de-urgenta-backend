@@ -51,6 +51,7 @@
         SendGrid:ApiKey: ${SENDGRID_API_KEY}
         ASPNETCORE_URLS: ${ASPNETCORE_URLS}
         ConnectionStrings__ApplicationDbContextConnection: ${DB_CONNECTION_STRING}
+        ConnectionStrings__IdentityDbConnectionString: ${DB_CONNECTION_STRING}
         ClientApplications__0__RedirectUris: ${SWAGGER_REDIRECT_URIS}
         ClientApplications__0__AllowedCorsOrigins: ${SWAGGER_CORS}
       build:
