@@ -39,7 +39,7 @@ namespace DeUrgenta.Api.Extensions
                             {
                                 Reference = new OpenApiReference
                                 {
-                                    Id = "BearerAuth",
+                                    Id = "Bearer",
                                     Type = ReferenceType.SecurityScheme
                                 }
                             },

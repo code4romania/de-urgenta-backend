@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -18,7 +19,7 @@ namespace DeUrgenta.Api.Extensions
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                var jwtSecurityScheme = new OpenApiSecurityScheme
                 {
                     Type = SecuritySchemeType.Http,
                     Scheme = JwtBearerDefaults.AuthenticationScheme.ToLowerInvariant(),
@@ -26,6 +27,11 @@ namespace DeUrgenta.Api.Extensions
                     Name = "Authorization",
                     BearerFormat = "JWT",
                     Description = "JWT Authorization header using the Bearer scheme."
+                };
+                c.AddSecurityDefinition("Bearer", jwtSecurityScheme);
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    { jwtSecurityScheme, Array.Empty<string>() }
                 });
 
                 c.OperationFilter<AuthorizeCheckOperationFilter>();

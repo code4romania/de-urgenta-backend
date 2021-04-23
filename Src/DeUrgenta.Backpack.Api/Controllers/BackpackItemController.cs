@@ -5,6 +5,7 @@ using DeUrgenta.Backpack.Api.Models;
 using DeUrgenta.Backpack.Api.Swagger.BackpackItem;
 using DeUrgenta.Common.Swagger;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -16,6 +17,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
     [Route("backpack/{backpackId:guid}")]
     [Produces("application/json")]
     [Consumes("application/json")]
+    [Authorize]
     public class BackpackItemController : ControllerBase
     {
         private readonly IMediator _mediator;

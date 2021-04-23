@@ -18,6 +18,7 @@ namespace DeUrgenta.Certifications.Api.Controller
     [Produces("application/json")]
     [Consumes("application/json")]
     [Route("certifications")]
+    [Authorize]
     public class CertificationController : ControllerBase
     {
         private readonly IMediator _mediator;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using DeUrgenta.Infra.Extensions;
 using DeUrgenta.User.Api.Domain;
@@ -58,6 +59,8 @@ namespace DeUrgenta.User.Api.Extensions
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredLength = 6;
                 options.Password.RequiredUniqueChars = 0;
+
+                options.ClaimsIdentity.EmailClaimType = JwtRegisteredClaimNames.Email;
             });
 
             services.AddTransient<IJwtService, JwtService>();

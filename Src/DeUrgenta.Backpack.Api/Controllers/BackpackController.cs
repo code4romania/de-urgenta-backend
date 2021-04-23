@@ -11,6 +11,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
+using System.Linq;
 
 namespace DeUrgenta.Backpack.Api.Controllers
 {
@@ -18,7 +19,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
     [Route("backpack")]
     [Produces("application/json")]
     [Consumes("application/json")]
-    [Authorize(AuthenticationSchemes = "backpackApiAuthenticationScheme")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class BackpackController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -40,6 +41,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<IImmutableList<BackpackModel>>> GetBackpacksAsync()
         {
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub");
             throw new NotImplementedException();
         }
 
