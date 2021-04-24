@@ -35,10 +35,10 @@ namespace DeUrgenta.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddBearerAuth(Configuration);
             services.AddControllers();
             services.AddDatabase<DeUrgentaContext>(Configuration.GetConnectionString("DbConnectionString"));
             services.AddExceptionHandling(WebHostEnvironment);
-            services.AddBearerAuth(Configuration);
             services.ConfigureGroupApiServices();
 
             var applicationAssemblies = GetAssemblies();
@@ -71,10 +71,13 @@ namespace DeUrgenta.Api
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
+
+            
 
             app.UseCors(CorsPolicyName);
 
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
+            
 
         }
 

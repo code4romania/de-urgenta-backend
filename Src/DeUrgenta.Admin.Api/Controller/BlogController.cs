@@ -17,6 +17,7 @@ namespace DeUrgenta.Admin.Api.Controller
     [Produces("application/json")]
     [Consumes("application/json")]
     [Route("blog")]
+    [Authorize]
     public class BlogController : ControllerBase
     {
         private readonly IMediator _mediator;

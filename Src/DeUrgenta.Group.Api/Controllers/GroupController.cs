@@ -21,6 +21,7 @@ namespace DeUrgenta.Group.Api.Controllers
     [Route("group")]
     [Produces("application/json")]
     [Consumes("application/json")]
+    [Authorize]
     public class GroupController : ControllerBase
     {
         private readonly IMediator _mediator;

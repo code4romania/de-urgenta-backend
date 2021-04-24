@@ -11,6 +11,7 @@ using Swashbuckle.AspNetCore.Filters;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Swagger;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DeUrgenta.Certifications.Api.Controller
 {
@@ -18,6 +19,7 @@ namespace DeUrgenta.Certifications.Api.Controller
     [Produces("application/json")]
     [Consumes("application/json")]
     [Route("certifications")]
+    [Authorize]
     public class CertificationController : ControllerBase
     {
         private readonly IMediator _mediator;

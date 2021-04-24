@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using DeUrgenta.Infra.Extensions;
 using DeUrgenta.User.Api.Domain;
@@ -18,6 +19,7 @@ namespace DeUrgenta.User.Api.Extensions
 
         public static IServiceCollection AddBearerAuth(this IServiceCollection services, IConfiguration configuration)
         {
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             services.ConfigureAppOptions<JwtConfig>(SecurityOptionsSectionName);
 
             var jwtConfig = services.GetOptions<JwtConfig>(SecurityOptionsSectionName);
@@ -48,6 +50,7 @@ namespace DeUrgenta.User.Api.Extensions
                 jwt.SaveToken = true;
                 jwt.TokenValidationParameters = tokenValidationParams;
             });
+            
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -58,6 +61,8 @@ namespace DeUrgenta.User.Api.Extensions
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredLength = 6;
                 options.Password.RequiredUniqueChars = 0;
+
+                
             });
 
             services.AddTransient<IJwtService, JwtService>();
