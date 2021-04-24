@@ -6,10 +6,10 @@ namespace DeUrgenta.Backpack.Api.Commands
 {
     public class DeleteBackpackItem : IRequest<Result>
     {
-        public Guid BackpackId { get; set; }
-        public DeleteBackpackItem(Guid backpackId)
+        public Guid ItemId { get; set; }
+        public DeleteBackpackItem(Guid itemId)
         {
-            BackpackId = backpackId;
+            ItemId = itemId;
         }
     }
 }
