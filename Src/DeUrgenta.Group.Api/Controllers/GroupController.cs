@@ -5,6 +5,7 @@ using DeUrgenta.Common.Swagger;
 using DeUrgenta.Group.Api.Models;
 using DeUrgenta.Group.Api.Swagger;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;

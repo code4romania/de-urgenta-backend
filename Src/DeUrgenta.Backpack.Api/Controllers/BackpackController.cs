@@ -19,7 +19,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
     [Route("backpack")]
     [Produces("application/json")]
     [Consumes("application/json")]
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    [Authorize]
     public class BackpackController : ControllerBase
     {
         private readonly IMediator _mediator;
