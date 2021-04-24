@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
+using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Backpack.Api.Models;
+using DeUrgenta.Backpack.Api.Queries;
 using DeUrgenta.Backpack.Api.Swagger.BackpackItem;
 using DeUrgenta.Common.Swagger;
 using MediatR;
@@ -39,7 +41,13 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<IImmutableList<BackpackItemModel>>> GetBackpackItemsAsync([FromRoute] Guid backpackId)
         {
-            throw new NotImplementedException();
+            var query = new GetBackpackItems(backpackId);
+            var result = await _mediator.Send(query);
+
+            if (result.IsFailure)
+                return BadRequest();
+
+            return Ok(result.Value);
         }
 
         /// <summary>
@@ -54,7 +62,13 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<IImmutableList<BackpackItemModel>>> GetBackpackCategoryItemsAsync([FromRoute] Guid backpackId, [FromRoute] Guid categoryId)
         {
-            throw new NotImplementedException();
+            var query = new GetBackpackCategoryItems(backpackId, categoryId);
+            var result = await _mediator.Send(query);
+
+            if (result.IsFailure)
+                return BadRequest();
+
+            return Ok(result.Value);
         }
 
         /// <summary>
@@ -73,7 +87,13 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<BackpackItemModel>> CreateNewBackpackItemAsync([FromRoute] Guid backpackId, [FromBody] BackpackItemRequest backpackItem)
         {
-            throw new NotImplementedException();
+            var command = new AddBackpackItem(backpackId, backpackItem);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+                return BadRequest();
+
+            return Ok(result.Value);
         }
 
         /// <summary>
@@ -93,7 +113,13 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<BackpackItemModel>> UpdateBackpackItemAsync([FromRoute] Guid itemId, [FromBody] BackpackItemRequest backpackItem)
         {
-            throw new NotImplementedException();
+            var command = new UpdateBackpackItem(itemId, backpackItem);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+                return BadRequest();
+
+            return Ok(result.Value);
         }
 
         /// <summary>
@@ -111,7 +137,13 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult> DeleteBackpackItemAsync([FromRoute] Guid itemId)
         {
-            throw new NotImplementedException();
+            var command = new DeleteBackpackItem(itemId);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+                return BadRequest();
+
+            return NoContent();
         }
     }
 }
