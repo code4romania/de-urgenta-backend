@@ -5,6 +5,7 @@ using DeUrgenta.Common.Swagger;
 using DeUrgenta.Group.Api.Models;
 using DeUrgenta.Group.Api.Swagger;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -16,6 +17,7 @@ namespace DeUrgenta.Group.Api.Controllers
     [Route("group")]
     [Produces("application/json")]
     [Consumes("application/json")]
+    [Authorize]
     public class GroupController : ControllerBase
     {
         private readonly IMediator _mediator;
