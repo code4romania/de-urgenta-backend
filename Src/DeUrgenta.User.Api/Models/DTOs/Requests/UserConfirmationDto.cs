@@ -5,8 +5,7 @@ namespace DeUrgenta.User.Api.Models.DTOs.Requests
     public class UserConfirmationDto
     {
         [Required]
-        [EmailAddress]
-        public string Email { get; set; }
+        public string UserId { get; set; }
         [Required]
         public string Code { get; set; }
     }

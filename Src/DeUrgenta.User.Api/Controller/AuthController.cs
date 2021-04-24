@@ -52,8 +52,9 @@ namespace DeUrgenta.User.Api.Controller
             {
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                var confirmationUrl = _configuration.GetValue<string>("ConfirmationUrl");
                 var callbackUrl =
-                    $"confirmEmail.html?userId={newUser.Id}&code={code}";
+                    $"{confirmationUrl}?userId={newUser.Id}&code={code}";
 
                 await SendRegistrationEmail(newUser.UserName, user.Email, callbackUrl);
                 return Ok("Email was sent");
@@ -70,7 +71,7 @@ namespace DeUrgenta.User.Api.Controller
         [Route("confirm")]
         public async Task<IActionResult> ConfirmEmail([FromBody] UserConfirmationDto confirmationRequest)
         {
-            var user = await _userManager.FindByEmailAsync(confirmationRequest.Email);
+            var user = await _userManager.FindByIdAsync(confirmationRequest.UserId);
             if (user == null)
             {
                 return BadRequest();
