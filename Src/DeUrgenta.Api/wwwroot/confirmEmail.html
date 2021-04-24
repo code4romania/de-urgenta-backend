@@ -14,11 +14,6 @@
         xmlhttp.open("POST", "/auth/confirm");
         xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xmlhttp.send(JSON.stringify({ "userId": userId, "code": code }));
-
-        xmlhttp.onreadystatechange = (e) => {
-            console.log(e);
-            console.log(xmlhttp);
-        }
     </script>
 </body>
 </html>
