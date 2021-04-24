@@ -3,8 +3,6 @@
     public enum EmailTemplate
     {
         AccountConfirmation,  
-        DailyAssessment, 
-        StateEntity,
         ResetPassword
     }
 }
