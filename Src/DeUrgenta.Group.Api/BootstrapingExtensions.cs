@@ -1,4 +1,5 @@
-﻿using DeUrgenta.Group.Api.Commands;
+﻿using DeUrgenta.Common.Validation;
+using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Queries;
 using DeUrgenta.Group.Api.Validators;
 using Microsoft.Extensions.DependencyInjection;

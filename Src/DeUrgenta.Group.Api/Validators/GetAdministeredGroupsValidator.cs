@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Group.Api.Queries;
 using Microsoft.EntityFrameworkCore;
