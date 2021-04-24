@@ -5,6 +5,7 @@ using DeUrgenta.Certifications.Api.Controller;
 using DeUrgenta.Api.Extensions;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.Domain;
+using DeUrgenta.Group.Api;
 using DeUrgenta.Group.Api.Controllers;
 using Hellang.Middleware.ProblemDetails;
 using DeUrgenta.Infra.Extensions;
@@ -38,6 +39,7 @@ namespace DeUrgenta.Api
             services.AddDatabase<DeUrgentaContext>(Configuration.GetConnectionString("DbConnectionString"));
             services.AddExceptionHandling(WebHostEnvironment);
             services.AddBearerAuth(Configuration);
+            services.ConfigureGroupApiServices();
 
             var applicationAssemblies = GetAssemblies();
 

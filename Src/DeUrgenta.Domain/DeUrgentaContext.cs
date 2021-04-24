@@ -20,6 +20,7 @@ namespace DeUrgenta.Domain
         public DbSet<UserToGroup> UsersToGroups { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<BlogPost> Blogs { get; set; }
+        public DbSet<GroupInvite> GroupInvites { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
        {
@@ -42,6 +43,7 @@ namespace DeUrgenta.Domain
 
             modelBuilder.ApplyConfiguration(new BlogPostEntityConfiguration());
             modelBuilder.ApplyConfiguration(new EventEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new GroupInviteEntityConfiguration());
         }
     }
 }

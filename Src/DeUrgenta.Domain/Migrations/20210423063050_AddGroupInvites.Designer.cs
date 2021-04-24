@@ -3,15 +3,17 @@ using System;
 using DeUrgenta.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DeUrgenta.Domain.Migrations
 {
     [DbContext(typeof(DeUrgentaContext))]
-    partial class DeUrgentaContextModelSnapshot : ModelSnapshot
+    [Migration("20210423063050_AddGroupInvites")]
+    partial class AddGroupInvites
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -216,10 +218,10 @@ namespace DeUrgenta.Domain.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
 
-                    b.Property<Guid?>("SafeLocation1Id")
+                    b.Property<Guid>("SafeLocation1Id")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("SafeLocation2Id")
+                    b.Property<Guid>("SafeLocation2Id")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id")
@@ -438,11 +440,15 @@ namespace DeUrgenta.Domain.Migrations
 
                     b.HasOne("DeUrgenta.Domain.Entities.GroupSafeLocation", "SafeLocation1")
                         .WithMany()
-                        .HasForeignKey("SafeLocation1Id");
+                        .HasForeignKey("SafeLocation1Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("DeUrgenta.Domain.Entities.GroupSafeLocation", "SafeLocation2")
                         .WithMany()
-                        .HasForeignKey("SafeLocation2Id");
+                        .HasForeignKey("SafeLocation2Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Admin");
 

@@ -20,6 +20,7 @@ namespace DeUrgenta.Domain.Entities
         public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Sub { get; set; }
         public ICollection<Backpack> Backpacks { get; set; }
         public ICollection<Certification> Certifications { get; set; }
         public ICollection<BackpackToUser> BackpackUsers { get; set; }
