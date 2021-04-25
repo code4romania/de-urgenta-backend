@@ -5,15 +5,29 @@
     <title>Confirmare adresa de email</title>
 </head>
 <body>
-    <script>        
+    <script>   
+        function callback(xhr) {
+            if (xhr.status === 200) {
+                document.getElementById('status').innerHTML = 'Adresa de mail a fost confirmata. Va puteti intoarce in aplicatie.';
+            } else {
+                document.getElementById('status').innerHTML = 'Eroare.';
+            }
+        }
         const urlParams = new URLSearchParams(window.location.search);
         const userId = urlParams.get('userId');
         const code = urlParams.get('code');
 
-        var xmlhttp = new XMLHttpRequest();   
-        xmlhttp.open("POST", "/auth/confirm");
-        xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xmlhttp.send(JSON.stringify({ "userId": userId, "code": code }));
+        var xhr = new XMLHttpRequest();   
+        xhr.open("POST", "/auth/confirm");
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                callback(xhr);
+            }
+        }
+        xhr.send(JSON.stringify({ "userId": userId, "code": code }));
+
     </script>
+    <div id="status"></div>
 </body>
 </html>
