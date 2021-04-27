@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Backpack.Api.Validators
 {
@@ -15,8 +15,7 @@ namespace DeUrgenta.Backpack.Api.Validators
         }
         public async Task<bool> IsValidAsync(DeleteBackpackItem request)
         {
-            //TODO: check if item exists
-            throw new NotImplementedException();
+            return await _context.BackpackItem.AnyAsync(x => x.Id == request.ItemId);
         }
     }
 }

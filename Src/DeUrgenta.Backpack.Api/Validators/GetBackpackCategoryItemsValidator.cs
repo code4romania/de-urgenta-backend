@@ -17,7 +17,6 @@ namespace DeUrgenta.Backpack.Api.Validators
         public async Task<bool> IsValidAsync(GetBackpackCategoryItems request)
         {
             return await _context.Backpacks.AnyAsync(x => x.Id == request.BackpackId);
-            //TODO: check if category is valid
         }
     }
 }

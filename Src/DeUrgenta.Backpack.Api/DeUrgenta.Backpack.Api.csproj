@@ -20,4 +20,9 @@
 	  <ProjectReference Include="..\DeUrgenta.Domain\DeUrgenta.Domain.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="CommandHandlers\" />
+	  <Folder Include="QueryHandlers\" />
+	</ItemGroup>
+
 </Project>
