@@ -5,6 +5,7 @@ using DeUrgenta.Infra.Extensions;
 using DeUrgenta.User.Api.Domain;
 using DeUrgenta.User.Api.Options;
 using DeUrgenta.User.Api.Services;
+using DeUrgenta.User.Api.Services.Emailing;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -50,7 +51,7 @@ namespace DeUrgenta.User.Api.Extensions
                 jwt.SaveToken = true;
                 jwt.TokenValidationParameters = tokenValidationParams;
             });
-            
+
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -62,7 +63,7 @@ namespace DeUrgenta.User.Api.Extensions
                 options.Password.RequiredLength = 6;
                 options.Password.RequiredUniqueChars = 0;
 
-                
+
             });
 
             services.AddTransient<IJwtService, JwtService>();
@@ -72,7 +73,50 @@ namespace DeUrgenta.User.Api.Extensions
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<UserDbContext>();
 
+
             return services;
+        }
+
+        public static void SetupEmailService(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddTransient<IEmailBuilderService, EmailBuilderService>();
+            services.AddSingleton<ITemplateFileSelector, TemplateFileSelector>();
+
+
+            var emailType = configuration.GetValue<EmailingSystemTypes>("EMailingSystem");
+
+            var sp = services.BuildServiceProvider();
+            var emailBuilder = sp.GetService<IEmailBuilderService>();
+
+            switch (emailType)
+            {
+                case EmailingSystemTypes.SendGrid:
+                    services.AddSingleton<IEmailSender, SendGridSender>(ctx =>
+                        new SendGridSender(
+                            emailBuilder,
+                            new SendGridOptions
+                            {
+                                ApiKey = configuration["SendGrid:ApiKey"],
+                                ClickTracking = configuration.GetValue<bool>("SendGrid:ClickTracking")
+                            }
+                        )
+                    );
+                    break;
+                case EmailingSystemTypes.Smtp:
+                    services.AddSingleton<IEmailSender, SmtpSender>(ctx =>
+                        new SmtpSender(
+                            emailBuilder,
+                            new SmtpOptions
+                            {
+                                Host = configuration["Smtp:Host"],
+                                Port = configuration.GetValue<int>("Smtp:Port"),
+                                User = configuration["Smtp:User"],
+                                Password = configuration["Smtp:Password"]
+                            }
+                        )
+                    );
+                    break;
+            }
         }
     }
 }
