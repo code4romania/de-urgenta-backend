@@ -7,7 +7,6 @@ using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Group.Api.Models;
 using DeUrgenta.Group.Api.Queries;
-using DeUrgenta.Group.Api.Validators;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,6 +26,7 @@ namespace DeUrgenta.Group.Api.QueryHandlers
         public async Task<Result<IImmutableList<GroupModel>>> Handle(GetMyGroups request, CancellationToken cancellationToken)
         {
             var isValid = await _validator.IsValidAsync(request);
+
             if (!isValid)
             {
                 return Result.Failure<IImmutableList<GroupModel>>("Validation failed");
@@ -36,10 +36,14 @@ namespace DeUrgenta.Group.Api.QueryHandlers
 
             var groups = await _context.UsersToGroups
                 .Include(g => g.Group)
-                .Include(u => u.User)
                 .Where(userToGroup => userToGroup.UserId == user.Id)
                 .Select(x => x.Group)
-                .Select(g => new GroupModel { Id = g.Id, Name = g.Name, IsAdmin = g.AdminId == user.Id })
+                .Select(g => new GroupModel
+                {
+                    Id = g.Id,
+                    Name = g.Name,
+                    IsAdmin = g.AdminId == user.Id
+                })
                 .ToListAsync(cancellationToken);
 
             return groups.ToImmutableList();

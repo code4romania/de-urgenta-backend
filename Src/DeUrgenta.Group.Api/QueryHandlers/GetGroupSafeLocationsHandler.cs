@@ -6,7 +6,6 @@ using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Group.Api.Models;
 using DeUrgenta.Group.Api.Queries;
-using DeUrgenta.Group.Api.Validators;
 using MediatR;
 
 namespace DeUrgenta.Group.Api.QueryHandlers
