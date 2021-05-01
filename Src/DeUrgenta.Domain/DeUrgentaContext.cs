@@ -11,7 +11,6 @@ namespace DeUrgenta.Domain
         }
 
         public DbSet<Backpack> Backpacks { get; set; }
-        public DbSet<BackpackToUser> BackpacksToUsers { get; set; }
         public DbSet<Certification> Certifications { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<GroupSafeLocation> GroupsSafeLocations { get; set; }
@@ -31,7 +30,6 @@ namespace DeUrgenta.Domain
             modelBuilder.ApplyConfiguration(new BackpackEntityConfiguration());
             modelBuilder.ApplyConfiguration(new BackpackItemEntityConfiguration());
 
-            modelBuilder.ApplyConfiguration(new BackpackToUserEntityConfiguration());
             modelBuilder.ApplyConfiguration(new CertificationEntityConfiguration());
             modelBuilder.ApplyConfiguration(new GroupEntityConfiguration());
 

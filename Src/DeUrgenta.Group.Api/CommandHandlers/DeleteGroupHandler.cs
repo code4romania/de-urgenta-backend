@@ -4,7 +4,6 @@ using CSharpFunctionalExtensions;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Group.Api.Commands;
-using DeUrgenta.Group.Api.Validators;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,7 +28,6 @@ namespace DeUrgenta.Group.Api.CommandHandlers
                 return Result.Failure("Validation failed");
             }
 
-            // TODO: what to do with backpack ?
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
             var group = await _context.Groups.FirstAsync(g => g.AdminId == user.Id, cancellationToken);
 

@@ -24,7 +24,7 @@ namespace DeUrgenta.Group.Api.Validators
                 return false;
             }
 
-            var isAdmin = await _context.Groups.AnyAsync(g => g.Admin.Id == user.Id);
+            var isAdmin = await _context.Groups.AnyAsync(g => g.Admin.Id == user.Id && g.Id == request.GroupId);
             if (isAdmin)
             {
                 return false;

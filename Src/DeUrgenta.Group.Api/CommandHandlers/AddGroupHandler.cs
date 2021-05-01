@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
+using DeUrgenta.Domain.Entities;
 using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Models;
-using DeUrgenta.Group.Api.Validators;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,8 +31,29 @@ namespace DeUrgenta.Group.Api.CommandHandlers
             }
 
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
-            var group = new Domain.Entities.Group { Admin = user, Name = request.Group.Name };
+            
+            var newBackpack = new Backpack
+            {
+                Name = $"Backpack for {request.Group.Name}"
+            };
+
+            var group = new Domain.Entities.Group
+            {
+                Admin = user, 
+                Name = request.Group.Name,
+                Backpack = newBackpack
+            };
+
             var newGroup = await _context.Groups.AddAsync(group, cancellationToken);
+
+            await _context.UsersToGroups.AddAsync(
+                new UserToGroup
+                {
+                    User = user,
+                    Group = group
+                }, cancellationToken);
+
+            await _context.SaveChangesAsync(cancellationToken);
 
             return new GroupModel { Id = newGroup.Entity.Id, Name = newGroup.Entity.Name, IsAdmin = true };
         }

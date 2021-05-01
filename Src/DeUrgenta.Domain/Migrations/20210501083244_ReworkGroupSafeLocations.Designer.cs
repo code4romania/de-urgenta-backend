@@ -3,15 +3,17 @@ using System;
 using DeUrgenta.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DeUrgenta.Domain.Migrations
 {
     [DbContext(typeof(DeUrgentaContext))]
-    partial class DeUrgentaContextModelSnapshot : ModelSnapshot
+    [Migration("20210501083244_ReworkGroupSafeLocations")]
+    partial class ReworkGroupSafeLocations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,6 +29,9 @@ namespace DeUrgenta.Domain.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
+                    b.Property<Guid>("AdminUserId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("GroupId")
                         .HasColumnType("uuid");
 
@@ -37,6 +42,8 @@ namespace DeUrgenta.Domain.Migrations
 
                     b.HasKey("Id")
                         .HasName("PK_Backpack");
+
+                    b.HasIndex("AdminUserId");
 
                     b.HasIndex("GroupId")
                         .IsUnique();
@@ -353,11 +360,19 @@ namespace DeUrgenta.Domain.Migrations
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.Backpack", b =>
                 {
+                    b.HasOne("DeUrgenta.Domain.Entities.User", "AdminUser")
+                        .WithMany()
+                        .HasForeignKey("AdminUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DeUrgenta.Domain.Entities.Group", "Group")
                         .WithOne("Backpack")
                         .HasForeignKey("DeUrgenta.Domain.Entities.Backpack", "GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("AdminUser");
 
                     b.Navigation("Group");
                 });

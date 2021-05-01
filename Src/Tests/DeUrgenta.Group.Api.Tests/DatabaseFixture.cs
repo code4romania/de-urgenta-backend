@@ -37,7 +37,8 @@ namespace DeUrgenta.Group.Api.Tests
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.testing.json", optional: false)
+                .AddJsonFile("appsettings.testing.json")
+                .AddEnvironmentVariables()
                 .Build();
             
             return configuration.GetConnectionString("TestingDbConnectionString");

@@ -5,7 +5,6 @@ using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
 using DeUrgenta.Group.Api.Commands;
-using DeUrgenta.Group.Api.Validators;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,7 +42,6 @@ namespace DeUrgenta.Group.Api.CommandHandlers
             });
 
             await _context.SaveChangesAsync(cancellationToken);
-
 
             return Result.Success();
         }

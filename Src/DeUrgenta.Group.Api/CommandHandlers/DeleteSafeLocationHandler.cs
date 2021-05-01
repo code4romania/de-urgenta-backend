@@ -4,7 +4,6 @@ using CSharpFunctionalExtensions;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Group.Api.Commands;
-using DeUrgenta.Group.Api.Validators;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

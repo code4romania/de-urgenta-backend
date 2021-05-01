@@ -39,6 +39,15 @@ namespace DeUrgenta.Group.Api.Validators
                 return false;
             }
 
+            var isAlreadyInvited = await _context.GroupInvites.AnyAsync(utg =>
+                utg.InvitationReceiver.Id == invitedUser.Id
+                && utg.Group.Id == request.GroupId);
+
+            if (isAlreadyInvited)
+            {
+                return false;
+            }
+
             var group = await _context.Groups.FirstOrDefaultAsync(g => g.Id == request.GroupId);
             if (group == null)
             {

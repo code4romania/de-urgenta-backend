@@ -129,6 +129,58 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         }
 
         [Fact]
+        public async Task Invalidate_when_user_is_already_invited()
+        {
+            // Arrange
+            var sut = new InviteToGroupValidator(_dbContext);
+
+            string userSub = Guid.NewGuid().ToString();
+            string nonGroupUserSub = Guid.NewGuid().ToString();
+
+            var admin = new User
+            {
+                FirstName = "Integration",
+                LastName = "Test",
+                Sub = userSub
+            };
+
+            var invitedGroupUser = new User
+            {
+                FirstName = "Integration2",
+                LastName = "Test2",
+                Sub = nonGroupUserSub
+            };
+
+            var group = new Domain.Entities.Group
+            {
+                Admin = admin,
+                Name = "my group"
+            };
+
+            var userToGroups = new UserToGroup { Group = group, User = admin };
+            var groupInvite = new GroupInvite
+            {
+                Group = group,
+                InvitationReceiver = invitedGroupUser,
+                InvitationSender = admin
+            };
+
+            await _dbContext.Users.AddAsync(admin);
+            await _dbContext.Users.AddAsync(invitedGroupUser);
+            await _dbContext.Groups.AddAsync(group);
+            await _dbContext.UsersToGroups.AddAsync(userToGroups);
+            await _dbContext.GroupInvites.AddAsync(groupInvite);
+
+            await _dbContext.SaveChangesAsync();
+
+            // Act
+            bool isValid = await sut.IsValidAsync(new InviteToGroup(userSub, group.Id, invitedGroupUser.Id));
+
+            // Assert
+            isValid.ShouldBeFalse();
+        }
+
+        [Fact]
         public async Task Validate_when_user_is_admin_of_group_and_invited_existing_user()
         {
             // Arrange

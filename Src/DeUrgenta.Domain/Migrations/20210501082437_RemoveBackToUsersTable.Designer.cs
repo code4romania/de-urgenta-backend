@@ -3,15 +3,17 @@ using System;
 using DeUrgenta.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DeUrgenta.Domain.Migrations
 {
     [DbContext(typeof(DeUrgentaContext))]
-    partial class DeUrgentaContextModelSnapshot : ModelSnapshot
+    [Migration("20210501082437_RemoveBackToUsersTable")]
+    partial class RemoveBackToUsersTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,7 +29,7 @@ namespace DeUrgenta.Domain.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
-                    b.Property<Guid>("GroupId")
+                    b.Property<Guid>("AdminUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -38,8 +40,7 @@ namespace DeUrgenta.Domain.Migrations
                     b.HasKey("Id")
                         .HasName("PK_Backpack");
 
-                    b.HasIndex("GroupId")
-                        .IsUnique();
+                    b.HasIndex("AdminUserId");
 
                     b.ToTable("Backpacks");
                 });
@@ -188,10 +189,20 @@ namespace DeUrgenta.Domain.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
 
+                    b.Property<Guid?>("SafeLocation1Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("SafeLocation2Id")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id")
                         .HasName("PK_Group");
 
                     b.HasIndex("AdminId");
+
+                    b.HasIndex("SafeLocation1Id");
+
+                    b.HasIndex("SafeLocation2Id");
 
                     b.ToTable("Groups");
                 });
@@ -238,9 +249,6 @@ namespace DeUrgenta.Domain.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
-                    b.Property<Guid?>("GroupId")
-                        .HasColumnType("uuid");
-
                     b.Property<decimal>("Latitude")
                         .HasColumnType("numeric");
 
@@ -254,8 +262,6 @@ namespace DeUrgenta.Domain.Migrations
 
                     b.HasKey("Id")
                         .HasName("PK_GroupSafeLocation");
-
-                    b.HasIndex("GroupId");
 
                     b.ToTable("GroupsSafeLocations");
                 });
@@ -353,13 +359,13 @@ namespace DeUrgenta.Domain.Migrations
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.Backpack", b =>
                 {
-                    b.HasOne("DeUrgenta.Domain.Entities.Group", "Group")
-                        .WithOne("Backpack")
-                        .HasForeignKey("DeUrgenta.Domain.Entities.Backpack", "GroupId")
+                    b.HasOne("DeUrgenta.Domain.Entities.User", "AdminUser")
+                        .WithMany("Backpacks")
+                        .HasForeignKey("AdminUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Group");
+                    b.Navigation("AdminUser");
                 });
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.Certification", b =>
@@ -382,7 +388,19 @@ namespace DeUrgenta.Domain.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DeUrgenta.Domain.Entities.GroupSafeLocation", "SafeLocation1")
+                        .WithMany()
+                        .HasForeignKey("SafeLocation1Id");
+
+                    b.HasOne("DeUrgenta.Domain.Entities.GroupSafeLocation", "SafeLocation2")
+                        .WithMany()
+                        .HasForeignKey("SafeLocation2Id");
+
                     b.Navigation("Admin");
+
+                    b.Navigation("SafeLocation1");
+
+                    b.Navigation("SafeLocation2");
                 });
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.GroupInvite", b =>
@@ -415,16 +433,6 @@ namespace DeUrgenta.Domain.Migrations
                     b.Navigation("InvitationSender");
                 });
 
-            modelBuilder.Entity("DeUrgenta.Domain.Entities.GroupSafeLocation", b =>
-                {
-                    b.HasOne("DeUrgenta.Domain.Entities.Group", "Group")
-                        .WithMany("GroupSafeLocations")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Group");
-                });
-
             modelBuilder.Entity("DeUrgenta.Domain.Entities.UserAddress", b =>
                 {
                     b.HasOne("DeUrgenta.Domain.Entities.User", null)
@@ -455,16 +463,14 @@ namespace DeUrgenta.Domain.Migrations
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.Group", b =>
                 {
-                    b.Navigation("Backpack");
-
                     b.Navigation("GroupMembers");
-
-                    b.Navigation("GroupSafeLocations");
                 });
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.User", b =>
                 {
                     b.Navigation("Addresses");
+
+                    b.Navigation("Backpacks");
 
                     b.Navigation("Certifications");
 

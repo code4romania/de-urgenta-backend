@@ -4,7 +4,6 @@ using CSharpFunctionalExtensions;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Group.Api.Commands;
-using DeUrgenta.Group.Api.Validators;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,7 +32,7 @@ namespace DeUrgenta.Group.Api.CommandHandlers
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
             var groupAssignment = await _context
                 .UsersToGroups
-                .FirstAsync(utg => utg.GroupId == request.GroupId && utg.UserId == user.Id, cancellationToken);
+                .FirstAsync(utg => utg.Group.Id == request.GroupId && utg.User.Id == user.Id, cancellationToken);
 
             _context.UsersToGroups.Remove(groupAssignment);
             await _context.SaveChangesAsync(cancellationToken);
