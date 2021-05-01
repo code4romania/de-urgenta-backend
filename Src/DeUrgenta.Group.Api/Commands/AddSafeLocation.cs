@@ -5,7 +5,7 @@ using MediatR;
 
 namespace DeUrgenta.Group.Api.Commands
 {
-    public class AddSafeLocation : IRequest<Result<SafeLocationModel>>
+    public class AddSafeLocation : IRequest<Result<SafeLocationResponseModel>>
     {
         public string UserSub { get; }
         public Guid GroupId { get; }

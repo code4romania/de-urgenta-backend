@@ -23,6 +23,14 @@ namespace DeUrgenta.Group.Api.Validators
                 return false;
             }
 
+            var isGroupAdmin = await _context.GroupsSafeLocations
+                .AnyAsync(gsl => gsl.Group.Admin.Id == user.Id && gsl.Id == request.SafeLocationId);
+
+            if (!isGroupAdmin)
+            {
+                return false;
+            }
+
             return true;
         }
     }

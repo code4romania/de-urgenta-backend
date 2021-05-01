@@ -29,7 +29,12 @@ namespace DeUrgenta.Group.Api.CommandHandlers
                 return Result.Failure("Validation failed");
             }
 
-            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
+            var safeLocation =await _context
+                .GroupsSafeLocations
+                .FirstAsync(gsl => gsl.Id == request.SafeLocationId, cancellationToken);
+
+            _context.GroupsSafeLocations.Remove(safeLocation);
+            await _context.SaveChangesAsync(cancellationToken);
 
             return Result.Success();
         }

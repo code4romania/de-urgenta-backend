@@ -24,6 +24,13 @@ namespace DeUrgenta.Group.Api.Validators
                 return false;
             }
 
+            var isGroupAdmin = await _context.Groups.AnyAsync(g => g.Admin.Id == user.Id && g.Id == request.GroupId);
+
+            if (!isGroupAdmin)
+            {
+                return false;
+            }
+
             return true;
         }
     }

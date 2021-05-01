@@ -35,7 +35,7 @@ namespace DeUrgenta.Group.Api.Tests.CommandsHandlers
             var sut = new UpdateSafeLocationHandler(validator, _dbContext);
 
             // Act
-            var result = await sut.Handle(new UpdateSafeLocation("a-sub", Guid.NewGuid(), Guid.NewGuid(), new SafeLocationRequest()), CancellationToken.None);
+            var result = await sut.Handle(new UpdateSafeLocation("a-sub", Guid.NewGuid(), new SafeLocationRequest()), CancellationToken.None);
 
             // Assert
             result.IsFailure.ShouldBeTrue();

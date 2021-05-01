@@ -7,12 +7,12 @@ namespace DeUrgenta.Group.Api.Commands
     public class DeleteSafeLocation : IRequest<Result>
     {
         public string UserSub { get; }
-        public Guid LocationId { get; }
+        public Guid SafeLocationId { get; }
 
-        public DeleteSafeLocation(string userSub, Guid locationId)
+        public DeleteSafeLocation(string userSub, Guid safeLocationId)
         {
             UserSub = userSub;
-            LocationId = locationId;
+            SafeLocationId = safeLocationId;
         }
     }
 }

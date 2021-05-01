@@ -6,10 +6,11 @@ using DeUrgenta.Domain;
 using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Models;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Group.Api.CommandHandlers
 {
-    public class UpdateSafeLocationHandler : IRequestHandler<UpdateSafeLocation, Result<SafeLocationModel>>
+    public class UpdateSafeLocationHandler : IRequestHandler<UpdateSafeLocation, Result<SafeLocationResponseModel>>
     {
         private readonly IValidateRequest<UpdateSafeLocation> _validator;
         private readonly DeUrgentaContext _context;
@@ -19,15 +20,33 @@ namespace DeUrgenta.Group.Api.CommandHandlers
             _validator = validator;
             _context = context;
         }
-        public async Task<Result<SafeLocationModel>> Handle(UpdateSafeLocation request, CancellationToken cancellationToken)
+        public async Task<Result<SafeLocationResponseModel>> Handle(UpdateSafeLocation request, CancellationToken cancellationToken)
         {
             var isValid = await _validator.IsValidAsync(request);
             if (!isValid)
             {
-                return Result.Failure<SafeLocationModel>("Validation failed");
+                return Result.Failure<SafeLocationResponseModel>("Validation failed");
             }
 
-            return new SafeLocationModel();
+            var safeLocation = await _context
+                .GroupsSafeLocations
+                .Include(gsl=>gsl.Group)
+                .FirstAsync(gsl => gsl.Id == request.SafeLocationId, cancellationToken);
+
+            safeLocation.Latitude = request.SafeLocation.Latitude;
+            safeLocation.Longitude = request.SafeLocation.Longitude;
+            safeLocation.Name = request.SafeLocation.Name;
+            await _context.SaveChangesAsync(cancellationToken);
+
+
+            return new SafeLocationResponseModel
+            {
+                Latitude = safeLocation.Latitude,
+                Longitude = safeLocation.Longitude,
+                Name = safeLocation.Name,
+                Id = safeLocation.Id,
+                GroupId = safeLocation.Group.Id
+            };
         }
     }
 }

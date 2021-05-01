@@ -295,10 +295,10 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerRequestExample(typeof(SafeLocationRequest), typeof(AddOrUpdateSafeLocationRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddSafeLocationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateSafeLocationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<SafeLocationModel>> CreateNewSafeLocationAsync([FromRoute] Guid groupId, [FromBody] SafeLocationRequest safeLocation)
+        public async Task<ActionResult<SafeLocationResponseModel>> CreateNewSafeLocationAsync([FromRoute] Guid groupId, [FromBody] SafeLocationRequest safeLocation)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var query = new AddSafeLocation(sub, groupId, safeLocation);
@@ -317,20 +317,20 @@ namespace DeUrgenta.Group.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPut]
-        [Route("{groupId:guid}/safe-location/{locationId:guid}")]
+        [Route("safe-location/{locationId:guid}")]
 
         [SwaggerResponse(StatusCodes.Status200OK, "Updated group safe location", typeof(SafeLocationModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerRequestExample(typeof(SafeLocationRequest), typeof(AddOrUpdateSafeLocationRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddSafeLocationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateSafeLocationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<SafeLocationModel>> UpdateSafeLocationAsync([FromRoute] Guid groupId, [FromRoute] Guid locationId, [FromBody] SafeLocationRequest safeLocation)
+        public async Task<ActionResult<SafeLocationModel>> UpdateSafeLocationAsync([FromRoute] Guid locationId, [FromBody] SafeLocationRequest safeLocation)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var query = new UpdateSafeLocation(sub, groupId,locationId, safeLocation);
+            var query = new UpdateSafeLocation(sub, locationId, safeLocation);
             var result = await _mediator.Send(query);
 
             if (result.IsFailure)

@@ -36,23 +36,134 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         }
 
         [Fact]
-        public async Task Validate_when_user_was_found_by_sub()
+        public async Task Invalidate_request_when_no_safe_location_found()
         {
             // Arrange
-            var sut = new DeleteSafeLocationValidator(_dbContext);
             string userSub = Guid.NewGuid().ToString();
-
-            await _dbContext.Users.AddAsync(new User
+            var user = new User
             {
                 FirstName = "Integration",
                 LastName = "Test",
                 Sub = userSub
-            });
+            };
+
+            await _dbContext.Users.AddAsync(user);
 
             await _dbContext.SaveChangesAsync();
 
+            var sut = new DeleteSafeLocationValidator(_dbContext);
+
             // Act
             bool isValid = await sut.IsValidAsync(new DeleteSafeLocation(userSub, Guid.NewGuid()));
+
+            // Assert
+            isValid.ShouldBeFalse();
+        }
+
+        [Fact]
+        public async Task Invalidate_request_when_group_does_not_exists()
+        {
+            // Arrange
+            string userSub = Guid.NewGuid().ToString();
+            var user = new User
+            {
+                FirstName = "Integration",
+                LastName = "Test",
+                Sub = userSub
+            };
+
+            await _dbContext.Users.AddAsync(user);
+            await _dbContext.SaveChangesAsync();
+            var sut = new DeleteSafeLocationValidator(_dbContext);
+
+            // Act
+            bool isValid = await sut.IsValidAsync(new DeleteSafeLocation(userSub, Guid.NewGuid()));
+
+            // Assert
+            isValid.ShouldBeFalse();
+        }
+
+        [Fact]
+        public async Task Invalidate_request_when_user_is_not_admin_of_group()
+        {
+            // Arrange
+            string userSub = Guid.NewGuid().ToString();
+            string adminSub = Guid.NewGuid().ToString();
+
+            var user = new User
+            {
+                FirstName = "Integration",
+                LastName = "Test",
+                Sub = userSub
+            };
+
+            var adminUser = new User
+            {
+                FirstName = "Admin",
+                LastName = "User",
+                Sub = adminSub
+            };
+
+            var group = new Domain.Entities.Group
+            {
+                Admin = adminUser,
+                Name = "a group"
+            };
+
+            var groupSafeLocation = new GroupSafeLocation
+            {
+                Group = group,
+                Name = "A safe location"
+            };
+
+            await _dbContext.Users.AddAsync(user);
+            await _dbContext.Users.AddAsync(adminUser);
+            await _dbContext.Groups.AddAsync(group);
+            await _dbContext.GroupsSafeLocations.AddAsync(groupSafeLocation);
+            await _dbContext.SaveChangesAsync();
+
+            var sut = new DeleteSafeLocationValidator(_dbContext);
+
+            // Act
+            bool isValid = await sut.IsValidAsync(new DeleteSafeLocation(userSub, groupSafeLocation.Id));
+
+            // Assert
+            isValid.ShouldBeFalse();
+        }
+
+        [Fact]
+        public async Task Validate_when_user_is_admin_of_requested_group()
+        {
+            // Arrange
+            var sut = new DeleteSafeLocationValidator(_dbContext);
+
+            string userSub = Guid.NewGuid().ToString();
+            var user = new User
+            {
+                FirstName = "Integration",
+                LastName = "Test",
+                Sub = userSub
+            };
+
+            var group = new Domain.Entities.Group
+            {
+                Admin = user,
+                Name = "my group"
+            };
+
+            var groupSafeLocation = new GroupSafeLocation
+            {
+                Group = group,
+                Name = "A safe location"
+            };
+
+            await _dbContext.Users.AddAsync(user);
+            await _dbContext.Groups.AddAsync(group);
+            await _dbContext.GroupsSafeLocations.AddAsync(groupSafeLocation);
+            await _dbContext.SaveChangesAsync();
+
+            // Act
+            bool isValid = await sut.IsValidAsync(new DeleteSafeLocation(userSub, groupSafeLocation.Id));
 
             // Assert
             isValid.ShouldBeTrue();

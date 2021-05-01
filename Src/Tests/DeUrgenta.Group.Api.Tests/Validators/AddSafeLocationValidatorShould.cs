@@ -4,6 +4,7 @@ using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
 using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Models;
+using DeUrgenta.Group.Api.Queries;
 using DeUrgenta.Group.Api.Validators;
 using Shouldly;
 using Xunit;
@@ -37,23 +38,119 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         }
 
         [Fact]
-        public async Task Validate_when_user_was_found_by_sub()
+        public async Task Invalidate_request_when_no_group_found()
         {
             // Arrange
-            var sut = new AddSafeLocationValidator(_dbContext);
             string userSub = Guid.NewGuid().ToString();
-
-            await _dbContext.Users.AddAsync(new User
+            var user = new User
             {
                 FirstName = "Integration",
                 LastName = "Test",
                 Sub = userSub
-            });
+            };
+
+            await _dbContext.Users.AddAsync(user);
 
             await _dbContext.SaveChangesAsync();
 
+            var sut = new AddSafeLocationValidator(_dbContext);
+
             // Act
             bool isValid = await sut.IsValidAsync(new AddSafeLocation(userSub, Guid.NewGuid(), new SafeLocationRequest()));
+
+            // Assert
+            isValid.ShouldBeFalse();
+        }
+
+        [Fact]
+        public async Task Invalidate_request_when_group_does_not_exists()
+        {
+            // Arrange
+            string userSub = Guid.NewGuid().ToString();
+            var user = new User
+            {
+                FirstName = "Integration",
+                LastName = "Test",
+                Sub = userSub
+            };
+
+            await _dbContext.Users.AddAsync(user);
+            await _dbContext.SaveChangesAsync();
+            var sut = new AddSafeLocationValidator(_dbContext);
+
+            // Act
+            bool isValid = await sut.IsValidAsync(new AddSafeLocation(userSub, Guid.NewGuid(), new SafeLocationRequest()));
+
+            // Assert
+            isValid.ShouldBeFalse();
+        }
+
+        [Fact]
+        public async Task Invalidate_request_when_user_is_not_admin_of_group()
+        {
+            // Arrange
+            string userSub = Guid.NewGuid().ToString();
+            string adminSub = Guid.NewGuid().ToString();
+
+            var user = new User
+            {
+                FirstName = "Integration",
+                LastName = "Test",
+                Sub = userSub
+            };
+
+            var adminUser = new User
+            {
+                FirstName = "Admin",
+                LastName = "User",
+                Sub = adminSub
+            };
+
+            var group = new Domain.Entities.Group
+            {
+                Admin = adminUser,
+                Name = "a group"
+            };
+
+            await _dbContext.Users.AddAsync(user);
+            await _dbContext.Users.AddAsync(adminUser);
+            await _dbContext.Groups.AddAsync(group);
+            await _dbContext.SaveChangesAsync();
+
+            var sut = new AddSafeLocationValidator(_dbContext);
+
+            // Act
+            bool isValid = await sut.IsValidAsync(new AddSafeLocation(userSub, Guid.NewGuid(), new SafeLocationRequest()));
+
+            // Assert
+            isValid.ShouldBeFalse();
+        }
+
+        [Fact]
+        public async Task Validate_when_user_is_admin_of_requested_group()
+        {
+            // Arrange
+            var sut = new AddSafeLocationValidator(_dbContext);
+
+            string userSub = Guid.NewGuid().ToString();
+            var user = new User
+            {
+                FirstName = "Integration",
+                LastName = "Test",
+                Sub = userSub
+            };
+
+            var group = new Domain.Entities.Group
+            {
+                Admin = user,
+                Name = "my group"
+            };
+            await _dbContext.Users.AddAsync(user);
+            await _dbContext.Groups.AddAsync(group);
+            await _dbContext.SaveChangesAsync();
+
+            // Act
+            bool isValid = await sut.IsValidAsync(new AddSafeLocation(userSub, group.Id, new SafeLocationRequest()));
 
             // Assert
             isValid.ShouldBeTrue();
