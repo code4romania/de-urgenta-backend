@@ -10,11 +10,11 @@ using Xunit;
 namespace DeUrgenta.Backpack.Api.Tests.Validators
 {
     [Collection(TestsConstants.DbCollectionName)]
-    public class RemoveContributorValidatorShould
+    public class RemoveCurrentUserFromContributorsValidatorShould
     {
         private readonly DeUrgentaContext _dbContext;
 
-        public RemoveContributorValidatorShould(DatabaseFixture fixture)
+        public RemoveCurrentUserFromContributorsValidatorShould(DatabaseFixture fixture)
         {
             _dbContext = fixture.Context;
         }
@@ -26,10 +26,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_request_when_no_user_found_by_sub(string sub)
         {
             // Arrange
-            var sut = new RemoveContributorValidator(_dbContext);
+            var sut = new RemoveCurrentUserFromContributorsValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new RemoveContributor(sub, Guid.NewGuid(), Guid.NewGuid()));
+            bool isValid = await sut.IsValidAsync(new RemoveCurrentUserFromContributors(sub, Guid.NewGuid()));
 
             // Assert
             isValid.ShouldBeFalse();

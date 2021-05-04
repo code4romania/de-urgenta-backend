@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Backpack.Api.Validators
 {
@@ -15,9 +15,15 @@ namespace DeUrgenta.Backpack.Api.Validators
             _context = context;
         }
 
-        public Task<bool> IsValidAsync(UpdateBackpack request)
+        public async Task<bool> IsValidAsync(UpdateBackpack request)
         {
-            throw new NotImplementedException();
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
+            if (user == null)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
