@@ -7,7 +7,7 @@ using Npgsql;
 using Respawn;
 using Xunit;
 
-namespace DeUrgenta.Group.Api.Tests
+namespace DeUrgenta.Tests.Helpers
 {
     public class DatabaseFixture : IAsyncLifetime
     {
@@ -40,7 +40,7 @@ namespace DeUrgenta.Group.Api.Tests
                 .AddJsonFile("appsettings.testing.json")
                 .AddEnvironmentVariables()
                 .Build();
-            
+
             return configuration.GetConnectionString("TestingDbConnectionString");
         }
 
@@ -59,13 +59,5 @@ namespace DeUrgenta.Group.Api.Tests
 
             await _emptyDatabaseCheckpoint.Reset(conn);
         }
-    }
-
-    [CollectionDefinition("Database collection")]
-    public class DatabaseCollection : ICollectionFixture<DatabaseFixture>
-    {
-        // This class has no code, and is never created. Its purpose is simply
-        // to be the place to apply [CollectionDefinition] and all the
-        // ICollectionFixture<> interfaces.
     }
 }

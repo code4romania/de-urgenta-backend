@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Http;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
 using System.Linq;
+using DeUrgenta.Backpack.Api.Commands;
+using DeUrgenta.Backpack.Api.Queries;
 
 namespace DeUrgenta.Backpack.Api.Controllers
 {
@@ -41,8 +43,16 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<IImmutableList<BackpackModel>>> GetBackpacksAsync()
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub");
-            throw new NotImplementedException();
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var query = new GetBackpacks(sub);
+            var result = await _mediator.Send(query);
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return Ok(result.Value);
         }
 
         /// <summary>
@@ -59,9 +69,19 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateBackpackResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<BackpackModel>> CreateNewBackpackAsync([FromBody] BackpackModelRequest request)
+        public async Task<ActionResult<BackpackModel>> CreateNewBackpackAsync([FromBody] BackpackModelRequest backpack)
         {
-            throw new NotImplementedException();
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+
+            var command = new CreateBackpack(sub, backpack);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return Ok(result.Value);
         }
 
         /// <summary>
@@ -80,7 +100,17 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<BackpackModel>> UpdateBackpackAsync([FromRoute] Guid backpackId, [FromBody] BackpackModelRequest backpack)
         {
-            throw new NotImplementedException();
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+
+            var command = new UpdateBackpack(sub, backpackId, backpack);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return Ok(result.Value);
         }
 
         /// <summary>
@@ -98,7 +128,17 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<IImmutableList<BackpackContributorModel>>> GetBackpackContributorsAsync([FromRoute] Guid backpackId)
         {
-            throw new NotImplementedException();
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+
+            var command = new GetBackpackContributors(sub, backpackId);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return Ok(result.Value);
         }
 
         /// <summary>
@@ -107,7 +147,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [HttpPut]
         [Route("{backpackId:guid}/contributor/{userId:guid}/invite")]
 
-        [SwaggerResponse(StatusCodes.Status204NoContent, "Invitation sent", typeof(BackpackModel))]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "Invitation sent")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
@@ -115,9 +155,19 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetBackpackContributorsResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<BackpackModel>> AddContributorAsync([FromRoute] Guid backpackId, [FromRoute] Guid userId)
+        public async Task<ActionResult> InviteToBackpackContributorsAsync([FromRoute] Guid backpackId, [FromRoute] Guid userId)
         {
-            throw new NotImplementedException();
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+
+            var command = new InviteToBackpackContributors(sub, backpackId, userId);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
         }
 
         /// <summary>
@@ -126,16 +176,26 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [HttpDelete]
         [Route("{backpackId:guid}/contributor/{userId:guid}")]
 
-        [SwaggerResponse(StatusCodes.Status204NoContent, "User removed from contributors", typeof(BackpackModel))]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "User removed from contributors")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerRequestExample(typeof(BackpackModelRequest), typeof(AddOrUpdateBackpackRequestExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<BackpackModel>> RemoveContributorAsync([FromRoute] Guid backpackId, [FromRoute] Guid userId)
+        public async Task<ActionResult> RemoveContributorAsync([FromRoute] Guid backpackId, [FromRoute] Guid userId)
         {
-            throw new NotImplementedException();
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+
+            var command = new RemoveContributor(sub, backpackId, userId);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
         }
 
         /// <summary>
@@ -144,15 +204,25 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [HttpPut]
         [Route("{backpackId:guid}/contributor/leave")]
 
-        [SwaggerResponse(StatusCodes.Status204NoContent, "User leaved from contributors", typeof(BackpackModel))]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "User leaved from contributors")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<BackpackModel>> RemoveCurrentContributorAsync([FromRoute] Guid backpackId)
+        public async Task<ActionResult> RemoveCurrentContributorAsync([FromRoute] Guid backpackId)
         {
-            throw new NotImplementedException();
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+
+            var command = new RemoveCurrentUserFromContributors(sub, backpackId);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
         }
 
         /// <summary>
@@ -170,7 +240,17 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult> DeleteBackpackAsync([FromRoute] Guid backpackId)
         {
-            throw new NotImplementedException();
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+
+            var command = new DeleteBackpack(sub, backpackId);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
         }
     }
 }

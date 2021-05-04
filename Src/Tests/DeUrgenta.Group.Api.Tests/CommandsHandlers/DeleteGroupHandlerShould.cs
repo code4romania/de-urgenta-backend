@@ -5,14 +5,14 @@ using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Group.Api.CommandHandlers;
 using DeUrgenta.Group.Api.Commands;
-using DeUrgenta.Group.Api.Validators;
+using DeUrgenta.Tests.Helpers;
 using NSubstitute;
 using Shouldly;
 using Xunit;
 
 namespace DeUrgenta.Group.Api.Tests.CommandsHandlers
 {
-    [Collection("Database collection")]
+    [Collection(TestsConstants.DbCollectionName)]
     public class DeleteGroupHandlerShould
     {
         private readonly DeUrgentaContext _dbContext;

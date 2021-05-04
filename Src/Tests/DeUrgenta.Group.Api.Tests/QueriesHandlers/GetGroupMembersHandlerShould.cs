@@ -5,14 +5,14 @@ using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Group.Api.Queries;
 using DeUrgenta.Group.Api.QueryHandlers;
-using DeUrgenta.Group.Api.Validators;
+using DeUrgenta.Tests.Helpers;
 using NSubstitute;
 using Shouldly;
 using Xunit;
 
 namespace DeUrgenta.Group.Api.Tests.QueriesHandlers
 {
-    [Collection("Database collection")]
+    [Collection(TestsConstants.DbCollectionName)]
     public class GetGroupMembersHandlerShould
     {
         private readonly DeUrgentaContext _dbContext;

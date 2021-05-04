@@ -104,7 +104,7 @@ namespace DeUrgenta.User.Api.Controller
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest user)
         {
-            var badRegistrationResponse = new RegistrationResponse()
+            var badRegistrationResponse = new RegistrationResponse
             {
                 Errors = new List<string> {
                     "Invalid login request"
@@ -124,6 +124,18 @@ namespace DeUrgenta.User.Api.Controller
             if (!isCorrect)
             {
                 return BadRequest(badRegistrationResponse);
+            }
+
+            var isEmailConfirmed = await _userManager.IsEmailConfirmedAsync(existingUser);
+            if (!isEmailConfirmed)
+            {
+                return BadRequest(new RegistrationResponse
+                {
+                    Errors = new List<string> {
+                        "Email is not confirmed."
+                    },
+                    Success = false
+                });
             }
 
             var jwtToken = _jwtService.GenerateJwtToken(existingUser);
