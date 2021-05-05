@@ -27,4 +27,10 @@
     <ProjectReference Include="..\DeUrgenta.Backpack.Api\DeUrgenta.Backpack.Api.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="appsettings.testing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

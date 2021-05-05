@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using DeUrgenta.Backpack.Api.Commands;
-using DeUrgenta.Backpack.Api.Models;
+using DeUrgenta.Backpack.Api.Queries;
 using DeUrgenta.Backpack.Api.Validators;
 using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
@@ -14,23 +10,21 @@ using Xunit;
 namespace DeUrgenta.Backpack.Api.Tests.Validators
 {
     [Collection("Database collection")]
-    public class AddBackpackItemValidatorShould
+    public class GetBackpackItemsValidatorShould
     {
         private readonly DeUrgentaContext _dbContext;
-        public AddBackpackItemValidatorShould(DatabaseFixture fixture)
+        public GetBackpackItemsValidatorShould(DatabaseFixture fixture)
         {
             _dbContext = fixture.Context;
         }
-
         [Fact]
         public async Task Invalidate_request_when_backpack_does_not_exist()
         {
             // Arrange
-            var sut = new AddBackpackItemValidator(_dbContext);
-            var command = new AddBackpackItem(Guid.NewGuid(), new BackpackItemRequest());
+            var sut = new GetBackpackItemsValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(command);
+            bool isValid = await sut.IsValidAsync(new GetBackpackItems(Guid.NewGuid()));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -40,8 +34,6 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Validate_request_when_backpack_exists()
         {
             // Arrange
-            var sut = new AddBackpackItemValidator(_dbContext);
-
             var userId = Guid.NewGuid();
             var backpackId = Guid.NewGuid();
             await _dbContext.Users.AddAsync(new User
@@ -56,13 +48,12 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
                 Name = "test-backpack",
                 AdminUserId = userId
             });
-
             await _dbContext.SaveChangesAsync();
 
-            var command = new AddBackpackItem(backpackId, new BackpackItemRequest());
+            var sut = new GetBackpackItemsValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(command);
+            bool isValid = await sut.IsValidAsync(new GetBackpackItems(backpackId));
 
             // Assert
             isValid.ShouldBeTrue();

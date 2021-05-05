@@ -6,6 +6,7 @@ using DeUrgenta.Backpack.Api.Models;
 using DeUrgenta.Backpack.Api.Queries;
 using DeUrgenta.Backpack.Api.Swagger.BackpackItem;
 using DeUrgenta.Common.Swagger;
+using DeUrgenta.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -60,7 +61,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetCategoryBackpackItemsResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<IImmutableList<BackpackItemModel>>> GetBackpackCategoryItemsAsync([FromRoute] Guid backpackId, [FromRoute] Guid categoryId)
+        public async Task<ActionResult<IImmutableList<BackpackItemModel>>> GetBackpackCategoryItemsAsync([FromRoute] Guid backpackId, [FromRoute] BackpackCategoryType categoryId)
         {
             var query = new GetBackpackCategoryItems(backpackId, categoryId);
             var result = await _mediator.Send(query);
