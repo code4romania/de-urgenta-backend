@@ -23,6 +23,13 @@ namespace DeUrgenta.Backpack.Api.Validators
                 return false;
             }
 
+            var isContributor = await _context.BackpacksToUsers.AnyAsync(btu => btu.User.Id == user.Id && btu.Backpack.Id == request.BackpackId);
+
+            if (!isContributor)
+            {
+                return false;
+            }
+
             return true;
         }
     }

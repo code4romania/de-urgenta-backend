@@ -3,15 +3,17 @@ using System;
 using DeUrgenta.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DeUrgenta.Domain.Migrations
 {
     [DbContext(typeof(DeUrgentaContext))]
-    partial class DeUrgentaContextModelSnapshot : ModelSnapshot
+    [Migration("20210506120414_BackpackRelated")]
+    partial class BackpackRelated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,13 +127,13 @@ namespace DeUrgenta.Domain.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("IX_BackpackToUser_User");
 
-                    b.HasIndex("BackpackId", "IsOwner")
-                        .IsUnique()
-                        .HasDatabaseName("IX_Backpack_Owner");
-
                     b.HasIndex("UserId", "BackpackId")
                         .IsUnique()
                         .HasDatabaseName("IX_BackpackToUser");
+
+                    b.HasIndex("BackpackId", "UserId", "IsOwner")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Backpack_User_Owner");
 
                     b.ToTable("BackpacksToUsers");
                 });

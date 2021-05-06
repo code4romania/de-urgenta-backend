@@ -27,9 +27,7 @@ namespace DeUrgenta.Domain.Configurations
                 .HasForeignKey(x => x.AdminId);
 
             builder
-                .HasOne(e => e.Backpack)
-                .WithOne(e => e.Group)
-                .HasForeignKey<Backpack>(x => x.GroupId);
+                .HasOne(e => e.Backpack);
         }
     }
 }

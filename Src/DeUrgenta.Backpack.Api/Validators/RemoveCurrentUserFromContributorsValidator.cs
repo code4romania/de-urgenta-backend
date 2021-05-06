@@ -23,6 +23,24 @@ namespace DeUrgenta.Backpack.Api.Validators
                 return false;
             }
 
+            var isOwner = await _context
+                .BackpacksToUsers
+                .AnyAsync(btu => btu.User.Id == user.Id && btu.Backpack.Id == request.BackpackId && btu.IsOwner);
+
+            if (isOwner)
+            {
+                return false;
+            }
+
+            var isPartOfGroup = await _context
+                .BackpacksToUsers
+                .AnyAsync(btu => btu.User.Id == user.Id && btu.Backpack.Id == request.BackpackId);
+
+            if (!isPartOfGroup)
+            {
+                return false;
+            }
+
             return true;
         }
     }

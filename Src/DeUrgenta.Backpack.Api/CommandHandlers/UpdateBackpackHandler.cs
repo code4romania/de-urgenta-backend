@@ -6,6 +6,7 @@ using DeUrgenta.Backpack.Api.Models;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Backpack.Api.CommandHandlers
 {
@@ -27,8 +28,16 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
             {
                 return Result.Failure<BackpackModel>("Validation failed");
             }
+            var backpack = await _context.Backpacks.FirstAsync(b => b.Id == request.BackpackId, cancellationToken);
+            backpack.Name = request.Backpack.Name;
 
-            return null;
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return new BackpackModel
+            {
+                Id = backpack.Id,
+                Name = backpack.Name
+            };
         }
     }
 }

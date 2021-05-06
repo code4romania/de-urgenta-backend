@@ -37,7 +37,7 @@ namespace DeUrgenta.Backpack.Api.Swagger.BackpackItem
                     ExpirationDate = DateTime.Today.AddDays(420),
                     CategoryType = BackpackCategoryType.WaterAndFood
                 },
-                new BackpackItemModel()
+                new BackpackItemModel
                 {
                     Id = Guid.NewGuid(),
                     Name = "Topor",

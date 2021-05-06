@@ -4,7 +4,9 @@ using CSharpFunctionalExtensions;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
+using DeUrgenta.Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Backpack.Api.CommandHandlers
 {
@@ -26,6 +28,20 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
             {
                 return Result.Failure("Validation failed");
             }
+
+            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
+            var backpack = await _context.Backpacks.FirstAsync(b => b.Id == request.BackpackId, cancellationToken);
+
+            var invitedUser = await _context.Users.FirstAsync(u => u.Id == request.UserId, cancellationToken);
+
+            await _context.BackpackInvites.AddAsync(new BackpackInvite
+            {
+                Backpack = backpack,
+                InvitationSender = user,
+                InvitationReceiver = invitedUser
+            }, cancellationToken);
+
+            await _context.SaveChangesAsync(cancellationToken);
 
             return Result.Success();
         }

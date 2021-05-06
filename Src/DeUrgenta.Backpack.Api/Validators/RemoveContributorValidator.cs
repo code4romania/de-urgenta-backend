@@ -18,7 +18,30 @@ namespace DeUrgenta.Backpack.Api.Validators
         public async Task<bool> IsValidAsync(RemoveContributor request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
-            if (user == null)
+            var targetUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == request.UserId);
+
+            if (user == null || targetUser == null)
+            {
+                return false;
+            }
+
+            if (user.Id == request.UserId)
+            {
+                return false;
+            }
+
+            var isOwner = await _context.BackpacksToUsers.AnyAsync(btu => btu.User.Id == user.Id && btu.Backpack.Id == request.BackpackId && btu.IsOwner);
+
+            if (!isOwner)
+            {
+                return false;
+            }
+
+            bool requestedUserIsContributor = await _context
+                .BackpacksToUsers
+                .AnyAsync(btu => btu.Backpack.Id == request.BackpackId && btu.User.Id == request.UserId);
+
+            if (!requestedUserIsContributor)
             {
                 return false;
             }

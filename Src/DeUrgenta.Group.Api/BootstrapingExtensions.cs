@@ -8,7 +8,7 @@ namespace DeUrgenta.Group.Api
 {
     public static class BootstrapingExtensions
     {
-        public static IServiceCollection ConfigureGroupApiServices(this IServiceCollection services)
+        public static IServiceCollection AddGroupApiServices(this IServiceCollection services)
         {
             services.AddTransient<IValidateRequest<AddGroup>, AddGroupValidator>();
             services.AddTransient<IValidateRequest<AddSafeLocation>, AddSafeLocationValidator>();

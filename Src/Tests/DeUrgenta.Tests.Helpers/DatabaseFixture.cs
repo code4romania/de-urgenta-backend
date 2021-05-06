@@ -33,7 +33,7 @@ namespace DeUrgenta.Tests.Helpers
             Context.Database.Migrate();
         }
 
-        private string GetConnectionString()
+        private static string GetConnectionString()
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())

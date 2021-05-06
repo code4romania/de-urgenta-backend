@@ -35,7 +35,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         /// Gets user backpacks
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("/backpacks")]
         [SwaggerResponse(StatusCodes.Status200OK, "User backpacks", typeof(IImmutableList<BackpackModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
@@ -45,6 +45,30 @@ namespace DeUrgenta.Backpack.Api.Controllers
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var query = new GetBackpacks(sub);
+            var result = await _mediator.Send(query);
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return Ok(result.Value);
+        }
+
+        /// <summary>
+        /// Gets user backpacks
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("/backpacks/my")]
+        [SwaggerResponse(StatusCodes.Status200OK, "User backpacks", typeof(IImmutableList<BackpackModel>))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
+
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetBackpacksResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
+        public async Task<ActionResult<IImmutableList<BackpackModel>>> GetMyBackpacksAsync()
+        {
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var query = new GetMyBackpacks(sub);
             var result = await _mediator.Send(query);
 
             if (result.IsFailure)
