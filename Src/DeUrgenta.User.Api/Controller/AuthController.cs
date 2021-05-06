@@ -126,18 +126,6 @@ namespace DeUrgenta.User.Api.Controller
                 return BadRequest(badRegistrationResponse);
             }
 
-            var isEmailConfirmed = await _userManager.IsEmailConfirmedAsync(existingUser);
-            if (!isEmailConfirmed)
-            {
-                return BadRequest(new RegistrationResponse
-                {
-                    Errors = new List<string> {
-                        "Email is not confirmed."
-                    },
-                    Success = false
-                });
-            }
-
             var jwtToken = _jwtService.GenerateJwtToken(existingUser);
 
             return Ok(jwtToken);
