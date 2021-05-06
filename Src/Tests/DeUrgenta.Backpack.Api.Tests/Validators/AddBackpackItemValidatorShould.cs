@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Backpack.Api.Models;
 using DeUrgenta.Backpack.Api.Validators;
 using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
+using DeUrgenta.Tests.Helpers;
 using Shouldly;
 using Xunit;
 
 namespace DeUrgenta.Backpack.Api.Tests.Validators
 {
-    [Collection("Database collection")]
+    [Collection(TestsConstants.DbCollectionName)]
     public class AddBackpackItemValidatorShould
     {
         private readonly DeUrgentaContext _dbContext;

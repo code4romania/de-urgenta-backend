@@ -7,9 +7,9 @@ using Npgsql;
 using Respawn;
 using Xunit;
 
-namespace DeUrgenta.Backpack.Api.Tests
+namespace DeUrgenta.Tests.Helpers
 {
-    public class DatabaseFixture : IAsyncLifetime
+     public class DatabaseFixture : IAsyncLifetime
     {
         private readonly string _connectionString;
 
@@ -28,16 +28,17 @@ namespace DeUrgenta.Backpack.Api.Tests
                 DbAdapter = DbAdapter.Postgres
             };
 
-            // Create instance of DbContext
+            // Create instance of you application's DbContext
             Context = new DeUrgentaContext(optionsBuilder.Options);
             Context.Database.Migrate();
         }
 
-        private string GetConnectionString()
+        private static string GetConnectionString()
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.testing.json", optional: false)
+                .AddJsonFile("appsettings.testing.json")
+                .AddEnvironmentVariables()
                 .Build();
 
             return configuration.GetConnectionString("TestingDbConnectionString");
@@ -58,13 +59,5 @@ namespace DeUrgenta.Backpack.Api.Tests
 
             await _emptyDatabaseCheckpoint.Reset(conn);
         }
-    }
-
-    [CollectionDefinition("Database collection")]
-    public class DatabaseCollection : ICollectionFixture<DatabaseFixture>
-    {
-        // This class has no code, and is never created. Its purpose is simply
-        // to be the place to apply [CollectionDefinition] and all the
-        // ICollectionFixture<> interfaces.
     }
 }

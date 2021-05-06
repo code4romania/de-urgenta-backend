@@ -24,13 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DeUrgenta.Backpack.Api\DeUrgenta.Backpack.Api.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="appsettings.testing.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\..\DeUrgenta.Backpack.Api\DeUrgenta.Backpack.Api.csproj" />
+    <ProjectReference Include="..\DeUrgenta.Tests.Helpers\DeUrgenta.Tests.Helpers.csproj" />
   </ItemGroup>
 
 </Project>
