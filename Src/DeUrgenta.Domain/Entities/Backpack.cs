@@ -19,5 +19,6 @@ namespace DeUrgenta.Domain.Entities
         public User AdminUser { get; set; }
 
         public ICollection<BackpackToUser> BackpackUsers { get; set; }
+        public virtual ICollection<BackpackItem> BackpackItems { get; set; } = new List<BackpackItem>();
     }
 }

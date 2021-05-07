@@ -38,11 +38,29 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         {
             // Arrange
             var backpackItemId = Guid.NewGuid();
+            var userId = Guid.NewGuid();
+
+            await _dbContext.Users.AddAsync(new User
+            {
+                Id = userId,
+                FirstName = "test-user",
+                LastName = "test-user"
+            });
+
+            var backpack = new Domain.Entities.Backpack 
+            { 
+                Id = Guid.NewGuid(), 
+                Name = "test-backpack",
+                AdminUserId = userId
+            };
+
+            await _dbContext.Backpacks.AddAsync(backpack);
 
             await _dbContext.BackpackItem.AddAsync(new BackpackItem
             {
                 Id = backpackItemId,
-                Name = "test-backpack-item"
+                Name = "test-backpack-item",
+                Backpack = backpack
             });
             await _dbContext.SaveChangesAsync();
 
