@@ -43,26 +43,5 @@ namespace DeUrgenta.Backpack.Api.Tests.QueryHandlers
             // Assert
             result.IsFailure.ShouldBeTrue();
         }
-
-        [Fact]
-        public async Task Return_success_result_when_validation_succeeds()
-        {
-            // Arrange
-            var validator = Substitute.For<IValidateRequest<GetBackpackItems>>();
-            validator
-                .IsValidAsync(Arg.Any<GetBackpackItems>())
-                .Returns(Task.FromResult(true));
-            var backpack  = new Domain.Entities.Backpack { Id = Guid.NewGuid()};
-            var backpackItemId = Guid.NewGuid();
-            await _dbContext.Backpacks.AddAsync(backpack);
-            await _dbContext.BackpackItem.AddAsync(new BackpackItem { Id = Guid.NewGuid(), Backpack = backpack });
-            var sut = new GetBackpackItemsHandler(validator, _dbContext);
-
-            // Act
-            var result = await sut.Handle(new GetBackpackItems(backpackItemId), CancellationToken.None);
-
-            // Assert
-            result.IsSuccess.ShouldBeTrue();
-        }
     }
 }

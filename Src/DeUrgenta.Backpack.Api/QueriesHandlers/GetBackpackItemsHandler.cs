@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Backpack.Api.QueryHandlers
 {
-    public class GetBackpackItemsHandler //: IRequestHandler<GetBackpackItems, Result<IImmutableList<BackpackItemModel>>>
+    public class GetBackpackItemsHandler : IRequestHandler<GetBackpackItems, Result<IImmutableList<BackpackItemModel>>>
     {
         private readonly IValidateRequest<GetBackpackItems> _validator;
         private readonly DeUrgentaContext _context;
