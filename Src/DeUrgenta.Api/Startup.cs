@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using DeUrgenta.Backpack.Api;
+using System.Collections.Generic;
+
 
 namespace DeUrgenta.Api
 {
@@ -52,7 +54,7 @@ namespace DeUrgenta.Api
                     .AllowAnyMethod()
                     .AllowAnyHeader();
             }));
-
+            services.SetupEmailService(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,7 +75,7 @@ namespace DeUrgenta.Api
             app.UseAuthorization();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
 
-            
+            app.UseStaticFiles();
 
             app.UseCors(CorsPolicyName);
 
