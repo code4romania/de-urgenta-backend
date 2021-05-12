@@ -27,6 +27,10 @@ namespace DeUrgenta.Domain.Configurations
                 .HasMaxLength(100);
 
             builder
+                .Property(x => x.Sub)
+                .IsRequired();
+
+            builder
                 .HasMany(x => x.Addresses)
                 .WithOne();
         }

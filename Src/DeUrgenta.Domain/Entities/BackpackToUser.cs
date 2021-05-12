@@ -11,7 +11,8 @@ namespace DeUrgenta.Domain.Entities
         public int Id { get; set; }
         public Guid UserId { get; set; }
         public virtual User User { get; set; }
+        public bool IsOwner { get; set; }
         public Guid BackpackId { get; set; }
-        public Backpack Backpack { get; set; }
+        public virtual Backpack Backpack { get; set; }
     }
 }

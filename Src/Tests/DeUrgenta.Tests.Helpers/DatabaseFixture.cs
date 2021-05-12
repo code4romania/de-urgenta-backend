@@ -9,7 +9,7 @@ using Xunit;
 
 namespace DeUrgenta.Tests.Helpers
 {
-     public class DatabaseFixture : IAsyncLifetime
+    public class DatabaseFixture : IAsyncLifetime
     {
         private readonly string _connectionString;
 

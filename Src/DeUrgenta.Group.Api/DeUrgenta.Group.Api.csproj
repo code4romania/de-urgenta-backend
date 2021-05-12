@@ -10,6 +10,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CSharpFunctionalExtensions" Version="2.15.1" />
+		<PackageReference Include="DiffEngine" Version="6.4.9" />
 		<PackageReference Include="MediatR" Version="9.0.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="6.1.0" />
 	</ItemGroup>

@@ -20,11 +20,6 @@ namespace DeUrgenta.Domain.Configurations
                 .Property(e => e.Name)
                 .HasMaxLength(250)
                 .IsRequired();
-
-            builder
-                .HasOne(e => e.AdminUser)
-                .WithMany(e => e.Backpacks)
-                .HasForeignKey(x => x.AdminUserId);
         }
     }
 }

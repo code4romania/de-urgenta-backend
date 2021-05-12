@@ -27,14 +27,7 @@ namespace DeUrgenta.Domain.Configurations
                 .HasForeignKey(x => x.AdminId);
 
             builder
-                .HasOne(x => x.SafeLocation1)
-                .WithMany()
-                .HasForeignKey(x => x.SafeLocation1Id);
-
-            builder
-                .HasOne(x => x.SafeLocation2)
-                .WithMany()
-                .HasForeignKey(x => x.SafeLocation2Id);
+                .HasOne(e => e.Backpack);
         }
     }
 }

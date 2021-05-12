@@ -13,6 +13,10 @@ namespace DeUrgenta.Domain.Configurations
                 .HasName("PK_BackpackToUser");
 
             builder
+                .Property(e => e.IsOwner)
+                .IsRequired();
+
+            builder
                 .HasIndex(e => e.UserId)
                 .HasDatabaseName("IX_BackpackToUser_User");
 
@@ -21,22 +25,27 @@ namespace DeUrgenta.Domain.Configurations
                 .HasDatabaseName("IX_BackpackToUser_Backpack");
 
             builder
-                .HasIndex(e => new {e.UserId, e.BackpackId})
+                .HasIndex(e => new { e.UserId, e.BackpackId })
                 .HasDatabaseName("IX_BackpackToUser")
                 .IsUnique();
 
             builder
+                .HasIndex(e => new { e.BackpackId, HasOwner = e.IsOwner })
+                .HasDatabaseName("IX_Backpack_Owner")
+                .IsUnique();
+
+            builder
                 .HasOne(d => d.User)
-                .WithMany(p => p.BackpackUsers)
+                .WithMany()
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.Restrict)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_BackpackToUser_User");
 
             builder
                 .HasOne(d => d.Backpack)
-                .WithMany(p => p.BackpackUsers)
+                .WithMany()
                 .HasForeignKey(d => d.BackpackId)
-                .OnDelete(DeleteBehavior.Restrict)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_BackpackToUser_Backpack");
         }
     }

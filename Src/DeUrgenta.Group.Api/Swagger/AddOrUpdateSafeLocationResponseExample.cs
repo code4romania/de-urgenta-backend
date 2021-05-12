@@ -4,13 +4,14 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace DeUrgenta.Group.Api.Swagger
 {
-    public class AddSafeLocationResponseExample : IExamplesProvider<SafeLocationModel>
+    public class AddOrUpdateSafeLocationResponseExample : IExamplesProvider<SafeLocationResponseModel>
     {
-        public SafeLocationModel GetExamples()
+        public SafeLocationResponseModel GetExamples()
         {
             return new()
             {
                 Id = Guid.NewGuid(),
+                GroupId = Guid.NewGuid(),
                 Name = "Locatia noastra safe",
                 Latitude = 99,
                 Longitude = 66

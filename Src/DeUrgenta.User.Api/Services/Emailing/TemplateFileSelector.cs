@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Reflection;
 using Microsoft.Extensions.Configuration;
 
 namespace DeUrgenta.User.Api.Services.Emailing

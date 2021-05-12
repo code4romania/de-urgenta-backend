@@ -19,8 +19,8 @@ namespace DeUrgenta.Domain.Configurations
             builder
                 .Property(x => x.Name)
                 .HasMaxLength(250)
-                .IsRequired();           
-            
+                .IsRequired();
+
             builder
                 .Property(x => x.Latitude)
                 .IsRequired();
@@ -28,6 +28,11 @@ namespace DeUrgenta.Domain.Configurations
             builder
                 .Property(x => x.Longitude)
                 .IsRequired();
+
+            builder
+                .HasOne(x => x.Group)
+                .WithMany(g => g.GroupSafeLocations)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 

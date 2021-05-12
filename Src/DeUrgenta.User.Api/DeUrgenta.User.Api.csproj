@@ -7,11 +7,6 @@
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<NoWarn>$(NoWarn);1591</NoWarn>
 	</PropertyGroup>
-	<ItemGroup>
-	  <Compile Remove="Options\**" />
-	  <EmbeddedResource Remove="Options\**" />
-	  <None Remove="Options\**" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="MediatR" Version="9.0.0" />
