@@ -32,6 +32,12 @@ namespace DeUrgenta.Domain.Configurations
             builder
                 .Property(e => e.BackpackCategory)
                 .IsRequired();
+            
+            builder
+                .HasOne(e => e.Backpack)
+                .WithMany(x => x.BackpackItems)
+                .HasForeignKey(x => x.BackpackId)
+                .HasConstraintName("FK_BackpackItem_Backpack"); ;
         }
     }
 }
