@@ -3,6 +3,7 @@ using DeUrgenta.Admin.Api.Controller;
 using DeUrgenta.Backpack.Api.Controllers;
 using DeUrgenta.Certifications.Api.Controller;
 using DeUrgenta.Api.Extensions;
+using DeUrgenta.Backpack.Api;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.Domain;
 using DeUrgenta.Group.Api;
@@ -39,8 +40,8 @@ namespace DeUrgenta.Api
             services.AddControllers();
             services.AddDatabase<DeUrgentaContext>(Configuration.GetConnectionString("DbConnectionString"));
             services.AddExceptionHandling(WebHostEnvironment);
-            services.ConfigureGroupApiServices();
-
+            services.AddBackpackApiServices();
+            services.AddGroupApiServices();
             var applicationAssemblies = GetAssemblies();
 
             services.AddSwaggerFor(applicationAssemblies, Configuration);

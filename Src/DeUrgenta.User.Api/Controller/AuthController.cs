@@ -104,7 +104,7 @@ namespace DeUrgenta.User.Api.Controller
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest user)
         {
-            var badRegistrationResponse = new RegistrationResponse()
+            var badRegistrationResponse = new RegistrationResponse
             {
                 Errors = new List<string> {
                     "Invalid login request"

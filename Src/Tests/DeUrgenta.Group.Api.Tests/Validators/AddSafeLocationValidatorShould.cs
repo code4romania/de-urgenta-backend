@@ -4,14 +4,14 @@ using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
 using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Models;
-using DeUrgenta.Group.Api.Queries;
 using DeUrgenta.Group.Api.Validators;
+using DeUrgenta.Tests.Helpers;
 using Shouldly;
 using Xunit;
 
 namespace DeUrgenta.Group.Api.Tests.Validators
 {
-    [Collection("Database collection")]
+    [Collection(TestsConstants.DbCollectionName)]
     public class AddSafeLocationValidatorShould
     {
         private readonly DeUrgentaContext _dbContext;

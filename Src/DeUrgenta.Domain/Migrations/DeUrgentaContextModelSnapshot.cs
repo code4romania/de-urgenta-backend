@@ -27,9 +27,6 @@ namespace DeUrgenta.Domain.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
-                    b.Property<Guid>("GroupId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(250)
@@ -38,10 +35,42 @@ namespace DeUrgenta.Domain.Migrations
                     b.HasKey("Id")
                         .HasName("PK_Backpack");
 
-                    b.HasIndex("GroupId")
-                        .IsUnique();
-
                     b.ToTable("Backpacks");
+                });
+
+            modelBuilder.Entity("DeUrgenta.Domain.Entities.BackpackInvite", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("uuid_generate_v4()");
+
+                    b.Property<Guid>("BackpackId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("InvitationReceiverId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("InvitationSenderId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id")
+                        .HasName("PK_Backpack_invite");
+
+                    b.HasIndex("BackpackId")
+                        .HasDatabaseName("IX_BackpackInvite_Backpack");
+
+                    b.HasIndex("InvitationReceiverId")
+                        .HasDatabaseName("IX_BackpackInvite_InvitationReceiver");
+
+                    b.HasIndex("InvitationSenderId")
+                        .HasDatabaseName("IX_BackpackInvite_InvitationSender");
+
+                    b.HasIndex("BackpackId", "InvitationReceiverId", "InvitationSenderId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_BackpackInvite");
+
+                    b.ToTable("BackpackInvites");
                 });
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.BackpackItem", b =>
@@ -69,6 +98,42 @@ namespace DeUrgenta.Domain.Migrations
                         .HasName("PK_BackpackItem");
 
                     b.ToTable("BackpackItem");
+                });
+
+            modelBuilder.Entity("DeUrgenta.Domain.Entities.BackpackToUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<Guid>("BackpackId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsOwner")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id")
+                        .HasName("PK_BackpackToUser");
+
+                    b.HasIndex("BackpackId")
+                        .HasDatabaseName("IX_BackpackToUser_Backpack");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("IX_BackpackToUser_User");
+
+                    b.HasIndex("BackpackId", "IsOwner")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Backpack_Owner");
+
+                    b.HasIndex("UserId", "BackpackId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_BackpackToUser");
+
+                    b.ToTable("BackpacksToUsers");
                 });
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.BlogPost", b =>
@@ -183,6 +248,9 @@ namespace DeUrgenta.Domain.Migrations
                     b.Property<Guid>("AdminId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("BackpackId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(250)
@@ -192,6 +260,8 @@ namespace DeUrgenta.Domain.Migrations
                         .HasName("PK_Group");
 
                     b.HasIndex("AdminId");
+
+                    b.HasIndex("BackpackId");
 
                     b.ToTable("Groups");
                 });
@@ -351,15 +421,55 @@ namespace DeUrgenta.Domain.Migrations
                     b.ToTable("UsersToGroups");
                 });
 
-            modelBuilder.Entity("DeUrgenta.Domain.Entities.Backpack", b =>
+            modelBuilder.Entity("DeUrgenta.Domain.Entities.BackpackInvite", b =>
                 {
-                    b.HasOne("DeUrgenta.Domain.Entities.Group", "Group")
-                        .WithOne("Backpack")
-                        .HasForeignKey("DeUrgenta.Domain.Entities.Backpack", "GroupId")
+                    b.HasOne("DeUrgenta.Domain.Entities.Backpack", "Backpack")
+                        .WithMany()
+                        .HasForeignKey("BackpackId")
+                        .HasConstraintName("FK_BackpackInvite_Backpack")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Group");
+                    b.HasOne("DeUrgenta.Domain.Entities.User", "InvitationReceiver")
+                        .WithMany()
+                        .HasForeignKey("InvitationReceiverId")
+                        .HasConstraintName("FK_BackpackInvite_InvitationReceiver")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DeUrgenta.Domain.Entities.User", "InvitationSender")
+                        .WithMany()
+                        .HasForeignKey("InvitationSenderId")
+                        .HasConstraintName("FK_BackpackInvite_InvitationSender")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Backpack");
+
+                    b.Navigation("InvitationReceiver");
+
+                    b.Navigation("InvitationSender");
+                });
+
+            modelBuilder.Entity("DeUrgenta.Domain.Entities.BackpackToUser", b =>
+                {
+                    b.HasOne("DeUrgenta.Domain.Entities.Backpack", "Backpack")
+                        .WithMany()
+                        .HasForeignKey("BackpackId")
+                        .HasConstraintName("FK_BackpackToUser_Backpack")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DeUrgenta.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("FK_BackpackToUser_User")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Backpack");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.Certification", b =>
@@ -382,7 +492,13 @@ namespace DeUrgenta.Domain.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DeUrgenta.Domain.Entities.Backpack", "Backpack")
+                        .WithMany()
+                        .HasForeignKey("BackpackId");
+
                     b.Navigation("Admin");
+
+                    b.Navigation("Backpack");
                 });
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.GroupInvite", b =>
@@ -455,8 +571,6 @@ namespace DeUrgenta.Domain.Migrations
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.Group", b =>
                 {
-                    b.Navigation("Backpack");
-
                     b.Navigation("GroupMembers");
 
                     b.Navigation("GroupSafeLocations");
