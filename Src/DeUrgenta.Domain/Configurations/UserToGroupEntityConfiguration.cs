@@ -29,14 +29,14 @@ namespace DeUrgenta.Domain.Configurations
                 .HasOne(d => d.User)
                 .WithMany(p => p.GroupsMember)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.Restrict)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_UserToGroup_User");
 
             builder
                 .HasOne(d => d.Group)
                 .WithMany(p => p.GroupMembers)
                 .HasForeignKey(d => d.GroupId)
-                .OnDelete(DeleteBehavior.Restrict)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_UserToGroup_Group");
         }
     }

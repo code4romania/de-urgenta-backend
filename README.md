@@ -66,9 +66,25 @@ dotnet ef migrations add <Migration-name> --project DeUrgenta.Domain --startup-p
 ```
 ### Adding EF Core migration to User.Api
 ```
-DeUrgenta.User.Api> dotnet ef migrations add Identity_initial_create --startup-project ..\DeUrgenta.Api\ -o Domain\Migrations --context UserDbContext
+DeUrgenta.User.Api> dotnet ef migrations add <Migration-name> --startup-project ..\DeUrgenta.Api\ -o Domain\Migrations --context UserDbContext
+```
+### Backend flows
+```mermaid
+graph TD
+    Controller -- Command / Query--> Mediator
+    Mediator --> CommandHandler/QueryHanlder
+    CommandHandler/QueryHanlder --> IValidateRequest
+    CommandHandler/QueryHanlder --> Database[(Database)]
 ```
 
+```mermaid
+graph
+Query/CommandHandler --> Validator
+    Validator --> C{Request valid ?}
+    C -->|true| D[Your logic goes here]
+    C -->|false| E[Result.Failure]
+    D --> Database[(Database)]
+```
 ## Feedback
 
 * Request a new feature on GitHub.

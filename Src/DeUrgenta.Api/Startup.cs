@@ -5,6 +5,7 @@ using DeUrgenta.Certifications.Api.Controller;
 using DeUrgenta.Api.Extensions;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.Domain;
+using DeUrgenta.Group.Api;
 using DeUrgenta.Group.Api.Controllers;
 using Hellang.Middleware.ProblemDetails;
 using DeUrgenta.Infra.Extensions;
@@ -16,7 +17,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
 
 namespace DeUrgenta.Api
 {
@@ -39,7 +39,7 @@ namespace DeUrgenta.Api
             services.AddControllers();
             services.AddDatabase<DeUrgentaContext>(Configuration.GetConnectionString("DbConnectionString"));
             services.AddExceptionHandling(WebHostEnvironment);
-            
+            services.ConfigureGroupApiServices();
 
             var applicationAssemblies = GetAssemblies();
 
@@ -76,9 +76,6 @@ namespace DeUrgenta.Api
             app.UseStaticFiles();
 
             app.UseCors(CorsPolicyName);
-
-            
-
         }
 
         private static Assembly[] GetAssemblies() => new[]

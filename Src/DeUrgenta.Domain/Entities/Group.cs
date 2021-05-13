@@ -9,6 +9,7 @@ namespace DeUrgenta.Domain.Entities
         public Group()
         {
             GroupMembers = new HashSet<UserToGroup>();
+            GroupSafeLocations = new HashSet<GroupSafeLocation>();
         }
 
         [Key]
@@ -16,10 +17,8 @@ namespace DeUrgenta.Domain.Entities
         public string Name { get; set; }
         public Guid AdminId { get; set; }
         public User Admin { get; set; }
-        public Guid SafeLocation1Id { get; set; }
-        public GroupSafeLocation SafeLocation1 { get; set; }
-        public Guid SafeLocation2Id { get; set; }
-        public GroupSafeLocation SafeLocation2 { get; set; }
         public ICollection<UserToGroup> GroupMembers { get; set; }
+        public ICollection<GroupSafeLocation> GroupSafeLocations { get; set; }
+        public Backpack Backpack { get; set; }
     }
 }
