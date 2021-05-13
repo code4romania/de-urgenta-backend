@@ -42,7 +42,6 @@ namespace DeUrgenta.Api
             services.AddExceptionHandling(WebHostEnvironment);
             services.AddBackpackApiServices();
             services.AddGroupApiServices();
-
             var applicationAssemblies = GetAssemblies();
 
             services.AddSwaggerFor(applicationAssemblies, Configuration);
