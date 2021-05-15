@@ -47,7 +47,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
 
             await _dbContext.Backpacks.AddAsync(backpack);
 
-            await _dbContext.BackpackItem.AddAsync(new BackpackItem
+            await _dbContext.BackpackItems.AddAsync(new BackpackItem
             {
                 Id = backpackItemId,
                 Name = "test-backpack-item",

@@ -31,7 +31,7 @@ namespace DeUrgenta.Backpack.Api.QueriesHandlers
                 return Result.Failure<IImmutableList<BackpackItemModel>>("Validation failed");
             }
 
-            var backpackItems = await _context.BackpackItem
+            var backpackItems = await _context.BackpackItems
                 .Where(item => item.BackpackId == request.BackpackId && item.BackpackCategory == request.CategoryId)
                 .Select(item => new BackpackItemModel
                 {

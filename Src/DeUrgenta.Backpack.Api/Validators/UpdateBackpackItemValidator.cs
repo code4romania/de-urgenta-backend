@@ -15,7 +15,7 @@ namespace DeUrgenta.Backpack.Api.Validators
         }
         public async Task<bool> IsValidAsync(UpdateBackpackItem request)
         {
-            return await _context.BackpackItem.AnyAsync(x => x.Id == request.ItemId);
+            return await _context.BackpackItems.AnyAsync(x => x.Id == request.ItemId);
         }
     }
 }

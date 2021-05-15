@@ -28,7 +28,7 @@ namespace DeUrgenta.Backpack.Api.CommandsHandlers
             {
                 return Result.Failure<BackpackItemModel>("Validation failed");
             }
-            var backpackItem = await _context.BackpackItem.FirstAsync(x => x.Id == request.ItemId, cancellationToken);
+            var backpackItem = await _context.BackpackItems.FirstAsync(x => x.Id == request.ItemId, cancellationToken);
             backpackItem.Name = request.BackpackItem.Name;
             backpackItem.BackpackCategory = request.BackpackItem.CategoryType ?? backpackItem.BackpackCategory;
             backpackItem.Amount = request.BackpackItem.Amount;
