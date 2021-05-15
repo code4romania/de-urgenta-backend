@@ -16,6 +16,18 @@ namespace DeUrgenta.Backpack.Api.Validators
         }
         public async Task<bool> IsValidAsync(GetBackpackCategoryItems request)
         {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
+            if (user == null)
+            {
+                return false;
+            }
+
+            var isContributor = await _context.BackpacksToUsers.AnyAsync(btu => btu.User.Id == user.Id && btu.Backpack.Id == request.BackpackId);
+            if (!isContributor)
+            {
+                return false;
+            }
+
             return await _context.Backpacks.AnyAsync(x => x.Id == request.BackpackId);
         }
     }

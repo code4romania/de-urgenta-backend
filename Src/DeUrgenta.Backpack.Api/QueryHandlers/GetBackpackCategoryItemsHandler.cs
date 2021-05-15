@@ -11,7 +11,7 @@ using DeUrgenta.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace DeUrgenta.Backpack.Api.QueriesHandlers
+namespace DeUrgenta.Backpack.Api.QueryHandlers
 {
     public class GetBackpackCategoryItemsHandler : IRequestHandler<GetBackpackCategoryItems, Result<IImmutableList<BackpackItemModel>>>
     {

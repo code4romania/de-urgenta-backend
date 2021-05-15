@@ -20,32 +20,50 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             _dbContext = fixture.Context;
         }
 
-        [Fact]
-        public async Task Invalidate_request_when_item_does_not_exist()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("my-weird-sub")]
+        public async Task Invalidate_request_when_no_user_found_by_sub(string sub)
         {
             // Arrange
             var sut = new DeleteBackpackItemValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new DeleteBackpackItem(Guid.NewGuid()));
+            bool isValid = await sut.IsValidAsync(new DeleteBackpackItem(sub, Guid.NewGuid()));
 
             // Assert
             isValid.ShouldBeFalse();
         }
 
         [Fact]
-        public async Task Validate_request_when_item_exists()
+        public async Task Invalidate_when_user_not_contributor_of_related_backpack()
         {
             // Arrange
+            string userSub = Guid.NewGuid().ToString();
+            string contributorSub = Guid.NewGuid().ToString();
             var backpackItemId = Guid.NewGuid();
+            var backpackId = Guid.NewGuid();
 
-            var backpack = new Domain.Entities.Backpack 
-            { 
-                Id = Guid.NewGuid(), 
-                Name = "test-backpack"
+            var nonContributor = new User
+            {
+                FirstName = "NonContributor",
+                LastName = "User",
+                Sub = userSub
             };
 
-            await _dbContext.Backpacks.AddAsync(backpack);
+            var contributor = new User
+            {
+                FirstName = "Contributor",
+                LastName = "User",
+                Sub = contributorSub
+            };
+
+            var backpack = new Domain.Entities.Backpack
+            {
+                Id = backpackId,
+                Name = "A backpack"
+            };
 
             await _dbContext.BackpackItems.AddAsync(new BackpackItem
             {
@@ -53,12 +71,93 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
                 Name = "test-backpack-item",
                 Backpack = backpack
             });
+
+            await _dbContext.Users.AddAsync(nonContributor);
+            await _dbContext.Users.AddAsync(contributor);
+            await _dbContext.Backpacks.AddAsync(backpack);
+            await _dbContext.BackpacksToUsers.AddAsync(new BackpackToUser { Backpack = backpack, User = contributor });
             await _dbContext.SaveChangesAsync();
 
             var sut = new DeleteBackpackItemValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new DeleteBackpackItem(backpackItemId));
+            bool isValid = await sut.IsValidAsync(new DeleteBackpackItem(nonContributor.Sub, backpackItemId));
+
+            // Assert
+            isValid.ShouldBeFalse();
+        }
+
+        [Fact]
+        public async Task Invalidate_request_when_item_does_not_exist()
+        {
+            // Arrange
+            string contributorSub = Guid.NewGuid().ToString();
+            var backpackId = Guid.NewGuid();
+
+            var contributor = new User
+            {
+                FirstName = "Contributor",
+                LastName = "User",
+                Sub = contributorSub
+            };
+
+            var backpack = new Domain.Entities.Backpack
+            {
+                Id = backpackId,
+                Name = "A backpack"
+            };
+
+            await _dbContext.Users.AddAsync(contributor);
+            await _dbContext.Backpacks.AddAsync(backpack);
+            await _dbContext.BackpacksToUsers.AddAsync(new BackpackToUser { Backpack = backpack, User = contributor });
+            await _dbContext.SaveChangesAsync();
+
+            var sut = new DeleteBackpackItemValidator(_dbContext);
+
+            // Act
+            bool isValid = await sut.IsValidAsync(new DeleteBackpackItem(contributorSub, Guid.NewGuid()));
+
+            // Assert
+            isValid.ShouldBeFalse();
+        }
+
+        [Fact]
+        public async Task Validate_request_when_item_exists_and_user_contributor()
+        {
+            // Arrange
+            string contributorSub = Guid.NewGuid().ToString();
+            var backpackId = Guid.NewGuid();
+            var backpackItemId = Guid.NewGuid();
+
+            var contributor = new User
+            {
+                FirstName = "Contributor",
+                LastName = "User",
+                Sub = contributorSub
+            };
+
+            var backpack = new Domain.Entities.Backpack
+            {
+                Id = backpackId,
+                Name = "A backpack"
+            };
+
+            await _dbContext.BackpackItems.AddAsync(new BackpackItem
+            {
+                Id = backpackItemId,
+                Name = "test-backpack-item",
+                Backpack = backpack
+            });
+
+            await _dbContext.Users.AddAsync(contributor);
+            await _dbContext.Backpacks.AddAsync(backpack);
+            await _dbContext.BackpacksToUsers.AddAsync(new BackpackToUser { Backpack = backpack, User = contributor });
+            await _dbContext.SaveChangesAsync();
+
+            var sut = new DeleteBackpackItemValidator(_dbContext);
+
+            // Act
+            bool isValid = await sut.IsValidAsync(new DeleteBackpackItem(contributorSub, backpackItemId));
 
             // Assert
             isValid.ShouldBeTrue();

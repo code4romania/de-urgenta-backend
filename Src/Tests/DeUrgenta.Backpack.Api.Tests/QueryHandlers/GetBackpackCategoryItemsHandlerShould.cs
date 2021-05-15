@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Queries;
-using DeUrgenta.Backpack.Api.QueriesHandlers;
+using DeUrgenta.Backpack.Api.QueryHandlers;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
@@ -35,8 +35,8 @@ namespace DeUrgenta.Backpack.Api.Tests.QueryHandlers
             var sut = new GetBackpackCategoryItemsHandler(validator, _dbContext);
 
             // Act
-            var result = await sut.Handle(new GetBackpackCategoryItems(Guid.NewGuid(), BackpackCategoryType.FirstAid), CancellationToken.None);
-
+            var result = await sut.Handle(new GetBackpackCategoryItems("a-sub", Guid.NewGuid(), BackpackCategoryType.FirstAid), CancellationToken.None);
+             
             // Assert
             result.IsFailure.ShouldBeTrue();
         }

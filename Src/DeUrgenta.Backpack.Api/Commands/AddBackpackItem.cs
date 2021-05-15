@@ -7,10 +7,12 @@ namespace DeUrgenta.Backpack.Api.Commands
 {
     public class AddBackpackItem : IRequest<Result<BackpackItemModel>>
     {
+        public string UserSub { get; }
         public Guid BackpackId { get; }
         public BackpackItemRequest BackpackItem { get; }
-        public AddBackpackItem(Guid backpackId, BackpackItemRequest backpackItem)
+        public AddBackpackItem(string userSub, Guid backpackId, BackpackItemRequest backpackItem)
         {
+            UserSub = userSub;
             BackpackId = backpackId;
             BackpackItem = backpackItem;
         }

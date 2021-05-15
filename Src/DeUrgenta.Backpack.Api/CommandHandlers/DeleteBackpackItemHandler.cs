@@ -8,7 +8,7 @@ using DeUrgenta.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace DeUrgenta.Backpack.Api.CommandsHandlers
+namespace DeUrgenta.Backpack.Api.CommandHandlers
 {
     public class DeleteBackpackItemHandler : IRequestHandler<DeleteBackpackItem, Result>
     {

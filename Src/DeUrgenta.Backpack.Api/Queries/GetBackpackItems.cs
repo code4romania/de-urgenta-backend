@@ -8,10 +8,12 @@ namespace DeUrgenta.Backpack.Api.Queries
 {
     public class GetBackpackItems : IRequest<Result<IImmutableList<BackpackItemModel>>>
     {
+        public string UserSub { get; }
         public Guid BackpackId { get; }
 
-        public GetBackpackItems(Guid backpackId)
+        public GetBackpackItems(string userSub, Guid backpackId)
         {
+            UserSub = userSub;
             BackpackId = backpackId;
         }
     }
