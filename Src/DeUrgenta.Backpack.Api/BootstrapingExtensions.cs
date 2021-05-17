@@ -19,6 +19,11 @@ namespace DeUrgenta.Backpack.Api
             services.AddTransient<IValidateRequest<RemoveContributor>, RemoveContributorValidator>();
             services.AddTransient<IValidateRequest<RemoveCurrentUserFromContributors>, RemoveCurrentUserFromContributorsValidator>();
             services.AddTransient<IValidateRequest<UpdateBackpack>, UpdateBackpackValidator>();
+            services.AddTransient<IValidateRequest<AddBackpackItem>, AddBackpackItemValidator>();
+            services.AddTransient<IValidateRequest<DeleteBackpackItem>, DeleteBackpackItemValidator>();
+            services.AddTransient<IValidateRequest<UpdateBackpackItem>, UpdateBackpackItemValidator>();
+            services.AddTransient<IValidateRequest<GetBackpackCategoryItems>, GetBackpackCategoryItemsValidator>();
+            services.AddTransient<IValidateRequest<GetBackpackItems>, GetBackpackItemsValidator>();
 
             return services;
         }

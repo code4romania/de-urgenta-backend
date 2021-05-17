@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Threading.Tasks;
+using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Backpack.Api.Models;
+using DeUrgenta.Backpack.Api.Queries;
 using DeUrgenta.Backpack.Api.Swagger.BackpackItem;
 using DeUrgenta.Common.Swagger;
+using DeUrgenta.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -39,7 +43,14 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<IImmutableList<BackpackItemModel>>> GetBackpackItemsAsync([FromRoute] Guid backpackId)
         {
-            throw new NotImplementedException();
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var query = new GetBackpackItems(sub, backpackId);
+            var result = await _mediator.Send(query);
+
+            if (result.IsFailure)
+                return BadRequest();
+
+            return Ok(result.Value);
         }
 
         /// <summary>
@@ -52,9 +63,16 @@ namespace DeUrgenta.Backpack.Api.Controllers
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetCategoryBackpackItemsResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<IImmutableList<BackpackItemModel>>> GetBackpackCategoryItemsAsync([FromRoute] Guid backpackId, [FromRoute] Guid categoryId)
+        public async Task<ActionResult<IImmutableList<BackpackItemModel>>> GetBackpackCategoryItemsAsync([FromRoute] Guid backpackId, [FromRoute] BackpackCategoryType categoryId)
         {
-            throw new NotImplementedException();
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var query = new GetBackpackCategoryItems(sub, backpackId, categoryId);
+            var result = await _mediator.Send(query);
+
+            if (result.IsFailure)
+                return BadRequest();
+
+            return Ok(result.Value);
         }
 
         /// <summary>
@@ -73,7 +91,14 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<BackpackItemModel>> CreateNewBackpackItemAsync([FromRoute] Guid backpackId, [FromBody] BackpackItemRequest backpackItem)
         {
-            throw new NotImplementedException();
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var command = new AddBackpackItem(sub, backpackId, backpackItem);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+                return BadRequest();
+
+            return Ok(result.Value);
         }
 
         /// <summary>
@@ -93,7 +118,14 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<BackpackItemModel>> UpdateBackpackItemAsync([FromRoute] Guid itemId, [FromBody] BackpackItemRequest backpackItem)
         {
-            throw new NotImplementedException();
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var command = new UpdateBackpackItem(sub, itemId, backpackItem);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+                return BadRequest();
+
+            return Ok(result.Value);
         }
 
         /// <summary>
@@ -111,7 +143,14 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult> DeleteBackpackItemAsync([FromRoute] Guid itemId)
         {
-            throw new NotImplementedException();
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var command = new DeleteBackpackItem(sub, itemId);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+                return BadRequest();
+
+            return NoContent();
         }
     }
 }
