@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
@@ -11,19 +13,19 @@ using DeUrgenta.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace DeUrgenta.Backpack.Api.QueriesHandlers
+namespace DeUrgenta.Backpack.Api.QueryHandlers
 {
-    public class GetBackpackCategoryItemsHandler : IRequestHandler<GetBackpackCategoryItems, Result<IImmutableList<BackpackItemModel>>>
+    public class GetBackpackItemsHandler : IRequestHandler<GetBackpackItems, Result<IImmutableList<BackpackItemModel>>>
     {
-        private readonly IValidateRequest<GetBackpackCategoryItems> _validator;
+        private readonly IValidateRequest<GetBackpackItems> _validator;
         private readonly DeUrgentaContext _context;
 
-        public GetBackpackCategoryItemsHandler(IValidateRequest<GetBackpackCategoryItems> validator, DeUrgentaContext context)
+        public GetBackpackItemsHandler(IValidateRequest<GetBackpackItems> validator, DeUrgentaContext context)
         {
             _validator = validator;
             _context = context;
         }
-        public async Task<Result<IImmutableList<BackpackItemModel>>> Handle(GetBackpackCategoryItems request, CancellationToken cancellationToken)
+        public async Task<Result<IImmutableList<BackpackItemModel>>> Handle(GetBackpackItems request, CancellationToken cancellationToken)
         {
             var isValid = await _validator.IsValidAsync(request);
             if (!isValid)
@@ -31,8 +33,8 @@ namespace DeUrgenta.Backpack.Api.QueriesHandlers
                 return Result.Failure<IImmutableList<BackpackItemModel>>("Validation failed");
             }
 
-            var backpackItems = await _context.BackpackItem
-                .Where(item => item.BackpackId == request.BackpackId && item.BackpackCategory == request.CategoryId)
+            var backpackItems = await _context.BackpackItems
+                .Where(item => item.Backpack.Id == request.BackpackId)
                 .Select(item => new BackpackItemModel
                 {
                     Id = item.Id,

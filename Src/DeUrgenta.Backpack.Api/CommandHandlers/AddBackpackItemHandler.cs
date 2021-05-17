@@ -13,7 +13,7 @@ using DeUrgenta.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace DeUrgenta.Backpack.Api.CommandsHandlers
+namespace DeUrgenta.Backpack.Api.CommandHandlers
 {
     public class AddBackpackItemHandler : IRequestHandler<AddBackpackItem, Result<BackpackItemModel>>
     {

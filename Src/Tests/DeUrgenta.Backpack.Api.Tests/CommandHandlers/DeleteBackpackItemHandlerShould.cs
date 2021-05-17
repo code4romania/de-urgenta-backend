@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Commands;
-using DeUrgenta.Backpack.Api.CommandsHandlers;
+using DeUrgenta.Backpack.Api.CommandHandlers;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Tests.Helpers;
@@ -10,7 +10,7 @@ using NSubstitute;
 using Shouldly;
 using Xunit;
 
-namespace DeUrgenta.Backpack.Api.Tests.CommandsHandlers
+namespace DeUrgenta.Backpack.Api.Tests.CommandHandlers
 {
     [Collection(TestsConstants.DbCollectionName)]
     public class DeleteBackpackItemHandlerShould
@@ -34,7 +34,7 @@ namespace DeUrgenta.Backpack.Api.Tests.CommandsHandlers
             var sut = new DeleteBackpackItemHandler(validator, _dbContext);
 
             // Act
-            var result = await sut.Handle(new DeleteBackpackItem(Guid.NewGuid()), CancellationToken.None);
+            var result = await sut.Handle(new DeleteBackpackItem("a-sub", Guid.NewGuid()), CancellationToken.None);
 
             // Assert
             result.IsFailure.ShouldBeTrue();

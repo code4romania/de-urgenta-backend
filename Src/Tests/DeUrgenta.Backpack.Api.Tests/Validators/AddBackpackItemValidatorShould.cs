@@ -20,36 +20,94 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             _dbContext = fixture.Context;
         }
 
-        [Fact]
-        public async Task Invalidate_request_when_backpack_does_not_exist()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("my-weird-sub")]
+        public async Task Invalidate_request_when_no_user_found_by_sub(string sub)
         {
             // Arrange
             var sut = new AddBackpackItemValidator(_dbContext);
-            var command = new AddBackpackItem(Guid.NewGuid(), new BackpackItemRequest());
 
             // Act
-            bool isValid = await sut.IsValidAsync(command);
+            bool isValid = await sut.IsValidAsync(new AddBackpackItem(sub, Guid.NewGuid(), new BackpackItemRequest()));
 
             // Assert
             isValid.ShouldBeFalse();
         }
 
         [Fact]
-        public async Task Validate_request_when_backpack_exists()
+        public async Task Invalidate_when_user_not_contributor_of_related_backpack()
         {
             // Arrange
             var sut = new AddBackpackItemValidator(_dbContext);
 
+            var userSub = Guid.NewGuid().ToString();
+            var contributorSub = Guid.NewGuid().ToString();
             var backpackId = Guid.NewGuid();
-            await _dbContext.Backpacks.AddAsync(new Domain.Entities.Backpack
+
+            var nonContributor = new User
+            {
+                FirstName = "NonContributor",
+                LastName = "User",
+                Sub = userSub
+            };
+
+            var contributor = new User
+            {
+                FirstName = "Contributor",
+                LastName = "User",
+                Sub = contributorSub
+            };
+
+            var backpack = new Domain.Entities.Backpack
+            {
+                Id = backpackId,
+                Name = "A backpack"
+            };
+
+            await _dbContext.Users.AddAsync(nonContributor);
+            await _dbContext.Users.AddAsync(contributor);
+            await _dbContext.Backpacks.AddAsync(backpack);
+            await _dbContext.BackpacksToUsers.AddAsync(new BackpackToUser { Backpack = backpack, User = contributor});
+            await _dbContext.SaveChangesAsync();
+
+            // Act
+            bool isValid = await sut.IsValidAsync(new AddBackpackItem(nonContributor.Sub, backpackId, new BackpackItemRequest()));
+
+            // Assert
+            isValid.ShouldBeFalse();
+        }
+
+
+        [Fact]
+        public async Task Validate_request_when_backpack_exists_and_user_contributor()
+        {
+            // Arrange
+            var sut = new AddBackpackItemValidator(_dbContext);
+
+            var contributorSub = Guid.NewGuid().ToString();
+            var backpackId = Guid.NewGuid();
+
+            var contributor = new User
+            {
+                FirstName = "Contributor",
+                LastName = "User",
+                Sub = contributorSub
+            };
+
+            var backpack = new Domain.Entities.Backpack
             {
                 Id = backpackId,
                 Name = "test-backpack",
-            });
+            };
 
+            await _dbContext.Users.AddAsync(contributor);
+            await _dbContext.Backpacks.AddAsync(backpack);
+            await _dbContext.BackpacksToUsers.AddAsync(new BackpackToUser { Backpack = backpack, User = contributor });
             await _dbContext.SaveChangesAsync();
 
-            var command = new AddBackpackItem(backpackId, new BackpackItemRequest());
+            var command = new AddBackpackItem(contributorSub, backpackId, new BackpackItemRequest());
 
             // Act
             bool isValid = await sut.IsValidAsync(command);

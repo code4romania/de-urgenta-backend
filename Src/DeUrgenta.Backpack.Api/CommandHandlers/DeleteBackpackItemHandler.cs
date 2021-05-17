@@ -8,7 +8,7 @@ using DeUrgenta.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace DeUrgenta.Backpack.Api.CommandsHandlers
+namespace DeUrgenta.Backpack.Api.CommandHandlers
 {
     public class DeleteBackpackItemHandler : IRequestHandler<DeleteBackpackItem, Result>
     {
@@ -29,8 +29,8 @@ namespace DeUrgenta.Backpack.Api.CommandsHandlers
                 return Result.Failure<BackpackItemModel>("Validation failed");
             }
 
-            var backpackItem = await _context.BackpackItem.FirstAsync(x => x.Id == request.ItemId, cancellationToken);
-            _context.BackpackItem.Remove(backpackItem);
+            var backpackItem = await _context.BackpackItems.FirstAsync(x => x.Id == request.ItemId, cancellationToken);
+            _context.BackpackItems.Remove(backpackItem);
             await _context.SaveChangesAsync(cancellationToken);
 
             return Result.Success();
