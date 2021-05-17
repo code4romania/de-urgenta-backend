@@ -40,8 +40,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_when_user_not_contributor_of_related_backpack()
         {
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
-            string contributorSub = Guid.NewGuid().ToString();
+            var sut = new AddBackpackItemValidator(_dbContext);
+
+            var userSub = Guid.NewGuid().ToString();
+            var contributorSub = Guid.NewGuid().ToString();
             var backpackId = Guid.NewGuid();
 
             var nonContributor = new User
@@ -70,8 +72,6 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.BackpacksToUsers.AddAsync(new BackpackToUser { Backpack = backpack, User = contributor});
             await _dbContext.SaveChangesAsync();
 
-            var sut = new AddBackpackItemValidator(_dbContext);
-
             // Act
             bool isValid = await sut.IsValidAsync(new AddBackpackItem(nonContributor.Sub, backpackId, new BackpackItemRequest()));
 
@@ -86,7 +86,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             // Arrange
             var sut = new AddBackpackItemValidator(_dbContext);
 
-            string contributorSub = Guid.NewGuid().ToString();
+            var contributorSub = Guid.NewGuid().ToString();
             var backpackId = Guid.NewGuid();
 
             var contributor = new User
@@ -105,7 +105,6 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.Users.AddAsync(contributor);
             await _dbContext.Backpacks.AddAsync(backpack);
             await _dbContext.BackpacksToUsers.AddAsync(new BackpackToUser { Backpack = backpack, User = contributor });
-
             await _dbContext.SaveChangesAsync();
 
             var command = new AddBackpackItem(contributorSub, backpackId, new BackpackItemRequest());

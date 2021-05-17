@@ -28,7 +28,7 @@ namespace DeUrgenta.Backpack.Api.Validators
                 return false;
             }
 
-            return await _context.Backpacks.AnyAsync(x => x.Id == request.BackpackId);
+            return true;
         }
     }
 }

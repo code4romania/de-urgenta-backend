@@ -43,8 +43,8 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_when_user_not_contributor_of_related_backpack()
         {
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
-            string contributorSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
+            var contributorSub = Guid.NewGuid().ToString();
             var backpackId = Guid.NewGuid();
 
             var nonContributor = new User
@@ -86,7 +86,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_request_when_item_does_not_exist()
         {
             // Arrange
-            string contributorSub = Guid.NewGuid().ToString();
+            var contributorSub = Guid.NewGuid().ToString();
             var backpackId = Guid.NewGuid();
 
             var contributor = new User
@@ -121,7 +121,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Validate_request_when_backpack_item_exists_and_user_contributor()
         {
             // Arrange
-            string contributorSub = Guid.NewGuid().ToString();
+            var contributorSub = Guid.NewGuid().ToString();
             var backpackId = Guid.NewGuid();
             var backpackItemId = Guid.NewGuid();
 

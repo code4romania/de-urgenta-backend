@@ -43,8 +43,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_when_user_not_contributor_of_related_backpack()
         {
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
-            string contributorSub = Guid.NewGuid().ToString();
+            var sut = new GetBackpackCategoryItemsValidator(_dbContext);
+
+            var userSub = Guid.NewGuid().ToString();
+            var contributorSub = Guid.NewGuid().ToString();
             var backpackId = Guid.NewGuid();
 
             var nonContributor = new User
@@ -72,8 +74,6 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.Backpacks.AddAsync(backpack);
             await _dbContext.BackpacksToUsers.AddAsync(new BackpackToUser { Backpack = backpack, User = contributor });
             await _dbContext.SaveChangesAsync();
-
-            var sut = new GetBackpackCategoryItemsValidator(_dbContext);
 
             // Act
             bool isValid = await sut.IsValidAsync(new GetBackpackCategoryItems(nonContributor.Sub, backpackId, BackpackCategoryType.FirstAid));
