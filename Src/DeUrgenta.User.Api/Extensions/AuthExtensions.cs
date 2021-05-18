@@ -70,10 +70,11 @@ namespace DeUrgenta.User.Api.Extensions
 
             services.AddDatabase<UserDbContext>(configuration.GetConnectionString("IdentityDbConnectionString"));
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services
+                .AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<UserDbContext>();
 
-
+            services.AddTransient<IApplicationUserManager, ApplicationUserManager>();
             return services;
         }
 

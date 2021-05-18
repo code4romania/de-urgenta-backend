@@ -19,15 +19,20 @@ namespace DeUrgenta.User.Api.Controller
     public class AuthManagementController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IApplicationUserManager _applicationUserManager;
         private readonly IJwtService _jwtService;
         private readonly IEmailSender _emailSender;
         private readonly IConfiguration _configuration;
 
         public AuthManagementController(
             UserManager<IdentityUser> userManager,
-            IJwtService jwtService, IEmailSender emailSender, IConfiguration configuration)
+            IApplicationUserManager applicationUserManager,
+            IJwtService jwtService,
+            IEmailSender emailSender,
+            IConfiguration configuration)
         {
             _userManager = userManager;
+            _applicationUserManager = applicationUserManager;
             _jwtService = jwtService;
             _emailSender = emailSender;
             _configuration = configuration;
@@ -50,11 +55,11 @@ namespace DeUrgenta.User.Api.Controller
 
             if (identityResult.Succeeded)
             {
+                await _applicationUserManager.CreateApplicationUserAsync(user, newUser.Id);
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                 var confirmationUrl = _configuration.GetValue<string>("ConfirmationUrl");
-                var callbackUrl =
-                    $"{confirmationUrl}?userId={newUser.Id}&code={code}";
+                var callbackUrl = $"{confirmationUrl}?userId={newUser.Id}&code={code}";
 
                 await SendRegistrationEmail(newUser.UserName, user.Email, callbackUrl);
                 return Ok("Email was sent");
@@ -86,7 +91,7 @@ namespace DeUrgenta.User.Api.Controller
 
         private async Task SendRegistrationEmail(string userName, string userEmail, string callbackUrl)
         {
-            EmailRequestModel email = new EmailRequestModel
+            var email = new EmailRequestModel
             {
                 Address = userEmail,
                 PlaceholderContent = new Dictionary<string, string>(),
