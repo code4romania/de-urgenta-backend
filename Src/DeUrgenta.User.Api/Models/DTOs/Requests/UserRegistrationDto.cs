@@ -17,8 +17,5 @@ namespace DeUrgenta.User.Api.Models.DTOs.Requests
 
         [Required]
         public string LastName { get; set; }
-
-        [Required]
-        public DateTime? Birthdate { get; set; }
     }
 }
