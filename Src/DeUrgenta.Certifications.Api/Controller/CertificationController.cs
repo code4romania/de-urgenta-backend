@@ -12,6 +12,7 @@ using System.Collections.Immutable;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Swagger;
 using Microsoft.AspNetCore.Authorization;
+using System.Linq;
 
 namespace DeUrgenta.Certifications.Api.Controller
 {
@@ -42,10 +43,15 @@ namespace DeUrgenta.Certifications.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<IImmutableList<CertificationModel>>> GetCertificationsAsync()
         {
-            // TODO: get user id from identity
-            var certifications = await _mediator.Send(new GetCertifications(Guid.NewGuid()));
-
-            return Ok(certifications);
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var query = new GetCertifications(sub);
+            var result = await _mediator.Send(query);
+            
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+            return Ok(result.Value);
         }
 
         /// <summary>
