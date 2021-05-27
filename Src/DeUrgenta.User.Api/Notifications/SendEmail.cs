@@ -8,6 +8,7 @@ namespace DeUrgenta.User.Api.Notifications
     {
         public string DestinationAddress { get; }
         public string SenderName { get; }
+        public string SenderEmail { get; }
         public string Subject { get; }
 
         public Dictionary<string, string> PlaceholderContent { get; }
@@ -16,11 +17,13 @@ namespace DeUrgenta.User.Api.Notifications
 
         public SendEmail(string destinationAddress,
             string senderName,
+            string senderEmail,
             string subject,
             EmailTemplate templateType)
         {
             DestinationAddress = destinationAddress;
             SenderName = senderName;
+            SenderEmail = senderEmail;
             Subject = subject;
 
             TemplateType = templateType;
@@ -29,9 +32,10 @@ namespace DeUrgenta.User.Api.Notifications
 
         public SendEmail(string destinationAddress,
             string senderName,
+            string senderEmail,
             string subject,
             EmailTemplate templateType,
-            EmailAttachment attachment) : this(destinationAddress, senderName, subject, templateType)
+            EmailAttachment attachment) : this(destinationAddress, senderName, senderEmail, subject, templateType)
         {
             Attachment = attachment;
         }

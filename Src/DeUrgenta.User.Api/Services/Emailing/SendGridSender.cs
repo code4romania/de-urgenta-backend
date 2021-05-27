@@ -51,7 +51,14 @@ namespace DeUrgenta.User.Api.Services.Emailing
 
             _logger.LogInformation("Sending email using Sendgrid");
 
-            await client.SendEmailAsync(message, cancellationToken);
+            var sendgridResponse = await client.SendEmailAsync(message, cancellationToken);
+            var statusCode = (int)sendgridResponse.StatusCode;
+            if (statusCode > 226 || statusCode < 200)
+            {
+                // not ok response received
+                var responseMessage = await sendgridResponse.Body.ReadAsStringAsync();
+                _logger.LogWarning("Received not ok(200) status code. Status code received {statusCode}. Response message {responseMessage}", statusCode, responseMessage);
+            }
         }
     }
 }
