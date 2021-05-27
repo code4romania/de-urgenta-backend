@@ -25,10 +25,11 @@ namespace DeUrgenta.User.Api.NotificationHandlers
             {
                 var email = new EmailRequestModel
                 {
-                    Address = notification.DestinationAddress,
+                    DestinationAddress = notification.DestinationAddress,
                     PlaceholderContent = notification.PlaceholderContent,
                     TemplateType = notification.TemplateType,
                     SenderName = notification.SenderName,
+                    SenderEmail = notification.SenderEmail,
                     Subject = notification.Subject
                 };
                 await _emailSender.SendAsync(email, cancellationToken);
