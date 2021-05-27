@@ -29,6 +29,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Domain\Migrations\" />
+	  <Folder Include="NotificationHandlers\" />
 	</ItemGroup>
 
 </Project>

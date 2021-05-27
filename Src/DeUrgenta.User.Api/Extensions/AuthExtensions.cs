@@ -62,8 +62,6 @@ namespace DeUrgenta.User.Api.Extensions
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredLength = 6;
                 options.Password.RequiredUniqueChars = 0;
-
-
             });
 
             services.AddTransient<IJwtService, JwtService>();
@@ -82,40 +80,30 @@ namespace DeUrgenta.User.Api.Extensions
         {
             services.AddTransient<IEmailBuilderService, EmailBuilderService>();
             services.AddSingleton<ITemplateFileSelector, TemplateFileSelector>();
-
-
             var emailType = configuration.GetValue<EmailingSystemTypes>("EMailingSystem");
-
-            var sp = services.BuildServiceProvider();
-            var emailBuilder = sp.GetService<IEmailBuilderService>();
 
             switch (emailType)
             {
                 case EmailingSystemTypes.SendGrid:
-                    services.AddSingleton<IEmailSender, SendGridSender>(ctx =>
-                        new SendGridSender(
-                            emailBuilder,
-                            new SendGridOptions
-                            {
-                                ApiKey = configuration["SendGrid:ApiKey"],
-                                ClickTracking = configuration.GetValue<bool>("SendGrid:ClickTracking")
-                            }
-                        )
-                    );
+                    services.AddSingleton(new SendGridOptions
+                    {
+                        ApiKey = configuration["SendGrid:ApiKey"],
+                        ClickTracking = configuration.GetValue<bool>("SendGrid:ClickTracking")
+                    });
+
+                    services.AddSingleton<IEmailSender, SendGridSender>();
                     break;
+
                 case EmailingSystemTypes.Smtp:
-                    services.AddSingleton<IEmailSender, SmtpSender>(ctx =>
-                        new SmtpSender(
-                            emailBuilder,
-                            new SmtpOptions
-                            {
-                                Host = configuration["Smtp:Host"],
-                                Port = configuration.GetValue<int>("Smtp:Port"),
-                                User = configuration["Smtp:User"],
-                                Password = configuration["Smtp:Password"]
-                            }
-                        )
-                    );
+                    services.AddSingleton(new SmtpOptions
+                    {
+                        Host = configuration["Smtp:Host"],
+                        Port = configuration.GetValue<int>("Smtp:Port"),
+                        User = configuration["Smtp:User"],
+                        Password = configuration["Smtp:Password"]
+                    });
+
+                    services.AddSingleton<IEmailSender, SmtpSender>();
                     break;
             }
         }
