@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace DeUrgenta.Certifications.Api.QueryHandlers
 {
-    internal class GetCertificationsHandler : IRequestHandler<GetCertifications, Result<IImmutableList<CertificationModel>>>
+    public class GetCertificationsHandler : IRequestHandler<GetCertifications, Result<IImmutableList<CertificationModel>>>
     {
         private readonly IValidateRequest<GetCertifications> _validator;
         private readonly DeUrgentaContext _context;
