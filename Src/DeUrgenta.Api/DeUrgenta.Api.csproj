@@ -37,4 +37,13 @@
 	  <ProjectReference Include="..\DeUrgenta.User.Api\DeUrgenta.User.Api.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="EmailTemplates\accountConfirmationTemplate.html">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="EmailTemplates\resetPasswordTemplate.html">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>

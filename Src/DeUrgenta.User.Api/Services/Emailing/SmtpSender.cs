@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MailKit.Net.Smtp;
 using MailKit.Security;
+using Microsoft.Extensions.Logging;
 using MimeKit;
 using MimeKit.Text;
 
@@ -12,13 +13,15 @@ namespace DeUrgenta.User.Api.Services.Emailing
     public class SmtpSender : BaseEmailSender
     {
         private readonly SmtpOptions _options;
+        private readonly ILogger<SmtpSender> _logger;
 
-        public SmtpSender(IEmailBuilderService emailBuilder, SmtpOptions options): base(emailBuilder)
+        public SmtpSender(IEmailBuilderService emailBuilder, SmtpOptions options, ILogger<SmtpSender> logger) : base(emailBuilder)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
+            _logger = logger; //?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public override async Task SendAsync(Email email, CancellationToken cancellationToken)
+        public override async Task SendAsync(Email email, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(email.To))
             {
@@ -58,6 +61,8 @@ namespace DeUrgenta.User.Api.Services.Emailing
                 {
                     message.Body = body;
                 }
+
+                _logger.LogInformation("Sending email using SmtpSender");
 
                 await client.SendAsync(message, cancellationToken);
                 await client.DisconnectAsync(true, cancellationToken);

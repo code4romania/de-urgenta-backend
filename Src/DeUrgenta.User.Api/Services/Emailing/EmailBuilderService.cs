@@ -28,8 +28,8 @@ namespace DeUrgenta.User.Api.Services.Emailing
             var emailModel = new Email
             {
                 FromName = emailRequest.SenderName,
-                FromEmail = "admin@jurnalmedical.ro",
-                To = emailRequest.Address,
+                FromEmail = emailRequest.SenderEmail,
+                To = emailRequest.DestinationAddress,
                 SenderName = emailRequest.SenderName,
                 Subject = EmailConstants.GetSubject(emailRequest.TemplateType),
                 Content = template,
