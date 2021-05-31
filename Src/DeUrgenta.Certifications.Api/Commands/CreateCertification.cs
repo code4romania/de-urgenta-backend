@@ -1,17 +1,19 @@
-﻿using MediatR;
+﻿using CSharpFunctionalExtensions;
+using DeUrgenta.Certifications.Api.Models;
+using MediatR;
 using System;
 
 namespace DeUrgenta.Certifications.Api.Commands
 {
-    public class CreateCertification : IRequest<Guid>
+    public class CreateCertification : IRequest<Result<CertificationModel>>
     {
-        public Guid UserId { get; }
+        public string UserSub{ get; }
         public string Name { get; }
         public DateTime ExpirationDate { get; }
 
-        public CreateCertification(Guid userId, string name, DateTime expirationDate)
+        public CreateCertification(string userSub, string name, DateTime expirationDate)
         {
-            UserId = userId;
+            UserSub = userSub;
             Name = name;
             ExpirationDate = expirationDate;
         }

@@ -1,4 +1,5 @@
-﻿using DeUrgenta.Certifications.Api.Queries;
+﻿using DeUrgenta.Certifications.Api.Commands;
+using DeUrgenta.Certifications.Api.Queries;
 using DeUrgenta.Certifications.Api.Validators;
 using DeUrgenta.Common.Validation;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +11,8 @@ namespace DeUrgenta.Certifications.Api
         public static IServiceCollection AddCertificationsApiServices(this IServiceCollection services)
         {
             services.AddTransient<IValidateRequest<GetCertifications>, GetCertificationsValidator>();
+            services.AddTransient<IValidateRequest<CreateCertification>, CreateCertificationValidator>();
+
             return services;
         }
     }

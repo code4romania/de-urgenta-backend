@@ -69,10 +69,16 @@ namespace DeUrgenta.Certifications.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<CertificationModel>> CreateNewCertificationAsync([FromBody] CertificationRequest certification)
         {
-            // TODO: get user id from identity
-            var newCertificationId = await _mediator.Send(new CreateCertification(Guid.NewGuid(), certification.Name, certification.ExpirationDate));
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var command = new CreateCertification(sub, certification.Name, certification.ExpirationDate);
+            var result = await _mediator.Send(command);
 
-            return Ok(newCertificationId);
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return Ok(result.Value);
         }
 
         /// <summary>
