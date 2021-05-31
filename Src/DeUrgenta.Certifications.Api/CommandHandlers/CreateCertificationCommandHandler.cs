@@ -36,7 +36,8 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
             {
                 Name = request.Name,
                 ExpirationDate = request.ExpirationDate,
-                User = user
+                User = user,
+                IssuingAuthority = request.IssuingAuthority
             };
 
             await _context.Certifications.AddAsync(certification, cancellationToken);
@@ -46,7 +47,8 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
             {
                 Id = certification.Id,
                 Name = certification.Name,
-                ExpirationDate = certification.ExpirationDate
+                ExpirationDate = certification.ExpirationDate,
+                IssuingAuthority = certification.IssuingAuthority
             };
         }
     }

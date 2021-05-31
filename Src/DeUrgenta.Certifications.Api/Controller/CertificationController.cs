@@ -70,7 +70,7 @@ namespace DeUrgenta.Certifications.Api.Controller
         public async Task<ActionResult<CertificationModel>> CreateNewCertificationAsync([FromBody] CertificationRequest certification)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new CreateCertification(sub, certification.Name, certification.ExpirationDate);
+            var command = new CreateCertification(sub, certification);
             var result = await _mediator.Send(command);
 
             if (result.IsFailure)

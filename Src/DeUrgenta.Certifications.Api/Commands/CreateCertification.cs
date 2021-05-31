@@ -10,12 +10,14 @@ namespace DeUrgenta.Certifications.Api.Commands
         public string UserSub{ get; }
         public string Name { get; }
         public DateTime ExpirationDate { get; }
+        public string IssuingAuthority { get; }
 
-        public CreateCertification(string userSub, string name, DateTime expirationDate)
+        public CreateCertification(string userSub, CertificationRequest certificationRequest)
         {
             UserSub = userSub;
-            Name = name;
-            ExpirationDate = expirationDate;
+            Name = certificationRequest.Name;
+            ExpirationDate = certificationRequest.ExpirationDate;
+            IssuingAuthority = certificationRequest.IssuingAuthority;
         }
     }
 }
