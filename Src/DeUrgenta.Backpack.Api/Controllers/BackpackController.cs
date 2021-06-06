@@ -32,7 +32,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         }
 
         /// <summary>
-        /// Gets user backpacks
+        /// Gets backpacks for current user in which he either is contributor or owner.
         /// </summary>
         /// <returns></returns>
         [HttpGet("/backpacks")]
@@ -56,7 +56,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         }
 
         /// <summary>
-        /// Gets user backpacks
+        /// Gets backpacks for current user for which he is owner.
         /// </summary>
         /// <returns></returns>
         [HttpGet("/backpacks/my")]

@@ -3,7 +3,7 @@
   services:
     postgres:
       image: postgres
-      container_name: postgres
+      container_name: deurgenta_postgres
       environment:
         POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
         POSTGRES_USER: ${POSTGRES_USER}
@@ -14,6 +14,7 @@
         - ./postgres_data:/var/lib/postgresql/data
 
     api:
+      container_name: deurgenta_api
       depends_on:
         - "postgres"
       build:
@@ -29,6 +30,7 @@
       restart: unless-stopped
 
     recurent-jobs:
+      container_name: deurgenta_recurent_jobs
       depends_on:
         - "postgres"
       build:
