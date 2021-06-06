@@ -1,4 +1,6 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using CSharpFunctionalExtensions;
 using DeUrgenta.Certifications.Api.Commands;
 using DeUrgenta.Certifications.Api.Models;
 using DeUrgenta.Common.Validation;
@@ -6,18 +8,15 @@ using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace DeUrgenta.Certifications.Api.CommandHandlers
 {
-    public class CreateCertificationCommandHandler : IRequestHandler<CreateCertification, Result<CertificationModel>>
+    public class CreateCertificationHandler : IRequestHandler<CreateCertification, Result<CertificationModel>>
     {
         private readonly IValidateRequest<CreateCertification> _validator;
         private readonly DeUrgentaContext _context;
 
-        public CreateCertificationCommandHandler(IValidateRequest<CreateCertification> validator, DeUrgentaContext context)
+        public CreateCertificationHandler(IValidateRequest<CreateCertification> validator, DeUrgentaContext context)
         {
             _validator = validator;
             _context = context;

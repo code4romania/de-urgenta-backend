@@ -22,10 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CommandHandlers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\DeUrgenta.Certifications.Api\DeUrgenta.Certifications.Api.csproj" />
     <ProjectReference Include="..\DeUrgenta.Tests.Helpers\DeUrgenta.Tests.Helpers.csproj" />
   </ItemGroup>
