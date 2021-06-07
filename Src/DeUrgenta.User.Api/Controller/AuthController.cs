@@ -3,9 +3,12 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using CSharpFunctionalExtensions;
+using DeUrgenta.User.Api.Models;
 using DeUrgenta.User.Api.Models.DTOs.Requests;
 using DeUrgenta.User.Api.Models.DTOs.Responses;
 using DeUrgenta.User.Api.Notifications;
+using DeUrgenta.User.Api.Queries;
 using DeUrgenta.User.Api.Services;
 using DeUrgenta.User.Api.Services.Emailing;
 using MediatR;
@@ -68,7 +71,7 @@ namespace DeUrgenta.User.Api.Controller
                 return Ok("Email was sent");
             }
 
-            return BadRequest(new RegistrationResponse
+            return BadRequest(new ActionResponse
             {
                 Errors = identityResult.Errors.Select(x => x.Description).ToList(),
                 Success = false
@@ -140,7 +143,7 @@ namespace DeUrgenta.User.Api.Controller
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest user)
         {
-            var badRegistrationResponse = new RegistrationResponse
+            var badRegistrationResponse = new ActionResponse
             {
                 Errors = new List<string> {
                     "Invalid login request"
@@ -163,8 +166,20 @@ namespace DeUrgenta.User.Api.Controller
             }
 
             var jwtToken = _jwtService.GenerateJwtToken(existingUser);
+            Result<UserModel> userDetails = await _mediator.Send(new GetUser(existingUser.Id));
 
-            return Ok(jwtToken);
+            if (userDetails.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return Ok(new
+            {
+                token = jwtToken,
+                userDetails.Value.LastName,
+                userDetails.Value.FirstName,
+                Success = true
+            });
         }
     }
 }

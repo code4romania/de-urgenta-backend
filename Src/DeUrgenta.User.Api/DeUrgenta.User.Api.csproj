@@ -9,6 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CSharpFunctionalExtensions" Version="2.15.3" />
 		<PackageReference Include="MediatR" Version="9.0.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="6.1.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.2" />
@@ -29,6 +30,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Domain\Migrations\" />
+	  <Folder Include="Queries\" />
 	  <Folder Include="NotificationHandlers\" />
 	</ItemGroup>
 

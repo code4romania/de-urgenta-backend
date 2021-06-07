@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DeUrgenta.Group.Api
 {
-    public static class BootstrapingExtensions
+    public static class BootstrappingExtensions
     {
         public static IServiceCollection AddGroupApiServices(this IServiceCollection services)
         {
