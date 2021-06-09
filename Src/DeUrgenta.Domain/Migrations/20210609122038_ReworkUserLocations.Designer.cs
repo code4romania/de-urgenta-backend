@@ -3,15 +3,17 @@ using System;
 using DeUrgenta.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DeUrgenta.Domain.Migrations
 {
     [DbContext(typeof(DeUrgentaContext))]
-    partial class DeUrgentaContextModelSnapshot : ModelSnapshot
+    [Migration("20210609122038_ReworkUserLocations")]
+    partial class ReworkUserLocations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -365,17 +367,17 @@ namespace DeUrgenta.Domain.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
-
                     b.Property<decimal>("Latitude")
                         .HasMaxLength(100)
                         .HasColumnType("numeric");
 
                     b.Property<decimal>("Longitude")
                         .HasColumnType("numeric");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
 
                     b.Property<int>("Type")
                         .HasMaxLength(100)

@@ -6,16 +6,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.User.Api.Validators
 {
-    public class GetUserValidator : IValidateRequest<GetUser>
+    public class GetUserLocationsValidator : IValidateRequest<GetUserLocations>
     {
         private readonly DeUrgentaContext _context;
 
-        public GetUserValidator(DeUrgentaContext context)
+        public GetUserLocationsValidator(DeUrgentaContext context)
         {
             _context = context;
         }
 
-        public async Task<bool> IsValidAsync(GetUser request)
+        public async Task<bool> IsValidAsync(GetUserLocations request)
         {
             var userExists = await _context.Users.AnyAsync(u => u.Sub == request.UserSub);
 

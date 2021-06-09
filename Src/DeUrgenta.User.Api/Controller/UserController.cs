@@ -31,107 +31,153 @@ namespace DeUrgenta.User.Api.Controller
         }
 
         /// <summary>
-        /// Gets user info
+        /// Gets user info about current user
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("whoami")]
         [SwaggerResponse(StatusCodes.Status200OK, "Get details about an user", typeof(UserModel))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetUserResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<UserModel>> GetUserDetailsAsync()
         {
-            throw new NotImplementedException();
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var result = await _mediator.Send(new GetUser(sub));
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return Ok(result.Value);
         }
 
         /// <summary>
-        /// Adds a new group
+        /// Updates user info
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [SwaggerResponse(StatusCodes.Status200OK, "New user", typeof(UserModel))]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "Update successful")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerRequestExample(typeof(UserRequest), typeof(AddOrUpdateUserRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateUserResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<UserModel>> UpdateUserAsync(UserRequest user)
         {
-            throw new NotImplementedException();
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var result = await _mediator.Send(new UpdateUser(sub, user));
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
         }
 
         /// <summary>
-        /// Gets user safe location
+        /// Gets user locations
         /// </summary>
         /// <returns></returns>
-        [HttpGet("safe-locations")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Get safe locations of current user", typeof(IImmutableList<UserSafeLocationModel>))]
+        [HttpGet("locations")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Get locations of current user", typeof(IImmutableList<UserLocationModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetUserSafeLocationsResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetUserLocationsResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<IImmutableList<UserSafeLocationModel>>> GetUserSafeLocationsAsync()
+        public async Task<ActionResult<IImmutableList<UserLocationModel>>> GetUserLocationsAsync()
         {
-            throw new NotImplementedException();
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var result = await _mediator.Send(new GetUserLocations(sub));
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return Ok(result.Value);
         }
 
         /// <summary>
-        /// Adds a new user safe location
+        /// Adds a new user location
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [Route("safe-location")]
-        [SwaggerResponse(StatusCodes.Status200OK, "new user safe location", typeof(UserSafeLocationModel))]
+        [Route("location")]
+        [SwaggerResponse(StatusCodes.Status200OK, "new user location", typeof(UserLocationModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerRequestExample(typeof(UserSafeLocationRequest), typeof(AddOrUpdateUserSafeLocationRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddUserSafeLocationResponseExample))]
+        [SwaggerRequestExample(typeof(UserLocationRequest), typeof(AddOrUpdateUserLocationRequestExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddUserLocationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<UserSafeLocationModel>> CreateNewSafeLocationAsync([FromBody] UserSafeLocationRequest safeLocation)
+        public async Task<ActionResult<UserLocationModel>> AddLocationAsync([FromBody] UserLocationRequest location)
         {
-            throw new NotImplementedException();
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var result = await _mediator.Send(new AddLocation(sub, location));
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return Ok(result.Value);
         }
 
         /// <summary>
-        /// Updates user safe location
+        /// Updates user location
         /// </summary>
         /// <returns></returns>
         [HttpPut]
-        [Route("safe-location/{locationId:guid}")]
+        [Route("location/{locationId:guid}")]
 
-        [SwaggerResponse(StatusCodes.Status200OK, "Updated user safe location", typeof(UserSafeLocationModel))]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "Updated user location")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerRequestExample(typeof(UserSafeLocationRequest), typeof(AddOrUpdateUserSafeLocationRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddUserSafeLocationResponseExample))]
+        [SwaggerRequestExample(typeof(UserLocationRequest), typeof(AddOrUpdateUserLocationRequestExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<UserSafeLocationModel>> UpdateSafeLocationAsync([FromRoute] Guid locationId, [FromBody] UserSafeLocationRequest safeLocation)
+        public async Task<ActionResult<UserLocationModel>> UpdateLocationAsync([FromRoute] Guid locationId, [FromBody] UserLocationRequest location)
         {
-            throw new NotImplementedException();
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var result = await _mediator.Send(new UpdateLocation(sub,locationId, location));
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
         }
 
         /// <summary>
-        /// Delete an user safe location
+        /// Delete an user location
         /// </summary>
         /// <returns></returns>
         [HttpDelete]
-        [Route("safe-location/{locationId:guid}")]
+        [Route("location/{locationId:guid}")]
 
-        [SwaggerResponse(StatusCodes.Status204NoContent, "User safe location was deleted")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "User location was deleted")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> DeleteSafeLocationAsync([FromRoute] Guid locationId)
+        public async Task<ActionResult> DeleteLocationAsync([FromRoute] Guid locationId)
         {
-            throw new NotImplementedException();
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var result = await _mediator.Send(new DeleteLocation(sub, locationId));
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
         }
 
 

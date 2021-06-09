@@ -4,7 +4,6 @@ using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.User.Api.Commands;
-using DeUrgenta.User.Api.Queries;
 using DeUrgenta.User.Api.Validators;
 using Shouldly;
 using Xunit;

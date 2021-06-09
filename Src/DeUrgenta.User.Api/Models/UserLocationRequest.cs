@@ -1,17 +1,21 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using DeUrgenta.Domain.Entities;
 
 namespace DeUrgenta.User.Api.Models
 {
-    public sealed record UserSafeLocationRequest
+    public sealed record UserLocationRequest
     {
         [Required]
-        [StringLength(100, MinimumLength = 3)]
-        public string Name { get; init; }
+        [StringLength(1000, MinimumLength = 3)]
+        public string Address { get; init; }
 
         [Required]
         public decimal Latitude { get; init; }
 
         [Required]
         public decimal Longitude { get; init; }
+
+        [Required]
+        public UserAddressType Type { get; set; }
     }
 }
