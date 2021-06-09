@@ -29,8 +29,11 @@ namespace DeUrgenta.Group.Api.CommandHandlers
             }
 
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
-            var group = await _context.Groups.FirstAsync(g => g.AdminId == user.Id, cancellationToken);
+            var group = await _context.Groups
+                .Include(x=>x.Backpack)
+                .FirstAsync(g => g.AdminId == user.Id, cancellationToken);
 
+            _context.Backpacks.Remove(group.Backpack);
             _context.Groups.Remove(group);
             await _context.SaveChangesAsync(cancellationToken);
 

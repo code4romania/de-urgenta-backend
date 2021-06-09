@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Infra.Extensions;
+using DeUrgenta.User.Api.Commands;
 using DeUrgenta.User.Api.Domain;
 using DeUrgenta.User.Api.Options;
 using DeUrgenta.User.Api.Queries;
@@ -114,6 +115,13 @@ namespace DeUrgenta.User.Api
         public static IServiceCollection AddUserApiServices(this IServiceCollection services)
         {
             services.AddTransient<IValidateRequest<GetUser>, GetUserValidator>();
+            services.AddTransient<IValidateRequest<GetBackpackInvites>, GetBackpackInvitesValidator>();
+            services.AddTransient<IValidateRequest<GetGroupInvites>, GetGroupInvitesValidator>();
+
+            services.AddTransient<IValidateRequest<AcceptBackpackInvite>, AcceptBackpackInviteValidator>();
+            services.AddTransient<IValidateRequest<AcceptGroupInvite>, AcceptGroupInviteValidator>();
+            services.AddTransient<IValidateRequest<RejectBackpackInvite>, RejectBackpackInviteValidator>();
+            services.AddTransient<IValidateRequest<RejectGroupInvite>, RejectGroupInviteValidator>();
 
             return services;
         }

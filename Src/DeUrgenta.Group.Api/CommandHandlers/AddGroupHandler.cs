@@ -53,6 +53,12 @@ namespace DeUrgenta.Group.Api.CommandHandlers
                     Group = group
                 }, cancellationToken);
 
+            await _context.BackpacksToUsers.AddAsync(new BackpackToUser
+            {
+                Backpack = newBackpack,
+                User = user
+            }, cancellationToken);
+
             await _context.SaveChangesAsync(cancellationToken);
 
             return new GroupModel { Id = newGroup.Entity.Id, Name = newGroup.Entity.Name, IsAdmin = true };

@@ -6,6 +6,6 @@ namespace DeUrgenta.Group.Api.Models
     {
         public Guid Id { get; init; }
         public string Name { get; init; }
-        public bool IsAdmin { get; set; }
+        public bool IsAdmin { get; init; }
     }
 }
