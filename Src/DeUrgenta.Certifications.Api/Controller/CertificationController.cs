@@ -98,7 +98,16 @@ namespace DeUrgenta.Certifications.Api.Controller
         public async Task<ActionResult<CertificationModel>> UpdateCertificationAsync([FromRoute] Guid certificationId, [FromBody] CertificationRequest certification)
         {
 
-            return NoContent();
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var command = new UpdateCertification(sub, certificationId, certification);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return Ok(result.Value);
         }
 
         /// <summary>
@@ -115,7 +124,17 @@ namespace DeUrgenta.Certifications.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult> DeleteCertificationAsync([FromRoute] Guid certificationId)
         {
-            throw new NotImplementedException();
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+
+            var command = new DeleteCertification(sub, certificationId);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
         }
     }
 }
