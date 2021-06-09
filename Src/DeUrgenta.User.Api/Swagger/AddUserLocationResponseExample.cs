@@ -13,7 +13,7 @@ namespace DeUrgenta.User.Api.Swagger
             {
                 Id = Guid.NewGuid(),
                 Address = "Splaiul Unirii 160, 040041 Bucharest, Romania",
-                Type = UserAddressType.Work,
+                Type = UserLocationType.Work,
                 Longitude = 44.41184746891321m,
                 Latitude = 26.118310383230373m
             };

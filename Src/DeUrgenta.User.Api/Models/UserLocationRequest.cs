@@ -16,6 +16,6 @@ namespace DeUrgenta.User.Api.Models
         public decimal Longitude { get; init; }
 
         [Required]
-        public UserAddressType Type { get; set; }
+        public UserLocationType Type { get; set; }
     }
 }

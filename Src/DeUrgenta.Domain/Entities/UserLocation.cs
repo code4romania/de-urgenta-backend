@@ -10,7 +10,7 @@ namespace DeUrgenta.Domain.Entities
         public string Address { get; set; }
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
-        public UserAddressType Type { get; set; }
+        public UserLocationType Type { get; set; }
         public virtual User User { get; set; }
     }
 }

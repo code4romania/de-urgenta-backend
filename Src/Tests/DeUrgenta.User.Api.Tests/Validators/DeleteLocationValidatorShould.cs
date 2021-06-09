@@ -71,7 +71,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             {
                 FirstName = "Integration",
                 LastName = "Test",
-                Sub = userSub,
+                Sub = userSub
             };
             await _dbContext.Users.AddAsync(user);
 
@@ -79,7 +79,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             {
                 User = user,
                 Address = "Splaiul Unirii 160, 040041 Bucharest, Romania",
-                Type = UserAddressType.Work,
+                Type = UserLocationType.Work,
                 Longitude = 44.41184746891321m,
                 Latitude = 26.118310383230373m
 

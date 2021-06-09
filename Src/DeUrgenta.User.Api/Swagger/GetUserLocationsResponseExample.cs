@@ -18,7 +18,7 @@ namespace DeUrgenta.User.Api.Swagger
                     Latitude = 44.42100028019816m,
                     Longitude= 26.137300692423988m,
                     Address = "Bulevardul camil ressu, sector 3 2 A, Bucuresti 011135",
-                    Type = UserAddressType.Work,
+                    Type = UserLocationType.Work,
                     Id = Guid.NewGuid()
                 },
                 new ()
@@ -26,7 +26,7 @@ namespace DeUrgenta.User.Api.Swagger
                     Latitude = 44.42237955141269m,
                     Longitude=  26.16373654467784m,
                     Address = "Bulevardul Nicolae Grigorescu nr. 20 CA14, Bucuresti 030453",
-                    Type = UserAddressType.School,
+                    Type = UserLocationType.School,
                     Id = Guid.NewGuid()
                 },
                 new ()
@@ -34,7 +34,7 @@ namespace DeUrgenta.User.Api.Swagger
                     Latitude = 44.41964679721312m,
                     Longitude=  26.115253981442685m,
                     Address = "Strada Nerva Traian, Bucuresti",
-                    Type = UserAddressType.Home,
+                    Type = UserLocationType.Home,
                     Id = Guid.NewGuid()
                 },
                 new ()
@@ -42,7 +42,7 @@ namespace DeUrgenta.User.Api.Swagger
                     Latitude = 44.43104805920341m,
                     Longitude= 26.100319441533046m,
                     Address = "Str. Franceza 17, Bucuresti 030167",
-                    Type = UserAddressType.Gym,
+                    Type = UserLocationType.Gym,
                     Id = Guid.NewGuid()
                 },
 

@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Swagger;
+using DeUrgenta.Infra.Models;
 using DeUrgenta.User.Api.Commands;
 using DeUrgenta.User.Api.Models;
 using DeUrgenta.User.Api.Queries;
@@ -77,6 +78,26 @@ namespace DeUrgenta.User.Api.Controller
             return NoContent();
         }
 
+
+        /// <summary>
+        /// Gets user location types
+        /// </summary>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet("location-types")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Get available location types", typeof(IImmutableList<IndexedItemModel>))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
+
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetUserLocationTypesResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
+        public async Task<ActionResult<BackpackInviteModel>> GetUserLocationTypesAsync()
+        {
+            var query = new GetUserLocationTypes();
+            var locationTypes = await _mediator.Send(query);
+
+            return Ok(locationTypes);
+        }
+
         /// <summary>
         /// Gets user locations
         /// </summary>
@@ -144,7 +165,7 @@ namespace DeUrgenta.User.Api.Controller
         public async Task<ActionResult<UserLocationModel>> UpdateLocationAsync([FromRoute] Guid locationId, [FromBody] UserLocationRequest location)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var result = await _mediator.Send(new UpdateLocation(sub,locationId, location));
+            var result = await _mediator.Send(new UpdateLocation(sub, locationId, location));
 
             if (result.IsFailure)
             {
@@ -189,7 +210,7 @@ namespace DeUrgenta.User.Api.Controller
         [SwaggerResponse(StatusCodes.Status200OK, "Get group invites for current user", typeof(IImmutableList<GropInviteModel>))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
-       
+
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetGroupInvitesResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
@@ -260,7 +281,7 @@ namespace DeUrgenta.User.Api.Controller
 
             return NoContent();
         }
-        
+
         /// <summary>
         /// Gets backpack invites
         /// </summary>

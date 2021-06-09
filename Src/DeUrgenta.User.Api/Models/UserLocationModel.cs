@@ -9,6 +9,6 @@ namespace DeUrgenta.User.Api.Models
         public string Address { get; init; }
         public decimal Latitude { get; init; }
         public decimal Longitude { get; init; }
-        public UserAddressType Type { get; init; }
+        public UserLocationType Type { get; init; }
     }
 }

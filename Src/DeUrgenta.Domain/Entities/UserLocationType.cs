@@ -1,6 +1,6 @@
 ﻿namespace DeUrgenta.Domain.Entities
 {
-    public enum UserAddressType
+    public enum UserLocationType
     {
         Other,
         Home,
