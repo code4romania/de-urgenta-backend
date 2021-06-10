@@ -17,13 +17,9 @@ namespace DeUrgenta.Certifications.Api.Validators
 
         public async Task<bool> IsValidAsync(GetCertifications request)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
-            if (user == null)
-            {
-                return false;
-            }
+            var isExistingUser = await _context.Users.AnyAsync(u => u.Sub == request.UserSub);
 
-            return true;
+            return isExistingUser;
         }
     }
 }
