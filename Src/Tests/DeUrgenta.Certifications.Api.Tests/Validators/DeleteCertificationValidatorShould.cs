@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using DeUrgenta.Certifications.Api.Commands;
-using DeUrgenta.Certifications.Api.Models;
 using DeUrgenta.Certifications.Api.Validators;
 using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
@@ -12,14 +11,15 @@ using Xunit;
 namespace DeUrgenta.Certifications.Api.Tests.Validators
 {
     [Collection(TestsConstants.DbCollectionName)]
-    public class UpdateCertificationValidatorShould
+    public class DeleteCertificationValidatorShould
     {
         private readonly DeUrgentaContext _dbContext;
 
-        public UpdateCertificationValidatorShould(DatabaseFixture fixture)
+        public DeleteCertificationValidatorShould(DatabaseFixture fixture)
         {
             _dbContext = fixture.Context;
         }
+
         [Theory]
         [InlineData(null)]
         [InlineData("")]
@@ -27,10 +27,10 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
         public async Task Invalidate_request_when_no_user_found_by_sub(string sub)
         {
             // Arrange
-            var sut = new UpdateCertificationValidator(_dbContext);
+            var sut = new DeleteCertificationValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new UpdateCertification(sub, Guid.NewGuid(), new CertificationRequest()));
+            bool isValid = await sut.IsValidAsync(new DeleteCertification(sub, Guid.NewGuid()));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -40,7 +40,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
         public async Task Invalidate_request_when_certification_not_found()
         {
             // Arrange
-            var sut = new UpdateCertificationValidator(_dbContext);
+            var sut = new DeleteCertificationValidator(_dbContext);
             string userSub = Guid.NewGuid().ToString();
 
             var user = new User
@@ -54,7 +54,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new UpdateCertification(userSub, Guid.NewGuid(), new CertificationRequest()));
+            bool isValid = await sut.IsValidAsync(new DeleteCertification(userSub, Guid.NewGuid()));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -64,7 +64,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
         public async Task Invalidate_request_when_user_is_not_owner()
         {
             // Arrange
-            var sut = new UpdateCertificationValidator(_dbContext);
+            var sut = new DeleteCertificationValidator(_dbContext);
 
             var certificationId = Guid.NewGuid();
             var ownerId = Guid.NewGuid();
@@ -92,7 +92,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new UpdateCertification(userSub, certificationId, new CertificationRequest()));
+            bool isValid = await sut.IsValidAsync(new DeleteCertification(userSub, certificationId));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -102,7 +102,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
         public async Task Validate_request_when_user_is_owner()
         {
             // Arrange
-            var sut = new UpdateCertificationValidator(_dbContext);
+            var sut = new DeleteCertificationValidator(_dbContext);
 
             var certificationId = Guid.NewGuid();
             var ownerId = Guid.NewGuid();
@@ -129,7 +129,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new UpdateCertification(ownerSub, certificationId, new CertificationRequest()));
+            bool isValid = await sut.IsValidAsync(new DeleteCertification(ownerSub, certificationId));
 
             // Assert
             isValid.ShouldBeTrue();
