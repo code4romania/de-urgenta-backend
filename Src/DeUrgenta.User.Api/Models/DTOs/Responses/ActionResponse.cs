@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 
-namespace DeUrgenta.User.Api.Models
+namespace DeUrgenta.User.Api.Models.DTOs.Responses
 {
-    public class AuthResult
+    public class ActionResponse
     {
-        public string Token { get; set; }
         public bool Success { get; set; }
         public List<string> Errors { get; set; }
     }
