@@ -2,7 +2,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using DeUrgenta.User.Api.Models;
 using DeUrgenta.User.Api.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -19,7 +18,7 @@ namespace DeUrgenta.User.Api.Services
             _jwtConfig = jwtConfigOptions.Value;
         }
 
-        public AuthResult GenerateJwtToken(IdentityUser user)
+        public string GenerateJwtToken(IdentityUser user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
 
@@ -41,11 +40,7 @@ namespace DeUrgenta.User.Api.Services
             var token = jwtTokenHandler.CreateToken(tokenDescriptor);
             var jwtToken = jwtTokenHandler.WriteToken(token);
 
-            return new AuthResult
-            {
-                Token = jwtToken,
-                Success = true,
-            };
+            return jwtToken;
         }
     }
 }

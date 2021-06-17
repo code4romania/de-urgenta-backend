@@ -1,20 +1,23 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using DeUrgenta.Common.Validation;
 using DeUrgenta.Infra.Extensions;
 using DeUrgenta.User.Api.Domain;
 using DeUrgenta.User.Api.Options;
+using DeUrgenta.User.Api.Queries;
 using DeUrgenta.User.Api.Services;
 using DeUrgenta.User.Api.Services.Emailing;
+using DeUrgenta.User.Api.Validators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
-namespace DeUrgenta.User.Api.Extensions
+namespace DeUrgenta.User.Api
 {
-    public static class AuthExtensions
+    public static class BootstrappingExtensions
     {
         private const string SecurityOptionsSectionName = "JwtConfig";
 
@@ -106,6 +109,13 @@ namespace DeUrgenta.User.Api.Extensions
                     services.AddSingleton<IEmailSender, SmtpSender>();
                     break;
             }
+        }
+
+        public static IServiceCollection AddUserApiServices(this IServiceCollection services)
+        {
+            services.AddTransient<IValidateRequest<GetUser>, GetUserValidator>();
+
+            return services;
         }
     }
 }
