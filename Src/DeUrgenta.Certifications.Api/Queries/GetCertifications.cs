@@ -2,16 +2,17 @@
 using DeUrgenta.Certifications.Api.Models;
 using MediatR;
 using System.Collections.Immutable;
+using CSharpFunctionalExtensions;
 
 namespace DeUrgenta.Certifications.Api.Queries
 {
-    public class GetCertifications : IRequest<IImmutableList<CertificationModel>>
+    public class GetCertifications : IRequest<Result<IImmutableList<CertificationModel>>>
     {
-        public Guid UserId { get; }
+        public string UserSub { get; }
 
-        public GetCertifications(Guid userId)
+        public GetCertifications(string userSub)
         {
-            UserId = userId;
+            UserSub = userSub;
         }
     }
 }

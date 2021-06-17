@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using DeUrgenta.Certifications.Api;
 
 namespace DeUrgenta.Api
 {
@@ -44,7 +45,8 @@ namespace DeUrgenta.Api
             services.AddUserApiServices();
             services.AddBackpackApiServices();
             services.AddGroupApiServices();
-
+            services.AddCertificationsApiServices();         
+          
             var applicationAssemblies = GetAssemblies();
 
             services.AddSwaggerFor(applicationAssemblies, Configuration);
