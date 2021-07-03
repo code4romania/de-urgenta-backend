@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DeUrgenta.Backpack.Api
 {
-    public static class BootstrapingExtensions
+    public static class BootstrappingExtensions
     {
         public static IServiceCollection AddBackpackApiServices(this IServiceCollection services)
         {

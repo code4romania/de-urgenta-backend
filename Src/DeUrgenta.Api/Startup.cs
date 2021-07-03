@@ -10,10 +10,10 @@ using DeUrgenta.Group.Api;
 using DeUrgenta.Group.Api.Controllers;
 using Hellang.Middleware.ProblemDetails;
 using DeUrgenta.Infra.Extensions;
+using DeUrgenta.User.Api;
 using DeUrgenta.User.Api.Controller;
 using MediatR;
 using Microsoft.Extensions.Hosting;
-using DeUrgenta.User.Api.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -44,9 +44,12 @@ namespace DeUrgenta.Api
             services.AddControllers().AddFluentValidation();
             services.AddDatabase<DeUrgentaContext>(Configuration.GetConnectionString("DbConnectionString"));
             services.AddExceptionHandling(WebHostEnvironment);
+
+            services.AddUserApiServices();
             services.AddBackpackApiServices();
             services.AddGroupApiServices();
-            services.AddCertificationsApiServices();
+            services.AddCertificationsApiServices();         
+          
             var applicationAssemblies = GetAssemblies();
 
             services.AddSwaggerFor(applicationAssemblies, Configuration);
