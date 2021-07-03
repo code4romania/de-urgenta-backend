@@ -19,6 +19,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using DeUrgenta.Certifications.Api;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using DeUrgenta.Certifications.Api.Validators;
 
 namespace DeUrgenta.Api
 {
@@ -38,7 +41,7 @@ namespace DeUrgenta.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddBearerAuth(Configuration);
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation();
             services.AddDatabase<DeUrgentaContext>(Configuration.GetConnectionString("DbConnectionString"));
             services.AddExceptionHandling(WebHostEnvironment);
             services.AddBackpackApiServices();
