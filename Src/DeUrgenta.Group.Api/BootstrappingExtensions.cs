@@ -1,7 +1,10 @@
 ﻿using DeUrgenta.Common.Validation;
 using DeUrgenta.Group.Api.Commands;
+using DeUrgenta.Group.Api.Models;
 using DeUrgenta.Group.Api.Queries;
 using DeUrgenta.Group.Api.Validators;
+using DeUrgenta.Group.Api.Validators.PayloadValidators;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DeUrgenta.Group.Api
@@ -23,6 +26,8 @@ namespace DeUrgenta.Group.Api
             services.AddTransient<IValidateRequest<RemoveFromGroup>, RemoveFromGroupValidator>();
             services.AddTransient<IValidateRequest<UpdateGroup>, UpdateGroupValidator>();
             services.AddTransient<IValidateRequest<UpdateSafeLocation>, UpdateSafeLocationValidator>();
+            services.AddTransient<IValidator<GroupRequest>, GroupPayloadValidator>();
+            services.AddTransient<IValidator<SafeLocationRequest>, SafeLocationPayloadValidator>();
 
             return services;
         }
