@@ -2,7 +2,7 @@
 using DeUrgenta.Certifications.Api.Models;
 using DeUrgenta.Certifications.Api.Queries;
 using DeUrgenta.Certifications.Api.Validators;
-using DeUrgenta.Certifications.Api.Validators.PayloadValidators;
+using DeUrgenta.Certifications.Api.Validators.RequestValidators;
 using DeUrgenta.Common.Validation;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +17,7 @@ namespace DeUrgenta.Certifications.Api
             services.AddTransient<IValidateRequest<CreateCertification>, CreateCertificationValidator>();
             services.AddTransient<IValidateRequest<UpdateCertification>, UpdateCertificationValidator>();
             services.AddTransient<IValidateRequest<DeleteCertification>, DeleteCertificationValidator>();
-            services.AddTransient<IValidator<CertificationRequest>, CertificationPayloadValidator>();
+            services.AddTransient<IValidator<CertificationRequest>, CertificationRequestValidator>();
 
             return services;
         }

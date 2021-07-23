@@ -2,11 +2,11 @@
 using DeUrgenta.Admin.Api.Models;
 using FluentValidation;
 
-namespace DeUrgenta.Admin.Api.Validators.PayloadValidators
+namespace DeUrgenta.Admin.Api.Validators.RequestValidators
 {
-    public class EventPayloadValidator : AbstractValidator<EventRequest>
+    public class EventRequestValidator : AbstractValidator<EventRequest>
     {
-        public EventPayloadValidator()
+        public EventRequestValidator()
         {
             RuleFor(c => c.Title).NotEmpty().MinimumLength(3).MaximumLength(250);
             RuleFor(c => c.OrganizedBy).NotEmpty().MinimumLength(3).MaximumLength(100);

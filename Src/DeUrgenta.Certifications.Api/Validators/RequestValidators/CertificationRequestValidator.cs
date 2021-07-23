@@ -2,11 +2,11 @@
 using DeUrgenta.Certifications.Api.Models;
 using FluentValidation;
 
-namespace DeUrgenta.Certifications.Api.Validators.PayloadValidators
+namespace DeUrgenta.Certifications.Api.Validators.RequestValidators
 {
-    public class CertificationPayloadValidator:AbstractValidator<CertificationRequest>
+    public class CertificationRequestValidator : AbstractValidator<CertificationRequest>
     {
-        public CertificationPayloadValidator()
+        public CertificationRequestValidator()
         {
             RuleFor(c => c.Name).NotEmpty().MinimumLength(3).MaximumLength(250);
             RuleFor(c => c.IssuingAuthority).NotEmpty().MinimumLength(3).MaximumLength(250);

@@ -2,7 +2,7 @@
 using DeUrgenta.Backpack.Api.Models;
 using DeUrgenta.Backpack.Api.Queries;
 using DeUrgenta.Backpack.Api.Validators;
-using DeUrgenta.Backpack.Api.Validators.PayloadValidators;
+using DeUrgenta.Backpack.Api.Validators.RequestValidators;
 using DeUrgenta.Common.Validation;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,8 +27,8 @@ namespace DeUrgenta.Backpack.Api
             services.AddTransient<IValidateRequest<UpdateBackpackItem>, UpdateBackpackItemValidator>();
             services.AddTransient<IValidateRequest<GetBackpackCategoryItems>, GetBackpackCategoryItemsValidator>();
             services.AddTransient<IValidateRequest<GetBackpackItems>, GetBackpackItemsValidator>();
-            services.AddTransient<IValidator<BackpackItemRequest>, BackpackItemPayloadValidator>();
-            services.AddTransient<IValidator<BackpackModelRequest>, BackpackModelPayloadValidator>();
+            services.AddTransient<IValidator<BackpackItemRequest>, BackpackItemRequestValidator>();
+            services.AddTransient<IValidator<BackpackModelRequest>, BackpackModelRequestValidator>();
 
             return services;
         }

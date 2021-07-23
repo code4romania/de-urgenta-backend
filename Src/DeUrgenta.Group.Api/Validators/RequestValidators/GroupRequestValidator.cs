@@ -1,11 +1,11 @@
 ﻿using DeUrgenta.Group.Api.Models;
 using FluentValidation;
 
-namespace DeUrgenta.Group.Api.Validators.PayloadValidators
+namespace DeUrgenta.Group.Api.Validators.RequestValidators
 {
-    public class GroupPayloadValidator : AbstractValidator<GroupRequest>
+    public class GroupRequestValidator : AbstractValidator<GroupRequest>
     {
-        public GroupPayloadValidator()
+        public GroupRequestValidator()
         {
             RuleFor(c => c.Name).NotEmpty().MinimumLength(3).MaximumLength(250);
         }

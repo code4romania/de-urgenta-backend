@@ -1,11 +1,11 @@
 ﻿using DeUrgenta.Admin.Api.Models;
 using FluentValidation;
 
-namespace DeUrgenta.Admin.Api.Validators.PayloadValidators
+namespace DeUrgenta.Admin.Api.Validators.RequestValidators
 {
-    public class BlogPostPayloadValidator:AbstractValidator<BlogPostRequest>
+    public class BlogPostRequestValidator : AbstractValidator<BlogPostRequest>
     {
-        public BlogPostPayloadValidator()
+        public BlogPostRequestValidator()
         {
             RuleFor(c => c.Author).NotEmpty().MinimumLength(3).MaximumLength(100);
             RuleFor(c => c.Title).NotEmpty().MinimumLength(3).MaximumLength(250);

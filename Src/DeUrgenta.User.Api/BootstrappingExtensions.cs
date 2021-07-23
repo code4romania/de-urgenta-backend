@@ -10,7 +10,7 @@ using DeUrgenta.User.Api.Queries;
 using DeUrgenta.User.Api.Services;
 using DeUrgenta.User.Api.Services.Emailing;
 using DeUrgenta.User.Api.Validators;
-using DeUrgenta.User.Api.Validators.PayloadValidators;
+using DeUrgenta.User.Api.Validators.RequestValidators;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -117,8 +117,8 @@ namespace DeUrgenta.User.Api
         public static IServiceCollection AddUserApiServices(this IServiceCollection services)
         {
             services.AddTransient<IValidateRequest<GetUser>, GetUserValidator>();
-            services.AddTransient<IValidator<UserRequest>, UserPayloadValidator>();
-            services.AddTransient<IValidator<UserSafeLocationRequest>, UserSafeLocationPayloadValidator>();
+            services.AddTransient<IValidator<UserRequest>, UserRequestValidator>();
+            services.AddTransient<IValidator<UserSafeLocationRequest>, UserSafeLocationRequestValidator>();
 
             return services;
         }

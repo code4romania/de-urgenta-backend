@@ -2,11 +2,11 @@
 using DeUrgenta.Backpack.Api.Models;
 using FluentValidation;
 
-namespace DeUrgenta.Backpack.Api.Validators.PayloadValidators
+namespace DeUrgenta.Backpack.Api.Validators.RequestValidators
 {
-    public class BackpackItemPayloadValidator:AbstractValidator<BackpackItemRequest>
+    public class BackpackItemRequestValidator : AbstractValidator<BackpackItemRequest>
     {
-        public BackpackItemPayloadValidator()
+        public BackpackItemRequestValidator()
         {
             RuleFor(c => c.Name).NotEmpty().MinimumLength(3).MaximumLength(250);
             RuleFor(c => (int)c.Amount).InclusiveBetween(1, 99999);
