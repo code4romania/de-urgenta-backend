@@ -37,7 +37,16 @@ namespace DeUrgenta.Group.Api.QueryHandlers
             var groups = await _context
                 .Groups
                 .Where(g => g.AdminId == user.Id)
-                .Select(g => new GroupModel { Id = g.Id, Name = g.Name, IsAdmin = g.AdminId == user.Id })
+                .Include(g=>g.Admin)
+                .Select(g => new GroupModel
+                {
+                    Id = g.Id, 
+                    Name = g.Name,
+                    NumberOfMembers = g.GroupMembers.Count,
+                    AdminId = g.AdminId,
+                    AdminFirstName = g.Admin.FirstName,
+                    AdminLastName = g.Admin.LastName
+                })
                 .ToListAsync(cancellationToken);
 
             return groups.ToImmutableList();

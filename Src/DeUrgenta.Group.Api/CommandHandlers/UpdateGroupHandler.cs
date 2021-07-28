@@ -30,13 +30,24 @@ namespace DeUrgenta.Group.Api.CommandHandlers
             }
 
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
-            var group = await _context.Groups.FirstAsync(g => g.AdminId == user.Id && g.Id == request.GroupId, cancellationToken);
+            var group = await _context
+                .Groups
+                .Include(g => g.Admin)
+                .FirstAsync(g => g.AdminId == user.Id && g.Id == request.GroupId, cancellationToken);
 
             group.Name = request.Group.Name;
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new GroupModel { Id = group.Id, Name = group.Name, IsAdmin = true };
+            return new GroupModel
+            {
+                Id = group.Id,
+                Name = group.Name,
+                NumberOfMembers = group.GroupMembers.Count,
+                AdminId = group.AdminId,
+                AdminFirstName = group.Admin.FirstName,
+                AdminLastName = group.Admin.LastName
+            };
         }
     }
 }
