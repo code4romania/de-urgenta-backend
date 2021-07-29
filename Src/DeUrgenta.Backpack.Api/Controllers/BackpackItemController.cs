@@ -18,7 +18,7 @@ using Swashbuckle.AspNetCore.Filters;
 namespace DeUrgenta.Backpack.Api.Controllers
 {
     [ApiController]
-    [Route("backpack/{backpackId:guid}")]
+    [Route("backpack")]
     [Produces("application/json")]
     [Consumes("application/json")]
     [Authorize]
@@ -35,7 +35,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         /// Gets items in a backpack
         /// </summary>
         /// <returns></returns>
-        [HttpGet("items")]
+        [HttpGet("{backpackId:guid}/items")]
         [SwaggerResponse(StatusCodes.Status200OK, "Items from a backpack", typeof(IImmutableList<BackpackItemModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
@@ -57,7 +57,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         /// Gets items in a backpack for a specific category
         /// </summary>
         /// <returns></returns>
-        [HttpGet("{categoryId:int}/items")]
+        [HttpGet("{backpackId:guid}/{categoryId:int}/items")]
         [SwaggerResponse(StatusCodes.Status200OK, "Items from a backpack category", typeof(IImmutableList<BackpackItemModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
@@ -79,7 +79,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         /// Adds a new backpack item
         /// </summary>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost("{backpackId:guid}")]
 
         [SwaggerResponse(StatusCodes.Status200OK, "New backpack item", typeof(BackpackItemModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]

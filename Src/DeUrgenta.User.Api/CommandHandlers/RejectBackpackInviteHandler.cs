@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.User.Api.CommandHandlers
 {
-    public class RejectBackpackInviteHandler : IRequestHandler<RejectBackpackInvite,Result>
+    public class RejectBackpackInviteHandler : IRequestHandler<RejectBackpackInvite, Result>
     {
         private readonly IValidateRequest<RejectBackpackInvite> _validator;
         private readonly DeUrgentaContext _context;
@@ -30,9 +30,7 @@ namespace DeUrgenta.User.Api.CommandHandlers
 
             var invite = await _context
                 .BackpackInvites
-                .FirstAsync(bi =>
-                    bi.InvitationReceiver.Sub == request.UserSub
-                    && bi.Id == request.BackpackInviteId, cancellationToken);
+                .FirstAsync(bi => bi.Id == request.BackpackInviteId, cancellationToken);
 
             _context.BackpackInvites.Remove(invite);
             await _context.SaveChangesAsync(cancellationToken);

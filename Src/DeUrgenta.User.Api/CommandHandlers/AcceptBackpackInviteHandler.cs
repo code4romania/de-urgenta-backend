@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.User.Api.CommandHandlers
 {
-    public class AcceptBackpackInviteHandler : IRequestHandler<AcceptBackpackInvite,Result>
+    public class AcceptBackpackInviteHandler : IRequestHandler<AcceptBackpackInvite, Result>
     {
         private readonly IValidateRequest<AcceptBackpackInvite> _validator;
         private readonly DeUrgentaContext _context;
@@ -32,20 +32,19 @@ namespace DeUrgenta.User.Api.CommandHandlers
             // remove invite
             var invite = await _context
                 .BackpackInvites
-                .FirstAsync(bi =>
-                    bi.InvitationReceiver.Sub == request.UserSub
-                    && bi.Id == request.BackpackInviteId, cancellationToken);
+                .FirstAsync(bi => bi.Id == request.BackpackInviteId, cancellationToken);
+
             _context.BackpackInvites.Remove(invite);
-            
+
             // add user to contributors
-            var backpack = await _context.Backpacks.FirstAsync(b=>b.Id == invite.BackpackId, cancellationToken);
-            var user =await _context.Users.FirstAsync(u=>u.Id == invite.InvitationReceiverId,cancellationToken);
+            var backpack = await _context.Backpacks.FirstAsync(b => b.Id == invite.BackpackId, cancellationToken);
+            var user = await _context.Users.FirstAsync(u => u.Id == invite.InvitationReceiverId, cancellationToken);
 
             await _context.BackpacksToUsers.AddAsync(new BackpackToUser
-                {
-                    User = user,
-                    Backpack = backpack
-                },
+            {
+                User = user,
+                Backpack = backpack
+            },
                 cancellationToken);
 
             await _context.SaveChangesAsync(cancellationToken);

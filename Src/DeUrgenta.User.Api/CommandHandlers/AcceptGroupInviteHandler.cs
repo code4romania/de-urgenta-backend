@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.User.Api.CommandHandlers
 {
-    public class AcceptGroupInviteHandler : IRequestHandler<AcceptGroupInvite,Result>
+    public class AcceptGroupInviteHandler : IRequestHandler<AcceptGroupInvite, Result>
     {
         private readonly IValidateRequest<AcceptGroupInvite> _validator;
         private readonly DeUrgentaContext _context;
@@ -32,29 +32,27 @@ namespace DeUrgenta.User.Api.CommandHandlers
             // remove invite
             var invite = await _context
                 .GroupInvites
-                .FirstAsync(gi =>
-                    gi.InvitationReceiver.Sub == request.UserSub
-                    && gi.Id == request.GroupInviteId, cancellationToken);
+                .FirstAsync(gi => gi.Id == request.GroupInviteId, cancellationToken);
 
             _context.GroupInvites.Remove(invite);
 
             // add user to group members
             var group = await _context
                 .Groups
-                .Include(g=>g.Backpack)
+                .Include(g => g.Backpack)
                 .FirstAsync(g => g.Id == invite.GroupId, cancellationToken);
 
             var user = await _context.Users.FirstAsync(u => u.Id == invite.InvitationReceiverId, cancellationToken);
             var user2 = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
 
             await _context.UsersToGroups.AddAsync(new UserToGroup
-                {
-                    User = user,
-                    Group = group
-                },
+            {
+                User = user,
+                Group = group
+            },
                 cancellationToken);
 
-            await _context.BackpacksToUsers.AddAsync(new BackpackToUser {Backpack = group.Backpack, User = user}, cancellationToken);
+            await _context.BackpacksToUsers.AddAsync(new BackpackToUser { Backpack = group.Backpack, User = user }, cancellationToken);
 
             await _context.SaveChangesAsync(cancellationToken);
 
