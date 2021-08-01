@@ -87,6 +87,15 @@ namespace DeUrgenta.User.Api.Controller
             return callbackUrl;
         }
 
+         private async Task<string> GetResetPasswordCallbakUrlAsync(IdentityUser user)
+        {
+            var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            resetToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(resetToken));
+            var resetUrl = _configuration.GetValue<string>("ResetUrl");
+            var callbackUrl = $"{resetUrl}?userId={user.Id}&reset={resetToken}";
+            return callbackUrl;
+        }
+
         [HttpPost]
         [Route("confirm")]
         public async Task<IActionResult> ConfirmEmail([FromBody] UserConfirmationDto confirmationRequest)
@@ -139,6 +148,19 @@ namespace DeUrgenta.User.Api.Controller
             await _mediator.Publish(email);
         }
 
+        private async Task SendResetPasswordEmail(string userName, string userEmail, string callbackUrl){
+              var email = new SendEmail(userEmail,
+                _senderName,
+                _senderEmail,
+                "[Aplicatia de urgenta] Resetare parolă",// TODO: add I18n
+            EmailTemplate.ResetPassword);
+
+            email.PlaceholderContent.Add("name", HtmlEncoder.Default.Encode(userName));
+            email.PlaceholderContent.Add("resetPasswordLink", callbackUrl);
+
+            await _mediator.Publish(email);
+        }
+
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest user)
@@ -180,6 +202,50 @@ namespace DeUrgenta.User.Api.Controller
                 userDetails.Value.FirstName,
                 Success = true
             });
+        }
+
+        [HttpPost]
+        [Route("request-reset-password")]
+        public async Task<IActionResult> RequestResetPassword([FromBody] UserRequestResetPassword changePasswordRequest){
+
+            var user = await _userManager.FindByEmailAsync(changePasswordRequest.Email);
+
+            if(user==null){
+                return Ok();
+            }
+            
+            
+
+            
+            var resetUrl = await this.GetResetPasswordCallbakUrlAsync(user);
+            
+            await SendResetPasswordEmail(user.UserName,user.Email,resetUrl);
+            
+            return Ok(resetUrl);
+        }
+
+
+        [HttpPost]
+        [Route("reset-password")]
+        public async Task<IActionResult> RequestResetPassword([FromBody] UserResetPassword userResetPassword){
+            
+           var user = await _userManager.FindByIdAsync(userResetPassword.UserId);
+           var resToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(userResetPassword.ResetToken));
+           var res = await _userManager.ResetPasswordAsync(user, 
+           resToken, userResetPassword.NewPassword);
+
+           
+
+           if(!res.Succeeded){
+               return BadRequest(new ActionResponse
+            {
+                Errors = res.Errors.Select(x => x.Description).ToList(),
+                Success = false
+            });
+           }
+
+           return Ok();
+
         }
     }
 }

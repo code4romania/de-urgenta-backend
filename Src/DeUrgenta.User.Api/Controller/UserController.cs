@@ -80,7 +80,7 @@ namespace DeUrgenta.User.Api.Controller
             var correctPassword = await _userManager.CheckPasswordAsync(user, userChangePassword.OldPassword);
 
             
-
+            
             var resp = await _userManager.ChangePasswordAsync(user, userChangePassword.OldPassword, userChangePassword.NewPassword);
 
             if(!resp.Succeeded){
