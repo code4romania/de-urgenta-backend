@@ -29,7 +29,7 @@ namespace DeUrgenta.User.Api.Controller
         private readonly UserManager<IdentityUser> _userManager;
 
         public UserController(IMediator mediator, UserManager<IdentityUser> userManager)
-        {   
+        {
             _userManager = userManager;
             _mediator = mediator;
         }
@@ -68,26 +68,29 @@ namespace DeUrgenta.User.Api.Controller
 
         [HttpPut]
         [Route("change-password")]
-        public async Task<IActionResult> ChangePassword([FromBody]UserChangePassword userChangePassword){
+        public async Task<IActionResult> ChangePassword([FromBody] UserChangePasswordRequest userChangePassword)
+        {
             var userEmail = User.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
 
             var user = await _userManager.FindByEmailAsync(userEmail);
 
-            if(user==null){
+            if (user == null)
+            {
                 return BadRequest("Invalid User");
             }
 
             var correctPassword = await _userManager.CheckPasswordAsync(user, userChangePassword.OldPassword);
 
-            
-            
+
+
             var resp = await _userManager.ChangePasswordAsync(user, userChangePassword.OldPassword, userChangePassword.NewPassword);
 
-            if(!resp.Succeeded){
+            if (!resp.Succeeded)
+            {
                 return BadRequest(
                     new ActionResponse
                     {
-                        Errors = resp.Errors.Select(e=>e.Description).ToList(),
+                        Errors = resp.Errors.Select(e => e.Description).ToList(),
                         Success = false
                     }
                 );

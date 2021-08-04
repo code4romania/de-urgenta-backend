@@ -4,11 +4,14 @@ using System.Text;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Infra.Extensions;
 using DeUrgenta.User.Api.Domain;
+using DeUrgenta.User.Api.Models.DTOs.Requests;
 using DeUrgenta.User.Api.Options;
 using DeUrgenta.User.Api.Queries;
 using DeUrgenta.User.Api.Services;
 using DeUrgenta.User.Api.Services.Emailing;
 using DeUrgenta.User.Api.Validators;
+using DeUrgenta.User.Api.Validators.RequestValidators;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -115,6 +118,9 @@ namespace DeUrgenta.User.Api
         {
             services.AddTransient<IValidateRequest<GetUser>, GetUserValidator>();
 
+            services.AddTransient<IValidator<UserChangePasswordRequest>, UserChangePasswordRequestValidator>();
+            services.AddTransient<IValidator<UserResetPasswordRequest>, UserResetPasswordRequestValidator>();
+            services.AddTransient<IValidator<UserEmailPasswordResetRequest>, UserEmailPasswordResetRequestValidator>();
             return services;
         }
     }
