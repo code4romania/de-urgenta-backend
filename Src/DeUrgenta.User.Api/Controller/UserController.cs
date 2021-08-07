@@ -1,12 +1,17 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.User.Api.Models;
+using DeUrgenta.User.Api.Models.DTOs.Requests;
+using DeUrgenta.User.Api.Models.DTOs.Responses;
 using DeUrgenta.User.Api.Swagger;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
@@ -21,9 +26,11 @@ namespace DeUrgenta.User.Api.Controller
     public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public UserController(IMediator mediator)
+        public UserController(IMediator mediator, UserManager<IdentityUser> userManager)
         {
+            _userManager = userManager;
             _mediator = mediator;
         }
 
@@ -57,6 +64,41 @@ namespace DeUrgenta.User.Api.Controller
         public async Task<ActionResult<UserModel>> UpdateUserAsync(UserRequest user)
         {
             throw new NotImplementedException();
+        }
+
+        [HttpPut]
+        [Route("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] UserChangePasswordRequest userChangePassword)
+        {
+            var userEmail = User.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
+
+            var user = await _userManager.FindByEmailAsync(userEmail);
+
+            if (user == null)
+            {
+                return BadRequest("Invalid User");
+            }
+
+            var correctPassword = await _userManager.CheckPasswordAsync(user, userChangePassword.OldPassword);
+
+
+
+            var resp = await _userManager.ChangePasswordAsync(user, userChangePassword.OldPassword, userChangePassword.NewPassword);
+
+            if (!resp.Succeeded)
+            {
+                return BadRequest(
+                    new ActionResponse
+                    {
+                        Errors = resp.Errors.Select(e => e.Description).ToList(),
+                        Success = false
+                    }
+                );
+            }
+
+            return Ok("Password changed");
+
+
         }
 
         /// <summary>

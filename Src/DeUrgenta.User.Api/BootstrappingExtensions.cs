@@ -4,7 +4,6 @@ using System.Text;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Infra.Extensions;
 using DeUrgenta.User.Api.Domain;
-using DeUrgenta.User.Api.Models;
 using DeUrgenta.User.Api.Options;
 using DeUrgenta.User.Api.Queries;
 using DeUrgenta.User.Api.Services;
@@ -120,6 +119,9 @@ namespace DeUrgenta.User.Api
             services.AddTransient<IValidator<UserRequest>, UserRequestValidator>();
             services.AddTransient<IValidator<UserSafeLocationRequest>, UserSafeLocationRequestValidator>();
 
+            services.AddTransient<IValidator<UserChangePasswordRequest>, UserChangePasswordRequestValidator>();
+            services.AddTransient<IValidator<UserResetPasswordRequest>, UserResetPasswordRequestValidator>();
+            services.AddTransient<IValidator<UserEmailPasswordResetRequest>, UserEmailPasswordResetRequestValidator>();
             return services;
         }
     }
