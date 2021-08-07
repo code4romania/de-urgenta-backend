@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace DeUrgenta.User.Api.Models.DTOs.Requests

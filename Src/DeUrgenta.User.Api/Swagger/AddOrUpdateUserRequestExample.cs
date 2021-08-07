@@ -7,7 +7,7 @@ namespace DeUrgenta.User.Api.Swagger
     {
         public UserRequest GetExamples()
         {
-            return new() { FirstName = "Code4", LastName = "Romania" };
+            return new() { FirstName = "Joe", LastName = "Pesci" };
         }
     }
 }

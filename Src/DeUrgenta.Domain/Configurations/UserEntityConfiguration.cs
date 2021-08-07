@@ -31,8 +31,8 @@ namespace DeUrgenta.Domain.Configurations
                 .IsRequired();
 
             builder
-                .HasMany(x => x.Addresses)
-                .WithOne();
+                .HasMany(x => x.Locations)
+                .WithOne(l=> l.User);
         }
     }
 }

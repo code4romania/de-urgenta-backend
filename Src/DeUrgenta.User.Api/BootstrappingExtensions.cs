@@ -3,7 +3,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Infra.Extensions;
+using DeUrgenta.User.Api.Commands;
 using DeUrgenta.User.Api.Domain;
+using DeUrgenta.User.Api.Models;
+using DeUrgenta.User.Api.Models.DTOs.Requests;
 using DeUrgenta.User.Api.Options;
 using DeUrgenta.User.Api.Queries;
 using DeUrgenta.User.Api.Services;
@@ -116,8 +119,22 @@ namespace DeUrgenta.User.Api
         public static IServiceCollection AddUserApiServices(this IServiceCollection services)
         {
             services.AddTransient<IValidateRequest<GetUser>, GetUserValidator>();
+            services.AddTransient<IValidateRequest<UpdateUser>, UpdateUserValidator>();
+            services.AddTransient<IValidateRequest<GetBackpackInvites>, GetBackpackInvitesValidator>();
+            services.AddTransient<IValidateRequest<GetGroupInvites>, GetGroupInvitesValidator>();
+            services.AddTransient<IValidateRequest<GetUserLocations>, GetUserLocationsValidator>();
+
+            services.AddTransient<IValidateRequest<AcceptBackpackInvite>, AcceptBackpackInviteValidator>();
+            services.AddTransient<IValidateRequest<AcceptGroupInvite>, AcceptGroupInviteValidator>();
+            services.AddTransient<IValidateRequest<RejectBackpackInvite>, RejectBackpackInviteValidator>();
+            services.AddTransient<IValidateRequest<RejectGroupInvite>, RejectGroupInviteValidator>();
+
+            services.AddTransient<IValidateRequest<AddLocation>, AddLocationValidator>();
+            services.AddTransient<IValidateRequest<DeleteLocation>, DeleteLocationValidator>();
+            services.AddTransient<IValidateRequest<UpdateLocation>, UpdateLocationValidator>();
+
             services.AddTransient<IValidator<UserRequest>, UserRequestValidator>();
-            services.AddTransient<IValidator<UserSafeLocationRequest>, UserSafeLocationRequestValidator>();
+            services.AddTransient<IValidator<UserLocationRequest>, UserSafeLocationRequestValidator>();
 
             services.AddTransient<IValidator<UserChangePasswordRequest>, UserChangePasswordRequestValidator>();
             services.AddTransient<IValidator<UserResetPasswordRequest>, UserResetPasswordRequestValidator>();

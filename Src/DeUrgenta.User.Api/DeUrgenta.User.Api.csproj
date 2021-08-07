@@ -31,7 +31,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Domain\Migrations\" />
-	  <Folder Include="Queries\" />
 	  <Folder Include="NotificationHandlers\" />
 	</ItemGroup>
 

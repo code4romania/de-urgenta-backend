@@ -34,15 +34,20 @@ namespace DeUrgenta.Group.Api.QueryHandlers
 
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
 
-            var groups = await _context.UsersToGroups
+            var groups = await _context
+                .UsersToGroups
                 .Include(g => g.Group)
+                .ThenInclude(g => g.Admin)
                 .Where(userToGroup => userToGroup.UserId == user.Id)
                 .Select(x => x.Group)
                 .Select(g => new GroupModel
                 {
                     Id = g.Id,
                     Name = g.Name,
-                    IsAdmin = g.AdminId == user.Id
+                    NumberOfMembers = g.GroupMembers.Count,
+                    AdminId = g.AdminId,
+                    AdminFirstName = g.Admin.FirstName,
+                    AdminLastName = g.Admin.LastName
                 })
                 .ToListAsync(cancellationToken);
 

@@ -130,10 +130,6 @@ namespace DeUrgenta.Domain.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("IX_BackpackToUser_User");
 
-                    b.HasIndex("BackpackId", "IsOwner")
-                        .IsUnique()
-                        .HasDatabaseName("IX_Backpack_Owner");
-
                     b.HasIndex("UserId", "BackpackId")
                         .IsUnique()
                         .HasDatabaseName("IX_BackpackToUser");
@@ -362,17 +358,17 @@ namespace DeUrgenta.Domain.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("DeUrgenta.Domain.Entities.UserAddress", b =>
+            modelBuilder.Entity("DeUrgenta.Domain.Entities.UserLocation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
-                    b.Property<string>("Category")
+                    b.Property<string>("Address")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
 
                     b.Property<decimal>("Latitude")
                         .HasMaxLength(100)
@@ -381,10 +377,9 @@ namespace DeUrgenta.Domain.Migrations
                     b.Property<decimal>("Longitude")
                         .HasColumnType("numeric");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
+                    b.Property<int>("Type")
+                        .HasMaxLength(100)
+                        .HasColumnType("integer");
 
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uuid");
@@ -394,7 +389,7 @@ namespace DeUrgenta.Domain.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserAddresses");
+                    b.ToTable("UserLocations");
                 });
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.UserToGroup", b =>
@@ -558,11 +553,13 @@ namespace DeUrgenta.Domain.Migrations
                     b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("DeUrgenta.Domain.Entities.UserAddress", b =>
+            modelBuilder.Entity("DeUrgenta.Domain.Entities.UserLocation", b =>
                 {
-                    b.HasOne("DeUrgenta.Domain.Entities.User", null)
-                        .WithMany("Addresses")
+                    b.HasOne("DeUrgenta.Domain.Entities.User", "User")
+                        .WithMany("Locations")
                         .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.UserToGroup", b =>
@@ -600,13 +597,13 @@ namespace DeUrgenta.Domain.Migrations
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.User", b =>
                 {
-                    b.Navigation("Addresses");
-
                     b.Navigation("Certifications");
 
                     b.Navigation("GroupsAdministered");
 
                     b.Navigation("GroupsMember");
+
+                    b.Navigation("Locations");
                 });
 #pragma warning restore 612, 618
         }
