@@ -34,6 +34,7 @@ namespace DeUrgenta.User.Api.QueryHandlers
 
             return new UserModel
             {
+                Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName
             };

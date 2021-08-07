@@ -3,17 +3,17 @@ using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace DeUrgenta.Api.Extensions
 {
     public static class SwaggerExtensions
     {
-        public static IServiceCollection AddSwaggerFor(this IServiceCollection services, Assembly[] assemblies, IConfiguration config)
+        public static IServiceCollection AddSwaggerFor(this IServiceCollection services, Assembly[] assemblies)
         {
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
@@ -25,12 +25,22 @@ namespace DeUrgenta.Api.Extensions
                     In = ParameterLocation.Header,
                     Name = "Authorization",
                     BearerFormat = "JWT",
-                    Description = "JWT Authorization header using the Bearer scheme."
+                    Description = "JWT Authorization header using the Bearer scheme.",
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    },
                 };
+
                 c.AddSecurityDefinition("Bearer", jwtSecurityScheme);
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     { jwtSecurityScheme, Array.Empty<string>() }
+                });
+                c.CustomOperationIds(apiDesc =>
+                {
+                    return apiDesc.TryGetMethodInfo(out MethodInfo methodInfo) ? methodInfo.Name : $"{apiDesc.ActionDescriptor.RouteValues["controller"]}_{apiDesc.ActionDescriptor.RouteValues["action"]}_{apiDesc.HttpMethod}";
                 });
 
                 c.OperationFilter<AuthorizeCheckOperationFilter>();
@@ -43,7 +53,7 @@ namespace DeUrgenta.Api.Extensions
                     Contact = new OpenApiContact
                     {
                         Name = "Code4Romania",
-                        Email = string.Empty,
+                        Email = "code4ro@code4.ro",
                         Url = new Uri("https://code4.ro/"),
                     },
                     License = new OpenApiLicense

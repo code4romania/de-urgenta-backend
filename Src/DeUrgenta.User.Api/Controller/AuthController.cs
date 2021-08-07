@@ -12,10 +12,12 @@ using DeUrgenta.User.Api.Queries;
 using DeUrgenta.User.Api.Services;
 using DeUrgenta.User.Api.Services.Emailing;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace DeUrgenta.User.Api.Controller
 {
@@ -164,9 +166,11 @@ namespace DeUrgenta.User.Api.Controller
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] UserLoginRequest user)
+        [SwaggerResponse(StatusCodes.Status200OK, "Login response", typeof(LoginResponse))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Something bad happened", typeof(ProblemDetails))]
+        public async Task<ActionResult<LoginResponse>> Login([FromBody] UserLoginRequest user)
         {
-            var badRegistrationResponse = new ActionResponse
+            var badRegistrationResponse = new LoginResponse
             {
                 Errors = new List<string> {
                     "Invalid login request"
@@ -196,11 +200,11 @@ namespace DeUrgenta.User.Api.Controller
                 return BadRequest();
             }
 
-            return Ok(new
+            return Ok(new LoginResponse
             {
-                token = jwtToken,
-                userDetails.Value.LastName,
-                userDetails.Value.FirstName,
+                Token = jwtToken,
+                LastName = userDetails.Value.LastName,
+                FirstName = userDetails.Value.FirstName,
                 Success = true
             });
         }
