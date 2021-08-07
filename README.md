@@ -2,6 +2,8 @@
 
 [![GitHub contributors](https://img.shields.io/github/contributors/code4romania/de-urgenta-backend.svg?style=for-the-badge)](https://github.com/code4romania/de-urgenta-backend/graphs/contributors) [![GitHub last commit](https://img.shields.io/github/last-commit/code4romania/de-urgenta-backend.svg?style=for-the-badge)](https://github.com/code4romania/de-urgenta-backend/commits/master) [![License: MPL 2.0](https://img.shields.io/badge/license-MPL%202.0-brightgreen.svg?style=for-the-badge)](https://opensource.org/licenses/MPL-2.0)
 
+**Check out the [Wiki](https://github.com/code4romania/de-urgenta-backend/wiki)!**
+
 De Urgență [was prototyped](https://civiclabs.ro/ro/solutions/stay-together) in [Code for Romania](https://code4.ro/ro)'s research project, [Civic Labs](https://civiclabs.ro/ro).
 
 The application aims to inform citizens about how to react to the first critical hours in a crysis situation (like that of an earthquake). 

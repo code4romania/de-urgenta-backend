@@ -5,11 +5,15 @@ using DeUrgenta.Common.Validation;
 using DeUrgenta.Infra.Extensions;
 using DeUrgenta.User.Api.Commands;
 using DeUrgenta.User.Api.Domain;
+using DeUrgenta.User.Api.Models;
+using DeUrgenta.User.Api.Models.DTOs.Requests;
 using DeUrgenta.User.Api.Options;
 using DeUrgenta.User.Api.Queries;
 using DeUrgenta.User.Api.Services;
 using DeUrgenta.User.Api.Services.Emailing;
 using DeUrgenta.User.Api.Validators;
+using DeUrgenta.User.Api.Validators.RequestValidators;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -129,7 +133,12 @@ namespace DeUrgenta.User.Api
             services.AddTransient<IValidateRequest<DeleteLocation>, DeleteLocationValidator>();
             services.AddTransient<IValidateRequest<UpdateLocation>, UpdateLocationValidator>();
 
+            services.AddTransient<IValidator<UserRequest>, UserRequestValidator>();
+            services.AddTransient<IValidator<UserLocationRequest>, UserSafeLocationRequestValidator>();
 
+            services.AddTransient<IValidator<UserChangePasswordRequest>, UserChangePasswordRequestValidator>();
+            services.AddTransient<IValidator<UserResetPasswordRequest>, UserResetPasswordRequestValidator>();
+            services.AddTransient<IValidator<UserEmailPasswordResetRequest>, UserEmailPasswordResetRequestValidator>();
             return services;
         }
     }
