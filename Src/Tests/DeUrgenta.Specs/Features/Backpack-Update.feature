@@ -3,18 +3,18 @@
 
 Background: 
 	Given Sasha is authenticated user
-	And has a backpack "My backpack"
+	And Sasha creates a backpack named "My backpack"
 
 @backpack @backpack_update
-Scenario:  Backpack update should be reflected in `my backpacks` list
-	When edit backpack name to "My new backpack"
-	And he queries for his backpacks
+Scenario:  Backpack update should be reflected in `my backpacks` list of owner
+	When owner edits backpack name to "My new backpack"
+	And owner queries for his backpacks
 	Then returned backpacks contain updated backpack
 
 @backpack @backpack_update
-Scenario: Backpack update should be reflected in `backpacks` list
-	When edit backpack name to "My new backpack"
-	And he queries for backpacks
+Scenario: Backpack update should be reflected in `backpacks` list of owner
+	When owner edits backpack name to "My new backpack"
+	And owner queries for backpacks
 	Then returned backpacks contain updated backpack
 
 @backpack @backpack_update
@@ -29,6 +29,14 @@ Scenario: Backpack update cannot be performed by a contributor
 	And is a contributor to Sasha's backpack
 	When Grisha edits backpack created by Sasha
 	Then gets BadRequest in response
+
+@backpack @backpack_update
+Scenario: Backpack update should be reflected in `backpacks` list of contributors
+	Given Grisha is authenticated user
+	And is a contributor to Sasha's backpack
+	When owner edits backpack name to "My new backpack"
+	And Grisha queries for backpacks
+	Then returned backpacks contain updated backpack
 
 @backpack @backpack_update
 Scenario: Backpack update cannot be performed by an un-authenticated

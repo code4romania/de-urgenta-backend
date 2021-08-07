@@ -83,7 +83,7 @@ namespace DeUrgenta.Specs.Features
  testRunner.Given("Sasha is authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 6
- testRunner.And("has a backpack \"My backpack\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Sasha creates a backpack named \"My backpack\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
         }
         
@@ -92,18 +92,18 @@ namespace DeUrgenta.Specs.Features
             this.TestTearDown();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Backpack update should be reflected in `my backpacks` list")]
+        [Xunit.SkippableFactAttribute(DisplayName="Backpack update should be reflected in `my backpacks` list of owner")]
         [Xunit.TraitAttribute("FeatureTitle", "Backpack update")]
-        [Xunit.TraitAttribute("Description", "Backpack update should be reflected in `my backpacks` list")]
+        [Xunit.TraitAttribute("Description", "Backpack update should be reflected in `my backpacks` list of owner")]
         [Xunit.TraitAttribute("Category", "backpack")]
         [Xunit.TraitAttribute("Category", "backpack_update")]
-        public virtual void BackpackUpdateShouldBeReflectedInMyBackpacksList()
+        public virtual void BackpackUpdateShouldBeReflectedInMyBackpacksListOfOwner()
         {
             string[] tagsOfScenario = new string[] {
                     "backpack",
                     "backpack_update"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Backpack update should be reflected in `my backpacks` list", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Backpack update should be reflected in `my backpacks` list of owner", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 9
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -128,10 +128,10 @@ this.ScenarioInitialize(scenarioInfo);
 this.FeatureBackground();
 #line hidden
 #line 10
- testRunner.When("edit backpack name to \"My new backpack\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("owner edits backpack name to \"My new backpack\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 11
- testRunner.And("he queries for his backpacks", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("owner queries for his backpacks", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 12
  testRunner.Then("returned backpacks contain updated backpack", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -140,18 +140,18 @@ this.FeatureBackground();
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Backpack update should be reflected in `backpacks` list")]
+        [Xunit.SkippableFactAttribute(DisplayName="Backpack update should be reflected in `backpacks` list of owner")]
         [Xunit.TraitAttribute("FeatureTitle", "Backpack update")]
-        [Xunit.TraitAttribute("Description", "Backpack update should be reflected in `backpacks` list")]
+        [Xunit.TraitAttribute("Description", "Backpack update should be reflected in `backpacks` list of owner")]
         [Xunit.TraitAttribute("Category", "backpack")]
         [Xunit.TraitAttribute("Category", "backpack_update")]
-        public virtual void BackpackUpdateShouldBeReflectedInBackpacksList()
+        public virtual void BackpackUpdateShouldBeReflectedInBackpacksListOfOwner()
         {
             string[] tagsOfScenario = new string[] {
                     "backpack",
                     "backpack_update"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Backpack update should be reflected in `backpacks` list", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Backpack update should be reflected in `backpacks` list of owner", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 15
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -176,10 +176,10 @@ this.ScenarioInitialize(scenarioInfo);
 this.FeatureBackground();
 #line hidden
 #line 16
- testRunner.When("edit backpack name to \"My new backpack\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("owner edits backpack name to \"My new backpack\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 17
- testRunner.And("he queries for backpacks", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("owner queries for backpacks", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 18
  testRunner.Then("returned backpacks contain updated backpack", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -287,18 +287,18 @@ this.FeatureBackground();
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Backpack update cannot be performed by an un-authenticated")]
+        [Xunit.SkippableFactAttribute(DisplayName="Backpack update should be reflected in `backpacks` list of contributors")]
         [Xunit.TraitAttribute("FeatureTitle", "Backpack update")]
-        [Xunit.TraitAttribute("Description", "Backpack update cannot be performed by an un-authenticated")]
+        [Xunit.TraitAttribute("Description", "Backpack update should be reflected in `backpacks` list of contributors")]
         [Xunit.TraitAttribute("Category", "backpack")]
         [Xunit.TraitAttribute("Category", "backpack_update")]
-        public virtual void BackpackUpdateCannotBePerformedByAnUn_Authenticated()
+        public virtual void BackpackUpdateShouldBeReflectedInBackpacksListOfContributors()
         {
             string[] tagsOfScenario = new string[] {
                     "backpack",
                     "backpack_update"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Backpack update cannot be performed by an un-authenticated", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Backpack update should be reflected in `backpacks` list of contributors", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 34
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -323,12 +323,66 @@ this.ScenarioInitialize(scenarioInfo);
 this.FeatureBackground();
 #line hidden
 #line 35
- testRunner.Given("Ion is un-authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("Grisha is authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 36
- testRunner.When("Ion edits backpack created by Sasha", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("is a contributor to Sasha\'s backpack", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 37
+ testRunner.When("owner edits backpack name to \"My new backpack\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 38
+ testRunner.And("Grisha queries for backpacks", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 39
+ testRunner.Then("returned backpacks contain updated backpack", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Backpack update cannot be performed by an un-authenticated")]
+        [Xunit.TraitAttribute("FeatureTitle", "Backpack update")]
+        [Xunit.TraitAttribute("Description", "Backpack update cannot be performed by an un-authenticated")]
+        [Xunit.TraitAttribute("Category", "backpack")]
+        [Xunit.TraitAttribute("Category", "backpack_update")]
+        public virtual void BackpackUpdateCannotBePerformedByAnUn_Authenticated()
+        {
+            string[] tagsOfScenario = new string[] {
+                    "backpack",
+                    "backpack_update"};
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Backpack update cannot be performed by an un-authenticated", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 42
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 4
+this.FeatureBackground();
+#line hidden
+#line 43
+ testRunner.Given("Ion is un-authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 44
+ testRunner.When("Ion edits backpack created by Sasha", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 45
  testRunner.Then("gets Unauthorized in response", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

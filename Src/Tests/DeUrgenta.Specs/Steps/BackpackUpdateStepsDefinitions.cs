@@ -40,7 +40,7 @@ namespace DeUrgenta.Specs.Steps
             _scenarioContext["Ion"] = Ion;
         }
 
-        [Given(@"has a backpack ""(.*)""")]
+        [Given(@"Sasha creates a backpack named ""(.*)""")]
         public async Task GivenHasABackpack(string backpackName)
         {
             var user = _scenarioContext.Get<ApiClient>("Sasha");
@@ -53,7 +53,7 @@ namespace DeUrgenta.Specs.Steps
             _scenarioContext["backpack-id"] = backpack.Id;
         }
 
-        [When(@"edit backpack name to ""(.*)""")]
+        [When(@"owner edits backpack name to ""(.*)""")]
         public async Task WhenEditBackpackNameTo(string newBackpackName)
         {
             var user = _scenarioContext.Get<ApiClient>("Sasha");
@@ -67,7 +67,7 @@ namespace DeUrgenta.Specs.Steps
             _scenarioContext["updated-backpack"] = backpackModel;
         }
 
-        [When(@"he queries for his backpacks")]
+        [When(@"owner queries for his backpacks")]
         public async Task WhenHeQueriesForHisBackpacks()
 
         {
@@ -77,7 +77,7 @@ namespace DeUrgenta.Specs.Steps
             _scenarioContext["backpacks"] = backpacks.ToImmutableArray();
         }
 
-        [When(@"he queries for backpacks")]
+        [When(@"owner queries for backpacks")]
         public async Task WhenHeQueriesForBackpacks()
         {
             ApiClient user = _scenarioContext.Get<ApiClient>("Sasha");
@@ -164,6 +164,15 @@ namespace DeUrgenta.Specs.Steps
 
             updateResponse.ShouldBeOfType<ApiException>();
             (updateResponse as ApiException).StatusCode.ShouldBe(401);
+        }
+
+        [When(@"Grisha queries for backpacks")]
+        public async Task WhenGrishaQueriesForBackpacks()
+        {
+            var user = _scenarioContext.Get<ApiClient>("Grisha");
+
+            var backpacks = await user.GetBackpacksAsync();
+            _scenarioContext["backpacks"] = backpacks.ToImmutableArray();
         }
 
     }
