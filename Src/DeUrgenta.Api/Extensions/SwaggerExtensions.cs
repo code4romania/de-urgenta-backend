@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -65,7 +66,9 @@ namespace DeUrgenta.Api.Extensions
                 c.ExampleFilters();
             });
 
+            services.AddFluentValidationRulesToSwagger();
             services.AddSwaggerExamplesFromAssemblies(assemblies);
+
             return services;
         }
 
