@@ -5,6 +5,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <SpecFlowObsoleteCodeBehindFiles Remove="Features\Backpack-Update - Copy.feature.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
 		<PackageReference Include="Shouldly" Version="4.0.3" />
 		<PackageReference Include="SpecFlow.Plus.LivingDocPlugin" Version="3.9.5" />
@@ -32,9 +36,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Features\Backpack-Delete.feature.cs">
+	    <DependentUpon>Backpack-Delete.feature</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Update="appsettings.specs.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <SpecFlowFeatureFiles Update="Features\Backpack-Delete.feature">
+	    <Visible>$(UsingMicrosoftNETSdk)</Visible>
+	    <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+	  </SpecFlowFeatureFiles>
 	</ItemGroup>
 
 </Project>
