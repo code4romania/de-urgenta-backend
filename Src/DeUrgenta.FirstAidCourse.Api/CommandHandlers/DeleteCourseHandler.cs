@@ -1,25 +1,25 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
-using DeUrgenta.FirstAidCourse.Api.Commands;
+using DeUrgenta.Courses.Api.Commands;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace DeUrgenta.FirstAidCourse.Api.CommandHandlers
+namespace DeUrgenta.Courses.Api.CommandHandlers
 {
-    public class DeleteFirstAidCourseHandler : IRequestHandler<DeleteFirstAidCourse, Result>
+    public class DeleteCourseHandler : IRequestHandler<DeleteCourse, Result>
     {
-        private readonly IValidateRequest<DeleteFirstAidCourse> _validator;
+        private readonly IValidateRequest<DeleteCourse> _validator;
         private readonly DeUrgentaContext _context;
 
-        public DeleteFirstAidCourseHandler(IValidateRequest<DeleteFirstAidCourse> validator, DeUrgentaContext context)
+        public DeleteCourseHandler(IValidateRequest<DeleteCourse> validator, DeUrgentaContext context)
         {
             _validator = validator;
             _context = context;
         }
-        public async Task<Result> Handle(DeleteFirstAidCourse request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(DeleteCourse request, CancellationToken cancellationToken)
         {
             var isValid = await _validator.IsValidAsync(request);
             if (!isValid)

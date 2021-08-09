@@ -4,9 +4,9 @@ using DeUrgenta.Domain.Entities;
 
 namespace DeUrgenta.Domain.Configurations
 {
-    internal class FirstAidCourseEntityConfiguration : IEntityTypeConfiguration<FirstAidCourse>
+    internal class FirstAidCourseEntityConfiguration : IEntityTypeConfiguration<Course>
     {
-        public void Configure(EntityTypeBuilder<FirstAidCourse> builder)
+        public void Configure(EntityTypeBuilder<Course> builder)
         {
             builder
                 .HasKey(x => x.Id)

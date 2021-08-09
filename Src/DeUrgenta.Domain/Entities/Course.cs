@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DeUrgenta.Domain.Entities
 {
-    public class FirstAidCourse
+    public class Course
     {
         [Key]
         public Guid Id { get; set; }

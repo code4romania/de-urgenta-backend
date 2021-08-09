@@ -1,32 +1,32 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
-using DeUrgenta.FirstAidCourse.Api.Commands;
-using DeUrgenta.FirstAidCourse.Api.Models;
+using DeUrgenta.Courses.Api.Commands;
+using DeUrgenta.Courses.Api.Models;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace DeUrgenta.FirstAidCourse.Api.CommandHandlers
+namespace DeUrgenta.Courses.Api.CommandHandlers
 {
-    public class UpdateFirstAidCourseHandler : IRequestHandler<UpdateFirstAidCourse, Result<FirstAidCourseModel>>
+    public class UpdateCourseHandler : IRequestHandler<UpdateCourse, Result<CourseModel>>
     {
-        private readonly IValidateRequest<UpdateFirstAidCourse> _validator;
+        private readonly IValidateRequest<UpdateCourse> _validator;
         private readonly DeUrgentaContext _context;
 
-        public UpdateFirstAidCourseHandler(IValidateRequest<UpdateFirstAidCourse> validator, DeUrgentaContext context)
+        public UpdateCourseHandler(IValidateRequest<UpdateCourse> validator, DeUrgentaContext context)
         {
             _context = context;
             _validator = validator;
         }
 
-        public async Task<Result<FirstAidCourseModel>> Handle(UpdateFirstAidCourse request, CancellationToken cancellationToken)
+        public async Task<Result<CourseModel>> Handle(UpdateCourse request, CancellationToken cancellationToken)
         {
             var isValid = await _validator.IsValidAsync(request);
             if (!isValid)
             {
-                return Result.Failure<FirstAidCourseModel>("Validation failed");
+                return Result.Failure<CourseModel>("Validation failed");
             }
 
             var firstAidCourse = await _context.FirstAidCourses.FirstAsync(c => c.Id == request.FirstAidCourseId, cancellationToken);
@@ -36,7 +36,7 @@ namespace DeUrgenta.FirstAidCourse.Api.CommandHandlers
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new FirstAidCourseModel
+            return new CourseModel
             {
                 Id = firstAidCourse.Id,
                 Name = firstAidCourse.Name,

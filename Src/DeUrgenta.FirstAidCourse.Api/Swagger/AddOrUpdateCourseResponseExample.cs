@@ -1,12 +1,12 @@
 ﻿using System;
-using DeUrgenta.FirstAidCourse.Api.Models;
+using DeUrgenta.Courses.Api.Models;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace DeUrgenta.FirstAidCourse.Api.Swagger
+namespace DeUrgenta.Courses.Api.Swagger
 {
-    public class AddOrUpdateFirstAidCourseResponseExample : IExamplesProvider<FirstAidCourseModel>
+    public class AddOrUpdateCourseResponseExample : IExamplesProvider<CourseModel>
     {
-        public FirstAidCourseModel GetExamples()
+        public CourseModel GetExamples()
         {
             return new()
             {

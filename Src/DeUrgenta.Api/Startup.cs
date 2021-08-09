@@ -20,6 +20,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using DeUrgenta.Certifications.Api;
 using FluentValidation.AspNetCore;
+using DeUrgenta.Courses.Api;
+using DeUrgenta.Courses.Api.Controller;
 
 namespace DeUrgenta.Api
 {
@@ -47,7 +49,8 @@ namespace DeUrgenta.Api
             services.AddBackpackApiServices();
             services.AddGroupApiServices();
             services.AddCertificationsApiServices();         
-          
+            services.AddFirstAidCoursesApiServices();
+
             var applicationAssemblies = GetAssemblies();
 
             services.AddSwaggerFor(applicationAssemblies, Configuration);
@@ -95,6 +98,7 @@ namespace DeUrgenta.Api
                 typeof(BlogController).GetTypeInfo().Assembly,
                 typeof(GroupController).GetTypeInfo().Assembly,
                 typeof(UserController).GetTypeInfo().Assembly,
+                typeof(CourseController).GetTypeInfo().Assembly,
 
                 // Common
 

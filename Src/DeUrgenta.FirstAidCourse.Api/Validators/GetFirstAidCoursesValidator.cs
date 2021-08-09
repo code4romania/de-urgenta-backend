@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
-using DeUrgenta.FirstAidCourse.Api.Queries;
+using DeUrgenta.Courses.Api.Queries;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace DeUrgenta.FirstAidCourse.Api.Validators
+namespace DeUrgenta.Courses.Api.Validators
 {
-    public class GetFirstAidCoursesValidator : IValidateRequest<GetFirstAidCourses>
+    public class GetFirstAidCoursesValidator : IValidateRequest<GetCourses>
     {
         private readonly DeUrgentaContext _context;
 
@@ -15,7 +15,7 @@ namespace DeUrgenta.FirstAidCourse.Api.Validators
             _context = context;
         }
 
-        public async Task<bool> IsValidAsync(GetFirstAidCourses request)
+        public async Task<bool> IsValidAsync(GetCourses request)
         {
             var isExistingUser = await _context.Users.AnyAsync(u => u.Sub == request.UserSub);
 

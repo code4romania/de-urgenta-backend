@@ -13,7 +13,7 @@ namespace DeUrgenta.Domain
         public DbSet<Backpack> Backpacks { get; set; }
         public DbSet<BackpackItem> BackpackItems { get; set; }
         public DbSet<Certification> Certifications { get; set; }
-        public DbSet<FirstAidCourse> FirstAidCourses { get; set; }
+        public DbSet<Course> FirstAidCourses { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<GroupSafeLocation> GroupsSafeLocations { get; set; }
         public DbSet<User> Users { get; set; }

@@ -1,16 +1,16 @@
-﻿using DeUrgenta.FirstAidCourse.Api.Models;
+﻿using DeUrgenta.Courses.Api.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
-namespace DeUrgenta.FirstAidCourse.Api.Swagger
+namespace DeUrgenta.Courses.Api.Swagger
 {
-    public class GetFirstAidCoursesResponseExample : IExamplesProvider<IImmutableList<FirstAidCourseModel>>
+    public class GetCoursesResponseExample : IExamplesProvider<IImmutableList<CourseModel>>
     {
-        public IImmutableList<FirstAidCourseModel> GetExamples()
+        public IImmutableList<CourseModel> GetExamples()
         {
-            var certifications = new List<FirstAidCourseModel>
+            var certifications = new List<CourseModel>
             {
                 new()
                 {

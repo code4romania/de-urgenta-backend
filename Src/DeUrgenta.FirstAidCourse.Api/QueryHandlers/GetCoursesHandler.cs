@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
-using DeUrgenta.FirstAidCourse.Api.Models;
-using DeUrgenta.FirstAidCourse.Api.Queries;
+using DeUrgenta.Courses.Api.Models;
+using DeUrgenta.Courses.Api.Queries;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using MediatR;
@@ -10,31 +10,31 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DeUrgenta.FirstAidCourse.Api.QueryHandlers
+namespace DeUrgenta.Courses.Api.QueryHandlers
 {
-    public class GetFirstAidCoursesHandler : IRequestHandler<GetFirstAidCourses, Result<IImmutableList<FirstAidCourseModel>>>
+    public class GetCoursesHandler : IRequestHandler<GetCourses, Result<IImmutableList<CourseModel>>>
     {
-        private readonly IValidateRequest<GetFirstAidCourses> _validator;
+        private readonly IValidateRequest<GetCourses> _validator;
         private readonly DeUrgentaContext _context;
 
-        public GetFirstAidCoursesHandler(IValidateRequest<GetFirstAidCourses> validator, DeUrgentaContext context)
+        public GetCoursesHandler(IValidateRequest<GetCourses> validator, DeUrgentaContext context)
         {
             _validator = validator;
             _context = context;
         }
 
-        public async Task<Result<IImmutableList<FirstAidCourseModel>>> Handle(GetFirstAidCourses request,
+        public async Task<Result<IImmutableList<CourseModel>>> Handle(GetCourses request,
             CancellationToken cancellationToken)
         {
             var isValid = await _validator.IsValidAsync(request);
             if (!isValid)
             {
-                return Result.Failure<IImmutableList<FirstAidCourseModel>>("Validation failed");
+                return Result.Failure<IImmutableList<CourseModel>>("Validation failed");
             }
 
             var firstAidCourse = await _context.FirstAidCourses
             .Where(x => x.User.Sub == request.UserSub)
-            .Select(x => new FirstAidCourseModel
+            .Select(x => new CourseModel
             {
                 Id = x.Id,
                 Name = x.Name,

@@ -1,23 +1,23 @@
-﻿using DeUrgenta.FirstAidCourse.Api.Commands;
-using DeUrgenta.FirstAidCourse.Api.Models;
-using DeUrgenta.FirstAidCourse.Api.Queries;
-using DeUrgenta.FirstAidCourse.Api.Validators;
-using DeUrgenta.FirstAidCourse.Api.Validators.RequestValidators;
+﻿using DeUrgenta.Courses.Api.Commands;
+using DeUrgenta.Courses.Api.Models;
+using DeUrgenta.Courses.Api.Queries;
+using DeUrgenta.Courses.Api.Validators;
+using DeUrgenta.Courses.Api.Validators.RequestValidators;
 using DeUrgenta.Common.Validation;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DeUrgenta.FirstAidCourse.Api
+namespace DeUrgenta.Courses.Api
 {
     public static class BootstrapingExtensions
     {
         public static IServiceCollection AddFirstAidCoursesApiServices(this IServiceCollection services)
         {
-            services.AddTransient<IValidateRequest<GetFirstAidCourses>, GetFirstAidCoursesValidator>();
-            services.AddTransient<IValidateRequest<CreateFirstAidCourse>, CreateFirstAidCourseValidator>();
-            services.AddTransient<IValidateRequest<UpdateFirstAidCourse>, UpdateFirstAidCourseValidator>();
-            services.AddTransient<IValidateRequest<DeleteFirstAidCourse>, DeleteFirstAidCourseValidator>();
-            services.AddTransient<IValidator<FirstAidCourseRequest>, FirstAidCourseRequestValidator>();
+            services.AddTransient<IValidateRequest<GetCourses>, GetFirstAidCoursesValidator>();
+            services.AddTransient<IValidateRequest<CreateCourse>, CreateFirstAidCourseValidator>();
+            services.AddTransient<IValidateRequest<UpdateCourse>, UpdateFirstAidCourseValidator>();
+            services.AddTransient<IValidateRequest<DeleteCourse>, DeleteFirstAidCourseValidator>();
+            services.AddTransient<IValidator<CourseRequest>, FirstAidCourseRequestValidator>();
 
             return services;
         }

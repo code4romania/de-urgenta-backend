@@ -2,13 +2,13 @@
 using CSharpFunctionalExtensions;
 using MediatR;
 
-namespace DeUrgenta.FirstAidCourse.Api.Commands
+namespace DeUrgenta.Courses.Api.Commands
 {
-    public class DeleteFirstAidCourse : IRequest<Result>
+    public class DeleteCourse : IRequest<Result>
     {
         public string UserSub { get; }
         public Guid FirstAidCourseId { get; }
-        public DeleteFirstAidCourse(string sub, Guid firstAidCourseId)
+        public DeleteCourse(string sub, Guid firstAidCourseId)
         {
             UserSub = sub;
             FirstAidCourseId = firstAidCourseId;

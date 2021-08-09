@@ -1,8 +1,8 @@
 using System;
-using DeUrgenta.FirstAidCourse.Api.Commands;
-using DeUrgenta.FirstAidCourse.Api.Models;
-using DeUrgenta.FirstAidCourse.Api.Queries;
-using DeUrgenta.FirstAidCourse.Api.Swagger;
+using DeUrgenta.Courses.Api.Commands;
+using DeUrgenta.Courses.Api.Models;
+using DeUrgenta.Courses.Api.Queries;
+using DeUrgenta.Courses.Api.Swagger;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,18 +14,18 @@ using DeUrgenta.Common.Swagger;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
 
-namespace DeUrgenta.FirstAidCourse.Api.Controller
+namespace DeUrgenta.Courses.Api.Controller
 {
     [ApiController]
     [Produces("application/json")]
     [Consumes("application/json")]
-    [Route("certifications")]
+    [Route("courses")]
     [Authorize]
-    public class FirstAidCourseController : ControllerBase
+    public class CourseController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public FirstAidCourseController(IMediator mediator)
+        public CourseController(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -36,15 +36,15 @@ namespace DeUrgenta.FirstAidCourse.Api.Controller
         /// <returns></returns>
         [HttpGet]
 
-        [SwaggerResponse(StatusCodes.Status200OK, "User certifications", typeof(IImmutableList<FirstAidCourseModel>))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Courses", typeof(IImmutableList<CourseModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetFirstAidCoursesResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetCoursesResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<IImmutableList<FirstAidCourseModel>>> GetCertificationsAsync()
+        public async Task<ActionResult<IImmutableList<CourseModel>>> GetCertificationsAsync()
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var query = new GetFirstAidCourses(sub);
+            var query = new GetCourses(sub);
             var result = await _mediator.Send(query);
             
             if (result.IsFailure)
@@ -59,18 +59,18 @@ namespace DeUrgenta.FirstAidCourse.Api.Controller
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [SwaggerResponse(StatusCodes.Status200OK, "New certification", typeof(FirstAidCourseModel))]
+        [SwaggerResponse(StatusCodes.Status200OK, "New certification", typeof(CourseModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerRequestExample(typeof(FirstAidCourseRequest), typeof(AddOrUpdateFirstAidCourseRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateFirstAidCourseResponseExample))]
+        [SwaggerRequestExample(typeof(CourseRequest), typeof(AddOrUpdateCourseRequestExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateCourseResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<FirstAidCourseModel>> CreateNewCertificationAsync([FromBody] FirstAidCourseRequest firstAidCourse)
+        public async Task<ActionResult<CourseModel>> CreateNewCertificationAsync([FromBody] CourseRequest firstAidCourse)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new CreateFirstAidCourse(sub, firstAidCourse);
+            var command = new CreateCourse(sub, firstAidCourse);
             var result = await _mediator.Send(command);
 
             if (result.IsFailure)
@@ -87,19 +87,19 @@ namespace DeUrgenta.FirstAidCourse.Api.Controller
         [HttpPut]
         [Route("{certificationId:guid}")]
 
-        [SwaggerResponse(StatusCodes.Status200OK, "Updated certification", typeof(FirstAidCourseModel))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Updated certification", typeof(CourseModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerRequestExample(typeof(FirstAidCourseRequest), typeof(AddOrUpdateFirstAidCourseRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateFirstAidCourseResponseExample))]
+        [SwaggerRequestExample(typeof(CourseRequest), typeof(AddOrUpdateCourseRequestExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateCourseResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<FirstAidCourseModel>> UpdateFirstAidCourseAsync([FromRoute] Guid firstAidCourseId, [FromBody] FirstAidCourseRequest firstAidCourse)
+        public async Task<ActionResult<CourseModel>> UpdateFirstAidCourseAsync([FromRoute] Guid firstAidCourseId, [FromBody] CourseRequest firstAidCourse)
         {
 
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new UpdateFirstAidCourse(sub, firstAidCourseId, firstAidCourse);
+            var command = new UpdateCourse(sub, firstAidCourseId, firstAidCourse);
             var result = await _mediator.Send(command);
 
             if (result.IsFailure)
@@ -126,7 +126,7 @@ namespace DeUrgenta.FirstAidCourse.Api.Controller
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
 
-            var command = new DeleteFirstAidCourse(sub, firstAidCourse);
+            var command = new DeleteCourse(sub, firstAidCourse);
             var result = await _mediator.Send(command);
 
             if (result.IsFailure)

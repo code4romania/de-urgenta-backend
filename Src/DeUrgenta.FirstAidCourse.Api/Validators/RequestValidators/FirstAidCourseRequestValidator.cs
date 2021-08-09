@@ -1,10 +1,10 @@
 ﻿using System;
-using DeUrgenta.FirstAidCourse.Api.Models;
+using DeUrgenta.Courses.Api.Models;
 using FluentValidation;
 
-namespace DeUrgenta.FirstAidCourse.Api.Validators.RequestValidators
+namespace DeUrgenta.Courses.Api.Validators.RequestValidators
 {
-    public class FirstAidCourseRequestValidator : AbstractValidator<FirstAidCourseRequest>
+    public class FirstAidCourseRequestValidator : AbstractValidator<CourseRequest>
     {
         public FirstAidCourseRequestValidator()
         {
