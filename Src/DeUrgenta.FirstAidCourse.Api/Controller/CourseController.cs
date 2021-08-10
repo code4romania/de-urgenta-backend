@@ -31,20 +31,20 @@ namespace DeUrgenta.Courses.Api.Controller
         }
 
         /// <summary>
-        /// Gets user certifications
+        /// Gets course types
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [Route("types")]
 
-        [SwaggerResponse(StatusCodes.Status200OK, "Courses", typeof(IImmutableList<CourseModel>))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Course types", typeof(IImmutableList<CourseTypeModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetCoursesResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetCourseTypesResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<IImmutableList<CourseModel>>> GetCertificationsAsync()
+        public async Task<ActionResult<IImmutableList<CourseTypeModel>>> GetCourseTypesAsync()
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var query = new GetCourses(sub);
+            var query = new GetCourseTypes();
             var result = await _mediator.Send(query);
             
             if (result.IsFailure)
@@ -55,86 +55,28 @@ namespace DeUrgenta.Courses.Api.Controller
         }
 
         /// <summary>
-        /// Adds a new certification
+        /// Gets course cities
         /// </summary>
         /// <returns></returns>
-        [HttpPost]
-        [SwaggerResponse(StatusCodes.Status200OK, "New certification", typeof(CourseModel))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
+        [HttpGet]
+        [Route("cities")]
+
+        [SwaggerResponse(StatusCodes.Status200OK, "Course cities", typeof(IImmutableList<CourseCityModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerRequestExample(typeof(CourseRequest), typeof(AddOrUpdateCourseRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateCourseResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetCourseCitiesResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<CourseModel>> CreateNewCertificationAsync([FromBody] CourseRequest firstAidCourse)
+        public async Task<ActionResult<IImmutableList<CourseCityModel>>> GetCourseCitiesAsync()
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new CreateCourse(sub, firstAidCourse);
-            var result = await _mediator.Send(command);
+            var query = new GetCourseCities();
+            var result = await _mediator.Send(query);
 
             if (result.IsFailure)
             {
                 return BadRequest();
             }
-
             return Ok(result.Value);
         }
 
-        /// <summary>
-        /// Updates a certification
-        /// </summary>
-        [HttpPut]
-        [Route("{certificationId:guid}")]
-
-        [SwaggerResponse(StatusCodes.Status200OK, "Updated certification", typeof(CourseModel))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
-
-        [SwaggerRequestExample(typeof(CourseRequest), typeof(AddOrUpdateCourseRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateCourseResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<CourseModel>> UpdateFirstAidCourseAsync([FromRoute] Guid firstAidCourseId, [FromBody] CourseRequest firstAidCourse)
-        {
-
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new UpdateCourse(sub, firstAidCourseId, firstAidCourse);
-            var result = await _mediator.Send(command);
-
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
-        }
-
-        /// <summary>
-        /// Delete a FirstAidCourse
-        /// </summary>
-        [HttpDelete]
-        [Route("{firstAidCourseId:guid}")]
-
-        [SwaggerResponse(StatusCodes.Status204NoContent, "FirstAidCourse was deleted")]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
-
-        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> DeleteFirstAidCourseAsync([FromRoute] Guid firstAidCourse)
-        {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-
-            var command = new DeleteCourse(sub, firstAidCourse);
-            var result = await _mediator.Send(command);
-
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
-        }
     }
 }

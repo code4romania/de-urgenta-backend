@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Courses.Api.Validators
 {
-    public class CreateFirstAidCourseValidator : IValidateRequest<CreateCourse>
+    public class CreateCourseValidator : IValidateRequest<CreateCourse>
     {
         private readonly DeUrgentaContext _context;
 
-        public CreateFirstAidCourseValidator(DeUrgentaContext context)
+        public CreateCourseValidator(DeUrgentaContext context)
         {
             _context = context;
         }

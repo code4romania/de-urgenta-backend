@@ -7,11 +7,11 @@ namespace DeUrgenta.Courses.Api.Commands
     public class DeleteCourse : IRequest<Result>
     {
         public string UserSub { get; }
-        public Guid FirstAidCourseId { get; }
-        public DeleteCourse(string sub, Guid firstAidCourseId)
+        public Guid courseId { get; }
+        public DeleteCourse(string sub, Guid courseId)
         {
             UserSub = sub;
-            FirstAidCourseId = firstAidCourseId;
+            this.courseId = courseId;
         }
     }
 }

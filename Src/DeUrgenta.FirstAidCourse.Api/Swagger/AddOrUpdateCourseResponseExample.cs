@@ -4,16 +4,13 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace DeUrgenta.Courses.Api.Swagger
 {
-    public class AddOrUpdateCourseResponseExample : IExamplesProvider<CourseModel>
+    public class AddOrUpdateCourseResponseExample : IExamplesProvider<CourseResponse>
     {
-        public CourseModel GetExamples()
+        public CourseResponse GetExamples()
         {
             return new()
             {
-                Id = Guid.NewGuid(),
                 Name = "Curs prim ajutor",
-                IssuingAuthority = "Crucea Rosie Romania",
-                ExpirationDate = DateTime.Today.AddDays(360),
             };
         }
     }

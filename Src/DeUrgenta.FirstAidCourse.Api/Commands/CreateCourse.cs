@@ -1,18 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
 using DeUrgenta.Courses.Api.Models;
+using DeUrgenta.Domain.Entities;
 using MediatR;
 using System;
 
 namespace DeUrgenta.Courses.Api.Commands
 {
-    public enum CourseType
-    {
-        BasicFirstAid,
-        QualifiedFirstAid,
-        DisasterPrepare
-    }
-
-    public class CreateCourse : IRequest<Result<CourseModel>>
+    public class CreateCourse : IRequest<Result<CourseTypeModel>>
     {
         public CourseType CourseType { get; }
         public string City { get; }
@@ -28,12 +22,12 @@ namespace DeUrgenta.Courses.Api.Commands
         //public string OrganizerName { get; }
         //public string OrganizerDetails { get; }
 
-        public CreateCourse(string userSub, CourseRequest firstAidCourseRequest)
+        public CreateCourse(string userSub, CourseRequest courseRequest)
         {
             UserSub = userSub;
-            Name = firstAidCourseRequest.Name;
-            ExpirationDate = firstAidCourseRequest.ExpirationDate;
-            IssuingAuthority = firstAidCourseRequest.IssuingAuthority;
+            Name = courseRequest.Name;
+            ExpirationDate = courseRequest.ExpirationDate;
+            IssuingAuthority = courseRequest.IssuingAuthority;
         }
     }
 }

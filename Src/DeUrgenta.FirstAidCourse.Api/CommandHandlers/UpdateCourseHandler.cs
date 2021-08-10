@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Courses.Api.CommandHandlers
 {
-    public class UpdateCourseHandler : IRequestHandler<UpdateCourse, Result<CourseModel>>
+    public class UpdateCourseHandler : IRequestHandler<UpdateCourse, Result<CourseTypeModel>>
     {
         private readonly IValidateRequest<UpdateCourse> _validator;
         private readonly DeUrgentaContext _context;
@@ -21,27 +21,25 @@ namespace DeUrgenta.Courses.Api.CommandHandlers
             _validator = validator;
         }
 
-        public async Task<Result<CourseModel>> Handle(UpdateCourse request, CancellationToken cancellationToken)
+        public async Task<Result<CourseTypeModel>> Handle(UpdateCourse request, CancellationToken cancellationToken)
         {
             var isValid = await _validator.IsValidAsync(request);
             if (!isValid)
             {
-                return Result.Failure<CourseModel>("Validation failed");
+                return Result.Failure<CourseTypeModel>("Validation failed");
             }
 
-            var firstAidCourse = await _context.FirstAidCourses.FirstAsync(c => c.Id == request.FirstAidCourseId, cancellationToken);
-            firstAidCourse.Name = request.FirstAidCourse.Name;
-            firstAidCourse.IssuingAuthority = request.FirstAidCourse.IssuingAuthority;
-            firstAidCourse.ExpirationDate = request.FirstAidCourse.ExpirationDate;
+            var course = await _context.Courses.FirstAsync(c => c.Id == request.CourseId, cancellationToken);
+            course.Name = request.Course.Name;
+            course.IssuingAuthority = request.Course.IssuingAuthority;
+            course.ExpirationDate = request.Course.ExpirationDate;
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new CourseModel
+            return new CourseTypeModel
             {
-                Id = firstAidCourse.Id,
-                Name = firstAidCourse.Name,
-                ExpirationDate = firstAidCourse.ExpirationDate,
-                IssuingAuthority = firstAidCourse.IssuingAuthority
+                Id = course.Id,
+                Name = course.Name,
             };
         }
     }

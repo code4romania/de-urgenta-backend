@@ -27,8 +27,8 @@ namespace DeUrgenta.Courses.Api.CommandHandlers
                 return Result.Failure("Validation failed");
             }
 
-            var firstAidCourse = await _context.FirstAidCourses.FirstAsync(c => c.Id == request.FirstAidCourseId, cancellationToken);
-            _context.FirstAidCourses.Remove(firstAidCourse);
+            var course = await _context.Courses.FirstAsync(c => c.Id == request.courseId, cancellationToken);
+            _context.Courses.Remove(course);
             await _context.SaveChangesAsync(cancellationToken);
 
             return Result.Success();

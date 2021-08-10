@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Courses.Api.Validators
 {
-    public class UpdateFirstAidCourseValidator : IValidateRequest<UpdateCourse>
+    public class UpdateCourseValidator : IValidateRequest<UpdateCourse>
     {
         private readonly DeUrgentaContext _context;
-        public UpdateFirstAidCourseValidator(DeUrgentaContext context)
+        public UpdateCourseValidator(DeUrgentaContext context)
         {
             _context = context;
         }
@@ -21,7 +21,7 @@ namespace DeUrgenta.Courses.Api.Validators
                 return false;
             }
 
-            var isOwner = await _context.Certifications.AnyAsync(c => c.UserId == user.Id && c.Id == request.FirstAidCourseId);
+            var isOwner = await _context.Certifications.AnyAsync(c => c.UserId == user.Id && c.Id == request.CourseId);
 
             if (!isOwner)
             {

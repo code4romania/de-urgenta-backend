@@ -4,7 +4,7 @@ using DeUrgenta.Domain.Entities;
 
 namespace DeUrgenta.Domain.Configurations
 {
-    internal class FirstAidCourseEntityConfiguration : IEntityTypeConfiguration<Course>
+    internal class CourseEntityConfiguration : IEntityTypeConfiguration<Course>
     {
         public void Configure(EntityTypeBuilder<Course> builder)
         {
@@ -31,7 +31,7 @@ namespace DeUrgenta.Domain.Configurations
                 .IsRequired();
 
             builder.HasOne(d => d.User)
-                .WithMany(p => p.FirstAidCourses)
+                .WithMany(p => p.Courses)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK_User_Certification");
         }

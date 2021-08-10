@@ -6,13 +6,10 @@ using CSharpFunctionalExtensions;
 
 namespace DeUrgenta.Courses.Api.Queries
 {
-    public class GetCourses : IRequest<Result<IImmutableList<CourseModel>>>
+    public class GetCourseCities : IRequest<Result<IImmutableList<CourseCityModel>>>
     {
-        public string UserSub { get; }
-
-        public GetCourses(string userSub)
+        public GetCourseCities()
         {
-            UserSub = userSub;
         }
     }
 }

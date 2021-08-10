@@ -49,7 +49,7 @@ namespace DeUrgenta.Api
             services.AddBackpackApiServices();
             services.AddGroupApiServices();
             services.AddCertificationsApiServices();         
-            services.AddFirstAidCoursesApiServices();
+            services.AddCoursesApiServices();
 
             var applicationAssemblies = GetAssemblies();
 

@@ -4,9 +4,9 @@ using FluentValidation;
 
 namespace DeUrgenta.Courses.Api.Validators.RequestValidators
 {
-    public class FirstAidCourseRequestValidator : AbstractValidator<CourseRequest>
+    public class CourseRequestValidator : AbstractValidator<CourseRequest>
     {
-        public FirstAidCourseRequestValidator()
+        public CourseRequestValidator()
         {
             RuleFor(c => c.Name).NotEmpty().MinimumLength(3).MaximumLength(250);
             RuleFor(c => c.IssuingAuthority).NotEmpty().MinimumLength(3).MaximumLength(250);
