@@ -6,7 +6,7 @@
 
 De Urgență [was prototyped](https://civiclabs.ro/ro/solutions/stay-together) in [Code for Romania](https://code4.ro/ro)'s research project, [Civic Labs](https://civiclabs.ro/ro).
 
-The application aims to inform citizens about how to react to the first critical hours in a crysis situation (like that of an earthquake). 
+The application aims to inform citizens about how to react to the first critical hours in a crisis situation (like that of an earthquake).
 
 It also aims to build healthy habits that become ingrained with time, so that, when the critical moment arrives, each person knows what the key first steps to keeping themselves safe are. 
 

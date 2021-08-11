@@ -39,7 +39,7 @@ namespace DeUrgenta.Api.Extensions
                 {
                     Version = "v1",
                     Title = "De Urgenta API",
-                    Description = "The application aims to inform citizens about how to react to the first critical hours in a crysis situation (like that of an earthquake).",
+                    Description = "The application aims to inform citizens about how to react to the first critical hours in a crisis situation (like that of an earthquake).",
                     TermsOfService = new Uri("https://github.com/code4romania/de-urgenta-backend"),
                     Contact = new OpenApiContact
                     {
