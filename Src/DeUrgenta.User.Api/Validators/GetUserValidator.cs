@@ -17,14 +17,9 @@ namespace DeUrgenta.User.Api.Validators
 
         public async Task<bool> IsValidAsync(GetUser request)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
+            var userExists = await _context.Users.AnyAsync(u => u.Sub == request.UserSub);
 
-            if (user == null)
-            {
-                return false;
-            }
-
-            return true;
+            return userExists;
         }
     }
 }

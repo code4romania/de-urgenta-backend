@@ -24,13 +24,13 @@
         ASPNETCORE_URLS: ${ASPNETCORE_URLS}
         ConnectionStrings__DbConnectionString: ${DB_CONNECTION_STRING}
         ConnectionStrings__IdentityDbConnectionString: ${DB_CONNECTION_STRING}
-        SendGrid__ApiKey: ${SENDGRID_API_KEY}        
+        SendGrid__ApiKey: ${SENDGRID_API_KEY}
       ports:
         - 5040:80
       restart: unless-stopped
 
-    recurent-jobs:
-      container_name: deurgenta_recurent_jobs
+    recurring-jobs:
+      container_name: deurgenta_recurring_jobs
       depends_on:
         - "postgres"
       build:

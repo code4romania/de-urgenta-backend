@@ -18,7 +18,7 @@ namespace DeUrgenta.Domain
         public DbSet<Group> Groups { get; set; }
         public DbSet<GroupSafeLocation> GroupsSafeLocations { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<UserAddress> UserAddresses { get; set; }
+        public DbSet<UserLocation> UserLocations { get; set; }
         public DbSet<UserToGroup> UsersToGroups { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<BlogPost> Blogs { get; set; }

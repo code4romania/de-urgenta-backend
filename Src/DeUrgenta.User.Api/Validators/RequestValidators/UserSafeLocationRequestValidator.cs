@@ -3,11 +3,11 @@ using FluentValidation;
 
 namespace DeUrgenta.User.Api.Validators.RequestValidators
 {
-    public class UserSafeLocationRequestValidator : AbstractValidator<UserSafeLocationRequest>
+    public class UserSafeLocationRequestValidator : AbstractValidator<UserLocationRequest>
     {
         public UserSafeLocationRequestValidator()
         {
-            RuleFor(c => c.Name).NotEmpty().MinimumLength(3).MaximumLength(100);
+            RuleFor(c => c.Address).NotEmpty().MinimumLength(3).MaximumLength(100);
         }
     }
 }

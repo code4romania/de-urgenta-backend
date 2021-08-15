@@ -35,8 +35,15 @@ namespace DeUrgenta.Group.Api.QueryHandlers
                 .UsersToGroups
                 .Where(x => x.GroupId == request.GroupId)
                 .Include(x => x.User)
-                .Select(x => x.User)
-                .Select(x => new GroupMemberModel { Id = x.Id, FirstName = x.FirstName, LastName = x.LastName })
+                .Include(x=>x.Group)
+                .Select(x => new {x.User, x.Group})
+                .Select(x => new GroupMemberModel
+                {
+                    Id = x.User.Id, 
+                    FirstName = x.User.FirstName, 
+                    LastName = x.User.LastName,
+                    IsGroupAdmin = x.Group.AdminId == x.User.Id
+                })
                 .ToListAsync(cancellationToken);
 
             return groupMembers.ToImmutableList();

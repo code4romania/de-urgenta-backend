@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DeUrgenta.Domain.Configurations
 {
-    internal class UserAddressEntityConfiguration : IEntityTypeConfiguration<UserAddress>
+    internal class UserAddressEntityConfiguration : IEntityTypeConfiguration<UserLocation>
     {
-        public void Configure(EntityTypeBuilder<UserAddress> builder)
+        public void Configure(EntityTypeBuilder<UserLocation> builder)
         {
             builder
                 .HasKey(x => x.Id)
@@ -17,12 +17,12 @@ namespace DeUrgenta.Domain.Configurations
                 .HasDefaultValueSql("uuid_generate_v4()");
 
             builder
-                .Property(x => x.Name)
+                .Property(x => x.Address)
                 .HasMaxLength(250)
                 .IsRequired();
 
             builder
-                .Property(x => x.Category)
+                .Property(x => x.Type)
                 .HasMaxLength(100)
                 .IsRequired();
 

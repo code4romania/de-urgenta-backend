@@ -30,11 +30,6 @@ namespace DeUrgenta.Domain.Configurations
                 .IsUnique();
 
             builder
-                .HasIndex(e => new { e.BackpackId, HasOwner = e.IsOwner })
-                .HasDatabaseName("IX_Backpack_Owner")
-                .IsUnique();
-
-            builder
                 .HasOne(d => d.User)
                 .WithMany()
                 .HasForeignKey(d => d.UserId)

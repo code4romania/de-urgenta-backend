@@ -28,12 +28,17 @@ namespace DeUrgenta.Group.Api.CommandHandlers
                 return Result.Failure("Validation failed");
             }
 
-            // TODO: remove user items in backpack
+            
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
             var groupAssignment = await _context
                 .UsersToGroups
                 .FirstAsync(utg => utg.Group.Id == request.GroupId && utg.User.Id == user.Id, cancellationToken);
 
+            var backpackToUser = await _context
+                .BackpacksToUsers
+                .FirstAsync(btu => btu.Backpack.Id == groupAssignment.Group.Backpack.Id && btu.User.Id == user.Id, cancellationToken);
+
+            _context.BackpacksToUsers.Remove(backpackToUser);
             _context.UsersToGroups.Remove(groupAssignment);
             await _context.SaveChangesAsync(cancellationToken);
 

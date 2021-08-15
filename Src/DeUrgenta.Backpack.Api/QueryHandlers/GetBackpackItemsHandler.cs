@@ -38,7 +38,9 @@ namespace DeUrgenta.Backpack.Api.QueryHandlers
                 .Select(item => new BackpackItemModel
                 {
                     Id = item.Id,
+                    BackpackId = item.BackpackId,
                     Amount = item.Amount,
+                    Name = item.Name,
                     CategoryType = item.BackpackCategory,
                     ExpirationDate = item.ExpirationDate
                 })
