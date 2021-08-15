@@ -34,7 +34,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Tests.Helpers", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Backpack.Api.Tests", "Tests\DeUrgenta.Backpack.Api.Tests\DeUrgenta.Backpack.Api.Tests.csproj", "{F82ED00A-2C0D-4A12-82F4-7691DEC9A0F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeUrgenta.Certifications.Api.Tests", "Tests\DeUrgenta.Certifications.Api.Tests\DeUrgenta.Certifications.Api.Tests.csproj", "{48E7C60E-F6A4-40CF-ABEB-A053035735CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Certifications.Api.Tests", "Tests\DeUrgenta.Certifications.Api.Tests\DeUrgenta.Certifications.Api.Tests.csproj", "{48E7C60E-F6A4-40CF-ABEB-A053035735CE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Courses.Api", "DeUrgenta.Course.Api\DeUrgenta.Courses.Api.csproj", "{58DB7D76-8935-45B0-B89C-6FF43A2E14FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -202,6 +204,18 @@ Global
 		{48E7C60E-F6A4-40CF-ABEB-A053035735CE}.Release|x64.Build.0 = Release|Any CPU
 		{48E7C60E-F6A4-40CF-ABEB-A053035735CE}.Release|x86.ActiveCfg = Release|Any CPU
 		{48E7C60E-F6A4-40CF-ABEB-A053035735CE}.Release|x86.Build.0 = Release|Any CPU
+		{58DB7D76-8935-45B0-B89C-6FF43A2E14FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58DB7D76-8935-45B0-B89C-6FF43A2E14FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58DB7D76-8935-45B0-B89C-6FF43A2E14FF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{58DB7D76-8935-45B0-B89C-6FF43A2E14FF}.Debug|x64.Build.0 = Debug|Any CPU
+		{58DB7D76-8935-45B0-B89C-6FF43A2E14FF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{58DB7D76-8935-45B0-B89C-6FF43A2E14FF}.Debug|x86.Build.0 = Debug|Any CPU
+		{58DB7D76-8935-45B0-B89C-6FF43A2E14FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58DB7D76-8935-45B0-B89C-6FF43A2E14FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58DB7D76-8935-45B0-B89C-6FF43A2E14FF}.Release|x64.ActiveCfg = Release|Any CPU
+		{58DB7D76-8935-45B0-B89C-6FF43A2E14FF}.Release|x64.Build.0 = Release|Any CPU
+		{58DB7D76-8935-45B0-B89C-6FF43A2E14FF}.Release|x86.ActiveCfg = Release|Any CPU
+		{58DB7D76-8935-45B0-B89C-6FF43A2E14FF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

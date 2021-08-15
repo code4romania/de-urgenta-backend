@@ -13,6 +13,8 @@ namespace DeUrgenta.Domain
         public DbSet<Backpack> Backpacks { get; set; }
         public DbSet<BackpackItem> BackpackItems { get; set; }
         public DbSet<Certification> Certifications { get; set; }
+        public DbSet<CourseCity> CourseCities { get; set; }
+        public DbSet<CourseType> CourseTypes { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<GroupSafeLocation> GroupsSafeLocations { get; set; }
         public DbSet<User> Users { get; set; }
@@ -26,7 +28,7 @@ namespace DeUrgenta.Domain
         public DbSet<BackpackToUser> BackpacksToUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-       {
+        {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.HasPostgresExtension("uuid-ossp");
@@ -49,6 +51,9 @@ namespace DeUrgenta.Domain
 
             modelBuilder.ApplyConfiguration(new GroupInviteEntityConfiguration());
             modelBuilder.ApplyConfiguration(new BackpackInviteEntityConfiguration());
+
+            modelBuilder.ApplyConfiguration(new CourseCityEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new CourseTypeEntityConfiguration());
         }
     }
 }

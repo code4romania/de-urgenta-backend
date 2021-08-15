@@ -13,6 +13,8 @@
 
 
 	<ItemGroup>
+		<PackageReference Include="FluentValidation" Version="10.3.0" />
+		<PackageReference Include="FluentValidation.AspNetCore" Version="10.3.0" />
 		<PackageReference Include="Hellang.Middleware.ProblemDetails" Version="5.3.0" />
 		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.4">
@@ -31,6 +33,7 @@
 	  <ProjectReference Include="..\DeUrgenta.Backpack.Api\DeUrgenta.Backpack.Api.csproj" />
 	  <ProjectReference Include="..\DeUrgenta.Certifications.Api\DeUrgenta.Certifications.Api.csproj" />
 	  <ProjectReference Include="..\DeUrgenta.Common\DeUrgenta.Common.csproj" />
+	  <ProjectReference Include="..\DeUrgenta.Course.Api\DeUrgenta.Courses.Api.csproj" />
 	  <ProjectReference Include="..\DeUrgenta.Domain\DeUrgenta.Domain.csproj" />
 	  <ProjectReference Include="..\DeUrgenta.Group.Api\DeUrgenta.Group.Api.csproj" />
 	  <ProjectReference Include="..\DeUrgenta.Infra\DeUrgenta.Infra.csproj" />

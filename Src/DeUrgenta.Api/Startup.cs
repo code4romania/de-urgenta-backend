@@ -19,6 +19,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using DeUrgenta.Certifications.Api;
+using FluentValidation.AspNetCore;
+using DeUrgenta.Courses.Api;
+using DeUrgenta.Courses.Api.Controller;
 
 namespace DeUrgenta.Api
 {
@@ -38,7 +41,7 @@ namespace DeUrgenta.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddBearerAuth(Configuration);
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation();
             services.AddDatabase<DeUrgentaContext>(Configuration.GetConnectionString("DbConnectionString"));
             services.AddExceptionHandling(WebHostEnvironment);
 
@@ -46,7 +49,8 @@ namespace DeUrgenta.Api
             services.AddBackpackApiServices();
             services.AddGroupApiServices();
             services.AddCertificationsApiServices();         
-          
+            services.AddCoursesApiServices();
+
             var applicationAssemblies = GetAssemblies();
 
             services.AddSwaggerFor(applicationAssemblies, Configuration);
@@ -94,6 +98,7 @@ namespace DeUrgenta.Api
                 typeof(BlogController).GetTypeInfo().Assembly,
                 typeof(GroupController).GetTypeInfo().Assembly,
                 typeof(UserController).GetTypeInfo().Assembly,
+                typeof(CourseController).GetTypeInfo().Assembly,
 
                 // Common
 
