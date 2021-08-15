@@ -1,5 +1,5 @@
 using System;
-using DeUrgenta.Courses.Api.Commands;
+//using DeUrgenta.Courses.Api.Commands;
 using DeUrgenta.Courses.Api.Models;
 using DeUrgenta.Courses.Api.Queries;
 using DeUrgenta.Courses.Api.Swagger;
@@ -31,7 +31,7 @@ namespace DeUrgenta.Courses.Api.Controller
         }
 
         /// <summary>
-        /// Gets course types
+        /// Get course types
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -55,7 +55,7 @@ namespace DeUrgenta.Courses.Api.Controller
         }
 
         /// <summary>
-        /// Gets course cities
+        /// Get course cities
         /// </summary>
         /// <returns></returns>
         [HttpGet]

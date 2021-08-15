@@ -15,6 +15,5 @@ namespace DeUrgenta.Domain.Entities
         public virtual ICollection<Group> GroupsAdministered { get; set; } = new List<Group>();
         public virtual ICollection<UserToGroup> GroupsMember { get; set; } = new List<UserToGroup>();
         public virtual ICollection<UserAddress> Addresses { get; set; } = new List<UserAddress>();
-        public virtual ICollection<Course> Courses { get; set; } = new List<Course>();
     }
 }
