@@ -79,7 +79,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
                 Id = ownerId
             };
 
-            var certification = new Domain.Entities.Certification
+            var certification = new Certification
             {
                 Id = certificationId,
                 Name = "my certification",
@@ -116,7 +116,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
                 Id = ownerId
             };
 
-            var certification = new Domain.Entities.Certification
+            var certification = new Certification
             {
                 Id = certificationId,
                 Name = "my certification",
