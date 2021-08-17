@@ -1,5 +1,4 @@
-﻿using System;
-using DeUrgenta.Api;
+﻿using DeUrgenta.Api;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
@@ -9,8 +8,6 @@ namespace DeUrgenta.Specs
     public class ApiWebApplicationFactory : WebApplicationFactory<Startup>
     {
         private readonly IConfiguration _configuration;
-
-        public Uri ServerUri { get; private set; }
 
         public ApiWebApplicationFactory()
         {

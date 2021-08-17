@@ -82,6 +82,9 @@ namespace DeUrgenta.Specs.Features
 #line 5
  testRunner.Given("Sasha is authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
+#line 6
+ testRunner.And("he creates a backpack called \"My backpack\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
         }
         
         void System.IDisposable.Dispose()
@@ -101,7 +104,7 @@ namespace DeUrgenta.Specs.Features
                     "backpack_create"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a backpack", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 8
+#line 9
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -123,9 +126,6 @@ this.ScenarioInitialize(scenarioInfo);
                 this.ScenarioStart();
 #line 4
 this.FeatureBackground();
-#line hidden
-#line 9
- testRunner.When("he creates a backpack called \"My backpack\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 10
  testRunner.Then("returned backpack has same name", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -173,12 +173,9 @@ this.ScenarioInitialize(scenarioInfo);
 this.FeatureBackground();
 #line hidden
 #line 15
- testRunner.And("he creates a backpack called \"My backpack\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 16
  testRunner.When("he queries for his backpacks", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 17
+#line 16
  testRunner.Then("returned backpacks contain created backpack", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -197,7 +194,7 @@ this.FeatureBackground();
                     "backpack_create"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Query `backpacks` should contain created backpack", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 20
+#line 19
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -220,13 +217,10 @@ this.ScenarioInitialize(scenarioInfo);
 #line 4
 this.FeatureBackground();
 #line hidden
-#line 21
- testRunner.And("he creates a backpack called \"My backpack\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 22
+#line 20
  testRunner.When("he queries for backpacks", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 23
+#line 21
  testRunner.Then("returned backpacks contain created backpack", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using DeUrgenta.Specs.Drivers;
 using TechTalk.SpecFlow;
 
-namespace DeUrgenta.Specs.Steps
+namespace DeUrgenta.Specs
 {
     public abstract class BaseApiStep
     {
@@ -11,17 +11,17 @@ namespace DeUrgenta.Specs.Steps
         private readonly ApiClient _dummyClient;
 
         /// <summary>
-        /// An register user
+        /// A registered user
         /// </summary>
         public ApiClient Sasha { get; private set; }
 
         /// <summary>
-        /// An register user.
+        /// A registered user.
         /// </summary>
         public ApiClient Grisha { get; private set; }
 
         /// <summary>
-        /// An register user.
+        /// A registered user.
         /// Use this user to try to access private data as an non-authorized user
         /// </summary>
         public ApiClient Jora { get; private set; }

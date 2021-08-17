@@ -24,8 +24,8 @@ namespace DeUrgenta.Specs.Steps
             _scenarioContext["Sasha"] = Sasha;
         }
 
-        [When(@"he creates a backpack called ""(.*)""")]
-        public async Task WhenHeCreatesABackpackCalled(string backpackName)
+        [Given(@"he creates a backpack called ""(.*)""")]
+        public async Task GivenHeCreatesABackpackCalled(string backpackName)
         {
             ApiClient user = _scenarioContext.Get<ApiClient>("Sasha");
 
@@ -57,17 +57,6 @@ namespace DeUrgenta.Specs.Steps
         {
             var backpack = _scenarioContext.Get<BackpackModel>("backpack");
             backpack.Id.ShouldNotBe(Guid.Empty);
-        }
-
-        [Given(@"he creates a backpack called ""(.*)""")]
-        public async Task GivenHeCreatesABackpackCalled(string backpackName)
-        {
-            ApiClient user = _scenarioContext.Get<ApiClient>("Sasha");
-
-            BackpackModel backpack = await CreateBackpack(backpackName, user);
-
-            _scenarioContext["backpack-name"] = backpackName;
-            _scenarioContext["backpack"] = backpack;
         }
 
         [When(@"he queries for his backpacks")]

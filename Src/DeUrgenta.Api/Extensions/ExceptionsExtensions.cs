@@ -14,7 +14,7 @@ namespace DeUrgenta.Api.Extensions
         {
             services.AddProblemDetails(options =>
             {
-                options.IncludeExceptionDetails = (ctx, ex) => environment.IsDevelopment();
+                options.IncludeExceptionDetails = (_, _) => environment.IsDevelopment();
 
                 // You can configure the middleware to re-throw certain types of exceptions, all exceptions or based on a predicate.
                 // This is useful if you have upstream middleware that needs to do additional handling of exceptions.
