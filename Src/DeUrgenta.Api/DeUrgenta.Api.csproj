@@ -1,0 +1,56 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<UserSecretsId>adad1e6d-880b-4796-93f9-b5c3100ea5ce</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	</PropertyGroup>
+	
+	<PropertyGroup>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);1591</NoWarn>
+	</PropertyGroup>
+
+
+	<ItemGroup>
+		<PackageReference Include="FluentValidation" Version="10.3.0" />
+		<PackageReference Include="FluentValidation.AspNetCore" Version="10.3.0" />
+		<PackageReference Include="Hellang.Middleware.ProblemDetails" Version="5.3.0" />
+		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.4">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Serilog" Version="2.10.0" />
+		<PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
+		<PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+		<PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.5" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="6.1.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.1.5" />
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.5" />
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.1.5" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.1.5" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\DeUrgenta.Admin.Api\DeUrgenta.Admin.Api.csproj" />
+	  <ProjectReference Include="..\DeUrgenta.Backpack.Api\DeUrgenta.Backpack.Api.csproj" />
+	  <ProjectReference Include="..\DeUrgenta.Certifications.Api\DeUrgenta.Certifications.Api.csproj" />
+	  <ProjectReference Include="..\DeUrgenta.Common\DeUrgenta.Common.csproj" />
+	  <ProjectReference Include="..\DeUrgenta.Domain\DeUrgenta.Domain.csproj" />
+	  <ProjectReference Include="..\DeUrgenta.Group.Api\DeUrgenta.Group.Api.csproj" />
+	  <ProjectReference Include="..\DeUrgenta.Infra\DeUrgenta.Infra.csproj" />
+	  <ProjectReference Include="..\DeUrgenta.User.Api\DeUrgenta.User.Api.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="EmailTemplates\accountConfirmationTemplate.html">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="EmailTemplates\resetPasswordTemplate.html">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+</Project>
