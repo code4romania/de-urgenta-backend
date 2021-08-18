@@ -39,6 +39,7 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
                 ExpirationDate = request.BackpackItem.ExpirationDate,
                 Backpack = backpack
             };
+
             await _context.AddAsync(backpackItem, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
@@ -48,7 +49,8 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
                 Name = backpackItem.Name,
                 Amount = backpackItem.Amount,
                 CategoryType = backpackItem.BackpackCategory,
-                ExpirationDate = backpackItem.ExpirationDate
+                ExpirationDate = backpackItem.ExpirationDate,
+                BackpackId = request.BackpackId
             };
         }
     }
