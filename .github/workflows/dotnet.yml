@@ -5,7 +5,9 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-
+defaults:
+  run:
+    working-directory: ./Src
 jobs:
   build:
 
@@ -35,7 +37,7 @@ jobs:
     - name: ls
       run: ls -l
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore DeUrgenta.sln
     - name: Build
       run: dotnet build --no-restore
     - name: Test with dotnet
