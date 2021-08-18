@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
-using DeUrgenta.Domain.Entities;
 using DeUrgenta.User.Api.Commands;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +18,7 @@ namespace DeUrgenta.User.Api.Validators
 
         public async Task<bool> IsValidAsync(DeleteLocation request)
         {
-            var locationExists = await _context.Users.AnyAsync(u => u.Sub == request.UserSub && Enumerable.Any<UserLocation>(u.Locations, l => l.Id == request.LocationId));
+            var locationExists = await _context.Users.AnyAsync(u => u.Sub == request.UserSub && u.Locations.Any(l => l.Id == request.LocationId));
 
             return locationExists;
         }

@@ -30,7 +30,7 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
             }
             var backpackItem = await _context.BackpackItems.FirstAsync(x => x.Id == request.ItemId, cancellationToken);
             backpackItem.Name = request.BackpackItem.Name;
-            backpackItem.BackpackCategory = request.BackpackItem.CategoryType ?? backpackItem.BackpackCategory;
+            backpackItem.BackpackCategory = request.BackpackItem.CategoryType;
             backpackItem.Amount = request.BackpackItem.Amount;
             backpackItem.ExpirationDate = request.BackpackItem.ExpirationDate;
 

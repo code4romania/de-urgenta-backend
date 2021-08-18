@@ -26,8 +26,7 @@ namespace DeUrgenta.Domain.Configurations
                 .IsRequired();
 
             builder
-                .Property(e => e.ExpirationDate)
-                .IsRequired();
+                .Property(e => e.ExpirationDate);
 
             builder
                 .Property(e => e.BackpackCategory)
@@ -37,7 +36,7 @@ namespace DeUrgenta.Domain.Configurations
                 .HasOne(e => e.Backpack)
                 .WithMany(x => x.BackpackItems)
                 .HasForeignKey(x => x.BackpackId)
-                .HasConstraintName("FK_BackpackItem_Backpack"); ;
+                .HasConstraintName("FK_BackpackItem_Backpack");
         }
     }
 }

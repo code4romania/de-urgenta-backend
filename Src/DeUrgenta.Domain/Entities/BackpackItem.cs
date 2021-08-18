@@ -9,7 +9,7 @@ namespace DeUrgenta.Domain.Entities
         public Guid Id { get; set; }
         public string Name { get; set; }
         public uint Amount { get; set; }
-        public DateTime ExpirationDate { get; set; }
+        public DateTime? ExpirationDate { get; set; }
         public BackpackCategoryType BackpackCategory { get; set; }
 
         public virtual Backpack Backpack { get; set; }

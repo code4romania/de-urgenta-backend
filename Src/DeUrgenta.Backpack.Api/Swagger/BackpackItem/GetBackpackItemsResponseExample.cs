@@ -11,19 +11,23 @@ namespace DeUrgenta.Backpack.Api.Swagger.BackpackItem
     {
         public IImmutableList<BackpackItemModel> GetExamples()
         {
+            Guid backpackId = Guid.NewGuid();
+
             return new List<BackpackItemModel>
             {
                 new()
                 {
                     Id = Guid.NewGuid(),
+                    BackpackId = backpackId,
                     Name = "Hering conserva",
                     Amount = 1,
                     ExpirationDate = DateTime.Today.AddDays(20),
-                    CategoryType = BackpackCategoryType.WaterAndFood
+                    CategoryType = BackpackCategoryType.WaterAndFood,
                 },
                 new()
                 {
                     Id = Guid.NewGuid(),
+                    BackpackId = backpackId,
                     Name = "Naut",
                     Amount = 4,
                     ExpirationDate = DateTime.Today.AddDays(365),
@@ -32,14 +36,16 @@ namespace DeUrgenta.Backpack.Api.Swagger.BackpackItem
                 new()
                 {
                     Id = Guid.NewGuid(),
+                    BackpackId = backpackId,
                     Name = "Coca Cola cu numele tau pe sticla",
                     Amount = 10,
                     ExpirationDate = DateTime.Today.AddDays(420),
                     CategoryType = BackpackCategoryType.WaterAndFood
                 },
-                new BackpackItemModel
+                new()
                 {
                     Id = Guid.NewGuid(),
+                    BackpackId = backpackId,
                     Name = "Topor",
                     Amount = 1,
                     ExpirationDate = DateTime.Today.AddDays(420),
