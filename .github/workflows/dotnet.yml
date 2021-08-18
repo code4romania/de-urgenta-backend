@@ -34,14 +34,12 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
-    - name: ls
-      run: ls -l
     - name: Restore dependencies
       run: dotnet restore DeUrgenta.sln
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore DeUrgenta.sln
     - name: Test with dotnet
-      run: dotnet test --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
+      run: dotnet test DeUrgenta.sln --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
     - name: Upload dotnet test results
       uses: actions/upload-artifact@v2
       with:
