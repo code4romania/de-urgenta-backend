@@ -59,14 +59,14 @@ jobs:
     - name: Run specs
       run: |
         dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI
-        dotnet test --no-build  DeUrgenta.Specs.sln
+        dotnet test DeUrgenta.Specs.sln
       env:
         # Connection strings
         ConnectionStrings__DbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=git-ci;Password=git-ci-pass;
         ConnectionStrings__IdentityDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=git-ci;Password=git-ci-pass;
         
     - name: Generate living doc 
-      working-directory: ./Src/Specs/DeUrgenta.Specs/bin/Debug/net5.0
+      working-directory: ./Specs/DeUrgenta.Specs/bin/Debug/net5.0
       run: livingdoc test-assembly SpecFlowCalculator.Specs.dll -t TestExecution.json
       
     - uses: actions/upload-artifact@v2
