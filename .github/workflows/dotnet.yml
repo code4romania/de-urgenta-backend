@@ -7,13 +7,14 @@ on:
     branches: [ main ]
 
 defaults:
-  run: |
+  run: 
     working-directory: ./Src
-    export DB_CONNECTION_STRING=Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=docker;Password=docker;
+    
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    env:
+      DB_CONNECTION_STRING: Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=docker;Password=docker;
     # Service containers to run with `container-job`
     services:
       # Label used to access the service container
@@ -65,7 +66,7 @@ jobs:
     - name: Upload dotnet test results
       uses: actions/upload-artifact@v2
       with:
-        name: dotnet-results-${{ matrix.dotnet-version }}
-        path: TestResults-${{ matrix.dotnet-version }}
+        name: testresults
+        path: testresults
       # Use always() to always run this step to publish test results when there are test failures
       if: ${{ always() }}
