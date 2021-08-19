@@ -1,28 +1,29 @@
 ﻿using DeUrgenta.Api;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
+using System.Net.Http;
+using Microsoft.AspNetCore.TestHost;
 
 namespace DeUrgenta.Specs
 {
-    public class ApiWebApplicationFactory : WebApplicationFactory<Startup>
+    public class ApiWebApplicationFactory
     {
-        private readonly IConfiguration _configuration;
+        private readonly TestServer _testServer;
 
         public ApiWebApplicationFactory()
         {
-            _configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.specs.json")
-                .Build();
+            _testServer = new TestServer(new WebHostBuilder()
+                .ConfigureAppConfiguration((_, builder) =>
+                {
+                    builder.AddJsonFile("appsettings.specs.json");
+                    builder.AddEnvironmentVariables();
+                })
+                .UseStartup<Startup>());
         }
 
-        protected override void ConfigureWebHost(IWebHostBuilder builder)
+        public HttpClient CreateClient()
         {
-            builder.ConfigureAppConfiguration(config =>
-            {
-                config.AddConfiguration(_configuration);
-            });
-
+            return _testServer.CreateClient();
         }
     }
 }
