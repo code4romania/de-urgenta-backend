@@ -5,12 +5,13 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+
 defaults:
-  run:
+  run: |
     working-directory: ./Src
+    export DB_CONNECTION_STRING=Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=docker;Password=docker;
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     # Service containers to run with `container-job`
@@ -43,11 +44,24 @@ jobs:
       run: dotnet restore DeUrgenta.sln
     - name: Build
       run: dotnet build --no-restore DeUrgenta.sln
-    - name: Test with dotnet
-      run: dotnet test DeUrgenta.sln --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
+    - name: Apply migrations for test db
+      run: |
+        dotnet ef database update --project DeUrgenta.Domain --startup-project DeUrgenta.Api --context DeUrgentaContext --connection $DB_CONNECTION_STRING
+        dotnet ef database update --project DeUrgenta.User.Api --startup-project DeUrgenta.Api --context UserDbContext --connection $DB_CONNECTION_STRING
+    - name: Run unit & integration tests
+      run: |
+        dotnet test 
+        --no-restore
+        --results-directory ./testresults 
+        --logger "trx" 
+        /p:CollectCoverage=true 
+        /p:CoverletOutputFormat=cobertura 
+        /p:CoverletOutput=/testresults/coverage/ 
+        /p:Exclude="[xunit.*]*%2c[DeUrgenta.Tests.Helpers.*]*" 
+        ./DeUrgenta.sln
       env:
         # Connection string
-        ConnectionStrings__TestingDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=docker-action;Password=docker-action-pass;
+        ConnectionStrings__TestingDbConnectionString: $DB_CONNECTION_STRING
     - name: Upload dotnet test results
       uses: actions/upload-artifact@v2
       with:
