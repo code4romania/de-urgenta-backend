@@ -96,12 +96,12 @@ namespace DeUrgenta.Specs.Features
         [Xunit.TraitAttribute("FeatureTitle", "Backpack delete")]
         [Xunit.TraitAttribute("Description", "Backpack delete should be reflected in `my backpacks` list of owner")]
         [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_update")]
+        [Xunit.TraitAttribute("Category", "backpack_delete")]
         public virtual void BackpackDeleteShouldBeReflectedInMyBackpacksListOfOwner()
         {
             string[] tagsOfScenario = new string[] {
                     "backpack",
-                    "backpack_update"};
+                    "backpack_delete"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Backpack delete should be reflected in `my backpacks` list of owner", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 9
@@ -144,12 +144,12 @@ this.FeatureBackground();
         [Xunit.TraitAttribute("FeatureTitle", "Backpack delete")]
         [Xunit.TraitAttribute("Description", "Backpack update should be reflected in `backpacks` list of owner")]
         [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_update")]
+        [Xunit.TraitAttribute("Category", "backpack_delete")]
         public virtual void BackpackUpdateShouldBeReflectedInBackpacksListOfOwner()
         {
             string[] tagsOfScenario = new string[] {
                     "backpack",
-                    "backpack_update"};
+                    "backpack_delete"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Backpack update should be reflected in `backpacks` list of owner", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 15
@@ -192,12 +192,12 @@ this.FeatureBackground();
         [Xunit.TraitAttribute("FeatureTitle", "Backpack delete")]
         [Xunit.TraitAttribute("Description", "Backpack delete can be performed only by owner")]
         [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_update")]
+        [Xunit.TraitAttribute("Category", "backpack_delete")]
         public virtual void BackpackDeleteCanBePerformedOnlyByOwner()
         {
             string[] tagsOfScenario = new string[] {
                     "backpack",
-                    "backpack_update"};
+                    "backpack_delete"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Backpack delete can be performed only by owner", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 21
@@ -240,12 +240,12 @@ this.FeatureBackground();
         [Xunit.TraitAttribute("FeatureTitle", "Backpack delete")]
         [Xunit.TraitAttribute("Description", "Backpack delete cannot be performed by a contributor")]
         [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_update")]
+        [Xunit.TraitAttribute("Category", "backpack_delete")]
         public virtual void BackpackDeleteCannotBePerformedByAContributor()
         {
             string[] tagsOfScenario = new string[] {
                     "backpack",
-                    "backpack_update"};
+                    "backpack_delete"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Backpack delete cannot be performed by a contributor", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 27
@@ -291,12 +291,12 @@ this.FeatureBackground();
         [Xunit.TraitAttribute("FeatureTitle", "Backpack delete")]
         [Xunit.TraitAttribute("Description", "Backpack delete cannot be performed when there are contributors")]
         [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_update")]
+        [Xunit.TraitAttribute("Category", "backpack_delete")]
         public virtual void BackpackDeleteCannotBePerformedWhenThereAreContributors()
         {
             string[] tagsOfScenario = new string[] {
                     "backpack",
-                    "backpack_update"};
+                    "backpack_delete"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Backpack delete cannot be performed when there are contributors", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 34
@@ -342,12 +342,12 @@ this.FeatureBackground();
         [Xunit.TraitAttribute("FeatureTitle", "Backpack delete")]
         [Xunit.TraitAttribute("Description", "Backpack delete cannot be performed by an un-authenticated")]
         [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_update")]
+        [Xunit.TraitAttribute("Category", "backpack_delete")]
         public virtual void BackpackDeleteCannotBePerformedByAnUn_Authenticated()
         {
             string[] tagsOfScenario = new string[] {
                     "backpack",
-                    "backpack_update"};
+                    "backpack_delete"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Backpack delete cannot be performed by an un-authenticated", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 41
