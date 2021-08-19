@@ -30,12 +30,6 @@ Scenario: Backpack delete cannot be performed by a contributor
 	When Grisha deletes backpack created by Sasha
 	Then gets BadRequest in response
 
-@backpack @backpack_delete
-Scenario: Backpack delete cannot be performed when there are contributors
-	Given Grisha is authenticated user
-	And is a contributor to Sasha's backpack
-	When owner deletes backpack named "My backpack"
-	Then gets BadRequest in response
 
 @backpack @backpack_delete
 Scenario: Backpack delete cannot be performed by an un-authenticated
