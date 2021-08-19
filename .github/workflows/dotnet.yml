@@ -10,7 +10,7 @@ defaults:
   run: 
     working-directory: ./Src
 env:
-  DB_CONNECTION_STRING: Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=docker;Password=docker; 
+  DB_CONNECTION_STRING: Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=git-ci;Password=git-ci-pass; 
   
 jobs:
   build:
@@ -24,8 +24,8 @@ jobs:
         image: postgres
         # Provide the password for postgres
         env:
-          POSTGRES_PASSWORD: docker-action-pass
-          POSTGRES_USER: docker-action
+          POSTGRES_PASSWORD: git-ci-pass
+          POSTGRES_USER: git-ci
           POSTGRES_DB: postgres
         ports:
           # Maps tcp port 5432 on service container to the host
