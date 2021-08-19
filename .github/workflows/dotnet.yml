@@ -48,6 +48,7 @@ jobs:
       run: dotnet build --no-restore DeUrgenta.sln
     - name: Apply migrations for test db
       run: |
+        dotnet tool install --global dotnet-ef
         dotnet ef database update --project DeUrgenta.Domain --startup-project DeUrgenta.Api --context DeUrgentaContext --connection $DB_CONNECTION_STRING
         dotnet ef database update --project DeUrgenta.User.Api --startup-project DeUrgenta.Api --context UserDbContext --connection $DB_CONNECTION_STRING
     - name: Run unit & integration tests
@@ -65,9 +66,23 @@ jobs:
         # Connection string
         ConnectionStrings__TestingDbConnectionString: $DB_CONNECTION_STRING
     - name: Upload dotnet test results
-      uses: actions/upload-artifact@v2
+      run: echo TBD (see https://samlearnsazure.blog/2021/01/05/code-coverage-in-github-with-net-core/)
+    - name: Run specs
+      run: |
+        dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI
+        dotnet test ./DeUrgenta.Specs.sln
+      env:
+        # Connection strings
+        ConnectionStrings__DbConnectionString: $DB_CONNECTION_STRING
+        ConnectionStrings__IdentityDbConnectionString: $DB_CONNECTION_STRING
+        
+    - name: Generate living doc 
+      working-directory: /Specs/DeUrgenta.Specs/bin/Debug/net5.0
+      run: livingdoc test-assembly SpecFlowCalculator.Specs.dll -t TestExecution.json
+      
+    - uses: actions/upload-artifact@v2
       with:
-        name: testresults
-        path: testresults
-      # Use always() to always run this step to publish test results when there are test failures
-      if: ${{ always() }}
+        name: living-doc
+        path: /Specs/DeUrgenta.Specs/bin/Debug/net5.0/LivingDoc.html
+        if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn` 
+      
