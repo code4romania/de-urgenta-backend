@@ -9,12 +9,13 @@ on:
 defaults:
   run: 
     working-directory: ./Src
-    
+env:
+  DB_CONNECTION_STRING: Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=docker;Password=docker; 
+  
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      DB_CONNECTION_STRING: Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=docker;Password=docker;
+
     # Service containers to run with `container-job`
     services:
       # Label used to access the service container
@@ -47,7 +48,7 @@ jobs:
       run: dotnet build --no-restore DeUrgenta.sln
     - name: Apply migrations for test db
       run: |
-        dotnet ef database update --project DeUrgenta.Domain --startup-project DeUrgenta.Api --context DeUrgentaContext --connection {{ $DB_CONNECTION_STRING }}
+        dotnet ef database update --project DeUrgenta.Domain --startup-project DeUrgenta.Api --context DeUrgentaContext --connection $DB_CONNECTION_STRING
         dotnet ef database update --project DeUrgenta.User.Api --startup-project DeUrgenta.Api --context UserDbContext --connection $DB_CONNECTION_STRING
     - name: Run unit & integration tests
       run: |
