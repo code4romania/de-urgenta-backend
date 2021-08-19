@@ -9,8 +9,6 @@ on:
 defaults:
   run: 
     working-directory: ./Src
-env:
-  DB_CONNECTION_STRING: Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=git-ci;Password=git-ci-pass; 
   
 jobs:
   build:
@@ -49,8 +47,8 @@ jobs:
     - name: Apply migrations for test db
       run: |
         dotnet tool install --global dotnet-ef
-        dotnet ef database update --project DeUrgenta.Domain --startup-project DeUrgenta.Api --context DeUrgentaContext --connection $DB_CONNECTION_STRING
-        dotnet ef database update --project DeUrgenta.User.Api --startup-project DeUrgenta.Api --context UserDbContext --connection $DB_CONNECTION_STRING
+        dotnet ef database update --project DeUrgenta.Domain --startup-project DeUrgenta.Api --context DeUrgentaContext --connection "Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=git-ci;Password=git-ci-pass;"
+        dotnet ef database update --project DeUrgenta.User.Api --startup-project DeUrgenta.Api --context UserDbContext --connection "Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=git-ci;Password=git-ci-pass;"
     - name: Run unit & integration tests
       run: |
         dotnet test 
@@ -73,8 +71,8 @@ jobs:
         dotnet test ./DeUrgenta.Specs.sln
       env:
         # Connection strings
-        ConnectionStrings__DbConnectionString: $DB_CONNECTION_STRING
-        ConnectionStrings__IdentityDbConnectionString: $DB_CONNECTION_STRING
+        ConnectionStrings__DbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=git-ci;Password=git-ci-pass;
+        ConnectionStrings__IdentityDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=git-ci;Password=git-ci-pass;
         
     - name: Generate living doc 
       working-directory: /Specs/DeUrgenta.Specs/bin/Debug/net5.0
