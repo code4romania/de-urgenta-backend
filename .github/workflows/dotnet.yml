@@ -74,7 +74,7 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: living-doc
-        path: ./Specs/DeUrgenta.Specs/bin/Debug/net5.0/LivingDoc.html
+        path: ./Src/Specs/DeUrgenta.Specs/bin/Debug/net5.0/LivingDoc.html
         if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
       if: always()
       
