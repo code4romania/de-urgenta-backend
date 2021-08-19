@@ -47,15 +47,15 @@ jobs:
     - name: Apply migrations for test db
       run: |
         dotnet tool install --global dotnet-ef
-        dotnet ef database update --project DeUrgenta.Domain --startup-project DeUrgenta.Api --context DeUrgentaContext --connection "Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=git-ci;Password=git-ci-pass;"
-        dotnet ef database update --project DeUrgenta.User.Api --startup-project DeUrgenta.Api --context UserDbContext --connection "Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=git-ci;Password=git-ci-pass;"
+        dotnet ef database update  --no-build --project DeUrgenta.Domain --startup-project DeUrgenta.Api --context DeUrgentaContext --connection "Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=git-ci;Password=git-ci-pass;"
+        dotnet ef database update  --no-build --project DeUrgenta.User.Api --startup-project DeUrgenta.Api --context UserDbContext --connection "Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=git-ci;Password=git-ci-pass;"
     - name: Run unit & integration tests
       run: dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover DeUrgenta.sln
       env:
         # Connection string
         ConnectionStrings__TestingDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=git-ci;Password=git-ci-pass; 
     - name: Upload dotnet test results
-      run: echo TBD (see https://samlearnsazure.blog/2021/01/05/code-coverage-in-github-with-net-core/)
+      uses: codecov/codecov-action@v1
     - name: Run specs
       run: |
         dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI
