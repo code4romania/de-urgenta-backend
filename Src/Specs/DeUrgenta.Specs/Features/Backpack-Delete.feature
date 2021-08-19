@@ -36,8 +36,3 @@ Scenario: Backpack delete cannot be performed by an un-authenticated
 	Given Ion is un-authenticated user
 	When Ion deletes backpack created by Sasha
 	Then gets Unauthorized in response
-
-Scenario: something something
-	Given Ion
-	When code
-	Then ololo
