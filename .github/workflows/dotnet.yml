@@ -68,8 +68,7 @@ jobs:
     - name: Generate living doc 
      # working-directory: Specs/DeUrgenta.Specs/bin/Debug/net5.0
       run: |
-        ls -l
-        cd Specs/DeUrgenta.Specs/bin
+        cd Specs/DeUrgenta.Specs/bin/Debug/net5.0
         ls -l
         livingdoc test-assembly SpecFlowCalculator.Specs.dll -t TestExecution.json
       if: always()
