@@ -66,8 +66,10 @@ jobs:
         ConnectionStrings__IdentityDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=git-ci;Password=git-ci-pass;
         
     - name: Generate living doc 
-      working-directory: /Specs/DeUrgenta.Specs/bin/Debug/net5.0
-      run: livingdoc test-assembly SpecFlowCalculator.Specs.dll -t TestExecution.json
+      working-directory: ./Specs/DeUrgenta.Specs/bin/Debug/net5.0
+      run: |
+        ls
+        livingdoc test-assembly SpecFlowCalculator.Specs.dll -t TestExecution.json
       
     - uses: actions/upload-artifact@v2
       with:
