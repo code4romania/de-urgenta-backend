@@ -51,15 +51,8 @@ jobs:
         dotnet ef database update --project DeUrgenta.User.Api --startup-project DeUrgenta.Api --context UserDbContext --connection "Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=git-ci;Password=git-ci-pass;"
     - name: Run unit & integration tests
       run: |
-        dotnet test 
-        --no-restore
-        --results-directory ./testresults 
-        --logger "trx" 
-        /p:CollectCoverage=true 
-        /p:CoverletOutputFormat=cobertura 
-        /p:CoverletOutput=/testresults/coverage/ 
-        /p:Exclude="[xunit.*]*%2c[DeUrgenta.Tests.Helpers.*]*" 
-        DeUrgenta.sln
+        ls -L
+        dotnet test --no-restore --results-directory ./testresults --logger "trx" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=/testresults/coverage/ /p:Exclude="[xunit.*]*%2c[DeUrgenta.Tests.Helpers.*]*" DeUrgenta.sln
       env:
         # Connection string
         ConnectionStrings__TestingDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=git-ci;Password=git-ci-pass; 
