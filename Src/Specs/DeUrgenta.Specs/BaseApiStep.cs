@@ -40,7 +40,7 @@ namespace DeUrgenta.Specs
         [BeforeScenario]
         public async Task Cleanup()
         {
-            Ion = new ApiClient(_factory.CreateDefaultClient());
+            Ion = new ApiClient(_factory.CreateClient());
 
             Sasha = await RegisterClient("Sasha");
             Grisha = await RegisterClient("Grisha");
@@ -67,7 +67,7 @@ namespace DeUrgenta.Specs
                 Password = uniqueId.ToString()
             });
 
-            var client = _factory.CreateDefaultClient();
+            var client = _factory.CreateClient();
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {loginResponse.Token}");
 
             return new ApiClient(client);
