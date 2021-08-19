@@ -1,5 +1,4 @@
-﻿using System;
-using DeUrgenta.Certifications.Api.Models;
+﻿using DeUrgenta.Certifications.Api.Models;
 using MediatR;
 using System.Collections.Immutable;
 using CSharpFunctionalExtensions;

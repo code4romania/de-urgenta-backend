@@ -3,15 +3,17 @@ using System;
 using DeUrgenta.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DeUrgenta.Domain.Migrations
 {
     [DbContext(typeof(DeUrgentaContext))]
-    partial class DeUrgentaContextModelSnapshot : ModelSnapshot
+    [Migration("20210817182740_MakeNullable")]
+    partial class MakeNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,42 +168,6 @@ namespace DeUrgenta.Domain.Migrations
 
                     b.ToTable("Blogs");
                 });
-
-            modelBuilder.Entity("DeUrgenta.Domain.Entities.CourseCity", b =>
-            {
-                b.Property<Guid>("Id")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("uuid")
-                    .HasDefaultValueSql("uuid_generate_v4()");
-
-                b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
-
-                b.HasKey("Id")
-                    .HasName("PK_CourseCity");
-
-                b.ToTable("CourseCities");
-            });
-
-            modelBuilder.Entity("DeUrgenta.Domain.Entities.CourseType", b =>
-            {
-                b.Property<Guid>("Id")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("uuid")
-                    .HasDefaultValueSql("uuid_generate_v4()");
-
-                b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
-
-                b.HasKey("Id")
-                    .HasName("PK_CourseType");
-
-                b.ToTable("CourseTypes");
-            });
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.Certification", b =>
                 {
