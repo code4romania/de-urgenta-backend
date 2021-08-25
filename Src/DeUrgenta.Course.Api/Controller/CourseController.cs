@@ -1,5 +1,3 @@
-using System;
-//using DeUrgenta.Courses.Api.Commands;
 using DeUrgenta.Courses.Api.Models;
 using DeUrgenta.Courses.Api.Queries;
 using DeUrgenta.Courses.Api.Swagger;
@@ -12,7 +10,7 @@ using System.Collections.Immutable;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Swagger;
 using Microsoft.AspNetCore.Authorization;
-using System.Linq;
+using DeUrgenta.Common.Models;
 
 namespace DeUrgenta.Courses.Api.Controller
 {
@@ -31,7 +29,7 @@ namespace DeUrgenta.Courses.Api.Controller
         }
 
         /// <summary>
-        /// Get course types
+        /// Gets course types
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -55,7 +53,7 @@ namespace DeUrgenta.Courses.Api.Controller
         }
 
         /// <summary>
-        /// Get course cities
+        /// Gets course cities
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -78,5 +76,29 @@ namespace DeUrgenta.Courses.Api.Controller
             return Ok(result.Value);
         }
 
+        /// <summary>
+        /// Gets events list by city id and/or type id
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("/events")]
+
+        [SwaggerResponse(StatusCodes.Status200OK, "Events list", typeof(IImmutableList<EventModel>))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
+
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetEventsResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
+        public async Task<ActionResult<PagedResult<EventModel>>> GetEventsAsync([FromBody] EventModelRequest modelRequest)
+        {
+            var command = new GetEvents(modelRequest);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return Ok(result.Value);
+        }
     }
 }

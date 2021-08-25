@@ -11,6 +11,7 @@ namespace DeUrgenta.Courses.Api
         {
             services.AddTransient<IValidateRequest<GetCourseTypes>, GetCourseTypesValidator>();
             services.AddTransient<IValidateRequest<GetCourseCities>, GetCourseCitiesValidator>();
+            services.AddTransient<IValidateRequest<GetEvents>, GetEventsValidator>();
 
             return services;
         }

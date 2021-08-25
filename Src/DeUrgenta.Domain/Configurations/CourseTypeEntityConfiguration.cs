@@ -13,10 +13,6 @@ namespace DeUrgenta.Domain.Configurations
                 .HasName("PK_CourseType");
 
             builder
-                .Property(e => e.Id)
-                .HasDefaultValueSql("uuid_generate_v4()");
-
-            builder
                 .Property(x => x.Name)
                 .HasMaxLength(250)
                 .IsRequired();

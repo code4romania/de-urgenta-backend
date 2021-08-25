@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
+using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Admin.Api.Models;
+using DeUrgenta.Admin.Api.Queries;
 using DeUrgenta.Admin.Api.Swagger.Events;
 using DeUrgenta.Common.Models;
 using DeUrgenta.Common.Swagger;
@@ -30,7 +32,7 @@ namespace DeUrgenta.Admin.Api.Controller
         /// Gets upcoming events
         /// </summary>
         /// <returns></returns>
-        [HttpGet("events")]
+        [HttpGet("/events")]
         [AllowAnonymous]
 
         [SwaggerResponse(StatusCodes.Status200OK, "Upcoming events", typeof(PagedResult<EventModel>))]
@@ -40,7 +42,15 @@ namespace DeUrgenta.Admin.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<PagedResult<EventModel>>> GetEventsAsync([FromQuery] PaginationQueryModel pagination)
         {
-            throw new NotImplementedException();
+            var query = new GetEvents();
+            var result = await _mediator.Send(query);
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return Ok(result.Value);
         }
 
         /// <summary>
@@ -58,7 +68,15 @@ namespace DeUrgenta.Admin.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<EventModel>> CreateNewEventAsync([FromBody] EventRequest eventModel)
         {
-            throw new NotImplementedException();
+            var command = new CreateEvent(eventModel);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return Ok(result.Value);
         }
 
         /// <summary>
@@ -77,7 +95,15 @@ namespace DeUrgenta.Admin.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<EventModel>> UpdateEventAsync([FromRoute] Guid eventId, [FromBody] EventRequest eventModel)
         {
-            throw new NotImplementedException();
+            var command = new UpdateEvent(eventId, eventModel);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return Ok(result.Value);
         }
 
         /// <summary>
@@ -94,7 +120,15 @@ namespace DeUrgenta.Admin.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult> DeleteEventAsync([FromRoute] Guid eventId)
         {
-            throw new NotImplementedException();
+            var command = new DeleteEvent(eventId);
+            var result = await _mediator.Send(command);
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
         }
     }
 }

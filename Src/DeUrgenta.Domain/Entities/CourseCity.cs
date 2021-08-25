@@ -1,12 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DeUrgenta.Domain.Entities
 {
     public class CourseCity
     {
         [Key]
-        public Guid Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
         public string Name { get; set; }
     }
 }

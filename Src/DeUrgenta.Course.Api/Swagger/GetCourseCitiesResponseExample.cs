@@ -14,17 +14,17 @@ namespace DeUrgenta.Courses.Api.Swagger
             {
                 new()
                 {
-                    Id = Guid.Parse("64d73b37-ab49-4373-b797-2abec9f3c7d7"),
+                    Id = 1,
                     Name = "Bucuresti",
                 },
                 new()
                 {
-                    Id = Guid.Parse("8dae4066-f859-456e-9519-fd1d34c81921"),
+                    Id = 2,
                     Name = "Cluj-Napoca",
                 },
                 new()
                 {
-                    Id = Guid.Parse("2c06811b-2130-4b7e-abf4-6e78be879ba2"),
+                    Id = 3,
                     Name = "Iasi",
                 }
             };
