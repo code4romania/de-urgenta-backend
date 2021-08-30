@@ -1,20 +1,20 @@
 ﻿using System.Threading.Tasks;
+using DeUrgenta.Events.Api.Queries;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
-using DeUrgenta.Events.Api.Queries;
 
 namespace DeUrgenta.Events.Api.Validators
 {
-    public class GetEventsValidator : IValidateRequest<GetEvents>
+    public class GetEventCitiesValidator : IValidateRequest<GetEventCities>
     {
         private readonly DeUrgentaContext _context;
 
-        public GetEventsValidator(DeUrgentaContext context)
+        public GetEventCitiesValidator(DeUrgentaContext context)
         {
             _context = context;
         }
 
-        public async Task<bool> IsValidAsync(GetEvents request)
+        public async Task<bool> IsValidAsync(GetEventCities request)
         {
             return true;
         }

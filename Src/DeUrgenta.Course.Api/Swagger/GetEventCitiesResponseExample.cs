@@ -1,30 +1,26 @@
-﻿using DeUrgenta.Courses.Api.Models;
+﻿using DeUrgenta.Events.Api.Models;
 using Swashbuckle.AspNetCore.Filters;
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
-namespace DeUrgenta.Courses.Api.Swagger
+namespace DeUrgenta.Events.Api.Swagger
 {
-    public class GetCourseCitiesResponseExample : IExamplesProvider<IImmutableList<CourseCityModel>>
+    public class GetEventCitiesResponseExample : IExamplesProvider<IImmutableList<EventCityModel>>
     {
-        public IImmutableList<CourseCityModel> GetExamples()
+        public IImmutableList<EventCityModel> GetExamples()
         {
-            var cities = new List<CourseCityModel>
+            var cities = new List<EventCityModel>
             {
                 new()
                 {
-                    Id = 1,
                     Name = "Bucuresti",
                 },
                 new()
                 {
-                    Id = 2,
                     Name = "Cluj-Napoca",
                 },
                 new()
                 {
-                    Id = 3,
                     Name = "Iasi",
                 }
             };

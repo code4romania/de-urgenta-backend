@@ -4,13 +4,15 @@ using DeUrgenta.Domain.Entities;
 
 namespace DeUrgenta.Domain.Configurations
 {
-    internal class CourseCityEntityConfiguration : IEntityTypeConfiguration<CourseCity>
+    internal class EventTypeEntityConfiguration : IEntityTypeConfiguration<EventType>
     {
-        public void Configure(EntityTypeBuilder<CourseCity> builder)
+        public void Configure(EntityTypeBuilder<EventType> builder)
         {
+            builder.ToTable("EventTypes");
+
             builder
                 .HasKey(x => x.Id)
-                .HasName("PK_CourseCity");
+                .HasName("PK_EventType");
 
             builder
                 .Property(x => x.Name)

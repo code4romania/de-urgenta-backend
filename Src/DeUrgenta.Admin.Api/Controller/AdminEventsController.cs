@@ -19,11 +19,11 @@ namespace DeUrgenta.Admin.Api.Controller
     [Produces("application/json")]
     [Consumes("application/json")]
     [Route("event")]
-    public class EventsController : ControllerBase
+    public class AdminEventsController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public EventsController(IMediator mediator)
+        public AdminEventsController(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -32,7 +32,7 @@ namespace DeUrgenta.Admin.Api.Controller
         /// Gets upcoming events
         /// </summary>
         /// <returns></returns>
-        [HttpGet("/events")]
+        [HttpGet("get")]
         [AllowAnonymous]
 
         [SwaggerResponse(StatusCodes.Status200OK, "Upcoming events", typeof(PagedResult<EventModel>))]

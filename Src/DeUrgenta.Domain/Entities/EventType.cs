@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DeUrgenta.Domain.Entities
 {
-    public class CourseCity
+    public class EventType
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

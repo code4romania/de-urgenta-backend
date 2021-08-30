@@ -1,6 +1,6 @@
-using DeUrgenta.Courses.Api.Models;
-using DeUrgenta.Courses.Api.Queries;
-using DeUrgenta.Courses.Api.Swagger;
+using DeUrgenta.Events.Api.Models;
+using DeUrgenta.Events.Api.Queries;
+using DeUrgenta.Events.Api.Swagger;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,37 +12,36 @@ using DeUrgenta.Common.Swagger;
 using Microsoft.AspNetCore.Authorization;
 using DeUrgenta.Common.Models;
 
-namespace DeUrgenta.Courses.Api.Controller
+namespace DeUrgenta.Events.Api.Controller
 {
     [ApiController]
     [Produces("application/json")]
     [Consumes("application/json")]
-    [Route("courses")]
-    [Authorize]
-    public class CourseController : ControllerBase
+    [Route("event")]
+    public class EventController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public CourseController(IMediator mediator)
+        public EventController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
         /// <summary>
-        /// Gets course types
+        /// Gets event types
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         [Route("types")]
 
-        [SwaggerResponse(StatusCodes.Status200OK, "Course types", typeof(IImmutableList<CourseTypeModel>))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Event types", typeof(IImmutableList<EventTypeModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetCourseTypesResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetEventTypesResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<IImmutableList<CourseTypeModel>>> GetCourseTypesAsync()
+        public async Task<ActionResult<IImmutableList<EventTypeModel>>> GetEventTypesAsync()
         {
-            var query = new GetCourseTypes();
+            var query = new GetEventTypes();
             var result = await _mediator.Send(query);
             
             if (result.IsFailure)
@@ -53,20 +52,20 @@ namespace DeUrgenta.Courses.Api.Controller
         }
 
         /// <summary>
-        /// Gets course cities
+        /// Gets event cities
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         [Route("cities")]
 
-        [SwaggerResponse(StatusCodes.Status200OK, "Course cities", typeof(IImmutableList<CourseCityModel>))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Event cities", typeof(IImmutableList<EventCityModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetCourseCitiesResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetEventCitiesResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<IImmutableList<CourseCityModel>>> GetCourseCitiesAsync()
+        public async Task<ActionResult<IImmutableList<EventCityModel>>> GetEventCitiesAsync([FromQuery] int? eventTypeId)
         {
-            var query = new GetCourseCities();
+            var query = new GetEventCities(eventTypeId);
             var result = await _mediator.Send(query);
 
             if (result.IsFailure)
@@ -77,10 +76,10 @@ namespace DeUrgenta.Courses.Api.Controller
         }
 
         /// <summary>
-        /// Gets events list by city id and/or type id
+        /// Gets events list by city and/or type id
         /// </summary>
         /// <returns></returns>
-        [HttpPost]
+        [HttpGet]
         [Route("/events")]
 
         [SwaggerResponse(StatusCodes.Status200OK, "Events list", typeof(IImmutableList<EventModel>))]
@@ -88,7 +87,7 @@ namespace DeUrgenta.Courses.Api.Controller
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetEventsResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<PagedResult<EventModel>>> GetEventsAsync([FromBody] EventModelRequest modelRequest)
+        public async Task<ActionResult<PagedResult<EventModel>>> GetEventsAsync([FromQuery]EventModelRequest modelRequest)
         {
             var command = new GetEvents(modelRequest);
             var result = await _mediator.Send(command);

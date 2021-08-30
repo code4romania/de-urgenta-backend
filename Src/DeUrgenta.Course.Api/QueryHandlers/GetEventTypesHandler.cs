@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
-using DeUrgenta.Courses.Api.Models;
-using DeUrgenta.Courses.Api.Queries;
+using DeUrgenta.Events.Api.Models;
+using DeUrgenta.Events.Api.Queries;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using MediatR;
@@ -10,30 +10,30 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DeUrgenta.Courses.Api.QueryHandlers
+namespace DeUrgenta.Events.Api.QueryHandlers
 {
-    public class GetCourseTypesHandler : IRequestHandler<GetCourseTypes, Result<IImmutableList<CourseTypeModel>>>
+    public class GetEventTypesHandler : IRequestHandler<GetEventTypes, Result<IImmutableList<EventTypeModel>>>
     {
-        private readonly IValidateRequest<GetCourseTypes> _validator;
+        private readonly IValidateRequest<GetEventTypes> _validator;
         private readonly DeUrgentaContext _context;
 
-        public GetCourseTypesHandler(IValidateRequest<GetCourseTypes> validator, DeUrgentaContext context)
+        public GetEventTypesHandler(IValidateRequest<GetEventTypes> validator, DeUrgentaContext context)
         {
             _validator = validator;
             _context = context;
         }
 
-        public async Task<Result<IImmutableList<CourseTypeModel>>> Handle(GetCourseTypes request,
+        public async Task<Result<IImmutableList<EventTypeModel>>> Handle(GetEventTypes request,
             CancellationToken cancellationToken)
         {
             var isValid = await _validator.IsValidAsync(request);
             if (!isValid)
             {
-                return Result.Failure<IImmutableList<CourseTypeModel>>("Validation failed");
+                return Result.Failure<IImmutableList<EventTypeModel>>("Validation failed");
             }
 
-            var courseTypes = await _context.CourseTypes
-            .Select(x => new CourseTypeModel
+            var courseTypes = await _context.EventTypes
+            .Select(x => new EventTypeModel
             {
                 Id = x.Id,
                 Name = x.Name,

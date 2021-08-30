@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using DeUrgenta.Courses.Api.Queries;
+using DeUrgenta.Events.Api.Queries;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using MediatR;
@@ -9,9 +9,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Models;
-using System.Collections.Generic;
 
-namespace DeUrgenta.Courses.Api.QueryHandlers
+namespace DeUrgenta.Events.Api.QueryHandlers
 {
     public class GetEventsHandler : IRequestHandler<GetEvents, Result<IImmutableList<EventModel>>>
     {
@@ -32,78 +31,24 @@ namespace DeUrgenta.Courses.Api.QueryHandlers
                 return Result.Failure<IImmutableList<EventModel>>("Validation failed");
             }
 
-            List<EventModel> events;
-            if (request.ModelRequest.CityId == null && request.ModelRequest.EventTypeId == null)
-            {
-                events = await _context.Events
-                                          .Select(x => new EventModel
-                                          {
-                                              Id = x.Id,
-                                              Author = x.Author,
-                                              ContentBody = x.ContentBody,
-                                              OccursOn = x.OccursOn,
-                                              OrganizedBy = x.OrganizedBy,
-                                              PublishedOn = x.PublishedOn,
-                                              Title = x.Title,
-                                              City = x.City.Name,
-                                              EventType = x.EventType.Name
-                                          })
-                                          .ToListAsync(cancellationToken);
-            }
-            else if (request.ModelRequest.EventTypeId == null)
-            {
-                events = await _context.Events
-                                         .Where(x => request.ModelRequest.CityId == x.CityId)
-                                         .Select(x => new EventModel
-                                         {
-                                             Id = x.Id,
-                                             Author = x.Author,
-                                             ContentBody = x.ContentBody,
-                                             OccursOn = x.OccursOn,
-                                             OrganizedBy = x.OrganizedBy,
-                                             PublishedOn = x.PublishedOn,
-                                             Title = x.Title,
-                                             City = x.City.Name,
-                                             EventType = x.EventType.Name
-                                         })
-                                         .ToListAsync(cancellationToken);
-            }
-            else if (request.ModelRequest.CityId == null)
-            {
-                events = await _context.Events
-                                         .Where(x => request.ModelRequest.EventTypeId == x.TypeId)
-                                         .Select(x => new EventModel
-                                         {
-                                             Id = x.Id,
-                                             Author = x.Author,
-                                             ContentBody = x.ContentBody,
-                                             OccursOn = x.OccursOn,
-                                             OrganizedBy = x.OrganizedBy,
-                                             PublishedOn = x.PublishedOn,
-                                             Title = x.Title,
-                                             City = x.City.Name,
-                                             EventType = x.EventType.Name
-                                         })
-                                         .ToListAsync(cancellationToken);
-            }
-            else
-            {
-                events = await _context.Events
-                                         .Where(x => request.ModelRequest.CityId == x.CityId && request.ModelRequest.EventTypeId == x.TypeId)
-                                         .Select(x => new EventModel
-                                         {
-                                             Id = x.Id,
-                                             Author = x.Author,
-                                             ContentBody = x.ContentBody,
-                                             OccursOn = x.OccursOn,
-                                             OrganizedBy = x.OrganizedBy,
-                                             PublishedOn = x.PublishedOn,
-                                             Title = x.Title,
-                                             City = x.City.Name,
-                                             EventType = x.EventType.Name
-                                         })
-                                         .ToListAsync(cancellationToken);
-            }
+            var events = await _context.Events
+                                            .Where(x => request.ModelRequest.EventTypeId == null || x.EventType.Id == request.ModelRequest.EventTypeId.Value)
+                                            .Where(x => string.IsNullOrWhiteSpace(request.ModelRequest.City) || x.City.StartsWith(request.ModelRequest.City))
+                                             .Select(x => new EventModel
+                                             {
+                                                 Id = x.Id,
+                                                 Address = x.Address,
+                                                 Author = x.Author,
+                                                 ContentBody = x.ContentBody,
+                                                 OccursOn = x.OccursOn,
+                                                 OrganizedBy = x.OrganizedBy,
+                                                 PublishedOn = x.PublishedOn,
+                                                 Title = x.Title,
+                                                 City = x.City,
+                                                 EventTypeId = x.EventTypeId
+                                             })
+                                             .ToListAsync();
+
             return events.ToImmutableList();
         }
     }

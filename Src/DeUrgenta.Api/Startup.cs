@@ -20,8 +20,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using DeUrgenta.Certifications.Api;
 using FluentValidation.AspNetCore;
-using DeUrgenta.Courses.Api;
-using DeUrgenta.Courses.Api.Controller;
+using DeUrgenta.Admin.Api;
+using DeUrgenta.Events.Api;
+using DeUrgenta.Events.Api.Controller;
 
 namespace DeUrgenta.Api
 {
@@ -49,7 +50,8 @@ namespace DeUrgenta.Api
             services.AddBackpackApiServices();
             services.AddGroupApiServices();
             services.AddCertificationsApiServices();         
-            services.AddCoursesApiServices();
+            services.AddEventsApiServices();
+            services.AddAdminApiServices();
 
             var applicationAssemblies = GetAssemblies();
 
@@ -95,10 +97,10 @@ namespace DeUrgenta.Api
                 // Application parts
                 typeof(BackpackController).GetTypeInfo().Assembly,
                 typeof(CertificationController).GetTypeInfo().Assembly,
-                typeof(BlogController).GetTypeInfo().Assembly,
+                typeof(AdminBlogController).GetTypeInfo().Assembly,
                 typeof(GroupController).GetTypeInfo().Assembly,
                 typeof(UserController).GetTypeInfo().Assembly,
-                typeof(CourseController).GetTypeInfo().Assembly,
+                typeof(EventController).GetTypeInfo().Assembly,
 
                 // Common
 

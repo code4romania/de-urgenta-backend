@@ -15,9 +15,9 @@ namespace DeUrgenta.Domain.Entities
         public DateTime PublishedOn { get; set; }
         public bool IsArchived { get; set; }
 
-        public int CityId { get; set; }
-        public virtual CourseCity City { get; set; }
-        public int TypeId { get; set; }
-        public virtual CourseType EventType { get; set; }
+        public string City { get; set; }
+        public string Address { get; set; }
+        public int EventTypeId { get; set; }
+        public virtual EventType EventType { get; set; }
     }
 }

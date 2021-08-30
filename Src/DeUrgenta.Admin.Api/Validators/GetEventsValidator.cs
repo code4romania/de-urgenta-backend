@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
+using DeUrgenta.Admin.Api.Queries;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
-using DeUrgenta.Events.Api.Queries;
 
-namespace DeUrgenta.Events.Api.Validators
+namespace DeUrgenta.Admin.Api.Validators
 {
     public class GetEventsValidator : IValidateRequest<GetEvents>
     {

@@ -1,10 +1,13 @@
 ﻿using System;
+using Microsoft.AspNetCore.Mvc;
 
-namespace DeUrgenta.Courses.Api.Models
+namespace DeUrgenta.Events.Api.Models
 {
     public sealed record EventModelRequest
     {
-        public int? CityId { get; set; }
+        [FromQuery]
+        public string City { get; set; }
+        [FromQuery]
         public int? EventTypeId { get; set; }
     }
 }

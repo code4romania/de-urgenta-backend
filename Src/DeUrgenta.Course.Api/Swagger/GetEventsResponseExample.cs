@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
-namespace DeUrgenta.Courses.Api.Swagger
+namespace DeUrgenta.Events.Api.Swagger
 {
     public class GetEventsResponseExample : IExamplesProvider<IImmutableList<EventModel>>
     {
@@ -15,7 +15,9 @@ namespace DeUrgenta.Courses.Api.Swagger
                 new()
                 {
                     Id = Guid.Parse("34d73b37-ab49-4373-b797-2abec9f3c7d7"),
+                    Address = "Event Address",
                     Author = "Event Organizer",
+                    City = "Deva",
                     ContentBody = "Lorem ipsum color",
                     OccursOn = DateTime.Now.AddDays(-100),
                     OrganizedBy = "Event Organizer",

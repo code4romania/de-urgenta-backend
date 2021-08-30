@@ -14,7 +14,10 @@ namespace DeUrgenta.Admin.Api.Swagger.Events
               ContentBody = "<h1> E = mc^2 ajutor.</h1>",
               Title = "Curs relativ prim ajutor",
               OccursOn = DateTime.Today.AddDays(30),
-              OrganizedBy = "Crucea rosie"
+              OrganizedBy = "Crucea rosie",
+              City = "Suceava",
+              EventTypeId = 1,
+              Address = "some address"
             };
         }
     }

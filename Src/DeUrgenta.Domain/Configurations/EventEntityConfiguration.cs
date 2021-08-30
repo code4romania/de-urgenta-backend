@@ -48,24 +48,21 @@ namespace DeUrgenta.Domain.Configurations
                 .IsRequired();
 
             builder
-                .HasIndex(e => e.CityId)
+                .Property(e => e.City)
+                .IsRequired();
+
+            builder
+                .HasIndex(e => e.City)
                 .HasDatabaseName("IX_Event_City");
 
             builder
-                .HasOne(d => d.City)
-                .WithOne()
-                .HasForeignKey<Event>(d => d.CityId)
-                .HasConstraintName("FK_Event_City");
-
-            builder
-                .HasIndex(e => e.TypeId)
-                .HasDatabaseName("IX_Event_Type");
+                .Property(e => e.Address)
+                .IsRequired();
 
             builder
                 .HasOne(d => d.EventType)
                 .WithOne()
-                .HasForeignKey<Event>(d => d.TypeId)
-                .HasConstraintName("FK_Event_Type");
+                .HasForeignKey<Event>(d => d.EventTypeId);
         }
 
     }

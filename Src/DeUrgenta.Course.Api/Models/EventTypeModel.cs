@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace DeUrgenta.Courses.Api.Models
+namespace DeUrgenta.Events.Api.Models
 {
-    public sealed record CourseCityModel
+    public sealed record EventTypeModel
     {
         public int Id { get; init; }
         public string Name { get; init; }

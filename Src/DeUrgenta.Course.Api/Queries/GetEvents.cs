@@ -1,10 +1,10 @@
 ﻿using System.Collections.Immutable;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Common.Models;
-using DeUrgenta.Courses.Api.Models;
+using DeUrgenta.Events.Api.Models;
 using MediatR;
 
-namespace DeUrgenta.Courses.Api.Queries
+namespace DeUrgenta.Events.Api.Queries
 {
     public class GetEvents : IRequest<Result<IImmutableList<EventModel>>>
     {
