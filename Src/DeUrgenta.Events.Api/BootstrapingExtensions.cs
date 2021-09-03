@@ -11,7 +11,7 @@ namespace DeUrgenta.Events.Api
         {
             services.AddTransient<IValidateRequest<GetEventTypes>, GetEventTypesValidator>();
             services.AddTransient<IValidateRequest<GetEventCities>, GetEventCitiesValidator>();
-            services.AddTransient<IValidateRequest<GetEvents>, GetEventsValidator>();
+            services.AddTransient<IValidateRequest<GetEvent>, GetEventValidator>();
 
             return services;
         }

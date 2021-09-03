@@ -6,7 +6,7 @@ using System.Collections.Immutable;
 
 namespace DeUrgenta.Events.Api.Swagger
 {
-    public class GetEventsResponseExample : IExamplesProvider<IImmutableList<EventModel>>
+    public class GetEventResponseExample : IExamplesProvider<IImmutableList<EventModel>>
     {
         public IImmutableList<EventModel> GetExamples()
         {

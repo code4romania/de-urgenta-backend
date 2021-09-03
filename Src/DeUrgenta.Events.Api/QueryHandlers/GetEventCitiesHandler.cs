@@ -38,6 +38,7 @@ namespace DeUrgenta.Events.Api.QueryHandlers
                                 .Select(x => x.City)
                                 .Distinct()
                                 .Select(x => new EventCityModel { Name = x })
+                                .OrderBy(x => x.Name)
                                 .ToListAsync(cancellationToken);
             return x.ToImmutableList();
 

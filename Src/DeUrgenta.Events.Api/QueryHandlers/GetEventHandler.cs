@@ -9,21 +9,22 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Models;
+using System;
 
 namespace DeUrgenta.Events.Api.QueryHandlers
 {
-    public class GetEventsHandler : IRequestHandler<GetEvents, Result<IImmutableList<EventModel>>>
+    public class GetEventHandler : IRequestHandler<GetEvent, Result<IImmutableList<EventModel>>>
     {
-        private readonly IValidateRequest<GetEvents> _validator;
+        private readonly IValidateRequest<GetEvent> _validator;
         private readonly DeUrgentaContext _context;
 
-        public GetEventsHandler(IValidateRequest<GetEvents> validator, DeUrgentaContext context)
+        public GetEventHandler(IValidateRequest<GetEvent> validator, DeUrgentaContext context)
         {
             _validator = validator;
             _context = context;
         }
 
-        public async Task<Result<IImmutableList<EventModel>>> Handle(GetEvents request, CancellationToken cancellationToken)
+        public async Task<Result<IImmutableList<EventModel>>> Handle(GetEvent request, CancellationToken cancellationToken)
         {
             var isValid = await _validator.IsValidAsync(request);
             if (!isValid)
@@ -34,6 +35,7 @@ namespace DeUrgenta.Events.Api.QueryHandlers
             var events = await _context.Events
                                             .Where(x => request.ModelRequest.EventTypeId == null || x.EventType.Id == request.ModelRequest.EventTypeId.Value)
                                             .Where(x => string.IsNullOrWhiteSpace(request.ModelRequest.City) || x.City.StartsWith(request.ModelRequest.City))
+                                            .Where(x => x.OccursOn > DateTime.Today)
                                              .Select(x => new EventModel
                                              {
                                                  Id = x.Id,

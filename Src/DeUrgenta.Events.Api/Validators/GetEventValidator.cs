@@ -5,16 +5,16 @@ using DeUrgenta.Events.Api.Queries;
 
 namespace DeUrgenta.Events.Api.Validators
 {
-    public class GetEventsValidator : IValidateRequest<GetEvents>
+    public class GetEventValidator : IValidateRequest<GetEvent>
     {
         private readonly DeUrgentaContext _context;
 
-        public GetEventsValidator(DeUrgentaContext context)
+        public GetEventValidator(DeUrgentaContext context)
         {
             _context = context;
         }
 
-        public async Task<bool> IsValidAsync(GetEvents request)
+        public async Task<bool> IsValidAsync(GetEvent request)
         {
             return true;
         }

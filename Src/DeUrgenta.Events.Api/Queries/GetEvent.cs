@@ -6,11 +6,11 @@ using MediatR;
 
 namespace DeUrgenta.Events.Api.Queries
 {
-    public class GetEvents : IRequest<Result<IImmutableList<EventModel>>>
+    public class GetEvent : IRequest<Result<IImmutableList<EventModel>>>
     {
         public EventModelRequest ModelRequest { get; }
 
-        public GetEvents(EventModelRequest modelRequest)
+        public GetEvent(EventModelRequest modelRequest)
         {
             ModelRequest = modelRequest;
         }

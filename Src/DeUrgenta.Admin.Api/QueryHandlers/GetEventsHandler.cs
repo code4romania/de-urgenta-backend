@@ -45,6 +45,7 @@ namespace DeUrgenta.Admin.Api.QueryHandlers
                     City = x.City,
                     EventTypeId = x.EventTypeId
                 })
+                .OrderBy(x => x.OccursOn)
                 .ToListAsync(cancellationToken);
 
             return events.ToImmutableList();

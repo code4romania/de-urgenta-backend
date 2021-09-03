@@ -85,11 +85,11 @@ namespace DeUrgenta.Events.Api.Controller
         [SwaggerResponse(StatusCodes.Status200OK, "Events list", typeof(IImmutableList<EventModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetEventsResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetEventResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<PagedResult<EventModel>>> GetEventsAsync([FromQuery]EventModelRequest modelRequest)
         {
-            var command = new GetEvents(modelRequest);
+            var command = new GetEvent(modelRequest);
             var result = await _mediator.Send(command);
 
             if (result.IsFailure)

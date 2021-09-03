@@ -20,10 +20,4 @@
 		<ProjectReference Include="..\DeUrgenta.Domain\DeUrgenta.Domain.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="CommandHandlers\" />
-	  <Folder Include="Commands\" />
-	  <Folder Include="Validators\RequestValidators\" />
-	</ItemGroup>
-
 </Project>
