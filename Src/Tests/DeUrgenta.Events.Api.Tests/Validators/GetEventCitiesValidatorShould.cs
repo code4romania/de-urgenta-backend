@@ -21,6 +21,7 @@ namespace DeUrgenta.Events.Api.Tests.Validators
         [Theory]
         [InlineData(null)]
         [InlineData(1)]
+        [InlineData(-1)]
         public async Task CheckGetEventCitiesTest(int? eventTypeId)
         {
             // Arrange
@@ -30,7 +31,7 @@ namespace DeUrgenta.Events.Api.Tests.Validators
             bool isValid = await sut.IsValidAsync(new GetEventCities(eventTypeId));
 
             // Assert
-            isValid.ShouldBeFalse();
+            isValid.ShouldBeTrue();
         }
     }
 }

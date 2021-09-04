@@ -18,6 +18,7 @@ namespace DeUrgenta.Events.Api.Tests.Validators
             _dbContext = fixture.Context;
         }
 
+        [Fact]
         public async Task CheckGetEventTypesTest()
         {
             // Arrange
@@ -27,7 +28,7 @@ namespace DeUrgenta.Events.Api.Tests.Validators
             bool isValid = await sut.IsValidAsync(new GetEventTypes());
 
             // Assert
-            isValid.ShouldBeFalse();
+            isValid.ShouldBeTrue();
         }
     }
 }

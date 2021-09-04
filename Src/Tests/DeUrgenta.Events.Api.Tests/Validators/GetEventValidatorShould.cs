@@ -31,7 +31,7 @@ namespace DeUrgenta.Events.Api.Tests.Validators
             bool isValid = await sut.IsValidAsync(new GetEvent(new Models.EventModelRequest { City = city, EventTypeId = eventTypeId }));
 
             // Assert
-            isValid.ShouldBeFalse();
+            isValid.ShouldBeTrue();
         }
     }
 }
