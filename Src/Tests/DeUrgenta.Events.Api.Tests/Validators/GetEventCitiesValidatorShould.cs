@@ -20,9 +20,23 @@ namespace DeUrgenta.Events.Api.Tests.Validators
 
         [Theory]
         [InlineData(null)]
-        [InlineData(1)]
         [InlineData(-1)]
-        public async Task CheckGetEventCitiesTest(int? eventTypeId)
+        public async Task ShouldInvalidateWhenInvalidEventTypeId(int? eventTypeId)
+        {
+            // Arrange
+            var sut = new GetEventCitiesValidator(_dbContext);
+
+            // Act
+            bool isValid = await sut.IsValidAsync(new GetEventCities(eventTypeId));
+
+            // Assert
+            isValid.ShouldBeFalse();
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        public async Task ShouldValidateWhenValidEventTypeId(int? eventTypeId)
         {
             // Arrange
             var sut = new GetEventCitiesValidator(_dbContext);

@@ -2,6 +2,7 @@
 using DeUrgenta.Events.Api.Queries;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Events.Api.Validators
 {
@@ -16,6 +17,11 @@ namespace DeUrgenta.Events.Api.Validators
 
         public async Task<bool> IsValidAsync(GetEventCities request)
         {
+            if (!await _context.EventTypes.AnyAsync(x => x.Id == request.EventTypeId))
+            {
+                return false;
+            }
+
             return true;
         }
     }
