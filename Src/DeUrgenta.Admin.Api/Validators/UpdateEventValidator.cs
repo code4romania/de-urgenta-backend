@@ -17,6 +17,11 @@ namespace DeUrgenta.Admin.Api.Validators
 
         public async Task<bool> IsValidAsync(UpdateEvent request)
         {
+            if (request.Event == null)
+            {
+                return false;
+            }
+
             var ev = await _context.Events.FirstOrDefaultAsync(x => x.Id == request.EventId);
             if (ev == null)
             {

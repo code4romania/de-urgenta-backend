@@ -30,6 +30,14 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
                 return Result.Failure<EventModel>("Validation failed");
             }
             var ev = await _context.Events.FirstAsync(b => b.Id == request.EventId, cancellationToken);
+            ev.Address = request.Event.Address;
+            ev.Author = request.Event.Author;
+            ev.City = request.Event.City;
+            ev.ContentBody = request.Event.ContentBody;
+            ev.EventTypeId = request.Event.EventTypeId;
+            ev.OccursOn = request.Event.OccursOn;
+            ev.OrganizedBy = request.Event.OrganizedBy;
+            ev.Title = request.Event.Title;
 
             await _context.SaveChangesAsync(cancellationToken);
 
