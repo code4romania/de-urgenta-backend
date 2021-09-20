@@ -36,7 +36,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Backpack.Api.Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.User.Api.Tests", "Tests\DeUrgenta.User.Api.Tests\DeUrgenta.User.Api.Tests.csproj", "{AD70EC6D-8219-47CD-956F-5C116491650C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeUrgenta.Certifications.Api.Tests", "Tests\DeUrgenta.Certifications.Api.Tests\DeUrgenta.Certifications.Api.Tests.csproj", "{48E7C60E-F6A4-40CF-ABEB-A053035735CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Certifications.Api.Tests", "Tests\DeUrgenta.Certifications.Api.Tests\DeUrgenta.Certifications.Api.Tests.csproj", "{48E7C60E-F6A4-40CF-ABEB-A053035735CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

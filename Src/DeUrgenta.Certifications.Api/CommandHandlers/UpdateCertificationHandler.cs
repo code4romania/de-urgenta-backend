@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Certifications.Api.Commands;
@@ -6,6 +7,7 @@ using DeUrgenta.Certifications.Api.Models;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Certifications.Api.CommandHandlers
@@ -33,6 +35,8 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
             certification.Name = request.Certification.Name;
             certification.IssuingAuthority = request.Certification.IssuingAuthority;
             certification.ExpirationDate = request.Certification.ExpirationDate;
+            certification.PhotoTitle = request.Certification.Photo.FileName;
+            certification.Photo = await GetBytesAsync(request.Certification.Photo);
 
             await _context.SaveChangesAsync(cancellationToken);
 
@@ -43,6 +47,13 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
                 ExpirationDate = certification.ExpirationDate,
                 IssuingAuthority = certification.IssuingAuthority
             };
+        }
+
+        private async Task<byte[]> GetBytesAsync(IFormFile file)
+        {
+            using var memoryStream = new MemoryStream();
+            await file.CopyToAsync(memoryStream);
+            return memoryStream.ToArray();
         }
     }
 }

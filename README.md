@@ -64,7 +64,7 @@ docker-compose -d up postgres
 
 ### Creating a EF Core migration 
 ```
-dotnet ef migrations add <Migration-name> --project DeUrgenta.Domain --startup-project DeUrgenta.Api
+dotnet ef migrations add <Migration-name> --project DeUrgenta.Domain --startup-project DeUrgenta.Api --context DeUrgentaContext
 ```
 ### Adding EF Core migration to User.Api
 ```

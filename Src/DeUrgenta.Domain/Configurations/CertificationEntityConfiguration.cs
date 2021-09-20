@@ -30,6 +30,10 @@ namespace DeUrgenta.Domain.Configurations
                 .Property(x => x.ExpirationDate)
                 .IsRequired();
 
+            builder
+                .Property(x => x.PhotoTitle)
+                .HasMaxLength(250);
+
             builder.HasOne(d => d.User)
                 .WithMany(p => p.Certifications)
                 .HasForeignKey(d => d.UserId)

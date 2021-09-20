@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Http;
 
 namespace DeUrgenta.Certifications.Api.Models
 {
@@ -9,5 +10,7 @@ namespace DeUrgenta.Certifications.Api.Models
         public string IssuingAuthority { get; init; }
 
         public DateTime ExpirationDate { get; init; }
+
+        public IFormFile Photo { get; init; }
     }
 }
