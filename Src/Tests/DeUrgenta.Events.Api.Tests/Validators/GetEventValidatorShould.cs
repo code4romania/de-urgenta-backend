@@ -19,19 +19,32 @@ namespace DeUrgenta.Events.Api.Tests.Validators
         }
 
         [Theory]
-        [InlineData(null, null)]
-        [InlineData(null, 1)]
-        [InlineData("some city", null)]
-        public async Task CheckGetEventCitiesTest(string city, int? eventTypeId)
+        [InlineData(null)]
+        [InlineData(-1)]
+        public async Task ShouldInvalidateWhenInvalidEventTypeId(int? eventTypeId)
         {
             // Arrange
             var sut = new GetEventValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetEvent(new Models.EventModelRequest { City = city, EventTypeId = eventTypeId }));
+            bool isValid = await sut.IsValidAsync(new GetEvent(new Models.EventModelRequest { EventTypeId = eventTypeId }));
 
             // Assert
             isValid.ShouldBeFalse();
+        }
+
+        [Theory]
+        [InlineData(1)]
+        public async Task ShouldValidateWhenValidEventTypeId(int? eventTypeId)
+        {
+            // Arrange
+            var sut = new GetEventValidator(_dbContext);
+
+            // Act
+            bool isValid = await sut.IsValidAsync(new GetEvent(new Models.EventModelRequest { EventTypeId = eventTypeId }));
+
+            // Assert
+            isValid.ShouldBeTrue();
         }
     }
 }

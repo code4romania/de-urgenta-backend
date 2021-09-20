@@ -18,6 +18,12 @@ namespace DeUrgenta.Domain.Configurations
                 .Property(x => x.Name)
                 .HasMaxLength(250)
                 .IsRequired();
+
+            builder.HasData(
+                new EventType { Id = 1, Name = "Prim ajutor" },
+                new EventType { Id = 2, Name = "Prim ajutor calificat" },
+                new EventType { Id = 3, Name = "Pregătire in caz de dezastre" }
+            );
         }
     }
 }
