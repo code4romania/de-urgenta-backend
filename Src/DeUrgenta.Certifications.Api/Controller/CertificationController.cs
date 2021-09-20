@@ -9,10 +9,12 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
 using System.Collections.Immutable;
+using System.IO;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Swagger;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace DeUrgenta.Certifications.Api.Controller
 {
@@ -28,6 +30,34 @@ namespace DeUrgenta.Certifications.Api.Controller
         public CertificationController(IMediator mediator)
         {
             _mediator = mediator;
+        }
+
+        [HttpGet]
+        [Route("{certificationId:guid}/photo")]
+
+        [SwaggerResponse(StatusCodes.Status200OK, "User certification", typeof(File))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
+
+        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
+        public async Task<IActionResult> GetCertificationAsync(Guid certificationId)
+        {
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var query = new GetCertificationPhoto(sub, certificationId);
+            var result = await _mediator.Send(query);
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+            if (result.Value == null)
+            {
+                return Ok();
+            }
+
+            var gotContentType = new FileExtensionContentTypeProvider().TryGetContentType(result.Value.Title, out var contentType);
+            var file = File(result.Value.Photo, gotContentType ? contentType: "image/jpeg", result.Value.Title);
+
+            return file;
         }
 
         /// <summary>
