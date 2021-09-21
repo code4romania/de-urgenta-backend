@@ -32,6 +32,9 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
                 return Result.Failure<CertificationModel>("Validation failed");
             }
 
+            //save photo in storage
+            //then just save URL/path
+
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
             var certification = new Certification
             {
