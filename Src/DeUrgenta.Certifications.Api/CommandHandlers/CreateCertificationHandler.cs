@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Certifications.Api.Commands;
 using DeUrgenta.Certifications.Api.Models;
+using DeUrgenta.Certifications.Api.Storage;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
@@ -17,11 +18,13 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
     {
         private readonly IValidateRequest<CreateCertification> _validator;
         private readonly DeUrgentaContext _context;
+        private readonly IBlobStorage _storage;
 
-        public CreateCertificationHandler(IValidateRequest<CreateCertification> validator, DeUrgentaContext context)
+        public CreateCertificationHandler(IValidateRequest<CreateCertification> validator, DeUrgentaContext context, IBlobStorage storage)
         {
             _validator = validator;
             _context = context;
+            _storage = storage;
         }
 
         public async Task<Result<CertificationModel>> Handle(CreateCertification request, CancellationToken cancellationToken)
@@ -31,38 +34,37 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
             {
                 return Result.Failure<CertificationModel>("Validation failed");
             }
-
-            //save photo in storage
-            //then just save URL/path
-
+            
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
             var certification = new Certification
             {
                 Name = request.Name,
                 ExpirationDate = request.ExpirationDate,
                 User = user,
-                IssuingAuthority = request.IssuingAuthority,
-                PhotoTitle = request.Photo.FileName,
-                Photo = await GetBytesAsync(request.Photo)
+                IssuingAuthority = request.IssuingAuthority
             };
 
             await _context.Certifications.AddAsync(certification, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
+
+            var fileStream = await GetBytesAsync(request.Photo);
+            var photoUrl = await _storage.SaveAttachmentAsync(certification.Id, user.Sub, fileStream);
 
             return new CertificationModel
             {
                 Id = certification.Id,
                 Name = certification.Name,
                 ExpirationDate = certification.ExpirationDate,
-                IssuingAuthority = certification.IssuingAuthority
+                IssuingAuthority = certification.IssuingAuthority,
+                PhotoUrl = photoUrl
             };
         }
 
-        private async Task<byte[]> GetBytesAsync(IFormFile file)
+        private async Task<MemoryStream> GetBytesAsync(IFormFile file)
         {
             using var memoryStream = new MemoryStream();
             await file.CopyToAsync(memoryStream);
-            return memoryStream.ToArray();
+            return memoryStream;
         }
     }
 }

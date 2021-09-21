@@ -15,14 +15,23 @@ namespace DeUrgenta.Certifications.Api.Storage
             _config = config.CurrentValue;
         }
 
-        public Task<string> SaveAttachment(Guid certificationId, Stream attachment)
+        public async Task<string> SaveAttachmentAsync(Guid certificationId, string userSub, Stream attachment)
         {
-            throw new NotImplementedException();
+            var filePath = $"{userSub}/{certificationId}";
+
+            using (var targetStream = File.Create(Path.Combine(_config.Path, filePath)))
+            {
+                await attachment.CopyToAsync(targetStream);
+            }
+
+            return filePath;
         }
 
-        public string GetAttachment(Guid certificationId)
+        public string GetAttachment(Guid certificationId, string userSub)
         {
-            throw new NotImplementedException();
+            var filePath = $"{userSub}/{certificationId}";
+
+            return filePath;
         }
     }
 }

@@ -19,30 +19,32 @@ namespace DeUrgenta.Certifications.Api.Storage
             _config = config.CurrentValue;
         }
 
-        public async Task<string> SaveAttachment(Guid certificationId, Stream attachment)
+        public async Task<string> SaveAttachmentAsync(Guid certificationId, string userSub, Stream attachment)
         {
+             var fileKey = $"{userSub}/{certificationId}";
             var request = new PutObjectRequest
             {
                 BucketName = _config.BucketName,
-                Key = certificationId.ToString(),
+                Key = fileKey,
                 InputStream = attachment
             };
             await _s3Client.PutObjectAsync(request);
             
-            return GetPreSignedUrl(certificationId);
+            return GetPreSignedUrl(fileKey);
         }
 
-        public string GetAttachment(Guid certificationId)
+        public string GetAttachment(Guid certificationId, string userSub)
         {
-            return GetPreSignedUrl(certificationId);
+            var fileKey = $"{userSub}/{certificationId}";
+            return GetPreSignedUrl(fileKey);
         }
 
-        private string GetPreSignedUrl(Guid certificationId)
+        private string GetPreSignedUrl(string fileKey)
         {
             var request = new GetPreSignedUrlRequest
             {
                 BucketName = _config.BucketName, 
-                Key = certificationId.ToString(),
+                Key = fileKey,
                 Expires = DateTime.Now.AddMinutes(_config.PresignedUrlExpirationInMinutes)
             };
 
