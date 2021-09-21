@@ -21,7 +21,7 @@ namespace DeUrgenta.Certifications.Api.Storage
 
         public async Task<string> SaveAttachmentAsync(Guid certificationId, string userSub, Stream attachment)
         {
-             var fileKey = $"{userSub}/{certificationId}";
+            var fileKey = $"{userSub}/{certificationId}";
             var request = new PutObjectRequest
             {
                 BucketName = _config.BucketName,
@@ -29,7 +29,7 @@ namespace DeUrgenta.Certifications.Api.Storage
                 InputStream = attachment
             };
             await _s3Client.PutObjectAsync(request);
-            
+
             return GetPreSignedUrl(fileKey);
         }
 
@@ -43,7 +43,7 @@ namespace DeUrgenta.Certifications.Api.Storage
         {
             var request = new GetPreSignedUrlRequest
             {
-                BucketName = _config.BucketName, 
+                BucketName = _config.BucketName,
                 Key = fileKey,
                 Expires = DateTime.Now.AddMinutes(_config.PresignedUrlExpirationInMinutes)
             };

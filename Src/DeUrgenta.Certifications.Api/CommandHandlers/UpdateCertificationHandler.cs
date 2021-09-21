@@ -8,7 +8,6 @@ using DeUrgenta.Certifications.Api.Storage;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Certifications.Api.CommandHandlers
@@ -34,15 +33,20 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
                 return Result.Failure<CertificationModel>("Validation failed");
             }
 
-            var certification = await _context.Certifications.FirstAsync(c => c.Id == request.CertificationId, cancellationToken);
+            var certification = await _context.Certifications
+                .FirstAsync(c => c.Id == request.CertificationId, cancellationToken);
             certification.Name = request.Certification.Name;
             certification.IssuingAuthority = request.Certification.IssuingAuthority;
             certification.ExpirationDate = request.Certification.ExpirationDate;
-           
+
             await _context.SaveChangesAsync(cancellationToken);
 
-            var photoStream = await GetStreamAsync(request.Certification.Photo);
-            var fileUrl = await _storage.SaveAttachmentAsync(certification.Id, request.UserSub, photoStream);
+            string photoUrl;
+            using (var memoryStream = new MemoryStream())
+            {
+                await request.Certification.Photo.CopyToAsync(memoryStream);
+                photoUrl = await _storage.SaveAttachmentAsync(certification.Id, request.UserSub, memoryStream);
+            }
 
             return new CertificationModel
             {
@@ -50,15 +54,8 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
                 Name = certification.Name,
                 ExpirationDate = certification.ExpirationDate,
                 IssuingAuthority = certification.IssuingAuthority,
-                PhotoUrl = fileUrl
+                PhotoUrl = photoUrl
             };
-        }
-
-        private async Task<MemoryStream> GetStreamAsync(IFormFile file)
-        {
-            using var memoryStream = new MemoryStream();
-            await file.CopyToAsync(memoryStream);
-            return memoryStream;
         }
     }
 }

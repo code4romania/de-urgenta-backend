@@ -15,6 +15,7 @@ namespace DeUrgenta.Certifications.Api.Tests.QueryHandlers
     public class GetCertificationsHandlerShould
     {
         private readonly DeUrgentaContext _dbContext;
+
         public GetCertificationsHandlerShould(DatabaseFixture fixture)
         {
             _dbContext = fixture.Context;

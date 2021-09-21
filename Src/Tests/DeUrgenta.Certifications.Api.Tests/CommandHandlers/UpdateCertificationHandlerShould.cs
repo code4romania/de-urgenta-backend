@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using DeUrgenta.Certifications.Api.CommandHandlers;
 using DeUrgenta.Certifications.Api.Commands;
 using DeUrgenta.Certifications.Api.Models;
+using DeUrgenta.Certifications.Api.Storage;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Tests.Helpers;
@@ -17,6 +18,7 @@ namespace DeUrgenta.Certifications.Api.Tests.CommandHandlers
     public class UpdateCertificationHandlerShould
     {
         private readonly DeUrgentaContext _dbContext;
+
         public UpdateCertificationHandlerShould(DatabaseFixture fixture)
         {
             _dbContext = fixture.Context;
@@ -26,12 +28,13 @@ namespace DeUrgenta.Certifications.Api.Tests.CommandHandlers
         public async Task Return_failed_result_when_validation_fails()
         {
             // Arrange
+            var storage = Substitute.For<IBlobStorage>();
             var validator = Substitute.For<IValidateRequest<UpdateCertification>>();
             validator
                 .IsValidAsync(Arg.Any<UpdateCertification>())
                 .Returns(Task.FromResult(false));
 
-            var sut = new UpdateCertificationHandler(validator, _dbContext);
+            var sut = new UpdateCertificationHandler(validator, _dbContext, storage);
 
             // Act
             var result = await sut.Handle(new UpdateCertification("a-sub", Guid.NewGuid(), new CertificationRequest()), CancellationToken.None);
@@ -39,6 +42,5 @@ namespace DeUrgenta.Certifications.Api.Tests.CommandHandlers
             // Assert
             result.IsFailure.ShouldBeTrue();
         }
-
     }
 }

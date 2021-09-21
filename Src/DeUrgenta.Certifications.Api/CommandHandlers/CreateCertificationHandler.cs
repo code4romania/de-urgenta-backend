@@ -9,7 +9,6 @@ using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Certifications.Api.CommandHandlers
@@ -34,7 +33,7 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
             {
                 return Result.Failure<CertificationModel>("Validation failed");
             }
-            
+
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
             var certification = new Certification
             {
@@ -47,8 +46,12 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
             await _context.Certifications.AddAsync(certification, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            var fileStream = await GetStreamAsync(request.Photo);
-            var photoUrl = await _storage.SaveAttachmentAsync(certification.Id, user.Sub, fileStream);
+            string photoUrl;
+            using (var memoryStream = new MemoryStream())
+            {
+                await request.Photo.CopyToAsync(memoryStream);
+                photoUrl = await _storage.SaveAttachmentAsync(certification.Id, user.Sub, memoryStream);
+            }
 
             return new CertificationModel
             {
@@ -58,12 +61,6 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
                 IssuingAuthority = certification.IssuingAuthority,
                 PhotoUrl = photoUrl
             };
-        }
-        private async Task<MemoryStream> GetStreamAsync(IFormFile file)
-        {
-            using var memoryStream = new MemoryStream();
-            await file.CopyToAsync(memoryStream);
-            return memoryStream;
         }
     }
 }
