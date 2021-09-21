@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 using DeUrgenta.Common.Swagger;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
-using Microsoft.AspNetCore.StaticFiles;
 
 namespace DeUrgenta.Certifications.Api.Controller
 {
@@ -39,7 +38,7 @@ namespace DeUrgenta.Certifications.Api.Controller
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<IActionResult> GetCertificationAsync(Guid certificationId)
+        public async Task<ActionResult<CertificationPhotoModel>> GetCertificationAsync(Guid certificationId)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var query = new GetCertificationPhoto(sub, certificationId);
@@ -49,15 +48,8 @@ namespace DeUrgenta.Certifications.Api.Controller
             {
                 return BadRequest();
             }
-            if (result.Value == null)
-            {
-                return Ok();
-            }
-
-            var gotContentType = new FileExtensionContentTypeProvider().TryGetContentType(result.Value.Title, out var contentType);
-            var file = File(result.Value.Photo, gotContentType ? contentType: "image/jpeg", result.Value.Title);
-
-            return file;
+           
+            return result.Value;
         }
 
         /// <summary>

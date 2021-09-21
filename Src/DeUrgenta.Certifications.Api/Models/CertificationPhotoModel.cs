@@ -2,7 +2,6 @@
 {
     public sealed record CertificationPhotoModel
     {
-        public string Title { get; set; }
-        public byte[] Photo { get; set; }
+        public string PhotoUrl { get; set; }
     }
 }

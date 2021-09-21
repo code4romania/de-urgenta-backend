@@ -47,7 +47,7 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
             await _context.Certifications.AddAsync(certification, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            var fileStream = await GetBytesAsync(request.Photo);
+            var fileStream = await GetStreamAsync(request.Photo);
             var photoUrl = await _storage.SaveAttachmentAsync(certification.Id, user.Sub, fileStream);
 
             return new CertificationModel
@@ -59,8 +59,7 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
                 PhotoUrl = photoUrl
             };
         }
-
-        private async Task<MemoryStream> GetBytesAsync(IFormFile file)
+        private async Task<MemoryStream> GetStreamAsync(IFormFile file)
         {
             using var memoryStream = new MemoryStream();
             await file.CopyToAsync(memoryStream);
