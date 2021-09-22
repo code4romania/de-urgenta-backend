@@ -60,7 +60,6 @@ namespace DeUrgenta.User.Api
                 jwt.TokenValidationParameters = tokenValidationParams;
             });
 
-
             services.Configure<IdentityOptions>(options =>
             {
                 // Password settings.

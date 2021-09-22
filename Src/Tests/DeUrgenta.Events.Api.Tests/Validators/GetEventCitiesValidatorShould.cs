@@ -36,6 +36,7 @@ namespace DeUrgenta.Events.Api.Tests.Validators
         [Theory]
         [InlineData(1)]
         [InlineData(2)]
+        [InlineData(3)]
         public async Task ShouldValidateWhenValidEventTypeId(int? eventTypeId)
         {
             // Arrange

@@ -1,10 +1,11 @@
-﻿using System.Collections.Immutable;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Admin.Api.Queries;
+using DeUrgenta.Common.Extensions;
 using DeUrgenta.Common.Models;
+using DeUrgenta.Common.Models.Events;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using MediatR;
@@ -12,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Admin.Api.QueryHandlers
 {
-    public class GetEventsHandler : IRequestHandler<GetEvents, Result<IImmutableList<EventModel>>>
+    public class GetEventsHandler : IRequestHandler<GetEvents, Result<PagedResult<EventResponseModel>>>
     {
         private readonly IValidateRequest<GetEvents> _validator;
         private readonly DeUrgentaContext _context;
@@ -23,16 +24,17 @@ namespace DeUrgenta.Admin.Api.QueryHandlers
             _context = context;
         }
 
-        public async Task<Result<IImmutableList<EventModel>>> Handle(GetEvents request, CancellationToken cancellationToken)
+        public async Task<Result<PagedResult<EventResponseModel>>> Handle(GetEvents request, CancellationToken cancellationToken)
         {
             var isValid = await _validator.IsValidAsync(request);
             if (!isValid)
             {
-                return Result.Failure<IImmutableList<EventModel>>("Validation failed");
+                return Result.Failure<PagedResult<EventResponseModel>>("Validation failed");
             }
 
-            var events = await _context.Events
-                .Select(x => new EventModel
+            var pagedEvents = await _context.Events
+                .Include(x=>x.EventType)
+                .Select(x => new EventResponseModel
                 {
                     Id = x.Id,
                     Title = x.Title,
@@ -43,12 +45,13 @@ namespace DeUrgenta.Admin.Api.QueryHandlers
                     OrganizedBy = x.OrganizedBy,
                     PublishedOn = x.PublishedOn,
                     City = x.City,
-                    EventTypeId = x.EventTypeId
+                    EventType = x.EventType.Name,
+                    IsArchived = x.IsArchived
                 })
                 .OrderBy(x => x.OccursOn)
-                .ToListAsync(cancellationToken);
+                .GetPaged(request.Pagination.PageNumber, request.Pagination.PageSize);
 
-            return events.ToImmutableList();
+            return pagedEvents;
         }
     }
 }

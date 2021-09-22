@@ -54,7 +54,7 @@ namespace DeUrgenta.User.Api.Services.Emailing
             return template;
         }
 
-        private string FormatTemplate(string template, EmailRequestModel emailRequest)
+        private static string FormatTemplate(string template, EmailRequestModel emailRequest)
         {
             foreach (var placeholder in emailRequest.PlaceholderContent)
             {

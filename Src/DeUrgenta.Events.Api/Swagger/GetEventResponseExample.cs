@@ -1,16 +1,16 @@
-﻿using DeUrgenta.Common.Models;
-using Swashbuckle.AspNetCore.Filters;
+﻿using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using DeUrgenta.Common.Models.Events;
 
 namespace DeUrgenta.Events.Api.Swagger
 {
-    public class GetEventResponseExample : IExamplesProvider<IImmutableList<EventModel>>
+    public class GetEventResponseExample : IExamplesProvider<IImmutableList<EventResponseModel>>
     {
-        public IImmutableList<EventModel> GetExamples()
+        public IImmutableList<EventResponseModel> GetExamples()
         {
-            var courses = new List<EventModel>
+            var courses = new List<EventResponseModel>
             {
                 new()
                 {
@@ -23,6 +23,8 @@ namespace DeUrgenta.Events.Api.Swagger
                     OrganizedBy = "Event Organizer",
                     PublishedOn = DateTime.Now.AddDays(-50),
                     Title = "Curs de prim ajutor",
+                    IsArchived = false,
+                    EventType = "Curs prim ajutor"
                 }
             };
 

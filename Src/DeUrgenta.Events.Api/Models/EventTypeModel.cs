@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DeUrgenta.Events.Api.Models
+﻿namespace DeUrgenta.Events.Api.Models
 {
     public sealed record EventTypeModel
     {

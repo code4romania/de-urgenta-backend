@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace DeUrgenta.Common.Models
+namespace DeUrgenta.Common.Models.Events
 {
-    public sealed record EventModel
+    public sealed record EventResponseModel
     {
         public Guid Id { get; init; }
         public string Title { get; init; }
@@ -14,7 +14,6 @@ namespace DeUrgenta.Common.Models
         public bool IsArchived { get; init; }
         public string City { get; init; }
         public string Address { get; init; }
-        public int EventTypeId { get; init; }
-        public string EventType { get; init; }
+        public string EventType{ get; init; }
     }
 }

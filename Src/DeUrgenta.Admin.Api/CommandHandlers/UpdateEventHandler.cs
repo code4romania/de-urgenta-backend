@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Admin.Api.Commands;
-using DeUrgenta.Common.Models;
+using DeUrgenta.Common.Models.Events;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using MediatR;
@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Admin.Api.CommandHandlers
 {
-    public class UpdateEventHandler : IRequestHandler<UpdateEvent, Result<EventModel>>
+    public class UpdateEventHandler : IRequestHandler<UpdateEvent, Result<EventResponseModel>>
     {
         private readonly IValidateRequest<UpdateEvent> _validator;
         private readonly DeUrgentaContext _context;
@@ -22,36 +22,43 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result<EventModel>> Handle(UpdateEvent request, CancellationToken cancellationToken)
+        public async Task<Result<EventResponseModel>> Handle(UpdateEvent request, CancellationToken cancellationToken)
         {
             var isValid = await _validator.IsValidAsync(request);
             if (!isValid)
             {
-                return Result.Failure<EventModel>("Validation failed");
+                return Result.Failure<EventResponseModel>("Validation failed");
             }
-            var ev = await _context.Events.FirstAsync(b => b.Id == request.EventId, cancellationToken);
-            ev.Address = request.Event.Address;
-            ev.Author = request.Event.Author;
-            ev.City = request.Event.City;
-            ev.ContentBody = request.Event.ContentBody;
-            ev.EventTypeId = request.Event.EventTypeId;
-            ev.OccursOn = request.Event.OccursOn;
-            ev.OrganizedBy = request.Event.OrganizedBy;
-            ev.Title = request.Event.Title;
+
+            var eventType = await _context.EventTypes.FirstAsync(et => et.Id == request.Event.EventTypeId, cancellationToken);
+            var @event = await _context.Events.FirstAsync(e => e.Id == request.EventId, cancellationToken);
+
+            @event.Address = request.Event.Address;
+            @event.Author = request.Event.Author;
+            @event.City = request.Event.City;
+            @event.ContentBody = request.Event.ContentBody;
+            @event.EventType = eventType;
+            @event.OccursOn = request.Event.OccursOn;
+            @event.OrganizedBy = request.Event.OrganizedBy;
+            @event.Title = request.Event.Title;
+            @event.IsArchived = request.Event.IsArchived;
+            @event.PublishedOn = DateTime.UtcNow;
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new EventModel
+            return new EventResponseModel
             {
-                Id = ev.Id,
-                Title = ev.Title,
-                Address = ev.Address,
-                Author = ev.Author,
-                City = ev.City,
-                ContentBody = ev.ContentBody,
-                EventTypeId = ev.EventTypeId,
-                OccursOn = ev.OccursOn,
-                OrganizedBy = ev.OrganizedBy
+                Id = @event.Id,
+                Title = @event.Title,
+                Address = @event.Address,
+                Author = @event.Author,
+                City = @event.City,
+                ContentBody = @event.ContentBody,
+                EventType = eventType.Name,
+                OccursOn = @event.OccursOn,
+                OrganizedBy = @event.OrganizedBy,
+                IsArchived = @event.IsArchived,
+                PublishedOn = @event.PublishedOn
             };
         }
     }

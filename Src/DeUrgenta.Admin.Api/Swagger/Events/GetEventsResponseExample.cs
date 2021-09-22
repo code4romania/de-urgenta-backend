@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Immutable;
-using DeUrgenta.Admin.Api.Models;
 using DeUrgenta.Common.Models;
+using DeUrgenta.Common.Models.Events;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace DeUrgenta.Admin.Api.Swagger.Events
 {
-    public class GetEventsResponseExample : IExamplesProvider<PagedResult<EventModel>>
+    public class GetEventsResponseExample : IExamplesProvider<PagedResult<EventResponseModel>>
     {
-        public PagedResult<EventModel> GetExamples()
+        public PagedResult<EventResponseModel> GetExamples()
         {
             return new()
             {
@@ -16,7 +16,7 @@ namespace DeUrgenta.Admin.Api.Swagger.Events
                 PageCount = 1,
                 PageSize = 25,
                 RowCount = 3,
-                Results = new EventModel[]
+                Results = new EventResponseModel[]
                 {
                     new()
                     {
@@ -26,7 +26,11 @@ namespace DeUrgenta.Admin.Api.Swagger.Events
                         Title = "Curs relativ prim ajutor",
                         OccursOn = DateTime.Today.AddDays(30),
                         OrganizedBy = "Crucea rosie",
-                        PublishedOn = DateTime.Today.AddDays(-240)
+                        PublishedOn = DateTime.Today.AddDays(-240),
+                        EventType = "Prim ajutor",
+                        IsArchived = false,
+                        Address = "Strada Luminii",
+                        City = "Iasi"
                     },
                     new()
                     {
@@ -36,7 +40,11 @@ namespace DeUrgenta.Admin.Api.Swagger.Events
                         Title = "First Aid Live",
                         OccursOn = DateTime.Today.AddDays(62),
                         OrganizedBy = "Queen First Aid Foundation",
-                        PublishedOn = DateTime.Today.AddDays(-39)
+                        PublishedOn = DateTime.Today.AddDays(-39),
+                        EventType = "Prim ajutor calificat",
+                        IsArchived = false,
+                        Address = "Bulevardul Victoria",
+                        City = "Bucuresti"
                     },
                     new()
                     {
@@ -98,6 +106,10 @@ namespace DeUrgenta.Admin.Api.Swagger.Events
                     <ul>
                         <li>Stayin' alive</li>
                     </ul>",
+                        EventType = "Prim ajutor",
+                        IsArchived = false,
+                        Address = "Pregatire in caz de dezastre",
+                        City = "Bacau"
                     },
                 }.ToImmutableList()
             };

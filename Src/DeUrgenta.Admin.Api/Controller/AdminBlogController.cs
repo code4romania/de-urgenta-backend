@@ -14,10 +14,10 @@ using Swashbuckle.AspNetCore.Filters;
 namespace DeUrgenta.Admin.Api.Controller
 {
     [ApiController]
+    [Authorize]
     [Produces("application/json")]
     [Consumes("application/json")]
-    [Route("blog")]
-    [Authorize]
+    [Route("admin/blog")]
     public class AdminBlogController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -32,7 +32,6 @@ namespace DeUrgenta.Admin.Api.Controller
         /// </summary>
         /// <returns></returns>
         [HttpGet("posts")]
-        [AllowAnonymous]
         [SwaggerResponse(StatusCodes.Status200OK, "Blog posts", typeof(PagedResult<BlogPostModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 

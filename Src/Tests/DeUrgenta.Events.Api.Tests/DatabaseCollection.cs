@@ -1,7 +1,7 @@
 ﻿using DeUrgenta.Tests.Helpers;
 using Xunit;
 
-namespace DeUrgenta.Backpack.Api.Tests
+namespace DeUrgenta.Events.Api.Tests
 {
     /* Unfortunately we have to have this empty class in each test project due to this issue:
      https://github.com/xunit/xunit/issues/409

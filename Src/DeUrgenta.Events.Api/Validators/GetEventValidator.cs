@@ -17,13 +17,9 @@ namespace DeUrgenta.Events.Api.Validators
 
         public async Task<bool> IsValidAsync(GetEvent request)
         {
-            if (request.ModelRequest != null)
-            {
-                var isValid = await _context.EventTypes.AnyAsync(x => x.Id == request.ModelRequest.EventTypeId);
-                if (!isValid) return false;
-            }
+            var eventTypeExists = await _context.EventTypes.AnyAsync(x => x.Id == request.Filter.EventTypeId);
 
-            return true;
+            return eventTypeExists;
         }
     }
 }

@@ -8,12 +8,12 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using DeUrgenta.Common.Models;
 using System;
+using DeUrgenta.Common.Models.Events;
 
 namespace DeUrgenta.Events.Api.QueryHandlers
 {
-    public class GetEventHandler : IRequestHandler<GetEvent, Result<IImmutableList<EventModel>>>
+    public class GetEventHandler : IRequestHandler<GetEvent, Result<IImmutableList<EventResponseModel>>>
     {
         private readonly IValidateRequest<GetEvent> _validator;
         private readonly DeUrgentaContext _context;
@@ -24,20 +24,22 @@ namespace DeUrgenta.Events.Api.QueryHandlers
             _context = context;
         }
 
-        public async Task<Result<IImmutableList<EventModel>>> Handle(GetEvent request, CancellationToken cancellationToken)
+        public async Task<Result<IImmutableList<EventResponseModel>>> Handle(GetEvent request, CancellationToken cancellationToken)
         {
             var isValid = await _validator.IsValidAsync(request);
             if (!isValid)
             {
-                return Result.Failure<IImmutableList<EventModel>>("Validation failed");
+                return Result.Failure<IImmutableList<EventResponseModel>>("Validation failed");
             }
 
             var events = await _context.Events
-                                            .Where(x => request.ModelRequest.EventTypeId == null || x.EventType.Id == request.ModelRequest.EventTypeId.Value)
-                                            .Where(x => string.IsNullOrWhiteSpace(request.ModelRequest.City) || x.City.StartsWith(request.ModelRequest.City))
+                                            .Where(x => request.Filter.EventTypeId == null || x.EventType.Id == request.Filter.EventTypeId.Value)
+                                            .Where(x => string.IsNullOrWhiteSpace(request.Filter.City) || x.City.StartsWith(request.Filter.City))
                                             .Where(x => x.OccursOn > DateTime.Today)
-                                             .Select(x => new EventModel
+                                            .Include(x=>x.EventType)
+                                             .Select(x => new EventResponseModel
                                              {
+
                                                  Id = x.Id,
                                                  Address = x.Address,
                                                  Author = x.Author,
@@ -47,9 +49,10 @@ namespace DeUrgenta.Events.Api.QueryHandlers
                                                  PublishedOn = x.PublishedOn,
                                                  Title = x.Title,
                                                  City = x.City,
-                                                 EventTypeId = x.EventTypeId
+                                                 EventType = x.EventType.Name,
+                                                 IsArchived = x.IsArchived
                                              })
-                                             .ToListAsync();
+                                             .ToListAsync(cancellationToken);
 
             return events.ToImmutableList();
         }

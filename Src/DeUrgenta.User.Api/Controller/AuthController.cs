@@ -231,8 +231,7 @@ namespace DeUrgenta.User.Api.Controller
 
             var user = await _userManager.FindByIdAsync(userResetPassword.UserId);
             var resToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(userResetPassword.ResetToken));
-            var res = await _userManager.ResetPasswordAsync(user,
-            resToken, userResetPassword.NewPassword);
+            var res = await _userManager.ResetPasswordAsync(user,resToken, userResetPassword.NewPassword);
 
 
 
