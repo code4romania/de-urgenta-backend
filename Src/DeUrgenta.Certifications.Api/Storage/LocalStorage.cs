@@ -32,7 +32,7 @@ namespace DeUrgenta.Certifications.Api.Storage
                 await attachment.CopyToAsync(targetStream);
             }
 
-            return filePath;
+            return $"{_config.StaticFilesRequestPath}/{filePath}";
         }
 
         public string GetAttachment(Guid certificationId, string userSub)
@@ -41,7 +41,7 @@ namespace DeUrgenta.Certifications.Api.Storage
 
             var foundFile = Directory.EnumerateFiles(userDirectoryPath, $"{certificationId}.*").FirstOrDefault();
 
-            return foundFile != null ? $"/StaticFiles/{userSub}/{Path.GetFileName(foundFile)}" : null;
+            return foundFile != null ? $"{_config.StaticFilesRequestPath}/{userSub}/{Path.GetFileName(foundFile)}" : null;
         }
     }
 }

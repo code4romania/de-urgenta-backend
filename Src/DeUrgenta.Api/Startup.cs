@@ -84,12 +84,12 @@ namespace DeUrgenta.Api
             app.UseAuthorization();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
 
-            //todo get folder from config
+            var localCertificationStorePath = Configuration.GetValue<string>("LocalConfigOptions:Path");
+            var staticFilesRequestPath = Configuration.GetValue<string>("LocalConfigOptions:StaticFilesRequestPath");
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(WebHostEnvironment.ContentRootPath, "LocalCertificationStore")),
-                RequestPath = "/StaticFiles",
+                FileProvider = new PhysicalFileProvider(Path.Combine(WebHostEnvironment.ContentRootPath, localCertificationStorePath)),
+                RequestPath = staticFilesRequestPath,
                 ServeUnknownFileTypes = true,
                 OnPrepareResponse = ctx =>
                 {
