@@ -31,27 +31,6 @@ namespace DeUrgenta.Certifications.Api.Controller
             _mediator = mediator;
         }
 
-        [HttpGet]
-        [Route("{certificationId:guid}/photo")]
-
-        [SwaggerResponse(StatusCodes.Status200OK, "User certification", typeof(File))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
-
-        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<CertificationPhotoModel>> GetCertificationAsync(Guid certificationId)
-        {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var query = new GetCertificationPhoto(sub, certificationId);
-            var result = await _mediator.Send(query);
-
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-           
-            return result.Value;
-        }
-
         /// <summary>
         /// Gets user certifications
         /// </summary>
