@@ -9,13 +9,8 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators.RequestValidators
 {
     public class BackpackItemRequestValidatorShould
     {
-        private readonly BackpackItemRequestValidator _sut;
-
-        public BackpackItemRequestValidatorShould()
-        {
-            _sut = new BackpackItemRequestValidator();
-        }
-
+        private readonly BackpackItemRequestValidator _sut =  new();
+        
         [Theory]
         [InlineData("")]
         [InlineData(null)]

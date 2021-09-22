@@ -7,12 +7,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators.RequestValidators
 {
     public class BackpackModelRequestValidatorShould
     {
-        private readonly BackpackModelRequestValidator _sut;
-
-        public BackpackModelRequestValidatorShould()
-        {
-            _sut = new BackpackModelRequestValidator();
-        }
+        private readonly BackpackModelRequestValidator _sut = new();
 
         [Theory]
         [InlineData("")]
@@ -67,5 +62,20 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators.RequestValidators
                 .WithErrorMessage("The length of 'Name' must be 250 characters or fewer. You entered 251 characters.");
         }
 
+        [Fact]
+        public void Validate_request_when_all_fields_are_valid()
+        {
+            //Arrange 
+            var request = new BackpackModelRequest
+            {
+                Name = TestDataProviders.RandomString(4)
+            };
+
+            //Act
+            var result = _sut.TestValidate(request);
+
+            //Assert
+            result.ShouldNotHaveAnyValidationErrors();
+        }
     }
 }

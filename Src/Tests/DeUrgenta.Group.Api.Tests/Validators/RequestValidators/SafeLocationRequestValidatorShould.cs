@@ -7,12 +7,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators.RequestValidators
 {
     public class SafeLocationRequestValidatorShould
     {
-        private readonly SafeLocationRequestValidator _sut;
-
-        public SafeLocationRequestValidatorShould()
-        {
-            _sut = new SafeLocationRequestValidator();
-        }
+        private readonly SafeLocationRequestValidator _sut = new();
 
         [Theory]
         [InlineData("")]
@@ -65,6 +60,22 @@ namespace DeUrgenta.Group.Api.Tests.Validators.RequestValidators
             //Assert
             result.ShouldHaveValidationErrorFor(c => c.Name)
                 .WithErrorMessage("The length of 'Name' must be 100 characters or fewer. You entered 101 characters.");
+        }
+
+        [Fact]
+        public void Validate_request_when_all_fields_are_valid()
+        {
+            //Arrange 
+            var request = new SafeLocationRequest
+            {
+                Name = TestDataProviders.RandomString(4)
+            };
+
+            //Act
+            var result = _sut.TestValidate(request);
+
+            //Assert
+            result.ShouldNotHaveAnyValidationErrors();
         }
     }
 }

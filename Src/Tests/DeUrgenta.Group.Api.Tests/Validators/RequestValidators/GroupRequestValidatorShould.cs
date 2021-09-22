@@ -7,13 +7,8 @@ namespace DeUrgenta.Group.Api.Tests.Validators.RequestValidators
 {
     public class GroupRequestValidatorShould
     {
-        private readonly GroupRequestValidator _sut;
-
-        public GroupRequestValidatorShould()
-        {
-            _sut = new GroupRequestValidator();
-        }
-
+        private readonly GroupRequestValidator _sut = new();
+        
         [Theory]
         [InlineData("")]
         [InlineData(null)]
@@ -65,6 +60,22 @@ namespace DeUrgenta.Group.Api.Tests.Validators.RequestValidators
             //Assert
             result.ShouldHaveValidationErrorFor(c => c.Name)
                 .WithErrorMessage("The length of 'Name' must be 250 characters or fewer. You entered 251 characters.");
+        }
+
+        [Fact]
+        public void Validate_request_when_all_fields_are_valid()
+        {
+            //Arrange 
+            var request =  new GroupRequest
+            {
+                Name = TestDataProviders.RandomString(4)
+            };
+
+            //Act
+            var result = _sut.TestValidate(request);
+
+            //Assert
+            result.ShouldNotHaveAnyValidationErrors();
         }
     }
 }
