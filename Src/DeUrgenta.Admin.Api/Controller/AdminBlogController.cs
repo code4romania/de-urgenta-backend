@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using DeUrgenta.Admin.Api.Models;
-using DeUrgenta.Admin.Api.Swagger.Events;
+using DeUrgenta.Admin.Api.Swagger.Blog;
 using DeUrgenta.Common.Models;
 using DeUrgenta.Common.Swagger;
 using MediatR;
@@ -16,83 +16,84 @@ namespace DeUrgenta.Admin.Api.Controller
     [ApiController]
     [Produces("application/json")]
     [Consumes("application/json")]
-    [Route("event")]
-    public class EventsController : ControllerBase
+    [Route("blog")]
+    [Authorize]
+    public class AdminBlogController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public EventsController(IMediator mediator)
+        public AdminBlogController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
         /// <summary>
-        /// Gets upcoming events
+        /// Gets blog posts
         /// </summary>
         /// <returns></returns>
-        [HttpGet("events")]
+        [HttpGet("posts")]
         [AllowAnonymous]
-
-        [SwaggerResponse(StatusCodes.Status200OK, "Upcoming events", typeof(PagedResult<EventModel>))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Blog posts", typeof(PagedResult<BlogPostModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetEventsResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetBlogPostsResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<PagedResult<EventModel>>> GetEventsAsync([FromQuery] PaginationQueryModel pagination)
+        public async Task<ActionResult<PagedResult<BlogPostModel>>> GetBlogPostsAsync([FromQuery] PaginationQueryModel pagination)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Adds a new event
+        /// Adds a new blog post
         /// </summary>
         /// <returns></returns>
-        [HttpPost]
-        [SwaggerResponse(StatusCodes.Status200OK, "New event", typeof(EventModel))]
+        [HttpPost("post")]
+        [SwaggerResponse(StatusCodes.Status200OK, "New blog post", typeof(BlogPostModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerRequestExample(typeof(EventRequest), typeof(AddOrUpdateEventRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateEventResponseExample))]
+        [SwaggerRequestExample(typeof(BlogPostRequest), typeof(AddOrUpdateBlogPostRequestExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateBlogPostResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<EventModel>> CreateNewEventAsync([FromBody] EventRequest eventModel)
+        public async Task<ActionResult<BlogPostModel>> CreateNewBlogPostAsync([FromBody] BlogPostRequest blogPost)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Updates a event
+        /// Updates a blog Post
         /// </summary>
         [HttpPut]
-        [Route("{eventId:guid}")]
+        [Route("post/{blogPostId:guid}")]
 
-        [SwaggerResponse(StatusCodes.Status200OK, "Updated event", typeof(EventModel))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Updated a blog post", typeof(BlogPostModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerRequestExample(typeof(EventRequest), typeof(AddOrUpdateEventRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateEventResponseExample))]
+        [SwaggerRequestExample(typeof(BlogPostRequest), typeof(AddOrUpdateBlogPostRequestExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateBlogPostResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<EventModel>> UpdateEventAsync([FromRoute] Guid eventId, [FromBody] EventRequest eventModel)
+        public async Task<ActionResult<BlogPostModel>> UpdateBlogPostAsync([FromRoute] Guid blogPostId, [FromBody] BlogPostRequest blogPost)
         {
-            throw new NotImplementedException();
+
+            return NoContent();
         }
 
         /// <summary>
-        /// Delete a event
+        /// Delete a blog post
         /// </summary>
         [HttpDelete]
-        [Route("{eventId:guid}")]
+        [Route("post/{blogPostId:guid}")]
 
-        [SwaggerResponse(StatusCodes.Status204NoContent, "Event was deleted")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "Blog post was deleted")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> DeleteEventAsync([FromRoute] Guid eventId)
+        public async Task<ActionResult> DeleteBlogPostAsync([FromRoute] Guid blogPostId)
         {
             throw new NotImplementedException();
         }

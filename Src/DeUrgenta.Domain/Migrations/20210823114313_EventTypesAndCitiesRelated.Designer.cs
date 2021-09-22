@@ -3,15 +3,17 @@ using System;
 using DeUrgenta.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DeUrgenta.Domain.Migrations
 {
     [DbContext(typeof(DeUrgentaContext))]
-    partial class DeUrgentaContextModelSnapshot : ModelSnapshot
+    [Migration("20210823114313_EventTypesAndCitiesRelated")]
+    partial class EventTypesAndCitiesRelated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,6 +29,9 @@ namespace DeUrgenta.Domain.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
+                    b.Property<Guid>("AdminUserId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(250)
@@ -35,42 +40,9 @@ namespace DeUrgenta.Domain.Migrations
                     b.HasKey("Id")
                         .HasName("PK_Backpack");
 
+                    b.HasIndex("AdminUserId");
+
                     b.ToTable("Backpacks");
-                });
-
-            modelBuilder.Entity("DeUrgenta.Domain.Entities.BackpackInvite", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("uuid_generate_v4()");
-
-                    b.Property<Guid>("BackpackId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("InvitationReceiverId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("InvitationSenderId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id")
-                        .HasName("PK_Backpack_invite");
-
-                    b.HasIndex("BackpackId")
-                        .HasDatabaseName("IX_BackpackInvite_Backpack");
-
-                    b.HasIndex("InvitationReceiverId")
-                        .HasDatabaseName("IX_BackpackInvite_InvitationReceiver");
-
-                    b.HasIndex("InvitationSenderId")
-                        .HasDatabaseName("IX_BackpackInvite_InvitationSender");
-
-                    b.HasIndex("BackpackId", "InvitationReceiverId", "InvitationSenderId")
-                        .IsUnique()
-                        .HasDatabaseName("IX_BackpackInvite");
-
-                    b.ToTable("BackpackInvites");
                 });
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.BackpackItem", b =>
@@ -86,10 +58,7 @@ namespace DeUrgenta.Domain.Migrations
                     b.Property<int>("BackpackCategory")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("BackpackId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("ExpirationDate")
+                    b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Name")
@@ -100,9 +69,7 @@ namespace DeUrgenta.Domain.Migrations
                     b.HasKey("Id")
                         .HasName("PK_BackpackItem");
 
-                    b.HasIndex("BackpackId");
-
-                    b.ToTable("BackpackItems");
+                    b.ToTable("BackpackItem");
                 });
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.BackpackToUser", b =>
@@ -114,9 +81,6 @@ namespace DeUrgenta.Domain.Migrations
 
                     b.Property<Guid>("BackpackId")
                         .HasColumnType("uuid");
-
-                    b.Property<bool>("IsOwner")
-                        .HasColumnType("boolean");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -167,6 +131,42 @@ namespace DeUrgenta.Domain.Migrations
                     b.ToTable("Blogs");
                 });
 
+            modelBuilder.Entity("DeUrgenta.Domain.Entities.CourseCity", b =>
+            {
+                b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
+
+                b.HasKey("Id")
+                    .HasName("PK_CourseCity");
+
+                b.ToTable("CourseCities");
+            });
+
+            modelBuilder.Entity("DeUrgenta.Domain.Entities.CourseType", b =>
+            {
+                b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
+
+                b.HasKey("Id")
+                    .HasName("PK_CourseType");
+
+                b.ToTable("CourseTypes");
+            });
+
             modelBuilder.Entity("DeUrgenta.Domain.Entities.Certification", b =>
                 {
                     b.Property<Guid>("Id")
@@ -205,25 +205,14 @@ namespace DeUrgenta.Domain.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Author")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("ContentBody")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("EventTypeId")
-                        .HasColumnType("integer");
 
                     b.Property<bool>("IsArchived")
                         .HasColumnType("boolean");
@@ -244,51 +233,20 @@ namespace DeUrgenta.Domain.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
 
+                    b.Property<Guid>("CityId")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid?>("TypeId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id")
                         .HasName("PK_Event");
 
-                    b.HasIndex("City")
-                        .HasDatabaseName("IX_Event_City");
+                    b.HasIndex("CityId");
 
-                    b.HasIndex("EventTypeId")
-                        .IsUnique();
+                    b.HasIndex("TypeId");
 
                     b.ToTable("Events");
-                });
-
-            modelBuilder.Entity("DeUrgenta.Domain.Entities.EventType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
-
-                    b.HasKey("Id")
-                        .HasName("PK_EventType");
-
-                    b.ToTable("EventTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Prim ajutor"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Prim ajutor calificat"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Pregătire in caz de dezastre"
-                        });
                 });
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.Group", b =>
@@ -301,57 +259,27 @@ namespace DeUrgenta.Domain.Migrations
                     b.Property<Guid>("AdminId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("BackpackId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
+
+                    b.Property<Guid>("SafeLocation1Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("SafeLocation2Id")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id")
                         .HasName("PK_Group");
 
                     b.HasIndex("AdminId");
 
-                    b.HasIndex("BackpackId");
+                    b.HasIndex("SafeLocation1Id");
+
+                    b.HasIndex("SafeLocation2Id");
 
                     b.ToTable("Groups");
-                });
-
-            modelBuilder.Entity("DeUrgenta.Domain.Entities.GroupInvite", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("uuid_generate_v4()");
-
-                    b.Property<Guid>("GroupId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("InvitationReceiverId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("InvitationSenderId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id")
-                        .HasName("PK_Group_invite");
-
-                    b.HasIndex("GroupId")
-                        .HasDatabaseName("IX_GroupInvite_Group");
-
-                    b.HasIndex("InvitationReceiverId")
-                        .HasDatabaseName("IX_GroupInvite_InvitationReceiver");
-
-                    b.HasIndex("InvitationSenderId")
-                        .HasDatabaseName("IX_GroupInvite_InvitationSender");
-
-                    b.HasIndex("GroupId", "InvitationReceiverId", "InvitationSenderId")
-                        .IsUnique()
-                        .HasDatabaseName("IX_GroupInvite");
-
-                    b.ToTable("GroupInvites");
                 });
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.GroupSafeLocation", b =>
@@ -360,9 +288,6 @@ namespace DeUrgenta.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
-
-                    b.Property<Guid?>("GroupId")
-                        .HasColumnType("uuid");
 
                     b.Property<decimal>("Latitude")
                         .HasColumnType("numeric");
@@ -377,8 +302,6 @@ namespace DeUrgenta.Domain.Migrations
 
                     b.HasKey("Id")
                         .HasName("PK_GroupSafeLocation");
-
-                    b.HasIndex("GroupId");
 
                     b.ToTable("GroupsSafeLocations");
                 });
@@ -400,27 +323,23 @@ namespace DeUrgenta.Domain.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<string>("Sub")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("Id")
                         .HasName("PK_User");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("DeUrgenta.Domain.Entities.UserLocation", b =>
+            modelBuilder.Entity("DeUrgenta.Domain.Entities.UserAddress", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
-                    b.Property<string>("Address")
+                    b.Property<string>("Category")
                         .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<decimal>("Latitude")
                         .HasMaxLength(100)
@@ -429,9 +348,10 @@ namespace DeUrgenta.Domain.Migrations
                     b.Property<decimal>("Longitude")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("Type")
-                        .HasMaxLength(100)
-                        .HasColumnType("integer");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
 
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uuid");
@@ -441,7 +361,7 @@ namespace DeUrgenta.Domain.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserLocations");
+                    b.ToTable("UserAddresses");
                 });
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.UserToGroup", b =>
@@ -473,62 +393,31 @@ namespace DeUrgenta.Domain.Migrations
                     b.ToTable("UsersToGroups");
                 });
 
-            modelBuilder.Entity("DeUrgenta.Domain.Entities.BackpackInvite", b =>
+            modelBuilder.Entity("DeUrgenta.Domain.Entities.Backpack", b =>
                 {
-                    b.HasOne("DeUrgenta.Domain.Entities.Backpack", "Backpack")
-                        .WithMany()
-                        .HasForeignKey("BackpackId")
-                        .HasConstraintName("FK_BackpackInvite_Backpack")
+                    b.HasOne("DeUrgenta.Domain.Entities.User", "AdminUser")
+                        .WithMany("Backpacks")
+                        .HasForeignKey("AdminUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DeUrgenta.Domain.Entities.User", "InvitationReceiver")
-                        .WithMany()
-                        .HasForeignKey("InvitationReceiverId")
-                        .HasConstraintName("FK_BackpackInvite_InvitationReceiver")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DeUrgenta.Domain.Entities.User", "InvitationSender")
-                        .WithMany()
-                        .HasForeignKey("InvitationSenderId")
-                        .HasConstraintName("FK_BackpackInvite_InvitationSender")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Backpack");
-
-                    b.Navigation("InvitationReceiver");
-
-                    b.Navigation("InvitationSender");
-                });
-
-            modelBuilder.Entity("DeUrgenta.Domain.Entities.BackpackItem", b =>
-                {
-                    b.HasOne("DeUrgenta.Domain.Entities.Backpack", "Backpack")
-                        .WithMany("BackpackItems")
-                        .HasForeignKey("BackpackId")
-                        .HasConstraintName("FK_BackpackItem_Backpack")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Backpack");
+                    b.Navigation("AdminUser");
                 });
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.BackpackToUser", b =>
                 {
                     b.HasOne("DeUrgenta.Domain.Entities.Backpack", "Backpack")
-                        .WithMany()
+                        .WithMany("BackpackUsers")
                         .HasForeignKey("BackpackId")
                         .HasConstraintName("FK_BackpackToUser_Backpack")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DeUrgenta.Domain.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("BackpackUsers")
                         .HasForeignKey("UserId")
                         .HasConstraintName("FK_BackpackToUser_User")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Backpack");
@@ -548,17 +437,6 @@ namespace DeUrgenta.Domain.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("DeUrgenta.Domain.Entities.Event", b =>
-                {
-                    b.HasOne("DeUrgenta.Domain.Entities.EventType", "EventType")
-                        .WithOne()
-                        .HasForeignKey("DeUrgenta.Domain.Entities.Event", "EventTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("EventType");
-                });
-
             modelBuilder.Entity("DeUrgenta.Domain.Entities.Group", b =>
                 {
                     b.HasOne("DeUrgenta.Domain.Entities.User", "Admin")
@@ -567,62 +445,30 @@ namespace DeUrgenta.Domain.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DeUrgenta.Domain.Entities.Backpack", "Backpack")
+                    b.HasOne("DeUrgenta.Domain.Entities.GroupSafeLocation", "SafeLocation1")
                         .WithMany()
-                        .HasForeignKey("BackpackId");
+                        .HasForeignKey("SafeLocation1Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DeUrgenta.Domain.Entities.GroupSafeLocation", "SafeLocation2")
+                        .WithMany()
+                        .HasForeignKey("SafeLocation2Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Admin");
 
-                    b.Navigation("Backpack");
+                    b.Navigation("SafeLocation1");
+
+                    b.Navigation("SafeLocation2");
                 });
 
-            modelBuilder.Entity("DeUrgenta.Domain.Entities.GroupInvite", b =>
+            modelBuilder.Entity("DeUrgenta.Domain.Entities.UserAddress", b =>
                 {
-                    b.HasOne("DeUrgenta.Domain.Entities.Group", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupId")
-                        .HasConstraintName("FK_GroupInvite_Group")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DeUrgenta.Domain.Entities.User", "InvitationReceiver")
-                        .WithMany()
-                        .HasForeignKey("InvitationReceiverId")
-                        .HasConstraintName("FK_GroupInvite_InvitationReceiver")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DeUrgenta.Domain.Entities.User", "InvitationSender")
-                        .WithMany()
-                        .HasForeignKey("InvitationSenderId")
-                        .HasConstraintName("FK_GroupInvite_InvitationSender")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Group");
-
-                    b.Navigation("InvitationReceiver");
-
-                    b.Navigation("InvitationSender");
-                });
-
-            modelBuilder.Entity("DeUrgenta.Domain.Entities.GroupSafeLocation", b =>
-                {
-                    b.HasOne("DeUrgenta.Domain.Entities.Group", "Group")
-                        .WithMany("GroupSafeLocations")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Group");
-                });
-
-            modelBuilder.Entity("DeUrgenta.Domain.Entities.UserLocation", b =>
-                {
-                    b.HasOne("DeUrgenta.Domain.Entities.User", "User")
-                        .WithMany("Locations")
+                    b.HasOne("DeUrgenta.Domain.Entities.User", null)
+                        .WithMany("Addresses")
                         .HasForeignKey("UserId");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.UserToGroup", b =>
@@ -631,14 +477,14 @@ namespace DeUrgenta.Domain.Migrations
                         .WithMany("GroupMembers")
                         .HasForeignKey("GroupId")
                         .HasConstraintName("FK_UserToGroup_Group")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DeUrgenta.Domain.Entities.User", "User")
                         .WithMany("GroupsMember")
                         .HasForeignKey("UserId")
                         .HasConstraintName("FK_UserToGroup_User")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Group");
@@ -648,26 +494,45 @@ namespace DeUrgenta.Domain.Migrations
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.Backpack", b =>
                 {
-                    b.Navigation("BackpackItems");
+                    b.Navigation("BackpackUsers");
                 });
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.Group", b =>
                 {
                     b.Navigation("GroupMembers");
-
-                    b.Navigation("GroupSafeLocations");
                 });
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.User", b =>
                 {
+                    b.Navigation("Addresses");
+
+                    b.Navigation("Backpacks");
+
+                    b.Navigation("BackpackUsers");
+
                     b.Navigation("Certifications");
 
                     b.Navigation("GroupsAdministered");
 
                     b.Navigation("GroupsMember");
-
-                    b.Navigation("Locations");
                 });
+
+            modelBuilder.Entity("DeUrgenta.Domain.Entities.Event", b =>
+            {
+                b.HasOne("DeUrgenta.Domain.Entities.CourseCity", "CourseCity")
+                    .WithOne()
+                    .HasForeignKey("DeUrgenta.Domain.Entities.Event");
+                b.HasOne("DeUrgenta.Domain.Entities.CourseType", "CourseType")
+                    .WithOne()
+                    .HasForeignKey("DeUrgenta.Domain.Entities.Event");
+            });
+
+            modelBuilder.Entity("DeUrgenta.Domain.Entities.Event", b =>
+            {
+                b.Navigation("CourseCity");
+
+                b.Navigation("CourseType");
+            });
 #pragma warning restore 612, 618
         }
     }

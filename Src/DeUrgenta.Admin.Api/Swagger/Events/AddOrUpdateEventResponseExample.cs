@@ -1,5 +1,5 @@
 ﻿using System;
-using DeUrgenta.Admin.Api.Models;
+using DeUrgenta.Common.Models;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace DeUrgenta.Admin.Api.Swagger.Events

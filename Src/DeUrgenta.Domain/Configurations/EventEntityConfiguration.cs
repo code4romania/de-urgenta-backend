@@ -46,6 +46,23 @@ namespace DeUrgenta.Domain.Configurations
             builder
                 .Property(e => e.IsArchived)
                 .IsRequired();
+
+            builder
+                .Property(e => e.City)
+                .IsRequired();
+
+            builder
+                .HasIndex(e => e.City)
+                .HasDatabaseName("IX_Event_City");
+
+            builder
+                .Property(e => e.Address)
+                .IsRequired();
+
+            builder
+                .HasOne(d => d.EventType)
+                .WithOne()
+                .HasForeignKey<Event>(d => d.EventTypeId);
         }
 
     }

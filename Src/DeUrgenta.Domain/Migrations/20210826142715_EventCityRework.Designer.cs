@@ -3,15 +3,17 @@ using System;
 using DeUrgenta.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DeUrgenta.Domain.Migrations
 {
     [DbContext(typeof(DeUrgentaContext))]
-    partial class DeUrgentaContextModelSnapshot : ModelSnapshot
+    [Migration("20210826142715_EventCityRework")]
+    partial class EventCityRework
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -272,23 +274,6 @@ namespace DeUrgenta.Domain.Migrations
                         .HasName("PK_EventType");
 
                     b.ToTable("EventTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Prim ajutor"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Prim ajutor calificat"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Pregătire in caz de dezastre"
-                        });
                 });
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.Group", b =>
