@@ -1,0 +1,70 @@
+﻿using DeUrgenta.Group.Api.Models;
+using DeUrgenta.Group.Api.Validators.RequestValidators;
+using FluentValidation.TestHelper;
+using Xunit;
+
+namespace DeUrgenta.Group.Api.Tests.Validators.RequestValidators
+{
+    public class GroupRequestValidatorShould
+    {
+        private readonly GroupRequestValidator _sut;
+
+        public GroupRequestValidatorShould()
+        {
+            _sut = new GroupRequestValidator();
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        public void Invalidate_request_when_name_is_empty(string emptyName)
+        {
+            //Arrange
+            var request = new GroupRequest
+            {
+                Name = emptyName
+            };
+
+            //Act
+            var result = _sut.TestValidate(request);
+
+            //Assert
+            result.ShouldHaveValidationErrorFor(c => c.Name)
+                .WithErrorMessage("'Name' must not be empty.");
+        }
+
+        [Fact]
+        public void Invalidate_request_when_name_length_is_less_than_3_characters()
+        {
+            //Arrange
+            var request = new GroupRequest
+            {
+                Name = TestDataProviders.RandomString(1)
+            };
+
+            //Act
+            var result = _sut.TestValidate(request);
+
+            //Assert
+            result.ShouldHaveValidationErrorFor(c => c.Name)
+                .WithErrorMessage("The length of 'Name' must be at least 3 characters. You entered 1 characters.");
+        }
+
+        [Fact]
+        public void Invalidate_request_when_name_length_is_more_than_3_characters()
+        {
+            //Arrange
+            var request = new GroupRequest
+            {
+                Name = TestDataProviders.RandomString(251)
+            };
+
+            //Act
+            var result = _sut.TestValidate(request);
+
+            //Assert
+            result.ShouldHaveValidationErrorFor(c => c.Name)
+                .WithErrorMessage("The length of 'Name' must be 250 characters or fewer. You entered 251 characters.");
+        }
+    }
+}
