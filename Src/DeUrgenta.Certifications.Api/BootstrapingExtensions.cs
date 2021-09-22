@@ -18,7 +18,6 @@ namespace DeUrgenta.Certifications.Api
         public static IServiceCollection AddCertificationsApiServices(this IServiceCollection services)
         {
             services.AddTransient<IValidateRequest<GetCertifications>, GetCertificationsValidator>();
-            services.AddTransient<IValidateRequest<GetCertificationPhoto>, GetCertificationPhotoValidator>();
             services.AddTransient<IValidateRequest<CreateCertification>, CreateCertificationValidator>();
             services.AddTransient<IValidateRequest<UpdateCertification>, UpdateCertificationValidator>();
             services.AddTransient<IValidateRequest<DeleteCertification>, DeleteCertificationValidator>();
