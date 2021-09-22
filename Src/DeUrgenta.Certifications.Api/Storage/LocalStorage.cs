@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using DeUrgenta.Certifications.Api.Storage.Config;
 using Microsoft.Extensions.Options;
@@ -15,12 +16,19 @@ namespace DeUrgenta.Certifications.Api.Storage
             _config = config.CurrentValue;
         }
 
-        public async Task<string> SaveAttachmentAsync(Guid certificationId, string userSub, Stream attachment)
+        public async Task<string> SaveAttachmentAsync(Guid certificationId, string userSub, Stream attachment, string extension)
         {
-            var filePath = $"{userSub}/{certificationId}";
+            var filePath = $"{userSub}/{certificationId}{extension}";
+
+            var userFolderPath = Path.Combine(_config.Path, userSub);
+            if (!Directory.Exists(userFolderPath))
+            {
+                Directory.CreateDirectory(userFolderPath);
+            }
 
             using (var targetStream = File.Create(Path.Combine(_config.Path, filePath)))
             {
+                attachment.Seek(0, SeekOrigin.Begin);
                 await attachment.CopyToAsync(targetStream);
             }
 
@@ -29,9 +37,11 @@ namespace DeUrgenta.Certifications.Api.Storage
 
         public string GetAttachment(Guid certificationId, string userSub)
         {
-            var filePath = $"{userSub}/{certificationId}";
+            var userDirectoryPath = Path.Combine(_config.Path, userSub);
 
-            return filePath;
+            var foundFile = Directory.EnumerateFiles(userDirectoryPath, $"{certificationId}.*").FirstOrDefault();
+
+            return foundFile != null ? $"/StaticFiles/{userSub}/{Path.GetFileName(foundFile)}" : null;
         }
     }
 }

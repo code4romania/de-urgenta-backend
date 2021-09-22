@@ -6,7 +6,7 @@ namespace DeUrgenta.Certifications.Api.Storage
 {
     public interface IBlobStorage
     {
-        Task<string> SaveAttachmentAsync(Guid certificationId, string userSub, Stream attachment);
+        Task<string> SaveAttachmentAsync(Guid certificationId, string userSub, Stream attachment, string extension);
 
         string GetAttachment(Guid certificationId, string userSub);
     }

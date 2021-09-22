@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Amazon.S3;
 using Amazon.S3.Model;
 using DeUrgenta.Certifications.Api.Storage.Config;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Options;
 
 namespace DeUrgenta.Certifications.Api.Storage
@@ -19,14 +20,17 @@ namespace DeUrgenta.Certifications.Api.Storage
             _config = config.CurrentValue;
         }
 
-        public async Task<string> SaveAttachmentAsync(Guid certificationId, string userSub, Stream attachment)
+        public async Task<string> SaveAttachmentAsync(Guid certificationId, string userSub, Stream attachment, string extension)
         {
             var fileKey = $"{userSub}/{certificationId}";
+            new FileExtensionContentTypeProvider().TryGetContentType(extension, out var contentType);
+
             var request = new PutObjectRequest
             {
                 BucketName = _config.BucketName,
                 Key = fileKey,
-                InputStream = attachment
+                InputStream = attachment,
+                ContentType = contentType
             };
             await _s3Client.PutObjectAsync(request);
 

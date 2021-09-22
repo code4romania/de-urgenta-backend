@@ -40,14 +40,12 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
             certification.ExpirationDate = request.Certification.ExpirationDate;
 
             await _context.SaveChangesAsync(cancellationToken);
-
-            string photoUrl;
-            using (var memoryStream = new MemoryStream())
-            {
-                await request.Certification.Photo.CopyToAsync(memoryStream);
-                photoUrl = await _storage.SaveAttachmentAsync(certification.Id, request.UserSub, memoryStream);
-            }
-
+            
+            var photoUrl = await _storage.SaveAttachmentAsync(certification.Id, 
+                request.UserSub, 
+                request.Certification.Photo.OpenReadStream(), 
+                Path.GetExtension(request.Certification.Photo.FileName));
+            
             return new CertificationModel
             {
                 Id = certification.Id,

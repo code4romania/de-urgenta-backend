@@ -1,3 +1,5 @@
+using System.IO;
+using System.Net;
 using System.Reflection;
 using DeUrgenta.Admin.Api.Controller;
 using DeUrgenta.Backpack.Api.Controllers;
@@ -20,6 +22,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using DeUrgenta.Certifications.Api;
 using FluentValidation.AspNetCore;
+using Microsoft.Extensions.FileProviders;
 
 namespace DeUrgenta.Api
 {
@@ -46,8 +49,8 @@ namespace DeUrgenta.Api
             services.AddUserApiServices();
             services.AddBackpackApiServices();
             services.AddGroupApiServices();
-            services.AddCertificationsApiServices();         
-          
+            services.AddCertificationsApiServices();
+
             var applicationAssemblies = GetAssemblies();
 
             services.AddSwaggerFor(applicationAssemblies, Configuration);
@@ -81,7 +84,25 @@ namespace DeUrgenta.Api
             app.UseAuthorization();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
 
-            app.UseStaticFiles();
+            //todo get folder from config
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(WebHostEnvironment.ContentRootPath, "LocalCertificationStore")),
+                RequestPath = "/StaticFiles",
+                ServeUnknownFileTypes = true,
+                OnPrepareResponse = ctx =>
+                {
+                    if (!ctx.Context.User.Identity.IsAuthenticated)
+                    {
+                        ctx.Context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+
+                        ctx.Context.Response.ContentLength = 0;
+                        ctx.Context.Response.Body = Stream.Null;
+                        ctx.Context.Response.Headers.Add("Cache-Control", "no-store");
+                    }
+                }
+            });
 
             app.UseCors(CorsPolicyName);
         }
