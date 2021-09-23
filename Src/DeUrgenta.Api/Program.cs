@@ -1,7 +1,9 @@
 using System;
 using System.IO;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
@@ -10,6 +12,12 @@ namespace DeUrgenta.Api
 {
     public class Program
     {
+        public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false)
+            .AddEnvironmentVariables()
+            .Build();
+
         public static void Main(string[] args)
         {
             const string loggerTemplate = @"{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u4}]<{ThreadId}> [{SourceContext:l}] {Message:lj}{NewLine}{Exception}";
@@ -17,6 +25,7 @@ namespace DeUrgenta.Api
             var logfile = Path.Combine(baseDir, "logs", "log.txt");
 
             Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(Configuration)
                 .MinimumLevel.Verbose()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .MinimumLevel.Override("System", LogEventLevel.Warning)
@@ -29,8 +38,14 @@ namespace DeUrgenta.Api
 
             try
             {
-                Log.Information("Starting up");
-                CreateHostBuilder(args).Build().Run();
+                Log.Information("Build webhost.");
+                var builder = CreateHostBuilder(args);
+
+                builder.ConfigureServices(collection => collection.AddSingleton(Configuration));
+
+                var host = builder.Build();
+                Log.Information("Run the app.");
+                host.Run();
             }
             catch (Exception ex)
             {
@@ -42,12 +57,10 @@ namespace DeUrgenta.Api
             }
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .UseSerilog()
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+        public static IWebHostBuilder CreateHostBuilder(string[] args) => WebHost.CreateDefaultBuilder(args)
+            .UseContentRoot(Directory.GetCurrentDirectory())
+            .UseStartup<Startup>()
+            .UseConfiguration(Configuration)
+            .UseSerilog();
     }
 }
