@@ -48,8 +48,6 @@ jobs:
     - name: Apply migrations for test db
       run: |
         dotnet tool install --global dotnet-ef
-        dotnet ef --version
-        systemd-escape "Server=localhost;Port=5432;Database=de-urgenta-db;User Id=gitci;Password=gitcipass;"
         export ConnectionStrings__DbConnectionString="Server=localhost;Port=5432;Database=de-urgenta-db;User Id=gitci;Password=gitcipass;"
         echo $ConnectionStrings__DbConnectionString
         dotnet ef database update --project DeUrgenta.Domain --startup-project DeUrgenta.Api --context DeUrgentaContext
