@@ -46,10 +46,13 @@ jobs:
     - name: Build
       run: dotnet build --no-restore /p:ContinuousIntegrationBuild=true DeUrgenta.sln
     - name: Apply migrations for test db
+      env:
+        ConnectionStrings__DbConnectionString: ${{ secrets.CONN_STRING }}
+        SUPER_SECRET: ${{ secrets.CONN_STRING }}
       run: |
         dotnet tool install --global dotnet-ef
-        export ConnectionStrings__DbConnectionString="Server=localhost;Port=5432;Database=de-urgenta-db;User Id=gitci;Password=gitcipass;"
-        echo $ConnectionStrings__DbConnectionString
+        #export ConnectionStrings__DbConnectionString="Server=localhost;Port=5432;Database=de-urgenta-db;User Id=gitci;Password=gitcipass;"
+        echo $SUPER_SECRET
         dotnet ef database update --project DeUrgenta.Domain --startup-project DeUrgenta.Api --context DeUrgentaContext
         dotnet ef database update --project DeUrgenta.User.Api --startup-project DeUrgenta.Api --context UserDbContext
     - name: Run unit & integration tests
