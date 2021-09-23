@@ -49,6 +49,7 @@ jobs:
       run: |
         dotnet tool install --global dotnet-ef
         dotnet ef --version
+        systemd-escape Server=localhost;Port=5432;Database=de-urgenta-db;User Id=gitci;Password=gitcipass;
         export ConnectionStrings__DbConnectionString="Server=localhost;Port=5432;Database=de-urgenta-db;User Id=gitci;Password=gitcipass;"
         dotnet ef database update --project DeUrgenta.Domain --startup-project DeUrgenta.Api --context DeUrgentaContext
         dotnet ef database update --project DeUrgenta.User.Api --startup-project DeUrgenta.Api --context UserDbContext
