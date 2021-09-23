@@ -12,37 +12,48 @@ defaults:
     
 jobs:
   build:
-    name: Setup PostgreSQL on Ubuntu
-    runs-on: ubuntu-latest
-    steps:
-      - name: Start PostgreSQL on Ubuntu
-        run: |
-          sudo systemctl start postgresql.service
-          pg_isready
-      - name: Create scheduler user
-        run: |
-          sudo -u postgres psql --command="CREATE USER git-ci PASSWORD 'git-ci-pass'" --command="\du"
-      - name: Create test database
-        run: |
-          sudo -u postgres createdb --owner=git-ci de-urgenta-specs-db
-          PGPASSWORD=git-ci-pass psql --username=git-ci --host=localhost --list de-urgenta-specs-db
-      - uses: actions/checkout@v2
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 5.0.x
-      - name: Restore dependencies
-        run: dotnet restore DeUrgenta.sln
-      - name: Build
-        run: dotnet build --no-restore /p:ContinuousIntegrationBuild=true DeUrgenta.sln
-      - name: Apply migrations for test db
-        run: |
-          dotnet tool install --global dotnet-ef
-          dotnet ef database update  --no-build --project DeUrgenta.Domain --startup-project DeUrgenta.Api --context DeUrgentaContext --connection "Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=git-ci;Password=git-ci-pass;"
-          dotnet ef database update  --no-build --project DeUrgenta.User.Api --startup-project DeUrgenta.Api --context UserDbContext --connection "Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=git-ci;Password=git-ci-pass;"
-      - name: Run unit & integration tests
-        run: dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover DeUrgenta.sln
-        env:
-          # Connection string
-          ConnectionStrings__TestingDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-db;User Id=git-ci;Password=git-ci-pass;
 
+    runs-on: ubuntu-latest
+    
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: gitcipass
+          POSTGRES_USER: gitci
+          POSTGRES_DB: postgres
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore DeUrgenta.sln
+    - name: Build
+      run: dotnet build --no-restore /p:ContinuousIntegrationBuild=true DeUrgenta.sln
+    - name: Apply migrations for test db
+      run: |
+        dotnet tool install --global dotnet-ef
+        dotnet ef database update --no-build --project DeUrgenta.Domain --startup-project DeUrgenta.Api --context DeUrgentaContext --connection "Server=localhost;Port=5432;Database=de-urgenta-db;User Id=gitci;Password=gitcipass;"
+        dotnet ef database update --no-build --project DeUrgenta.User.Api --startup-project DeUrgenta.Api --context UserDbContext --connection "Server=localhost;Port=5432;Database=de-urgenta-db;User Id=gitci;Password=gitcipass;"
+    - name: Run unit & integration tests
+      run: dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover DeUrgenta.sln
+      env:
+        # Connection string
+        ConnectionStrings__TestingDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-db;User Id=gitci;Password=gitcipass; 
+    - name: Upload dotnet test results
+      uses: codecov/codecov-action@v1
