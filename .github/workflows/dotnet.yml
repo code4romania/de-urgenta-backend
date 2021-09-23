@@ -48,7 +48,7 @@ jobs:
     - name: Apply migrations for test db
       run: |
         dotnet tool install --global dotnet-ef
-       # dotnet ef database update --no-build --project DeUrgenta.Domain --startup-project DeUrgenta.Api --context DeUrgentaContext --connection "Server=localhost;Port=5432;Database=de-urgenta-db;User Id=gitci;Password=gitcipass;"
+        dotnet ef database update --no-build --project DeUrgenta.Domain --startup-project DeUrgenta.Api --context DeUrgentaContext --connection "Server=localhost;Port=5432;Database=de-urgenta-db;User Id=gitci;Password=gitcipass;"
      #   dotnet ef database update --no-build --project DeUrgenta.User.Api --startup-project DeUrgenta.Api --context UserDbContext --connection "Server=localhost;Port=5432;Database=de-urgenta-db;User Id=gitci;Password=gitcipass;"
     - name: Run unit & integration tests
       run: dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover DeUrgenta.sln
