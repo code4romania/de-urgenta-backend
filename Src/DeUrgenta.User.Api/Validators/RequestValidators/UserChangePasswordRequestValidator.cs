@@ -7,9 +7,9 @@ namespace DeUrgenta.User.Api.Validators.RequestValidators
     {
         public UserChangePasswordRequestValidator()
         {
-            RuleFor(c=>c.ConfirmNewPassword).NotEmpty().MinimumLength(1);
-            RuleFor(c=>c.NewPassword).NotEmpty().MinimumLength(1);
-            RuleFor(c=>c.ConfirmNewPassword).Equal(c=>c.NewPassword);
+            RuleFor(c => c.ConfirmNewPassword).NotEmpty().MinimumLength(1);
+            RuleFor(c => c.NewPassword).NotEmpty().MinimumLength(1);
+            RuleFor(c => c.ConfirmNewPassword).Equal(c => c.NewPassword);
         }
     }
 }

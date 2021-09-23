@@ -12,6 +12,5 @@ namespace DeUrgenta.Backpack.Api.Models
         public DateTime? ExpirationDate { get; init; }
 
         public BackpackCategoryType CategoryType { get; init; }
-
     }
 }

@@ -18,7 +18,7 @@ namespace DeUrgenta.User.Api.Services.Emailing
         public SmtpSender(IEmailBuilderService emailBuilder, SmtpOptions options, ILogger<SmtpSender> logger) : base(emailBuilder)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
-            _logger = logger; //?? throw new ArgumentNullException(nameof(logger));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public override async Task SendAsync(Email email, CancellationToken cancellationToken = default)

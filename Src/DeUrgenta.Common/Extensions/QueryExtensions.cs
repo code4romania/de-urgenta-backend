@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
-using DeUrgenta.Common.Models;
+using DeUrgenta.Common.Models.Pagination;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Common.Extensions

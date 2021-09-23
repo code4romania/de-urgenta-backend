@@ -11,8 +11,7 @@ namespace DeUrgenta.Backpack.Api.Validators.RequestValidators
             RuleFor(c => c.Name).NotEmpty().MinimumLength(3).MaximumLength(250);
             RuleFor(c => (int)c.Amount).InclusiveBetween(1, 99999);
             RuleFor(c => c.ExpirationDate).GreaterThanOrEqualTo(DateTime.Today).When(c => c.ExpirationDate.HasValue);
-            RuleFor(c => c.CategoryType).NotNull();
-
+            RuleFor(c => c.CategoryType).IsInEnum();
         }
     }
 }

@@ -24,7 +24,7 @@ namespace DeUrgenta.Tests.Helpers
             _emptyDatabaseCheckpoint = new Checkpoint
             {
                 SchemasToInclude = new[] { "public" },
-                TablesToIgnore = new[] { "__EFMigrationsHistory" },
+                TablesToIgnore = new[] { "__EFMigrationsHistory", "EventTypes" },
                 DbAdapter = DbAdapter.Postgres
             };
 

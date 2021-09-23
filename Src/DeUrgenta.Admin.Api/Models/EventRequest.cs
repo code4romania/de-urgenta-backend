@@ -13,5 +13,13 @@ namespace DeUrgenta.Admin.Api.Models
         public DateTime OccursOn { get; init; }
 
         public string Author { get; init; }
+
+        public string City { get; init; }
+
+        public int EventTypeId { get; init; }
+
+        public string Address { get; init; }
+
+        public bool IsArchived { get; init; }
     }
 }
