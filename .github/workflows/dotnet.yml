@@ -49,13 +49,13 @@ jobs:
     - name: Apply migrations for test db
       run: |
         dotnet tool install --global dotnet-ef
-        dotnet ef database update --no-build --project DeUrgenta.Domain --startup-project DeUrgenta.Api --context DeUrgentaContext --connection "Server=postgres;Port=5432;Database=de-urgenta-db;User Id=git-ci;Password=git-ci-pass;"
-        dotnet ef database update --no-build --project DeUrgenta.User.Api --startup-project DeUrgenta.Api --context UserDbContext --connection "Server=postgres;Port=5432;Database=de-urgenta-db;User Id=git-ci;Password=git-ci-pass;"
+        dotnet ef database update --no-build --project DeUrgenta.Domain --startup-project DeUrgenta.Api --context DeUrgentaContext --connection "Server=localhost;Port=5432;Database=de-urgenta-db;User Id=git-ci;Password=git-ci-pass;"
+        dotnet ef database update --no-build --project DeUrgenta.User.Api --startup-project DeUrgenta.Api --context UserDbContext --connection "Server=localhost;Port=5432;Database=de-urgenta-db;User Id=git-ci;Password=git-ci-pass;"
     - name: Run unit & integration tests
       run: dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover DeUrgenta.sln
       env:
         # Connection string
-        ConnectionStrings__TestingDbConnectionString: Server=postgres;Port=5432;Database=de-urgenta-db;User Id=git-ci;Password=git-ci-pass; 
+        ConnectionStrings__TestingDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-db;User Id=git-ci;Password=git-ci-pass; 
     - name: Upload dotnet test results
       uses: codecov/codecov-action@v1
 
