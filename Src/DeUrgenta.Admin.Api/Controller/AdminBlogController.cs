@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using DeUrgenta.Admin.Api.Models;
 using DeUrgenta.Admin.Api.Swagger.Blog;
-using DeUrgenta.Common.Models;
+using DeUrgenta.Common.Models.Pagination;
 using DeUrgenta.Common.Swagger;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using MediatR;
-using DeUrgenta.Common.Models;
 using DeUrgenta.Common.Models.Events;
+using DeUrgenta.Common.Models.Pagination;
 
 namespace DeUrgenta.Admin.Api.Queries
 {

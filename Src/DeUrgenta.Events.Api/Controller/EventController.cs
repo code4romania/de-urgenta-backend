@@ -9,8 +9,8 @@ using Swashbuckle.AspNetCore.Filters;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Swagger;
-using DeUrgenta.Common.Models;
 using DeUrgenta.Common.Models.Events;
+using DeUrgenta.Common.Models.Pagination;
 
 namespace DeUrgenta.Events.Api.Controller
 {

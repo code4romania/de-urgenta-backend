@@ -1,4 +1,4 @@
-namespace DeUrgenta.Common.Models
+namespace DeUrgenta.Common.Models.Pagination
 {
     public abstract record PagedResultBase
     {

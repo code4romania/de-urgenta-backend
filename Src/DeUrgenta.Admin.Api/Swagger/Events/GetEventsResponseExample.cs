@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Immutable;
-using DeUrgenta.Common.Models;
 using DeUrgenta.Common.Models.Events;
+using DeUrgenta.Common.Models.Pagination;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace DeUrgenta.Admin.Api.Swagger.Events

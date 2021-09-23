@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using DeUrgenta.Admin.Api.Models;
-using DeUrgenta.Common.Models;
+using DeUrgenta.Common.Models.Pagination;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace DeUrgenta.Admin.Api.Swagger.Blog
