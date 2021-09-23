@@ -1,5 +1,3 @@
-using System.IO;
-using System.Net;
 using System.Reflection;
 using DeUrgenta.Admin.Api.Controller;
 using DeUrgenta.Backpack.Api.Controllers;
@@ -22,7 +20,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using DeUrgenta.Certifications.Api;
 using FluentValidation.AspNetCore;
-using Microsoft.Extensions.FileProviders;
 
 namespace DeUrgenta.Api
 {
@@ -84,26 +81,8 @@ namespace DeUrgenta.Api
             app.UseAuthorization();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
 
-            var localCertificationStorePath = Configuration.GetValue<string>("LocalConfigOptions:Path");
-            var staticFilesRequestPath = Configuration.GetValue<string>("LocalConfigOptions:StaticFilesRequestPath");
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(Path.Combine(WebHostEnvironment.ContentRootPath, localCertificationStorePath)),
-                RequestPath = staticFilesRequestPath,
-                ServeUnknownFileTypes = true,
-                OnPrepareResponse = ctx =>
-                {
-                    if (!ctx.Context.User.Identity.IsAuthenticated)
-                    {
-                        ctx.Context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-
-                        ctx.Context.Response.ContentLength = 0;
-                        ctx.Context.Response.Body = Stream.Null;
-                        ctx.Context.Response.Headers.Add("Cache-Control", "no-store");
-                    }
-                }
-            });
-
+            app.UseConfigureStaticFiles(Configuration, WebHostEnvironment);
+           
             app.UseCors(CorsPolicyName);
         }
 
