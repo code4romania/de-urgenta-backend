@@ -17,8 +17,9 @@ namespace DeUrgenta.Admin.Api.Validators
 
         public async Task<bool> IsValidAsync(DeleteEvent request)
         {
-            var ev = await _context.Events.FirstOrDefaultAsync(x => x.Id == request.EventId);
-            if (ev == null)
+            var @event = await _context.Events.FirstOrDefaultAsync(x => x.Id == request.EventId);
+            
+            if (@event == null)
             {
                 return false;
             }

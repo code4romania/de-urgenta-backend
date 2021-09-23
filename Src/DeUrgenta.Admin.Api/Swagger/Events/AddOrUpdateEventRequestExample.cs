@@ -17,7 +17,8 @@ namespace DeUrgenta.Admin.Api.Swagger.Events
               OrganizedBy = "Crucea rosie",
               City = "Suceava",
               EventTypeId = 1,
-              Address = "some address"
+              Address = "some address",
+              IsArchived = false
             };
         }
     }

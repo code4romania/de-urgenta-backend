@@ -9,8 +9,8 @@ using Swashbuckle.AspNetCore.Filters;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Swagger;
-using Microsoft.AspNetCore.Authorization;
-using DeUrgenta.Common.Models;
+using DeUrgenta.Common.Models.Events;
+using DeUrgenta.Common.Models.Pagination;
 
 namespace DeUrgenta.Events.Api.Controller
 {
@@ -82,14 +82,14 @@ namespace DeUrgenta.Events.Api.Controller
         [HttpGet]
         [Route("/events")]
 
-        [SwaggerResponse(StatusCodes.Status200OK, "Events list", typeof(IImmutableList<EventModel>))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Events list", typeof(IImmutableList<EventResponseModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetEventResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<PagedResult<EventModel>>> GetEventsAsync([FromQuery]EventModelRequest modelRequest)
+        public async Task<ActionResult<PagedResult<EventResponseModel>>> GetEventsAsync([FromQuery]EventModelRequest filter)
         {
-            var command = new GetEvent(modelRequest);
+            var command = new GetEvent(filter);
             var result = await _mediator.Send(command);
 
             if (result.IsFailure)

@@ -56,7 +56,7 @@ namespace DeUrgenta.User.Api.Services.Emailing
             if (statusCode > 226 || statusCode < 200)
             {
                 // not ok response received
-                var responseMessage = await sendgridResponse.Body.ReadAsStringAsync();
+                var responseMessage = await sendgridResponse.Body.ReadAsStringAsync(cancellationToken);
                 _logger.LogWarning("Received not ok(200) status code. Status code received {statusCode}. Response message {responseMessage}", statusCode, responseMessage);
             }
         }

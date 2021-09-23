@@ -2,6 +2,7 @@
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Admin.Api.Validators
 {
@@ -16,7 +17,9 @@ namespace DeUrgenta.Admin.Api.Validators
 
         public async Task<bool> IsValidAsync(CreateEvent request)
         {
-            return true;
+            var eventTypeExists = await _context.EventTypes.AnyAsync(x => x.Id == request.Event.EventTypeId);
+
+            return eventTypeExists;
         }
     }
 }
