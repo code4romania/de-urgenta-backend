@@ -25,7 +25,6 @@ jobs:
         env:
           POSTGRES_PASSWORD: git-ci-pass
           POSTGRES_USER: git-ci
-          POSTGRES_DB: postgres
         ports:
           # Maps tcp port 5432 on service container to the host
           - 5432:5432
@@ -55,7 +54,7 @@ jobs:
       run: dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover DeUrgenta.sln
       env:
         # Connection string
-        ConnectionStrings__TestingDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=git-ci;Password=git-ci-pass; 
+        ConnectionStrings__TestingDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-db;User Id=git-ci;Password=git-ci-pass; 
     - name: Upload dotnet test results
       uses: codecov/codecov-action@v1
 
