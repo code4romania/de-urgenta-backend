@@ -50,8 +50,8 @@ jobs:
         dotnet tool install --global dotnet-ef
         dotnet ef --version
         export ConnectionStrings__DbConnectionString="Server=localhost;Port=5432;Database=de-urgenta-db;User Id=gitci;Password=gitcipass;"
-        dotnet ef database update --no-build --project DeUrgenta.Domain --startup-project DeUrgenta.Api --context DeUrgentaContext
-        dotnet ef database update --no-build --project DeUrgenta.User.Api --startup-project DeUrgenta.Api --context UserDbContext
+        dotnet ef database update --project DeUrgenta.Domain --startup-project DeUrgenta.Api --context DeUrgentaContext
+        dotnet ef database update --project DeUrgenta.User.Api --startup-project DeUrgenta.Api --context UserDbContext
     - name: Run unit & integration tests
       run: dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover DeUrgenta.sln
       env:
