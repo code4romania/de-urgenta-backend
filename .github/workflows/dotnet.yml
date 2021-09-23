@@ -23,8 +23,8 @@ jobs:
         image: postgres
         # Provide the password for postgres
         env:
-          POSTGRES_PASSWORD: docker
-          POSTGRES_USER: docker
+          POSTGRES_PASSWORD: gitcipass
+          POSTGRES_USER: gitci
           POSTGRES_DB: postgres
         ports:
           # Maps tcp port 5432 on service container to the host
