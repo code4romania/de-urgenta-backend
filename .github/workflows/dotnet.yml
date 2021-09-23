@@ -12,7 +12,6 @@ defaults:
     
 jobs:
   build:
-
     runs-on: ubuntu-latest
     
     # Service containers to run with `container-job`
@@ -35,7 +34,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
