@@ -20,10 +20,16 @@ namespace DeUrgenta.Certifications.Api.Storage
         {
             var filePath = $"{userSub}/{certificationId}{extension}";
 
-            var userFolderPath = Path.Combine(_config.Path, userSub);
-            if (!Directory.Exists(userFolderPath))
+            var userDirectoryPath = Path.Combine(_config.Path, userSub);
+            if (!Directory.Exists(userDirectoryPath))
             {
-                Directory.CreateDirectory(userFolderPath);
+                Directory.CreateDirectory(userDirectoryPath);
+            }
+
+            var existingPhotos = Directory.EnumerateFiles(userDirectoryPath, $"{certificationId}.*");
+            foreach (string existingPhoto in existingPhotos)
+            {
+                File.Delete(existingPhoto);
             }
 
             using (var targetStream = File.Create(Path.Combine(_config.Path, filePath)))
