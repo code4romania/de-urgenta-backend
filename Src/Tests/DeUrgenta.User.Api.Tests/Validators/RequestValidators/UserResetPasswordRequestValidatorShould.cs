@@ -11,6 +11,8 @@ namespace DeUrgenta.User.Api.Tests.Validators.RequestValidators
 
         [Theory]
         [InlineData("")]
+        [InlineData("\t")]
+        [InlineData(" ")]
         [InlineData(null)]
         public void Invalidate_request_when_first_name_is_empty(string emptyUserId)
         {
@@ -30,6 +32,8 @@ namespace DeUrgenta.User.Api.Tests.Validators.RequestValidators
 
         [Theory]
         [InlineData("")]
+        [InlineData("\t")]
+        [InlineData(" ")]
         [InlineData(null)]
         public void Invalidate_request_when_reset_token_is_empty(string emptyResetToken)
         {
@@ -49,6 +53,8 @@ namespace DeUrgenta.User.Api.Tests.Validators.RequestValidators
 
         [Theory]
         [InlineData("")]
+        [InlineData("\t")]
+        [InlineData(" ")]
         [InlineData(null)]
         public void Invalidate_request_when_new_password_is_empty(string emptyNewPassword)
         {

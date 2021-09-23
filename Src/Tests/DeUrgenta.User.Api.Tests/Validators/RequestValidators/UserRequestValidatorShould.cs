@@ -11,6 +11,8 @@ namespace DeUrgenta.User.Api.Tests.Validators.RequestValidators
 
         [Theory]
         [InlineData("")]
+        [InlineData("\t")]
+        [InlineData(" ")]
         [InlineData(null)]
         public void Invalidate_request_when_first_name_is_empty(string emptyFirstName)
         {
@@ -44,6 +46,8 @@ namespace DeUrgenta.User.Api.Tests.Validators.RequestValidators
 
         [Theory]
         [InlineData("")]
+        [InlineData("\t")]
+        [InlineData(" ")]
         [InlineData(null)]
         public void Invalidate_request_when_last_name_is_empty(string emptyFirstName)
         {

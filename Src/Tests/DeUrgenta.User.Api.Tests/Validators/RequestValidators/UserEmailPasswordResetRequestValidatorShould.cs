@@ -11,6 +11,8 @@ namespace DeUrgenta.User.Api.Tests.Validators.RequestValidators
 
         [Theory]
         [InlineData("")]
+        [InlineData("\t")]
+        [InlineData(" ")]
         [InlineData(null)]
         public void Invalidate_request_when_email_is_empty(string emptyEmail)
         {

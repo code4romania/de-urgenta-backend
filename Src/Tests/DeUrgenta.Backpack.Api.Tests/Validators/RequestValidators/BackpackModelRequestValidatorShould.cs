@@ -11,6 +11,8 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators.RequestValidators
 
         [Theory]
         [InlineData("")]
+        [InlineData("\t")]
+        [InlineData(" ")]
         [InlineData(null)]
         public void Invalidate_request_when_name_is_empty(string emptyName)
         {

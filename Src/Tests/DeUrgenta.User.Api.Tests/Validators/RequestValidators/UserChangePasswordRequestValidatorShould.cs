@@ -11,6 +11,8 @@ namespace DeUrgenta.User.Api.Tests.Validators.RequestValidators
 
         [Theory]
         [InlineData("")]
+        [InlineData("\t")]
+        [InlineData(" ")]
         [InlineData(null)]
         public void Invalidate_request_when_confirm_new_password_is_empty(string emptyChangeNewPassword)
         {
@@ -30,6 +32,8 @@ namespace DeUrgenta.User.Api.Tests.Validators.RequestValidators
 
         [Theory]
         [InlineData("")]
+        [InlineData("\t")]
+        [InlineData(" ")]
         [InlineData(null)]
         public void Invalidate_request_when_new_password_is_empty(string emptyNewPassword)
         {
