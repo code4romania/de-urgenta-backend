@@ -10,7 +10,7 @@ namespace DeUrgenta.Api.Extensions
 {
     public static class StaticFilesExtensions
     {
-        public static void UseConfigureStaticFiles(this IApplicationBuilder app, IConfiguration config, IWebHostEnvironment webHost)
+        public static void SetupStaticFiles(this IApplicationBuilder app, IConfiguration config, IWebHostEnvironment webHost)
         {
             var localCertificationStorePath = config.GetValue<string>("LocalConfigOptions:Path");
             var staticFilesRequestPath = config.GetValue<string>("LocalConfigOptions:StaticFilesRequestPath");

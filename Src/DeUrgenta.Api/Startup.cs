@@ -86,7 +86,7 @@ namespace DeUrgenta.Api
             app.UseAuthorization();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
 
-            app.UseConfigureStaticFiles(Configuration, WebHostEnvironment);
+            app.SetupStaticFiles(Configuration, WebHostEnvironment);
            
             app.UseCors(CorsPolicyName);
         }
