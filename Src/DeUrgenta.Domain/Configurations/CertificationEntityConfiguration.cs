@@ -29,7 +29,7 @@ namespace DeUrgenta.Domain.Configurations
             builder
                 .Property(x => x.ExpirationDate)
                 .IsRequired();
-
+            
             builder.HasOne(d => d.User)
                 .WithMany(p => p.Certifications)
                 .HasForeignKey(d => d.UserId)

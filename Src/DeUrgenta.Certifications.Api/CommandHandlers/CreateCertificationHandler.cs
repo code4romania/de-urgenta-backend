@@ -1,8 +1,10 @@
-﻿using System.Threading;
+﻿using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Certifications.Api.Commands;
 using DeUrgenta.Certifications.Api.Models;
+using DeUrgenta.Certifications.Api.Storage;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
@@ -15,11 +17,13 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
     {
         private readonly IValidateRequest<CreateCertification> _validator;
         private readonly DeUrgentaContext _context;
+        private readonly IBlobStorage _storage;
 
-        public CreateCertificationHandler(IValidateRequest<CreateCertification> validator, DeUrgentaContext context)
+        public CreateCertificationHandler(IValidateRequest<CreateCertification> validator, DeUrgentaContext context, IBlobStorage storage)
         {
             _validator = validator;
             _context = context;
+            _storage = storage;
         }
 
         public async Task<Result<CertificationModel>> Handle(CreateCertification request, CancellationToken cancellationToken)
@@ -42,12 +46,18 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
             await _context.Certifications.AddAsync(certification, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
+            var photoUrl = await _storage.SaveAttachmentAsync(certification.Id,
+                user.Sub,
+                request.Photo.OpenReadStream(),
+                Path.GetExtension(request.Photo.FileName));
+
             return new CertificationModel
             {
                 Id = certification.Id,
                 Name = certification.Name,
                 ExpirationDate = certification.ExpirationDate,
-                IssuingAuthority = certification.IssuingAuthority
+                IssuingAuthority = certification.IssuingAuthority,
+                PhotoUrl = photoUrl
             };
         }
     }

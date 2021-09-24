@@ -8,5 +8,6 @@ namespace DeUrgenta.Certifications.Api.Models
         public string Name { get; init; }
         public string IssuingAuthority { get; init; }
         public DateTime ExpirationDate { get; init; }
+        public string PhotoUrl { get; set; }
     }
 }

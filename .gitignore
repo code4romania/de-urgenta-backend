@@ -336,3 +336,4 @@ ASALocalRun/
 # de-urgenta specific
 Src/postgres_data
 .env
+Src/DeUrgenta.Api/LocalCertificationStore

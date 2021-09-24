@@ -2,6 +2,7 @@
 using DeUrgenta.Certifications.Api.Models;
 using MediatR;
 using System;
+using Microsoft.AspNetCore.Http;
 
 namespace DeUrgenta.Certifications.Api.Commands
 {
@@ -11,6 +12,7 @@ namespace DeUrgenta.Certifications.Api.Commands
         public string Name { get; }
         public DateTime ExpirationDate { get; }
         public string IssuingAuthority { get; }
+        public IFormFile Photo { get; init; }
 
         public CreateCertification(string userSub, CertificationRequest certificationRequest)
         {
@@ -18,6 +20,7 @@ namespace DeUrgenta.Certifications.Api.Commands
             Name = certificationRequest.Name;
             ExpirationDate = certificationRequest.ExpirationDate;
             IssuingAuthority = certificationRequest.IssuingAuthority;
+            Photo = certificationRequest.Photo;
         }
     }
 }

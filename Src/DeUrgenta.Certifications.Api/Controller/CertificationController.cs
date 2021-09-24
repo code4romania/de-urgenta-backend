@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
 using System.Collections.Immutable;
+using System.IO;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Swagger;
 using Microsoft.AspNetCore.Authorization;
@@ -59,6 +60,8 @@ namespace DeUrgenta.Certifications.Api.Controller
         /// </summary>
         /// <returns></returns>
         [HttpPost]
+        [Consumes("multipart/form-data")]
+
         [SwaggerResponse(StatusCodes.Status200OK, "New certification", typeof(CertificationModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
@@ -67,7 +70,7 @@ namespace DeUrgenta.Certifications.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateCertificationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<CertificationModel>> CreateNewCertificationAsync([FromBody] CertificationRequest certification)
+        public async Task<ActionResult<CertificationModel>> CreateNewCertificationAsync([FromForm] CertificationRequest certification)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var command = new CreateCertification(sub, certification);
@@ -86,6 +89,7 @@ namespace DeUrgenta.Certifications.Api.Controller
         /// </summary>
         [HttpPut]
         [Route("{certificationId:guid}")]
+        [Consumes("multipart/form-data")]
 
         [SwaggerResponse(StatusCodes.Status200OK, "Updated certification", typeof(CertificationModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
@@ -95,7 +99,7 @@ namespace DeUrgenta.Certifications.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateCertificationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<CertificationModel>> UpdateCertificationAsync([FromRoute] Guid certificationId, [FromBody] CertificationRequest certification)
+        public async Task<ActionResult<CertificationModel>> UpdateCertificationAsync([FromRoute] Guid certificationId, [FromForm] CertificationRequest certification)
         {
 
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
