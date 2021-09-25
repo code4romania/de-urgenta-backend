@@ -1,0 +1,80 @@
+name: .NET
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+defaults:
+  run: 
+    working-directory: ./Src
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: git-ci-pass
+          POSTGRES_USER: git-ci
+          POSTGRES_DB: postgres
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore DeUrgenta.sln
+    - name: Build
+      run: dotnet build --no-restore /p:ContinuousIntegrationBuild=true DeUrgenta.sln
+    - name: Apply migrations for test db
+      run: |
+        dotnet tool install --global dotnet-ef
+        dotnet ef database update  --no-build --project DeUrgenta.Domain --startup-project DeUrgenta.Api --context DeUrgentaContext --connection "Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=git-ci;Password=git-ci-pass;"
+        dotnet ef database update  --no-build --project DeUrgenta.User.Api --startup-project DeUrgenta.Api --context UserDbContext --connection "Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=git-ci;Password=git-ci-pass;"
+    - name: Run unit & integration tests
+      run: dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover DeUrgenta.sln
+      env:
+        # Connection string
+        ConnectionStrings__TestingDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=git-ci;Password=git-ci-pass; 
+    - name: Upload dotnet test results
+      uses: codecov/codecov-action@v1
+    - name: Run specs
+      run: |
+        dotnet tool install --global SpecFlow.Plus.LivingDoc.CLI
+        dotnet test DeUrgenta.Specs.sln
+      env:
+        # Connection strings
+        ConnectionStrings__DbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=git-ci;Password=git-ci-pass;
+        ConnectionStrings__IdentityDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-specs-db;User Id=git-ci;Password=git-ci-pass;
+        
+    - name: Generate living doc 
+      run: |
+        cd ./Specs/DeUrgenta.Specs/bin/Debug/net5.0
+        livingdoc test-assembly DeUrgenta.Specs.dll -t TestExecution.json
+      if: always()
+      
+    - uses: actions/upload-artifact@v2
+      with:
+        name: living-doc
+        path: ./Src/Specs/DeUrgenta.Specs/bin/Debug/net5.0/LivingDoc.html
+        if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
+      if: always()
+      

@@ -287,57 +287,6 @@ this.FeatureBackground();
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Backpack delete cannot be performed when there are contributors")]
-        [Xunit.TraitAttribute("FeatureTitle", "Backpack delete")]
-        [Xunit.TraitAttribute("Description", "Backpack delete cannot be performed when there are contributors")]
-        [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_delete")]
-        public virtual void BackpackDeleteCannotBePerformedWhenThereAreContributors()
-        {
-            string[] tagsOfScenario = new string[] {
-                    "backpack",
-                    "backpack_delete"};
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Backpack delete cannot be performed when there are contributors", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 34
-this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            bool isScenarioIgnored = default(bool);
-            bool isFeatureIgnored = default(bool);
-            if ((tagsOfScenario != null))
-            {
-                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((this._featureTags != null))
-            {
-                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((isScenarioIgnored || isFeatureIgnored))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-#line 4
-this.FeatureBackground();
-#line hidden
-#line 35
- testRunner.Given("Grisha is authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-#line 36
- testRunner.And("is a contributor to Sasha\'s backpack", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 37
- testRunner.When("owner deletes backpack named \"My backpack\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 38
- testRunner.Then("gets BadRequest in response", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
         [Xunit.SkippableFactAttribute(DisplayName="Backpack delete cannot be performed by an un-authenticated")]
         [Xunit.TraitAttribute("FeatureTitle", "Backpack delete")]
         [Xunit.TraitAttribute("Description", "Backpack delete cannot be performed by an un-authenticated")]
@@ -350,7 +299,7 @@ this.FeatureBackground();
                     "backpack_delete"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Backpack delete cannot be performed by an un-authenticated", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 41
+#line 35
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -373,13 +322,13 @@ this.ScenarioInitialize(scenarioInfo);
 #line 4
 this.FeatureBackground();
 #line hidden
-#line 42
+#line 36
  testRunner.Given("Ion is un-authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 43
+#line 37
  testRunner.When("Ion deletes backpack created by Sasha", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 44
+#line 38
  testRunner.Then("gets Unauthorized in response", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -394,7 +343,7 @@ this.FeatureBackground();
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("something something", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 46
+#line 40
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -417,13 +366,13 @@ this.ScenarioInitialize(scenarioInfo);
 #line 4
 this.FeatureBackground();
 #line hidden
-#line 47
+#line 41
  testRunner.Given("Ion", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 48
+#line 42
  testRunner.When("code", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 49
+#line 43
  testRunner.Then("ololo", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
