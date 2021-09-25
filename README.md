@@ -6,7 +6,7 @@
 
 De Urgență [was prototyped](https://civiclabs.ro/ro/solutions/stay-together) in [Code for Romania](https://code4.ro/ro)'s research project, [Civic Labs](https://civiclabs.ro/ro).
 
-The application aims to inform citizens about how to react to the first critical hours in a crysis situation (like that of an earthquake). 
+The application aims to inform citizens about how to react to the first critical hours in a crisis situation (like that of an earthquake).
 
 It also aims to build healthy habits that become ingrained with time, so that, when the critical moment arrives, each person knows what the key first steps to keeping themselves safe are. 
 
@@ -64,7 +64,7 @@ docker-compose -d up postgres
 
 ### Creating a EF Core migration 
 ```
-dotnet ef migrations add <Migration-name> --project DeUrgenta.Domain --startup-project DeUrgenta.Api
+dotnet ef migrations add <Migration-name> --project DeUrgenta.Domain --startup-project DeUrgenta.Api --context DeUrgentaContext
 ```
 ### Adding EF Core migration to User.Api
 ```
@@ -87,6 +87,20 @@ Query/CommandHandler --> Validator
     C -->|false| E[Result.Failure]
     D --> Database[(Database)]
 ```
+### Configuring storage
+In order to store certification photos you will need to have either Local or S3 storage configured. Toggle between these two options by setting the *StorageService* app setting to the appropriate value.
+
+Local storage needs no additional configuration. This option is suitable for development environments.
+
+S3 storage requires having an [AWS account configured](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html), a bucket created and the following app settings:
+```
+"S3ConfigOptions": {
+    "BucketName": "your-bucket-name",
+    "PresignedUrlExpirationInMinutes": "10"
+  }
+```
+
+
 ## Feedback
 
 * Request a new feature on GitHub.

@@ -12,14 +12,17 @@ namespace DeUrgenta.Api.Extensions
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             var attributes = context.MethodInfo.DeclaringType.GetCustomAttributes(true)
-                .Union(context.MethodInfo.GetCustomAttributes(true));
+                .Union(context.MethodInfo.GetCustomAttributes(true))
+                .ToList();
 
             if (attributes.OfType<IAllowAnonymous>().Any())
             {
                 return;
             }
 
-            var authAttributes = attributes.OfType<IAuthorizeData>();
+            var authAttributes = attributes
+                .OfType<IAuthorizeData>()
+                .ToList();
 
             if (authAttributes.Any())
             {

@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
 
-namespace DeUrgenta.Common.Models
+namespace DeUrgenta.Common.Models.Pagination
 {
     public record PagedResult<T> : PagedResultBase where T : class
     {

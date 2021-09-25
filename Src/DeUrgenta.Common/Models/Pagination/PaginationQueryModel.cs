@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace DeUrgenta.Common.Models
+namespace DeUrgenta.Common.Models.Pagination
 {
     public sealed record PaginationQueryModel
     {

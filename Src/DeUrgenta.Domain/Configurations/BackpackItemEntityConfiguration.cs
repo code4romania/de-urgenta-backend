@@ -26,8 +26,7 @@ namespace DeUrgenta.Domain.Configurations
                 .IsRequired();
 
             builder
-                .Property(e => e.ExpirationDate)
-                .IsRequired();
+                .Property(e => e.ExpirationDate);
 
             builder
                 .Property(e => e.BackpackCategory)

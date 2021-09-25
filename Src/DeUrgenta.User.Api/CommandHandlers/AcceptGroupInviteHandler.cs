@@ -43,7 +43,6 @@ namespace DeUrgenta.User.Api.CommandHandlers
                 .FirstAsync(g => g.Id == invite.GroupId, cancellationToken);
 
             var user = await _context.Users.FirstAsync(u => u.Id == invite.InvitationReceiverId, cancellationToken);
-            var user2 = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
 
             await _context.UsersToGroups.AddAsync(new UserToGroup
             {

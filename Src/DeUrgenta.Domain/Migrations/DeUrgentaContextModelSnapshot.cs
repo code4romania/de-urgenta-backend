@@ -89,7 +89,7 @@ namespace DeUrgenta.Domain.Migrations
                     b.Property<Guid>("BackpackId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("ExpirationDate")
+                    b.Property<DateTime?>("ExpirationDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Name")
@@ -205,14 +205,25 @@ namespace DeUrgenta.Domain.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Author")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("ContentBody")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("EventTypeId")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("IsArchived")
                         .HasColumnType("boolean");
@@ -236,7 +247,48 @@ namespace DeUrgenta.Domain.Migrations
                     b.HasKey("Id")
                         .HasName("PK_Event");
 
+                    b.HasIndex("City")
+                        .HasDatabaseName("IX_Event_City");
+
+                    b.HasIndex("EventTypeId")
+                        .IsUnique();
+
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("DeUrgenta.Domain.Entities.EventType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
+
+                    b.HasKey("Id")
+                        .HasName("PK_EventType");
+
+                    b.ToTable("EventTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Prim ajutor"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Prim ajutor calificat"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Pregătire in caz de dezastre"
+                        });
                 });
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.Group", b =>
@@ -494,6 +546,17 @@ namespace DeUrgenta.Domain.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DeUrgenta.Domain.Entities.Event", b =>
+                {
+                    b.HasOne("DeUrgenta.Domain.Entities.EventType", "EventType")
+                        .WithOne()
+                        .HasForeignKey("DeUrgenta.Domain.Entities.Event", "EventTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EventType");
                 });
 
             modelBuilder.Entity("DeUrgenta.Domain.Entities.Group", b =>

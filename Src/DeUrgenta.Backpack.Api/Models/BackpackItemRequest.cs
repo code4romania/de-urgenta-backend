@@ -9,9 +9,8 @@ namespace DeUrgenta.Backpack.Api.Models
 
         public uint Amount { get; init; }
 
-        public DateTime ExpirationDate { get; init; }
+        public DateTime? ExpirationDate { get; init; }
 
         public BackpackCategoryType CategoryType { get; init; }
-
     }
 }

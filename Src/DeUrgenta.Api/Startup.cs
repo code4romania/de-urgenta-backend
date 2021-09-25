@@ -20,6 +20,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using DeUrgenta.Certifications.Api;
 using FluentValidation.AspNetCore;
+using DeUrgenta.Admin.Api;
+using DeUrgenta.Events.Api;
+using DeUrgenta.Events.Api.Controller;
 
 namespace DeUrgenta.Api
 {
@@ -47,7 +50,9 @@ namespace DeUrgenta.Api
             services.AddBackpackApiServices();
             services.AddGroupApiServices();
             services.AddCertificationsApiServices();         
-          
+            services.AddEventsApiServices();
+            services.AddAdminApiServices();
+
             var applicationAssemblies = GetAssemblies();
 
             services.AddSwaggerFor(applicationAssemblies);
@@ -60,6 +65,7 @@ namespace DeUrgenta.Api
                     .AllowAnyHeader();
             }));
             services.SetupEmailService(Configuration);
+            services.SetupStorageService(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -80,8 +86,8 @@ namespace DeUrgenta.Api
             app.UseAuthorization();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
 
-            app.UseStaticFiles();
-
+            app.SetupStaticFiles(Configuration, WebHostEnvironment);
+           
             app.UseCors(CorsPolicyName);
         }
 
@@ -92,9 +98,10 @@ namespace DeUrgenta.Api
                 // Application parts
                 typeof(BackpackController).GetTypeInfo().Assembly,
                 typeof(CertificationController).GetTypeInfo().Assembly,
-                typeof(BlogController).GetTypeInfo().Assembly,
+                typeof(AdminBlogController).GetTypeInfo().Assembly,
                 typeof(GroupController).GetTypeInfo().Assembly,
                 typeof(UserController).GetTypeInfo().Assembly,
+                typeof(EventController).GetTypeInfo().Assembly,
 
                 // Common
 

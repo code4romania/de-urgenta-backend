@@ -14,5 +14,10 @@ namespace DeUrgenta.Domain.Entities
         public string Author { get; set; }
         public DateTime PublishedOn { get; set; }
         public bool IsArchived { get; set; }
+
+        public string City { get; set; }
+        public string Address { get; set; }
+        public int EventTypeId { get; set; }
+        public virtual EventType EventType { get; set; }
     }
 }

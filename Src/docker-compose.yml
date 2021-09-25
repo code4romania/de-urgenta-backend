@@ -10,8 +10,6 @@
         POSTGRES_DB: ${POSTGRES_DB}
       ports:
         - 5432:5432
-      volumes:
-        - ./postgres_data:/var/lib/postgresql/data
 
     api:
       container_name: deurgenta_api
@@ -24,13 +22,13 @@
         ASPNETCORE_URLS: ${ASPNETCORE_URLS}
         ConnectionStrings__DbConnectionString: ${DB_CONNECTION_STRING}
         ConnectionStrings__IdentityDbConnectionString: ${DB_CONNECTION_STRING}
-        SendGrid__ApiKey: ${SENDGRID_API_KEY}        
+        SendGrid__ApiKey: ${SENDGRID_API_KEY}
       ports:
         - 5040:80
       restart: unless-stopped
 
-    recurent-jobs:
-      container_name: deurgenta_recurent_jobs
+    recurring-jobs:
+      container_name: deurgenta_recurring_jobs
       depends_on:
         - "postgres"
       build:

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -48,7 +49,7 @@ namespace DeUrgenta.Api.Extensions
                 {
                     Version = "v1",
                     Title = "De Urgenta API",
-                    Description = "The application aims to inform citizens about how to react to the first critical hours in a crysis situation (like that of an earthquake).",
+                    Description = "The application aims to inform citizens about how to react to the first critical hours in a crisis situation (like that of an earthquake).",
                     TermsOfService = new Uri("https://github.com/code4romania/de-urgenta-backend"),
                     Contact = new OpenApiContact
                     {
@@ -75,7 +76,9 @@ namespace DeUrgenta.Api.Extensions
                 c.ExampleFilters();
             });
 
+            services.AddFluentValidationRulesToSwagger();
             services.AddSwaggerExamplesFromAssemblies(assemblies);
+
             return services;
         }
 

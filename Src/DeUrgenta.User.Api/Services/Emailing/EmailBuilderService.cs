@@ -40,7 +40,7 @@ namespace DeUrgenta.User.Api.Services.Emailing
         }
         private async Task<string> GetTemplate(EmailTemplate templateType)
         {
-            if (!_memoryCache.TryGetValue<string>(templateType, out string template))
+            if (!_memoryCache.TryGetValue(templateType, out string template))
             {
                 var filePath = _templateFileSelector.GetTemplatePath(templateType);
                 using (var streamReader = File.OpenText(filePath))
@@ -54,7 +54,7 @@ namespace DeUrgenta.User.Api.Services.Emailing
             return template;
         }
 
-        private string FormatTemplate(string template, EmailRequestModel emailRequest)
+        private static string FormatTemplate(string template, EmailRequestModel emailRequest)
         {
             foreach (var placeholder in emailRequest.PlaceholderContent)
             {
