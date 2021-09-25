@@ -17,7 +17,8 @@ namespace DeUrgenta.Infra.Extensions
 
             using var scope = services.BuildServiceProvider().CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<T>();
-
+            
+            dbContext.Database.Migrate();
             return services;
         }
     }

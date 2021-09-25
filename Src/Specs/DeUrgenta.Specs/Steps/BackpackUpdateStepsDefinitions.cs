@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
+using DeUrgenta.Specs.Clients;
 using DeUrgenta.Specs.Drivers;
 using Shouldly;
 using TechTalk.SpecFlow;
@@ -43,7 +44,7 @@ namespace DeUrgenta.Specs.Steps
         [Given(@"Sasha creates a backpack named ""(.*)""")]
         public async Task GivenHasABackpack(string backpackName)
         {
-            var user = _scenarioContext.Get<ApiClient>("Sasha");
+            var user = _scenarioContext.Get<Client>("Sasha");
 
             var backpack = await user.CreateNewBackpackAsync(new()
             {
@@ -56,7 +57,7 @@ namespace DeUrgenta.Specs.Steps
         [When(@"owner edits backpack name to ""(.*)""")]
         public async Task WhenEditBackpackNameTo(string newBackpackName)
         {
-            var user = _scenarioContext.Get<ApiClient>("Sasha");
+            var user = _scenarioContext.Get<Client>("Sasha");
             var backpackId = _scenarioContext.Get<Guid>("backpack-id");
 
             var backpackModel = await user.UpdateBackpackAsync(backpackId, new()
@@ -71,7 +72,7 @@ namespace DeUrgenta.Specs.Steps
         public async Task WhenHeQueriesForHisBackpacks()
 
         {
-            ApiClient user = _scenarioContext.Get<ApiClient>("Sasha");
+            Client user = _scenarioContext.Get<Client>("Sasha");
 
             var backpacks = await user.GetMyBackpacksAsync();
             _scenarioContext["backpacks"] = backpacks.ToImmutableArray();
@@ -80,7 +81,7 @@ namespace DeUrgenta.Specs.Steps
         [When(@"owner queries for backpacks")]
         public async Task WhenHeQueriesForBackpacks()
         {
-            ApiClient user = _scenarioContext.Get<ApiClient>("Sasha");
+            Client user = _scenarioContext.Get<Client>("Sasha");
 
             var backpacks = await user.GetBackpacksAsync();
             _scenarioContext["backpacks"] = backpacks.ToImmutableArray();
@@ -98,7 +99,7 @@ namespace DeUrgenta.Specs.Steps
         [When(@"Grisha edits backpack created by Sasha")]
         public async Task WhenEditBackpackCreatedBySasha()
         {
-            var user = _scenarioContext.Get<ApiClient>("Grisha");
+            var user = _scenarioContext.Get<Client>("Grisha");
             var backpackId = _scenarioContext.Get<Guid>("backpack-id");
 
             object updateResponse;
@@ -129,7 +130,7 @@ namespace DeUrgenta.Specs.Steps
         [Given(@"is a contributor to Sasha's backpack")]
         public async Task GivenGrishaIsAuthenticatedUserAndAContributor()
         {
-            var backpackOwner = _scenarioContext.Get<ApiClient>("Sasha");
+            var backpackOwner = _scenarioContext.Get<Client>("Sasha");
             var backpackId = _scenarioContext.Get<Guid>("backpack-id");
 
             await _backpackDriver.AddToBackpackContributor(backpackOwner, Grisha, backpackId);
@@ -138,7 +139,7 @@ namespace DeUrgenta.Specs.Steps
         [When(@"Ion edits backpack created by Sasha")]
         public async Task WhenIonEditsBackpackCreatedBySasha()
         {
-            var user = _scenarioContext.Get<ApiClient>("Ion");
+            var user = _scenarioContext.Get<Client>("Ion");
             var backpackId = _scenarioContext.Get<Guid>("backpack-id");
 
             object updateResponse;
@@ -169,7 +170,7 @@ namespace DeUrgenta.Specs.Steps
         [When(@"Grisha queries for backpacks")]
         public async Task WhenGrishaQueriesForBackpacks()
         {
-            var user = _scenarioContext.Get<ApiClient>("Grisha");
+            var user = _scenarioContext.Get<Client>("Grisha");
 
             var backpacks = await user.GetBackpacksAsync();
             _scenarioContext["backpacks"] = backpacks.ToImmutableArray();

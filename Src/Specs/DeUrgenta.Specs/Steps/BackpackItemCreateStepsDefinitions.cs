@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
+using DeUrgenta.Specs.Clients;
 using DeUrgenta.Specs.Drivers;
 using Shouldly;
 using TechTalk.SpecFlow;
@@ -38,7 +39,7 @@ namespace DeUrgenta.Specs.Steps
         [Given(@"Sasha creates a backpack")]
         public async Task GivenSashaCreatesABackpack()
         {
-            var sasha = _scenarioContext.Get<ApiClient>("Sasha");
+            var sasha = _scenarioContext.Get<Client>("Sasha");
             var backpack = await sasha.CreateNewBackpackAsync(new BackpackModelRequest { Name = "El backpacko" });
             _scenarioContext.Add("backpackId", backpack.Id);
         }
@@ -46,8 +47,8 @@ namespace DeUrgenta.Specs.Steps
         [Given(@"Grisha is a backpack contributor")]
         public async Task GivenGrishaIsABackpackContributor()
         {
-            var sasha = _scenarioContext.Get<ApiClient>("Sasha");
-            var grisha = _scenarioContext.Get<ApiClient>("Grisha");
+            var sasha = _scenarioContext.Get<Client>("Sasha");
+            var grisha = _scenarioContext.Get<Client>("Grisha");
             var backpackId = _scenarioContext.Get<Guid>("backpackId");
 
 
@@ -57,13 +58,13 @@ namespace DeUrgenta.Specs.Steps
         [When(@"Sasha creates an item")]
         public async Task WhenSashaCreatesAnItem()
         {
-            var sasha = _scenarioContext.Get<ApiClient>("Sasha");
+            var sasha = _scenarioContext.Get<Client>("Sasha");
             var backpackId = _scenarioContext.Get<Guid>("backpackId");
 
             await CreateBackpackItem(sasha, backpackId, DateTime.Now.AddDays(350));
         }
 
-        private async Task CreateBackpackItem(ApiClient user, Guid backpackId, DateTime? expirationDate)
+        private async Task CreateBackpackItem(Client user, Guid backpackId, DateTime? expirationDate)
         {
             var backpackItemRequest = new BackpackItemRequest
             {
@@ -88,7 +89,7 @@ namespace DeUrgenta.Specs.Steps
 
             response.Name.ShouldBe(request.Name);
             response.Amount.ShouldBe(request.Amount);
-            response.ExpirationDate.Date.ShouldBe(request.ExpirationDate.Date);
+            response.ExpirationDate.ShouldBe(request.ExpirationDate);
             response.CategoryType.ShouldBe(request.CategoryType);
         }
 
@@ -102,7 +103,7 @@ namespace DeUrgenta.Specs.Steps
         [When(@"Grisha queries for backpack items")]
         public async Task WhenGrishaQueriesForBackpackItems()
         {
-            var grisha = _scenarioContext.Get<ApiClient>("Grisha");
+            var grisha = _scenarioContext.Get<Client>("Grisha");
             var backpackId = _scenarioContext.Get<Guid>("backpackId");
 
             var backpackItems = await grisha.GetBackpackItemsAsync(backpackId);
@@ -117,7 +118,7 @@ namespace DeUrgenta.Specs.Steps
             var createdBackpackItem = _scenarioContext.Get<BackpackItemModel>("backpack-item");
 
             backpackItems.ShouldContain(x => createdBackpackItem.Name == x.Name
-                                           && createdBackpackItem.ExpirationDate.Date == x.ExpirationDate.Date
+                                           && createdBackpackItem.ExpirationDate.Value.Date == x.ExpirationDate.Value.Date
                                            && createdBackpackItem.CategoryType == x.CategoryType
                                            && createdBackpackItem.Amount == x.Amount);
         }
@@ -125,7 +126,7 @@ namespace DeUrgenta.Specs.Steps
         [When(@"Grisha creates an item")]
         public async Task WhenGrishaCreatesAnItem()
         {
-            var grisha = _scenarioContext.Get<ApiClient>("Grisha");
+            var grisha = _scenarioContext.Get<Client>("Grisha");
             var backpackId = _scenarioContext.Get<Guid>("backpackId");
 
             await CreateBackpackItem(grisha, backpackId, DateTime.Now.AddDays(350));
@@ -134,7 +135,7 @@ namespace DeUrgenta.Specs.Steps
         [When(@"Sasha queries for backpack items")]
         public async Task WhenSashaQueriesForBackpackItems()
         {
-            var sasha = _scenarioContext.Get<ApiClient>("Sasha");
+            var sasha = _scenarioContext.Get<Client>("Sasha");
             var backpackId = _scenarioContext.Get<Guid>("backpackId");
 
             var backpackItems = await sasha.GetBackpackItemsAsync(backpackId);
@@ -145,7 +146,7 @@ namespace DeUrgenta.Specs.Steps
         [When(@"Sasha creates an item with indefinite expiration date")]
         public async Task WhenSashaCreatesAnItemWithIndefiniteExpirationDate()
         {
-            var sasha = _scenarioContext.Get<ApiClient>("Sasha");
+            var sasha = _scenarioContext.Get<Client>("Sasha");
             var backpackId = _scenarioContext.Get<Guid>("backpackId");
 
             await CreateBackpackItem(sasha, backpackId, null);
@@ -161,7 +162,7 @@ namespace DeUrgenta.Specs.Steps
         [When(@"Jora creates an item")]
         public async Task WhenJoraCreatesAnItem()
         {
-            var jora = _scenarioContext.Get<ApiClient>("Jora");
+            var jora = _scenarioContext.Get<Client>("Jora");
             var backpackId = _scenarioContext.Get<Guid>("backpackId");
 
             try
@@ -192,7 +193,7 @@ namespace DeUrgenta.Specs.Steps
         [When(@"Ion creates an item")]
         public async Task WhenIonCreatesAnItem()
         {
-            var ion = _scenarioContext.Get<ApiClient>("Ion");
+            var ion = _scenarioContext.Get<Client>("Ion");
             var backpackId = _scenarioContext.Get<Guid>("backpackId");
 
             try

@@ -19,7 +19,7 @@ namespace DeUrgenta.Specs.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class BackpackDeleteFeature : object, Xunit.IClassFixture<BackpackDeleteFeature.FixtureData>, System.IDisposable
+    public partial class GroupEditFeature : object, Xunit.IClassFixture<GroupEditFeature.FixtureData>, System.IDisposable
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
@@ -28,10 +28,10 @@ namespace DeUrgenta.Specs.Features
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "Backpack-Delete.feature"
+#line 1 "Group-Edit.feature"
 #line hidden
         
-        public BackpackDeleteFeature(BackpackDeleteFeature.FixtureData fixtureData, DeUrgenta_Specs_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public GroupEditFeature(GroupEditFeature.FixtureData fixtureData, DeUrgenta_Specs_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
             this.TestInitialize();
@@ -40,7 +40,7 @@ namespace DeUrgenta.Specs.Features
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Backpack delete", "\tA user should be able to delete backpacks", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Group edit", "\tA group admin should be able to edit a group they created", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -80,10 +80,13 @@ namespace DeUrgenta.Specs.Features
 #line 4
 #line hidden
 #line 5
- testRunner.Given("Sasha is authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("Sasha is an authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 6
- testRunner.And("Sasha creates a backpack named \"My backpack\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("he creates a group named \"Sasha\'s group\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 7
+    testRunner.And("Grisha is an authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
         }
         
@@ -92,18 +95,14 @@ namespace DeUrgenta.Specs.Features
             this.TestTearDown();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Backpack delete should be reflected in `my backpacks` list of owner")]
-        [Xunit.TraitAttribute("FeatureTitle", "Backpack delete")]
-        [Xunit.TraitAttribute("Description", "Backpack delete should be reflected in `my backpacks` list of owner")]
-        [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_delete")]
-        public virtual void BackpackDeleteShouldBeReflectedInMyBackpacksListOfOwner()
+        [Xunit.SkippableFactAttribute(DisplayName="Change group name")]
+        [Xunit.TraitAttribute("FeatureTitle", "Group edit")]
+        [Xunit.TraitAttribute("Description", "Change group name")]
+        public virtual void ChangeGroupName()
         {
-            string[] tagsOfScenario = new string[] {
-                    "backpack",
-                    "backpack_delete"};
+            string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Backpack delete should be reflected in `my backpacks` list of owner", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Change group name", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 9
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -128,31 +127,24 @@ this.ScenarioInitialize(scenarioInfo);
 this.FeatureBackground();
 #line hidden
 #line 10
- testRunner.When("owner deletes backpack named \"My backpack\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("Sasha changes the name of the group to \"Awesome group\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 11
- testRunner.And("owner queries for his backpacks", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 12
- testRunner.Then("returned backpacks does not contain deleted backpack", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+    testRunner.Then("the returned group contains the group name \"Awesome group\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Backpack update should be reflected in `backpacks` list of owner")]
-        [Xunit.TraitAttribute("FeatureTitle", "Backpack delete")]
-        [Xunit.TraitAttribute("Description", "Backpack update should be reflected in `backpacks` list of owner")]
-        [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_delete")]
-        public virtual void BackpackUpdateShouldBeReflectedInBackpacksListOfOwner()
+        [Xunit.SkippableFactAttribute(DisplayName="Non-admin group member can\'t change group name")]
+        [Xunit.TraitAttribute("FeatureTitle", "Group edit")]
+        [Xunit.TraitAttribute("Description", "Non-admin group member can\'t change group name")]
+        public virtual void Non_AdminGroupMemberCantChangeGroupName()
         {
-            string[] tagsOfScenario = new string[] {
-                    "backpack",
-                    "backpack_delete"};
+            string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Backpack update should be reflected in `backpacks` list of owner", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 15
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Non-admin group member can\'t change group name", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 13
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -174,33 +166,29 @@ this.ScenarioInitialize(scenarioInfo);
                 this.ScenarioStart();
 #line 4
 this.FeatureBackground();
+#line hidden
+#line 14
+    testRunner.Given("Grisha is a member of \"Sasha\'s group\" but not the admin", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 15
+ testRunner.When("Grisha changes the name of the group to \"Awesome group\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 16
- testRunner.When("owner deletes backpack named \"My backpack\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 17
- testRunner.And("owner queries for backpacks", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 18
- testRunner.Then("returned backpacks does not contain deleted backpack", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+    testRunner.Then("Grisha gets a BadRequest response", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Backpack delete can be performed only by owner")]
-        [Xunit.TraitAttribute("FeatureTitle", "Backpack delete")]
-        [Xunit.TraitAttribute("Description", "Backpack delete can be performed only by owner")]
-        [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_delete")]
-        public virtual void BackpackDeleteCanBePerformedOnlyByOwner()
+        [Xunit.SkippableFactAttribute(DisplayName="Add member")]
+        [Xunit.TraitAttribute("FeatureTitle", "Group edit")]
+        [Xunit.TraitAttribute("Description", "Add member")]
+        public virtual void AddMember()
         {
-            string[] tagsOfScenario = new string[] {
-                    "backpack",
-                    "backpack_delete"};
+            string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Backpack delete can be performed only by owner", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 21
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Add member", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 18
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -222,33 +210,35 @@ this.ScenarioInitialize(scenarioInfo);
                 this.ScenarioStart();
 #line 4
 this.FeatureBackground();
+#line hidden
+#line 19
+    testRunner.Given("Grisha is not a member of \"Sasha\'s group\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 20
+    testRunner.When("Sasha invites Grisha to be part of \"Sasha\'s group\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 21
+    testRunner.And("Grisha accepts the inivitation", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 22
- testRunner.Given("Grisha is authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Then("the number of users in \"Sasha\'s group\" increases by 1", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 23
- testRunner.When("Grisha deletes backpack created by Sasha", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 24
- testRunner.Then("gets BadRequest in response", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+    testRunner.And("the list of group members in \"Sasha\'s group\" includes Grisha", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Backpack delete cannot be performed by a contributor")]
-        [Xunit.TraitAttribute("FeatureTitle", "Backpack delete")]
-        [Xunit.TraitAttribute("Description", "Backpack delete cannot be performed by a contributor")]
-        [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_delete")]
-        public virtual void BackpackDeleteCannotBePerformedByAContributor()
+        [Xunit.SkippableFactAttribute(DisplayName="Non-admin group member can\'t add member")]
+        [Xunit.TraitAttribute("FeatureTitle", "Group edit")]
+        [Xunit.TraitAttribute("Description", "Non-admin group member can\'t add member")]
+        public virtual void Non_AdminGroupMemberCantAddMember()
         {
-            string[] tagsOfScenario = new string[] {
-                    "backpack",
-                    "backpack_delete"};
+            string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Backpack delete cannot be performed by a contributor", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 27
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Non-admin group member can\'t add member", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 25
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -271,34 +261,71 @@ this.ScenarioInitialize(scenarioInfo);
 #line 4
 this.FeatureBackground();
 #line hidden
+#line 26
+    testRunner.Given("Grisha is a member of \"Sasha\'s group\" but not the admin", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 27
+ testRunner.When("Grisha invites a new member to be part of \"Sasha\'s group\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
 #line 28
- testRunner.Given("Grisha is authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-#line 29
- testRunner.And("is a contributor to Sasha\'s backpack", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 30
- testRunner.When("Grisha deletes backpack created by Sasha", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 31
- testRunner.Then("gets BadRequest in response", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+    testRunner.Then("Grisha gets a BadRequest response", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Backpack delete cannot be performed by an un-authenticated")]
-        [Xunit.TraitAttribute("FeatureTitle", "Backpack delete")]
-        [Xunit.TraitAttribute("Description", "Backpack delete cannot be performed by an un-authenticated")]
-        [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_delete")]
-        public virtual void BackpackDeleteCannotBePerformedByAnUn_Authenticated()
+        [Xunit.SkippableFactAttribute(DisplayName="Delete member")]
+        [Xunit.TraitAttribute("FeatureTitle", "Group edit")]
+        [Xunit.TraitAttribute("Description", "Delete member")]
+        public virtual void DeleteMember()
         {
-            string[] tagsOfScenario = new string[] {
-                    "backpack",
-                    "backpack_delete"};
+            string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Backpack delete cannot be performed by an un-authenticated", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Delete member", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 30
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 4
+this.FeatureBackground();
+#line hidden
+#line 31
+    testRunner.When("Sasha deletes Grisha from \"Sasha\'s group\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 32
+    testRunner.Then("the number of users in \"Sasha\'s group\" decreases by 1", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 33
+    testRunner.And("the list of group members in \"Sasha\'s group\" does not include Grisha", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Non-admin group member can\'t delete member")]
+        [Xunit.TraitAttribute("FeatureTitle", "Group edit")]
+        [Xunit.TraitAttribute("Description", "Non-admin group member can\'t delete member")]
+        public virtual void Non_AdminGroupMemberCantDeleteMember()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Non-admin group member can\'t delete member", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 35
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -323,13 +350,13 @@ this.ScenarioInitialize(scenarioInfo);
 this.FeatureBackground();
 #line hidden
 #line 36
- testRunner.Given("Ion is un-authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("Grisha is a member of \"Sasha\'s group\" but not the admin", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 37
- testRunner.When("Ion deletes backpack created by Sasha", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("Grisha deletes a member of \"Sasha\'s group\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 38
- testRunner.Then("gets Unauthorized in response", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+    testRunner.Then("Grisha gets a BadRequest response", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -342,12 +369,12 @@ this.FeatureBackground();
             
             public FixtureData()
             {
-                BackpackDeleteFeature.FeatureSetup();
+                GroupEditFeature.FeatureSetup();
             }
             
             void System.IDisposable.Dispose()
             {
-                BackpackDeleteFeature.FeatureTearDown();
+                GroupEditFeature.FeatureTearDown();
             }
         }
     }

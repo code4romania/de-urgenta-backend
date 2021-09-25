@@ -49,7 +49,7 @@ namespace DeUrgenta.Api
             services.AddUserApiServices();
             services.AddBackpackApiServices();
             services.AddGroupApiServices();
-            services.AddCertificationsApiServices();         
+            services.AddCertificationsApiServices();
             services.AddEventsApiServices();
             services.AddAdminApiServices();
 
@@ -87,7 +87,7 @@ namespace DeUrgenta.Api
             app.UseEndpoints(endpoints => endpoints.MapControllers());
 
             app.SetupStaticFiles(Configuration, WebHostEnvironment);
-           
+
             app.UseCors(CorsPolicyName);
         }
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
-using DeUrgenta.Specs.Drivers;
+using DeUrgenta.Specs.Clients;
 using Shouldly;
 using TechTalk.SpecFlow;
 
@@ -27,7 +27,7 @@ namespace DeUrgenta.Specs.Steps
         [Given(@"he creates a backpack called ""(.*)""")]
         public async Task GivenHeCreatesABackpackCalled(string backpackName)
         {
-            ApiClient user = _scenarioContext.Get<ApiClient>("Sasha");
+            Client user = _scenarioContext.Get<Client>("Sasha");
 
             BackpackModel backpack = await CreateBackpack(backpackName, user);
 
@@ -35,7 +35,7 @@ namespace DeUrgenta.Specs.Steps
             _scenarioContext["backpack"] = backpack;
         }
 
-        private static async Task<BackpackModel> CreateBackpack(string backpackName, ApiClient user)
+        private static async Task<BackpackModel> CreateBackpack(string backpackName, Client user)
         {
             return await user.CreateNewBackpackAsync(new BackpackModelRequest()
             {
@@ -62,7 +62,7 @@ namespace DeUrgenta.Specs.Steps
         [When(@"he queries for his backpacks")]
         public async Task WhenHeQueriesForHisBackpacks()
         {
-            ApiClient user = _scenarioContext.Get<ApiClient>("Sasha");
+            Client user = _scenarioContext.Get<Client>("Sasha");
 
             var backpacks = await user.GetMyBackpacksAsync();
             _scenarioContext["backpacks"] = backpacks.ToImmutableArray();
@@ -71,7 +71,7 @@ namespace DeUrgenta.Specs.Steps
         [When(@"he queries for backpacks")]
         public async Task WhenHeQueriesForBackpacks()
         {
-            ApiClient user = _scenarioContext.Get<ApiClient>("Sasha");
+            Client user = _scenarioContext.Get<Client>("Sasha");
 
             var backpacks = await user.GetBackpacksAsync();
             _scenarioContext["backpacks"] = backpacks.ToImmutableArray();

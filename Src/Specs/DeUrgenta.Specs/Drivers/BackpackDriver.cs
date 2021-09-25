@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using DeUrgenta.Specs.Clients;
 using DeUrgenta.Specs.Extensions;
 
 namespace DeUrgenta.Specs.Drivers
@@ -14,7 +15,7 @@ namespace DeUrgenta.Specs.Drivers
         /// <summary>
         /// Adds a user as backpack contributor.
         /// </summary>
-        public async Task AddToBackpackContributor(ApiClient backpackOwner, ApiClient targetUser, Guid backpackId)
+        public async Task AddToBackpackContributor(Client backpackOwner, Client targetUser, Guid backpackId)
         {
             var targetUserId = await targetUser.GetUserId();
             await backpackOwner.InviteToBackpackContributorsAsync(backpackId, targetUserId);

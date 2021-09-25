@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
+using DeUrgenta.Specs.Clients;
 using DeUrgenta.Specs.Drivers;
 using Shouldly;
 using TechTalk.SpecFlow;
@@ -31,7 +32,7 @@ namespace DeUrgenta.Specs.Steps
         [Given(@"Sasha creates a backpack named ""(.*)""")]
         public async Task GivenSashaCreatesABackpackNamed(string backpackName)
         {
-            var user = _scenarioContext.Get<ApiClient>("Sasha");
+            var user = _scenarioContext.Get<Client>("Sasha");
 
             var backpack = await user.CreateNewBackpackAsync(new()
             {
@@ -44,7 +45,7 @@ namespace DeUrgenta.Specs.Steps
         [When(@"owner deletes backpack named ""My backpack""")]
         public async Task WhenOwnerDeletesBackpackNamed()
         {
-            var user = _scenarioContext.Get<ApiClient>("Sasha");
+            var user = _scenarioContext.Get<Client>("Sasha");
             var backpackId = _scenarioContext.Get<Guid>("backpack-id");
 
             await DeleteBackpack(user, backpackId);
@@ -53,7 +54,7 @@ namespace DeUrgenta.Specs.Steps
         [When(@"owner queries for his backpacks")]
         public async Task WhenOwnerQueriesForHisBackpacks()
         {
-            ApiClient user = _scenarioContext.Get<ApiClient>("Sasha");
+            Client user = _scenarioContext.Get<Client>("Sasha");
 
             var backpacks = await user.GetMyBackpacksAsync();
             _scenarioContext["backpacks"] = backpacks.ToImmutableArray();
@@ -71,7 +72,7 @@ namespace DeUrgenta.Specs.Steps
         [When(@"owner queries for backpacks")]
         public async Task WhenOwnerQueriesForBackpacks()
         {
-            ApiClient user = _scenarioContext.Get<ApiClient>("Sasha");
+            Client user = _scenarioContext.Get<Client>("Sasha");
 
             var backpacks = await user.GetBackpacksAsync();
             _scenarioContext["backpacks"] = backpacks.ToImmutableArray();
@@ -86,13 +87,13 @@ namespace DeUrgenta.Specs.Steps
         [When(@"Grisha deletes backpack created by Sasha")]
         public async Task WhenGrishaDeletesBackpackCreatedBySasha()
         {
-            var user = _scenarioContext.Get<ApiClient>("Grisha");
+            var user = _scenarioContext.Get<Client>("Grisha");
             var backpackId = _scenarioContext.Get<Guid>("backpack-id");
 
             await DeleteBackpack(user, backpackId);
         }
 
-        private async Task DeleteBackpack(ApiClient user, Guid backpackId)
+        private async Task DeleteBackpack(Client user, Guid backpackId)
         {
             object deleteResponse = null;
 
@@ -120,7 +121,7 @@ namespace DeUrgenta.Specs.Steps
         [Given(@"is a contributor to Sasha's backpack")]
         public async Task GivenIsAContributorToSashaSBackpack()
         {
-            var backpackOwner = _scenarioContext.Get<ApiClient>("Sasha");
+            var backpackOwner = _scenarioContext.Get<Client>("Sasha");
             var backpackId = _scenarioContext.Get<Guid>("backpack-id");
 
             await _backpackDriver.AddToBackpackContributor(backpackOwner, Grisha, backpackId);
@@ -135,7 +136,7 @@ namespace DeUrgenta.Specs.Steps
         [When(@"Ion deletes backpack created by Sasha")]
         public async Task WhenIonDeletesBackpackCreatedBySasha()
         {
-            var user = _scenarioContext.Get<ApiClient>("Ion");
+            var user = _scenarioContext.Get<Client>("Ion");
             var backpackId = _scenarioContext.Get<Guid>("backpack-id");
 
             await DeleteBackpack(user, backpackId);
