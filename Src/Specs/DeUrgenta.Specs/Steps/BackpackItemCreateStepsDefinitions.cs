@@ -10,7 +10,7 @@ namespace DeUrgenta.Specs.Steps
 {
     [Binding]
     [Scope(Feature = "Backpack item creation")]
-    public class BackpackItemCreateStepsDefinitions : BaseApiStep
+    public class BackpackItemCreateStepsDefinitions : BaseStepDefinition
     {
         private readonly ScenarioContext _scenarioContext;
         private readonly BackpackDriver _backpackDriver;
@@ -52,7 +52,7 @@ namespace DeUrgenta.Specs.Steps
             var backpackId = _scenarioContext.Get<Guid>("backpackId");
 
 
-            await _backpackDriver.AddToBackpackContributor(sasha, grisha, backpackId);
+            await BackpackDriver.AddToBackpackContributor(sasha, grisha, backpackId);
         }
 
         [When(@"Sasha creates an item")]

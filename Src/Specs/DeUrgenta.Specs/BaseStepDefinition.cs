@@ -5,7 +5,7 @@ using TechTalk.SpecFlow;
 
 namespace DeUrgenta.Specs
 {
-    public abstract class BaseApiStep
+    public abstract class BaseStepDefinition
     {
         private readonly ApiWebApplicationFactory _factory;
         private readonly Client _dummyClient;
@@ -21,24 +21,26 @@ namespace DeUrgenta.Specs
         public Client Grisha { get; private set; }
 
         /// <summary>
+        /// Ill intended user
         /// A registered user.
         /// Use this user to try to access private data as an non-authorized user
         /// </summary>
         public Client Jora { get; private set; }
 
         /// <summary>
-        /// Ill intended user. Use this user to access private data as an non-authenticated user.
+        /// Ill intended user.
+        /// Use this user to access private data as an non-authenticated user.
         /// </summary>
         public Client Ion { get; private set; }
 
-        public BaseApiStep(ApiWebApplicationFactory factory)
+        public BaseStepDefinition(ApiWebApplicationFactory factory)
         {
             _factory = factory;
             _dummyClient = new Client(_factory.CreateClient());
         }
 
         [BeforeScenario]
-        public async Task Cleanup()
+        public async Task SetupClients()
         {
             Ion = new Client(_factory.CreateClient());
 

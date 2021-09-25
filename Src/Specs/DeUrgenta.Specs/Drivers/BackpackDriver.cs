@@ -15,7 +15,7 @@ namespace DeUrgenta.Specs.Drivers
         /// <summary>
         /// Adds a user as backpack contributor.
         /// </summary>
-        public async Task AddToBackpackContributor(Client backpackOwner, Client targetUser, Guid backpackId)
+        public static async Task AddToBackpackContributor(Client backpackOwner, Client targetUser, Guid backpackId)
         {
             var targetUserId = await targetUser.GetUserId();
             await backpackOwner.InviteToBackpackContributorsAsync(backpackId, targetUserId);

@@ -1,5 +1,6 @@
 ﻿using DeUrgenta.Group.Api.Models;
 using DeUrgenta.Group.Api.Validators.RequestValidators;
+using DeUrgenta.Tests.Helpers;
 using FluentValidation.TestHelper;
 using Xunit;
 

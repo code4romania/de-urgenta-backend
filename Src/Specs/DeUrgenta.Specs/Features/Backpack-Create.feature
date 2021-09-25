@@ -19,3 +19,9 @@ Scenario: Query `my backpacks` should contain created backpack
 Scenario: Query `backpacks` should contain created backpack
 	When he queries for backpacks
 	Then returned backpacks contain created backpack
+
+
+Scenario: An non authenticated user cannot create backpacks
+	Given Ion is a non authenticated user
+	When Ion tries to create a backpack
+	Then 401 is returned

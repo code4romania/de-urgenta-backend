@@ -1,5 +1,4 @@
-﻿using System;
-using DeUrgenta.Api;
+﻿using DeUrgenta.Api;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http;
@@ -14,7 +13,7 @@ namespace DeUrgenta.Specs
         private readonly TestServer _testServer;
 
         // Must be set in each test
-        public ITestOutputHelper Output { get; set; }
+        public ITestOutputHelper Output { get; }
 
         public ApiWebApplicationFactory(ITestOutputHelper output)
         {

@@ -10,7 +10,7 @@ namespace DeUrgenta.Specs.Steps
 {
     [Binding]
     [Scope(Feature = "Backpack delete")]
-    public class BackpackDeleteStepsDefinitions : BaseApiStep
+    public class BackpackDeleteStepsDefinitions : BaseStepDefinition
     {
         private readonly ScenarioContext _scenarioContext;
         private readonly BackpackDriver _backpackDriver;
@@ -124,7 +124,7 @@ namespace DeUrgenta.Specs.Steps
             var backpackOwner = _scenarioContext.Get<Client>("Sasha");
             var backpackId = _scenarioContext.Get<Guid>("backpack-id");
 
-            await _backpackDriver.AddToBackpackContributor(backpackOwner, Grisha, backpackId);
+            await BackpackDriver.AddToBackpackContributor(backpackOwner, Grisha, backpackId);
         }
 
         [Given(@"Ion is un-authenticated user")]

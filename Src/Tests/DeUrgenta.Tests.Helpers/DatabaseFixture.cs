@@ -7,15 +7,13 @@ namespace DeUrgenta.Tests.Helpers
 {
     public class DatabaseFixture
     {
-        private readonly string _connectionString;
-
         public DeUrgentaContext Context { get; }
 
         public DatabaseFixture()
         {
-            _connectionString = GetConnectionString();
+            string connectionString = GetConnectionString();
             var optionsBuilder = new DbContextOptionsBuilder<DeUrgentaContext>();
-            optionsBuilder.UseNpgsql(_connectionString);
+            optionsBuilder.UseNpgsql(connectionString);
             // Create instance of you application's DbContext
             Context = new DeUrgentaContext(optionsBuilder.Options);
             Context.Database.Migrate();

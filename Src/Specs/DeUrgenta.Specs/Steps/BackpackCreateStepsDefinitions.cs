@@ -9,7 +9,7 @@ namespace DeUrgenta.Specs.Steps
 {
     [Binding]
     [Scope(Feature = "Backpack creation")]
-    public class BackpackCreateStepsDefinitions : BaseApiStep
+    public class BackpackCreateStepsDefinitions : BaseStepDefinition
     {
         private readonly ScenarioContext _scenarioContext;
 
@@ -37,7 +37,7 @@ namespace DeUrgenta.Specs.Steps
 
         private static async Task<BackpackModel> CreateBackpack(string backpackName, Client user)
         {
-            return await user.CreateNewBackpackAsync(new BackpackModelRequest()
+            return await user.CreateNewBackpackAsync(new BackpackModelRequest
             {
                 Name = backpackName
             });
@@ -83,6 +83,34 @@ namespace DeUrgenta.Specs.Steps
             var userBackpacks = _scenarioContext.Get<ImmutableArray<BackpackModel>>("backpacks");
             var backpack = _scenarioContext.Get<BackpackModel>("backpack");
             userBackpacks.ShouldContain(x => x.Name == backpack.Name && x.Id == backpack.Id);
+        }
+
+        [Given(@"Ion is a non authenticated user")]
+        public void GivenIonIsANonAuthenticatedUser()
+        {
+            _scenarioContext["Ion"] = Ion;
+        }
+
+        [When(@"Ion tries to create a backpack")]
+        public async Task WhenIonTriesToCreateABackpack()
+        {
+            Client ion = _scenarioContext.Get<Client>("Ion");
+
+            try
+            {
+                await ion.CreateNewBackpackAsync(new BackpackModelRequest { Name = "a backpack" });
+            }
+            catch (Exception e)
+            {
+                _scenarioContext["create-response-exception"] = e;
+            }
+        }
+
+        [Then(@"(.*) is returned")]
+        public void ThenIsReturned(int statusCode)
+        {
+            var response = _scenarioContext.Get<ApiException>("create-response-exception");
+            response.StatusCode.ShouldBe(statusCode);
         }
     }
 }
