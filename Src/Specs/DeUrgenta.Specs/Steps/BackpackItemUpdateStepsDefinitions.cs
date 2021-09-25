@@ -13,15 +13,12 @@ namespace DeUrgenta.Specs.Steps
     public class BackpackItemUpdateStepsDefinitions : BaseStepDefinition
     {
         private readonly ScenarioContext _scenarioContext;
-        private readonly BackpackDriver _backpackDriver;
 
         public BackpackItemUpdateStepsDefinitions(
             ScenarioContext scenarioContext,
-            BackpackDriver backpackDriver,
             ApiWebApplicationFactory factory) : base(factory)
         {
             _scenarioContext = scenarioContext;
-            _backpackDriver = backpackDriver;
         }
 
         [Given(@"Sasha is authenticated user")]

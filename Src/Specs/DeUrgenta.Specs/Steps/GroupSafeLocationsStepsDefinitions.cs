@@ -13,15 +13,12 @@ namespace DeUrgenta.Specs.Steps
     [Scope(Feature = "Add Safe Location to Group")]
     public class GroupSafeLocationsStepsDefinitions : BaseStepDefinition
     {
-        private readonly GroupDriver _groupDriver;
         private readonly ScenarioContext _scenarioContext;
 
         public GroupSafeLocationsStepsDefinitions(
             ApiWebApplicationFactory factory,
-            GroupDriver groupDriver,
             ScenarioContext scenarioContext) : base(factory)
         {
-            _groupDriver = groupDriver;
             _scenarioContext = scenarioContext;
         }
 
@@ -179,7 +176,7 @@ namespace DeUrgenta.Specs.Steps
             var sasha = _scenarioContext.Get<Client>("Sasha");
             var groupId = _scenarioContext.Get<Guid>("group-id");
 
-            await _groupDriver.AddGroupMember(groupId, sasha, grisha);
+            await GroupDriver.AddGroupMember(groupId, sasha, grisha);
         }
 
         [When(@"Grisha checks the Safe Locations in `Sasha's group`")]
