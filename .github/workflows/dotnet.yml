@@ -22,7 +22,7 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore DeUrgenta.sln
     - name: Build
       run: dotnet build --no-restore /p:ContinuousIntegrationBuild=true DeUrgenta.sln
     - name: Run unit & integration tests
