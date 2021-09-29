@@ -1,8 +1,6 @@
-﻿using System.IO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DeUrgenta.Domain;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Npgsql;
 using Respawn;
 using Xunit;
@@ -11,42 +9,37 @@ namespace DeUrgenta.Tests.Helpers
 {
     public class DatabaseFixture : IAsyncLifetime
     {
-        private readonly string _connectionString;
-
+        private readonly TestConfig _testConfig;
         private readonly Checkpoint _emptyDatabaseCheckpoint;
         public DeUrgentaContext Context { get; }
 
         public DatabaseFixture()
         {
-            _connectionString = GetConnectionString();
+            _testConfig = new TestConfig();
+
             var optionsBuilder = new DbContextOptionsBuilder<DeUrgentaContext>();
-            optionsBuilder.UseNpgsql(_connectionString);
-            _emptyDatabaseCheckpoint = new Checkpoint
+            optionsBuilder.UseNpgsql(_testConfig.ConnectionString);
+            if (_testConfig.UseDbCheckpoint)
             {
-                SchemasToInclude = new[] { "public" },
-                TablesToIgnore = new[] { "__EFMigrationsHistory", "EventTypes" },
-                DbAdapter = DbAdapter.Postgres
-            };
+                _emptyDatabaseCheckpoint = new Checkpoint
+                {
+                    SchemasToInclude = new[] { "public" },
+                    TablesToIgnore = new[] { "__EFMigrationsHistory", "EventTypes" },
+                    DbAdapter = DbAdapter.Postgres
+                };
+            }
 
             // Create instance of you application's DbContext
             Context = new DeUrgentaContext(optionsBuilder.Options);
             Context.Database.Migrate();
         }
 
-        private static string GetConnectionString()
-        {
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.testing.json")
-                .AddEnvironmentVariables()
-                .Build();
-
-            return configuration.GetConnectionString("TestingDbConnectionString");
-        }
-
         public async Task InitializeAsync()
         {
-            await using var conn = new NpgsqlConnection(_connectionString);
+            if (!_testConfig.UseDbCheckpoint)
+                return;
+
+            await using var conn = new NpgsqlConnection(_testConfig.ConnectionString);
             await conn.OpenAsync();
 
             await _emptyDatabaseCheckpoint.Reset(conn);
@@ -54,7 +47,10 @@ namespace DeUrgenta.Tests.Helpers
 
         public async Task DisposeAsync()
         {
-            await using var conn = new NpgsqlConnection(_connectionString);
+            if (!_testConfig.UseDbCheckpoint)
+                return;
+
+            await using var conn = new NpgsqlConnection(_testConfig.ConnectionString);
             await conn.OpenAsync();
 
             await _emptyDatabaseCheckpoint.Reset(conn);

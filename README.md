@@ -100,6 +100,11 @@ S3 storage requires having an [AWS account configured](https://docs.aws.amazon.c
   }
 ```
 
+### Using DB checkpoint for integration tests
+To configure a DB to be cleaned after integration tests are run you can enable the *UseDbCheckpoint* option in the appsettings.testing.json
+```
+ "UseDbCheckpoint" : "true"
+```
 
 ## Feedback
 
