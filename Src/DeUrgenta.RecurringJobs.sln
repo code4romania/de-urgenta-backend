@@ -9,6 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Domain", "DeUrgen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Infra", "DeUrgenta.Infra\DeUrgenta.Infra.csproj", "{2D5B0BC4-04C5-458F-9AAB-4A8A1F60F467}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeUrgenta.RecurringJobs.Tests", "Tests\DeUrgenta.RecurringJobs.Tests\DeUrgenta.RecurringJobs.Tests.csproj", "{5E6EADB9-3A20-46AC-AC5F-63459A08E38E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Tests.Helpers", "Tests\DeUrgenta.Tests.Helpers\DeUrgenta.Tests.Helpers.csproj", "{016D5156-F918-4F31-A501-97A10EACF974}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0574C651-D000-4115-B86A-CB79A477918D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,9 +33,21 @@ Global
 		{2D5B0BC4-04C5-458F-9AAB-4A8A1F60F467}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D5B0BC4-04C5-458F-9AAB-4A8A1F60F467}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D5B0BC4-04C5-458F-9AAB-4A8A1F60F467}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E6EADB9-3A20-46AC-AC5F-63459A08E38E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E6EADB9-3A20-46AC-AC5F-63459A08E38E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E6EADB9-3A20-46AC-AC5F-63459A08E38E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E6EADB9-3A20-46AC-AC5F-63459A08E38E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{016D5156-F918-4F31-A501-97A10EACF974}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{016D5156-F918-4F31-A501-97A10EACF974}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{016D5156-F918-4F31-A501-97A10EACF974}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{016D5156-F918-4F31-A501-97A10EACF974}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5E6EADB9-3A20-46AC-AC5F-63459A08E38E} = {0574C651-D000-4115-B86A-CB79A477918D}
+		{016D5156-F918-4F31-A501-97A10EACF974} = {0574C651-D000-4115-B86A-CB79A477918D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E82FE75A-0728-4078-A2BF-F92A22A98F38}

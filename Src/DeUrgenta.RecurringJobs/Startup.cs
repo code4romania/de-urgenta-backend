@@ -24,6 +24,7 @@ namespace DeUrgenta.RecurringJobs
         {
             services.AddDatabase<DeUrgentaContext>(Configuration.GetConnectionString("DbConnectionString"));
             services.AddHangfireServices();
+            services.AddRecurringJobs(Configuration);
 
             services.AddControllers();
         }
@@ -44,6 +45,7 @@ namespace DeUrgenta.RecurringJobs
 
 
             app.UseAuthenticatedHangfireDashboard(Configuration);
+            app.ScheduleJobs(Configuration);
 
             app.UseEndpoints(endpoints =>
             {

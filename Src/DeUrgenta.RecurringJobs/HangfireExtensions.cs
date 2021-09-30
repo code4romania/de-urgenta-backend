@@ -1,4 +1,8 @@
-﻿using Hangfire;
+﻿using DeUrgenta.RecurringJobs.Jobs;
+using DeUrgenta.RecurringJobs.Jobs.Config;
+using DeUrgenta.RecurringJobs.Services;
+using DeUrgenta.RecurringJobs.Services.NotificationSenders;
+using Hangfire;
 using Hangfire.Dashboard;
 using Hangfire.Dashboard.BasicAuthorization;
 using Hangfire.MemoryStorage;
@@ -19,8 +23,33 @@ namespace DeUrgenta.RecurringJobs
                 .UseRecommendedSerializerSettings()
                 .UseMemoryStorage()
                 );
+
             // Add the processing server as IHostedService
             services.AddHangfireServer();
+        }
+
+        public static void AddRecurringJobs(this IServiceCollection services, IConfiguration configuration)
+        {
+            var notificationSendersConfig = configuration.GetSection("NotificationSenders")
+                .Get<NotificationSendersConfig>();
+
+            if (notificationSendersConfig.NoOpNotificationSenderEnabled)
+            {
+                services.AddScoped<INotificationSender, NoOpNotificationSender>();
+            }
+            if (notificationSendersConfig.EmailNotificationSenderEnabled)
+            {
+                services.AddScoped<INotificationSender, EmailNotificationSender>();
+            }
+            if (notificationSendersConfig.PushNotificationSenderEnabled)
+            {
+                services.AddScoped<INotificationSender, PushNotificationSender>();
+            }
+
+            services.AddScoped<INotificationService, NotificationService>();
+
+            services.Configure<ExpiredCertificationJobConfig>(configuration.GetSection("RecurringJobsConfig:ExpiredCertificationJobConfig"));
+            services.AddScoped<IExpiredCertificationJob, ExpiredCertificationJob>();
         }
 
         public static void UseAuthenticatedHangfireDashboard(this IApplicationBuilder app, IConfiguration configuration)
