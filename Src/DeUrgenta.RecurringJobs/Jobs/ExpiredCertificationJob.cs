@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using DeUrgenta.Domain;
 using DeUrgenta.RecurringJobs.Jobs.Config;
 using DeUrgenta.RecurringJobs.Services;
@@ -20,7 +21,7 @@ namespace DeUrgenta.RecurringJobs.Jobs
             _config = config.CurrentValue;
         }
 
-        public void Run()
+        public async Task RunAsync()
         {
             var usersWithExpiredCertifications = _context.Certifications
                 .Where(c => (c.ExpirationDate - DateTime.Today).Days <= _config.DaysBeforeExpirationDate)
@@ -29,7 +30,7 @@ namespace DeUrgenta.RecurringJobs.Jobs
 
             foreach (var userId in usersWithExpiredCertifications)
             {
-                _notificationService.SendNotification(userId);
+                await _notificationService.SendNotificationAsync(userId);
             }
         }
     }

@@ -18,7 +18,7 @@ namespace DeUrgenta.RecurringJobs
             {
                 RecurringJob.AddOrUpdate<ExpiredCertificationJob>(
                     nameof(ExpiredCertificationJob),
-                    job => job.Run(),
+                    job => job.RunAsync(),
                     expiredCertificationJobConfig.CronExpression,
                     TimeZoneInfo.Utc
                 );

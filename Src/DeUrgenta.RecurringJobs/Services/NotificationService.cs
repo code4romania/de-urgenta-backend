@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using DeUrgenta.RecurringJobs.Services.NotificationSenders;
 using Microsoft.Extensions.Logging;
 
@@ -17,7 +18,7 @@ namespace DeUrgenta.RecurringJobs.Services
             _logger = logger;
         }
 
-        public void SendNotification(Guid userId)
+        public async Task SendNotificationAsync(Guid userId)
         {
             if (_notificationSenders == null || !_notificationSenders.Any())
             {
@@ -27,7 +28,7 @@ namespace DeUrgenta.RecurringJobs.Services
 
             foreach (var notificationSender in _notificationSenders)
             {
-                notificationSender.SendNotification(userId);
+                await notificationSender.SendNotificationAsync(userId);
             }
         }
     }

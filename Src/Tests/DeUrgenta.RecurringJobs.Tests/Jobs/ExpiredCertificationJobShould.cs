@@ -49,10 +49,10 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             var sut = new ExpiredCertificationJob(_context, notificationService, jobConfig);
 
             //Act
-            sut.Run();
+            await sut.RunAsync();
 
             //Assert
-            notificationService.Received().SendNotification(userId);
+            await notificationService.Received().SendNotificationAsync(userId);
         }
         
         [Fact]
@@ -80,10 +80,10 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             var sut = new ExpiredCertificationJob(_context, notificationService, jobConfig);
 
             //Act
-            sut.Run();
+            await sut.RunAsync();
 
             //Assert
-            notificationService.DidNotReceive().SendNotification(userId);
+            await notificationService.DidNotReceive().SendNotificationAsync(userId);
         }
     }
 }

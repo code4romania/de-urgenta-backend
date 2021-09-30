@@ -1,7 +1,9 @@
-﻿namespace DeUrgenta.RecurringJobs.Jobs
+﻿using System.Threading.Tasks;
+
+namespace DeUrgenta.RecurringJobs.Jobs
 {
     public interface IExpiredCertificationJob
     {
-        void Run();
+        Task RunAsync();
     }
 }
