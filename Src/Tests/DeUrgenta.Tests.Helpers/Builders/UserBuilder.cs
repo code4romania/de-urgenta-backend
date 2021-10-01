@@ -14,7 +14,7 @@ namespace DeUrgenta.Tests.Helpers.Builders
             FirstName = TestDataProviders.RandomString(),
             LastName = TestDataProviders.RandomString(),
             Sub = _sub,
-            Email = "a@a.a"
+            Email = $"{_userId}@example.com"
         };
 
         public UserBuilder WithId(Guid userId)
