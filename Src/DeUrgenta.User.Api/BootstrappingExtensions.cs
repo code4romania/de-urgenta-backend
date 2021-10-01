@@ -15,6 +15,7 @@ using DeUrgenta.User.Api.Validators;
 using DeUrgenta.User.Api.Validators.RequestValidators;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -81,6 +82,12 @@ namespace DeUrgenta.User.Api
 
             services.AddTransient<IApplicationUserManager, ApplicationUserManager>();
             return services;
+        }
+
+        public static IApplicationBuilder ConfigureBearerAuth(this IApplicationBuilder builder)
+        {
+            builder.ApplicationServices.UseDatabase<UserDbContext>();
+            return builder;
         }
 
         public static void SetupEmailService(this IServiceCollection services, IConfiguration configuration)

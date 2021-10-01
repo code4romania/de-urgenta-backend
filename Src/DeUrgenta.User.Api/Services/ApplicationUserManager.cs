@@ -20,7 +20,8 @@ namespace DeUrgenta.User.Api.Services
             {
                 FirstName =  user.FirstName,
                 LastName = user.LastName,
-                Sub = userSub,
+                Email = user.Email,
+                Sub = userSub
             };
 
             var userBackpack = new Backpack
