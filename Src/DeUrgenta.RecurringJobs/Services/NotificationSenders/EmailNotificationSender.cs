@@ -16,7 +16,7 @@ namespace DeUrgenta.RecurringJobs.Services.NotificationSenders
 
         public async Task SendNotificationAsync(Guid userId)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u=> u.Id == userId);
+            throw new NotImplementedException();
         }
     }
 }
