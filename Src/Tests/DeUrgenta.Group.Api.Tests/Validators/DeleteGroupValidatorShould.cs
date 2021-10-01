@@ -5,6 +5,7 @@ using DeUrgenta.Domain.Entities;
 using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Validators;
 using DeUrgenta.Tests.Helpers;
+using DeUrgenta.Tests.Helpers.Builders;
 using Shouldly;
 using Xunit;
 
@@ -30,7 +31,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new DeleteGroupValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new DeleteGroup(sub, Guid.NewGuid()));
+            var isValid = await sut.IsValidAsync(new DeleteGroup(sub, Guid.NewGuid()));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -40,20 +41,15 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Invalidate_request_when_group_does_not_exists()
         {
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
-            var user = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
+            var userSub = Guid.NewGuid().ToString();
+            var user = new UserBuilder().WithSub(userSub).Build();
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
             var sut = new DeleteGroupValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new DeleteGroup(userSub, Guid.NewGuid()));
+            var isValid = await sut.IsValidAsync(new DeleteGroup(userSub, Guid.NewGuid()));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -63,22 +59,11 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Invalidate_request_when_user_is_not_admin_of_group()
         {
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
-            string adminSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
+            var adminSub = Guid.NewGuid().ToString();
 
-            var user = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
-
-            var adminUser = new User
-            {
-                FirstName = "Admin",
-                LastName = "User",
-                Sub = adminSub
-            };
+            var user = new UserBuilder().WithSub(userSub).Build();
+            var adminUser = new UserBuilder().WithSub(adminSub).Build();
 
             var group = new Domain.Entities.Group
             {
@@ -94,7 +79,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new DeleteGroupValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new DeleteGroup(userSub, group.Id));
+            var isValid = await sut.IsValidAsync(new DeleteGroup(userSub, group.Id));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -106,13 +91,8 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             // Arrange
             var sut = new DeleteGroupValidator(_dbContext);
 
-            string userSub = Guid.NewGuid().ToString();
-            var user = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
+            var userSub = Guid.NewGuid().ToString();
+            var user = new UserBuilder().WithSub(userSub).Build();
 
             var group = new Domain.Entities.Group
             {
@@ -124,7 +104,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new DeleteGroup(userSub, group.Id));
+            var isValid = await sut.IsValidAsync(new DeleteGroup(userSub, group.Id));
 
             // Assert
             isValid.ShouldBeTrue();

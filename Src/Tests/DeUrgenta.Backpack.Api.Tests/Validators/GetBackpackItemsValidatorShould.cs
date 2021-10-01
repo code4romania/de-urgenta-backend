@@ -5,6 +5,7 @@ using DeUrgenta.Backpack.Api.Validators;
 using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
 using DeUrgenta.Tests.Helpers;
+using DeUrgenta.Tests.Helpers.Builders;
 using Shouldly;
 using Xunit;
 
@@ -30,7 +31,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new GetBackpackItemsValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetBackpackItems(sub, Guid.NewGuid()));
+            var isValid = await sut.IsValidAsync(new GetBackpackItems(sub, Guid.NewGuid()));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -45,19 +46,8 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var userSub = Guid.NewGuid().ToString();
             var contributorSub = Guid.NewGuid().ToString();
 
-            var nonContributor = new User
-            {
-                FirstName = "NonContributor",
-                LastName = "User",
-                Sub = userSub
-            };
-
-            var contributor = new User
-            {
-                FirstName = "Contributor",
-                LastName = "User",
-                Sub = contributorSub
-            };
+            var nonContributor = new UserBuilder().WithSub(userSub).Build();
+            var contributor = new UserBuilder().WithSub(contributorSub).Build();
 
             var backpack = new Domain.Entities.Backpack
             {
@@ -72,7 +62,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetBackpackItems(nonContributor.Sub, Guid.NewGuid()));
+            var isValid = await sut.IsValidAsync(new GetBackpackItems(nonContributor.Sub, Guid.NewGuid()));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -87,12 +77,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var contributorSub = Guid.NewGuid().ToString();
             var backpackId = Guid.NewGuid();
 
-            var contributor = new User
-            {
-                FirstName = "Contributor",
-                LastName = "User",
-                Sub = contributorSub
-            };
+            var contributor = new UserBuilder().WithSub(contributorSub).Build();
 
             var backpack = new Domain.Entities.Backpack
             {
@@ -106,7 +91,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetBackpackItems(contributorSub, backpackId));
+            var isValid = await sut.IsValidAsync(new GetBackpackItems(contributorSub, backpackId));
 
             // Assert
             isValid.ShouldBeTrue();

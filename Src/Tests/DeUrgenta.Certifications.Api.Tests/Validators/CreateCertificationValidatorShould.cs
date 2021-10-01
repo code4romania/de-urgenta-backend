@@ -6,6 +6,7 @@ using DeUrgenta.Certifications.Api.Validators;
 using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
 using DeUrgenta.Tests.Helpers;
+using DeUrgenta.Tests.Helpers.Builders;
 using Shouldly;
 using Xunit;
 
@@ -31,7 +32,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             var sut = new CreateCertificationValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new CreateCertification(sub, new CertificationRequest()));
+            var isValid = await sut.IsValidAsync(new CreateCertification(sub, new CertificationRequest()));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -43,18 +44,14 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             var sut = new CreateCertificationValidator(_dbContext);
 
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
-            await _dbContext.Users.AddAsync(new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            });
+            var userSub = Guid.NewGuid().ToString();
+            var user = new UserBuilder().WithSub(userSub).Build();
 
+            await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new CreateCertification(userSub, new CertificationRequest()));
+            var isValid = await sut.IsValidAsync(new CreateCertification(userSub, new CertificationRequest()));
 
             // Assert
             isValid.ShouldBeTrue();

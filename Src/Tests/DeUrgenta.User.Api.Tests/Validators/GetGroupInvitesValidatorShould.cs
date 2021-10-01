@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using DeUrgenta.Domain;
 using DeUrgenta.Tests.Helpers;
+using DeUrgenta.Tests.Helpers.Builders;
 using DeUrgenta.User.Api.Queries;
 using DeUrgenta.User.Api.Validators;
 using Shouldly;
@@ -29,7 +30,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var sut = new GetGroupInvitesValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetGroupInvites(sub));
+            var isValid = await sut.IsValidAsync(new GetGroupInvites(sub));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -41,18 +42,14 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var sut = new GetGroupInvitesValidator(_dbContext);
 
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
-            await _dbContext.Users.AddAsync(new DeUrgenta.Domain.Entities.User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            });
-
+            var userSub = Guid.NewGuid().ToString();
+            var user = new UserBuilder().WithSub(userSub).Build();
+            
+            await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetGroupInvites(userSub));
+            var isValid = await sut.IsValidAsync(new GetGroupInvites(userSub));
 
             // Assert
             isValid.ShouldBeTrue();

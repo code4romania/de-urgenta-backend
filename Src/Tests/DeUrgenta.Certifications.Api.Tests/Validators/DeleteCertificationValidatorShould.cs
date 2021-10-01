@@ -5,6 +5,7 @@ using DeUrgenta.Certifications.Api.Validators;
 using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
 using DeUrgenta.Tests.Helpers;
+using DeUrgenta.Tests.Helpers.Builders;
 using Shouldly;
 using Xunit;
 
@@ -30,7 +31,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             var sut = new DeleteCertificationValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new DeleteCertification(sub, Guid.NewGuid()));
+            var isValid = await sut.IsValidAsync(new DeleteCertification(sub, Guid.NewGuid()));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -41,20 +42,15 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
         {
             // Arrange
             var sut = new DeleteCertificationValidator(_dbContext);
-            string userSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
 
-            var user = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
+            var user = new UserBuilder().WithSub(userSub).Build();
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new DeleteCertification(userSub, Guid.NewGuid()));
+            var isValid = await sut.IsValidAsync(new DeleteCertification(userSub, Guid.NewGuid()));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -71,13 +67,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             var ownerSub = Guid.NewGuid().ToString();
             var userSub = Guid.NewGuid().ToString();
 
-            var owner = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = ownerSub,
-                Id = ownerId
-            };
+            var owner = new UserBuilder().WithId(ownerId).WithSub(ownerSub).Build();
 
             var certification = new Certification
             {
@@ -92,7 +82,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new DeleteCertification(userSub, certificationId));
+            var isValid = await sut.IsValidAsync(new DeleteCertification(userSub, certificationId));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -108,13 +98,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             var ownerId = Guid.NewGuid();
             var ownerSub = Guid.NewGuid().ToString();
 
-            var owner = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = ownerSub,
-                Id = ownerId
-            };
+            var owner = new UserBuilder().WithId(ownerId).WithSub(ownerSub).Build();
 
             var certification = new Certification
             {
@@ -129,7 +113,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new DeleteCertification(ownerSub, certificationId));
+            var isValid = await sut.IsValidAsync(new DeleteCertification(ownerSub, certificationId));
 
             // Assert
             isValid.ShouldBeTrue();
