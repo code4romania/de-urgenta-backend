@@ -52,7 +52,10 @@ namespace DeUrgenta.RecurringJobs
             services.AddScoped<IExpiredCertificationJob, ExpiredCertificationJob>();
 
             services.Configure<NotificationSenderJobConfig>(configuration.GetSection("RecurringJobsConfig:NotificationSenderJobConfig"));
-            services.AddScoped<INotificationSenderJob,  NotificationSenderJob>();
+            services.AddScoped<INotificationSenderJob, NotificationSenderJob>();
+
+            services.Configure<NotificationCleanupJobConfig>(configuration.GetSection("RecurringJobsConfig:NotificationCleanupJobConfig"));
+            services.AddScoped<INotificationCleanupJob, NotificationCleanupJob>();
         }
 
         public static void UseAuthenticatedHangfireDashboard(this IApplicationBuilder app, IConfiguration configuration)

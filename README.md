@@ -100,6 +100,22 @@ S3 storage requires having an [AWS account configured](https://docs.aws.amazon.c
   }
 ```
 
+### Configuring recurring jobs
+Recurring jobs can be turned on or off or scheduled at different intervals by using the following configuration section in the RecurringJobs.sln appsettings.json file.
+```
+"RecurringJobsConfig": {
+    "ExpiredCertificationJobConfig": {
+      "IsEnabled": "true",
+      "CronExpression": "0 0 * * *",
+      "DaysBeforeExpirationDate": "30"
+    },
+    ...
+  },
+```
+Every jobs will have at least the *IsEnabled* and *CronExpression* settings, but additional settings can be added as needed.
+
+Use [crontab](https://crontab.guru/) to generate valid cron expressions.
+
 ### Using DB checkpoint for integration tests
 To configure a DB to be cleaned after integration tests are run you can enable the *UseDbCheckpoint* option in the appsettings.testing.json
 ```
