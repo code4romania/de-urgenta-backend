@@ -48,7 +48,7 @@ namespace DeUrgenta.Api
 
             services.AddUserApiServices();
             services.AddBackpackApiServices();
-            services.AddGroupApiServices();
+            services.AddGroupApiServices(Configuration);
             services.AddCertificationsApiServices();         
             services.AddEventsApiServices();
             services.AddAdminApiServices();

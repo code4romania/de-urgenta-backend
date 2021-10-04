@@ -8,6 +8,7 @@ using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace DeUrgenta.Group.Api.CommandHandlers
 {
@@ -31,7 +32,7 @@ namespace DeUrgenta.Group.Api.CommandHandlers
             }
 
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
-            
+
             var newBackpack = new Backpack
             {
                 Name = $"Backpack for {request.Group.Name}"
