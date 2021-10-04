@@ -18,7 +18,7 @@ namespace DeUrgenta.RecurringJobs.Services
             _logger = logger;
         }
 
-        public async Task SendNotificationAsync(Guid userId)
+        public async Task SendNotificationAsync(Guid notificationId)
         {
             if (_notificationSenders == null || !_notificationSenders.Any())
             {
@@ -28,7 +28,7 @@ namespace DeUrgenta.RecurringJobs.Services
 
             foreach (var notificationSender in _notificationSenders)
             {
-                await notificationSender.SendNotificationAsync(userId);
+                await notificationSender.SendNotificationAsync(notificationId);
             }
         }
     }

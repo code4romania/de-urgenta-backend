@@ -5,7 +5,7 @@ namespace DeUrgenta.RecurringJobs.Services.NotificationSenders
 {
     public class PushNotificationSender : INotificationSender
     {
-        public Task SendNotificationAsync(Guid userId)
+        public Task SendNotificationAsync(Guid notificationId)
         {
             throw new NotImplementedException();
         }

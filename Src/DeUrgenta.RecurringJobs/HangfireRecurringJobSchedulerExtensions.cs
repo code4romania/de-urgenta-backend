@@ -16,10 +16,22 @@ namespace DeUrgenta.RecurringJobs
 
             if (expiredCertificationJobConfig.IsEnabled)
             {
-                RecurringJob.AddOrUpdate<ExpiredCertificationJob>(
+                RecurringJob.AddOrUpdate<IExpiredCertificationJob>(
                     nameof(ExpiredCertificationJob),
                     job => job.RunAsync(),
                     expiredCertificationJobConfig.CronExpression,
+                    TimeZoneInfo.Utc
+                );
+            }
+
+            var sendNotificationsJob = configuration.GetSection("RecurringJobsConfig:NotificationSenderJobConfig")
+                .Get<NotificationSenderJobConfig>();
+            if (sendNotificationsJob.IsEnabled)
+            {
+                RecurringJob.AddOrUpdate<INotificationSenderJob>(
+                    nameof(NotificationSenderJob),
+                    job => job.RunAsync(),
+                    sendNotificationsJob.CronExpression,
                     TimeZoneInfo.Utc
                 );
             }

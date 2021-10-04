@@ -5,9 +5,9 @@ namespace DeUrgenta.RecurringJobs.Services.NotificationSenders
 {
     public class NoOpNotificationSender : INotificationSender
     {
-        public Task SendNotificationAsync(Guid userId)
+        public Task SendNotificationAsync(Guid notificationId)
         {
-            Console.WriteLine($"Sent notification to user: {userId}");
+            Console.WriteLine($"Sent notification Id '{notificationId}' to user.");
 
             return Task.CompletedTask;
         }
