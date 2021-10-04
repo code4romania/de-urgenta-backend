@@ -5,6 +5,7 @@ using DeUrgenta.Domain;
 using DeUrgenta.RecurringJobs.Domain;
 using DeUrgenta.RecurringJobs.Domain.Entities;
 using DeUrgenta.RecurringJobs.Jobs.Config;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace DeUrgenta.RecurringJobs.Jobs
@@ -24,17 +25,17 @@ namespace DeUrgenta.RecurringJobs.Jobs
 
         public async Task RunAsync()
         {
-            var expiringCertifications = _context.Certifications
+            var expiringCertifications = await _context.Certifications
                 .Where(c => (c.ExpirationDate - DateTime.Today).Days <= _config.DaysBeforeExpirationDate)
-                .ToList();
+                .ToListAsync();
 
             foreach (var expiringCertification in expiringCertifications)
             {
-                var scheduledNotifications = _jobsContext.Notifications
+                var scheduledNotifications = await _jobsContext.Notifications
                     .Where(n => n.CertificationDetails.CertificationId == expiringCertification.Id
                                         && n.ScheduledDate >= DateTime.Today)
                     .Select(n => n.CertificationDetails.CertificationId)
-                    .ToList();
+                    .ToListAsync();
 
                 if (scheduledNotifications.Count != 0)
                 {

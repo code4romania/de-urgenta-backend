@@ -35,6 +35,18 @@ namespace DeUrgenta.RecurringJobs
                     TimeZoneInfo.Utc
                 );
             }
+
+            var cleanupNotificationsJob = configuration.GetSection("RecurringJobsConfig:NotificationCleanupJobConfig")
+                    .Get<NotificationCleanupJobConfig>();
+            if (cleanupNotificationsJob.IsEnabled)
+            {
+                RecurringJob.AddOrUpdate<INotificationCleanupJob>(
+                    nameof(NotificationCleanupJob),
+                    job => job.RunAsync(),
+                    cleanupNotificationsJob.CronExpression,
+                    TimeZoneInfo.Utc
+                );
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using DeUrgenta.RecurringJobs.Domain;
 using DeUrgenta.RecurringJobs.Domain.Entities;
 using DeUrgenta.RecurringJobs.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.RecurringJobs.Jobs
 {
@@ -20,11 +21,11 @@ namespace DeUrgenta.RecurringJobs.Jobs
 
         public async Task RunAsync()
         {
-            var notificationIdsToSend = _jobsContext.Notifications
+            var notificationIdsToSend = await _jobsContext.Notifications
                 .Where(n => n.Status == NotificationStatus.NotSent 
                                     && n.ScheduledDate.Date == DateTime.Today)
                 .Select(n => n.Id)
-                .ToList();
+                .ToListAsync();
 
             foreach (var notificationId in notificationIdsToSend)
             {
