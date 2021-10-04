@@ -31,12 +31,12 @@ namespace DeUrgenta.RecurringJobs.Domain.Migrations
                 schema: "jobs",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    NotificationId = table.Column<Guid>(type: "uuid", nullable: false)
+                    NotificationId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CertificationId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Certification", x => x.Id);
+                    table.PrimaryKey("PK_Certification", x => x.NotificationId);
                     table.ForeignKey(
                         name: "FK_CertificationDetails_Notifications_NotificationId",
                         column: x => x.NotificationId,
@@ -45,13 +45,6 @@ namespace DeUrgenta.RecurringJobs.Domain.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CertificationDetails_NotificationId",
-                schema: "jobs",
-                table: "CertificationDetails",
-                column: "NotificationId",
-                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

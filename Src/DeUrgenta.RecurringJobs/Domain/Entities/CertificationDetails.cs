@@ -5,10 +5,10 @@ namespace DeUrgenta.RecurringJobs.Domain.Entities
 {
     public class CertificationDetails
     {
+        public Guid CertificationId { get; set; }
+
         [Key]
-        public Guid Id { get; set; }
-        
-        public virtual Notification Notification { get; set; }
         public virtual Guid NotificationId { get; set; }
+        public virtual Notification Notification { get; set; }
     }
 }

@@ -12,6 +12,6 @@ namespace DeUrgenta.RecurringJobs.Domain.Entities
         public NotificationStatus Status { get; set; }
         public DateTime ScheduledDate { get; set; }
 
-        public virtual CertificationDetails CertificationDetails{ get; set; }
+        public virtual CertificationDetails CertificationDetails { get; set; }
     }
 }

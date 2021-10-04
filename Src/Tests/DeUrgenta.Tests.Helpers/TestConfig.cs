@@ -7,6 +7,7 @@ namespace DeUrgenta.Tests.Helpers
     public class TestConfig
     {
         public string ConnectionString { get; set; }
+        public string JobsConnectionString { get; set; }
         public bool UseDbCheckpoint { get; set; }
 
         public TestConfig()
@@ -18,6 +19,7 @@ namespace DeUrgenta.Tests.Helpers
                 .Build();
 
             ConnectionString = configuration.GetConnectionString("TestingDbConnectionString");
+            JobsConnectionString = configuration.GetConnectionString("JobsTestingDbConnectionString");
             UseDbCheckpoint = Convert.ToBoolean(configuration.GetSection("UseDbCheckpoint").Value);
         }
     }

@@ -9,7 +9,7 @@ namespace DeUrgenta.RecurringJobs.Domain.Configurations
         public void Configure(EntityTypeBuilder<CertificationDetails> builder)
         {
             builder
-                .HasKey(x => x.Id)
+                .HasKey(x => x.NotificationId)
                 .HasName("PK_Certification");
         }
     }

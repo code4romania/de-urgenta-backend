@@ -9,17 +9,18 @@ namespace DeUrgenta.Tests.Helpers
 {
     public class DatabaseFixture : IAsyncLifetime
     {
-        private readonly TestConfig _testConfig;
         private readonly Checkpoint _emptyDatabaseCheckpoint;
+
+        protected readonly TestConfig TestConfig;
         public DeUrgentaContext Context { get; }
 
         public DatabaseFixture()
         {
-            _testConfig = new TestConfig();
+            TestConfig = new TestConfig();
 
             var optionsBuilder = new DbContextOptionsBuilder<DeUrgentaContext>();
-            optionsBuilder.UseNpgsql(_testConfig.ConnectionString);
-            if (_testConfig.UseDbCheckpoint)
+            optionsBuilder.UseNpgsql(TestConfig.ConnectionString);
+            if (TestConfig.UseDbCheckpoint)
             {
                 _emptyDatabaseCheckpoint = new Checkpoint
                 {
@@ -36,10 +37,10 @@ namespace DeUrgenta.Tests.Helpers
 
         public async Task InitializeAsync()
         {
-            if (!_testConfig.UseDbCheckpoint)
+            if (!TestConfig.UseDbCheckpoint)
                 return;
 
-            await using var conn = new NpgsqlConnection(_testConfig.ConnectionString);
+            await using var conn = new NpgsqlConnection(TestConfig.ConnectionString);
             await conn.OpenAsync();
 
             await _emptyDatabaseCheckpoint.Reset(conn);
@@ -47,10 +48,10 @@ namespace DeUrgenta.Tests.Helpers
 
         public async Task DisposeAsync()
         {
-            if (!_testConfig.UseDbCheckpoint)
+            if (!TestConfig.UseDbCheckpoint)
                 return;
 
-            await using var conn = new NpgsqlConnection(_testConfig.ConnectionString);
+            await using var conn = new NpgsqlConnection(TestConfig.ConnectionString);
             await conn.OpenAsync();
 
             await _emptyDatabaseCheckpoint.Reset(conn);

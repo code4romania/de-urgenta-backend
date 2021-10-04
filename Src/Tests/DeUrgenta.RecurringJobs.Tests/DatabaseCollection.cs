@@ -7,7 +7,7 @@ namespace DeUrgenta.RecurringJobs.Tests
      https://github.com/xunit/xunit/issues/409
     */
     [CollectionDefinition(TestsConstants.DbCollectionName)]
-    public class DatabaseCollection : ICollectionFixture<DatabaseFixture>
+    public class DatabaseCollection : ICollectionFixture<JobsDatabaseFixture>
     {
         // This class has no code, and is never created. Its purpose is simply
         // to be the place to apply [CollectionDefinition] and all the

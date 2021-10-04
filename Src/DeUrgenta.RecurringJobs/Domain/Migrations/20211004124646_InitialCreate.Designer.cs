@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DeUrgenta.RecurringJobs.Domain.Migrations
 {
     [DbContext(typeof(JobsContext))]
-    [Migration("20211001134642_InitialCreate")]
+    [Migration("20211004124646_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -19,23 +19,19 @@ namespace DeUrgenta.RecurringJobs.Domain.Migrations
             modelBuilder
                 .HasDefaultSchema("jobs")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.4")
+                .HasAnnotation("ProductVersion", "5.0.10")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             modelBuilder.Entity("DeUrgenta.RecurringJobs.Domain.Entities.CertificationDetails", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("NotificationId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("Id")
-                        .HasName("PK_Certification");
+                    b.Property<Guid>("CertificationId")
+                        .HasColumnType("uuid");
 
-                    b.HasIndex("NotificationId")
-                        .IsUnique();
+                    b.HasKey("NotificationId")
+                        .HasName("PK_Certification");
 
                     b.ToTable("CertificationDetails");
                 });
