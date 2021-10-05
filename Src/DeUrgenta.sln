@@ -42,7 +42,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Events.Api", "DeU
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Events.Api.Tests", "Tests\DeUrgenta.Events.Api.Tests\DeUrgenta.Events.Api.Tests.csproj", "{CB8FC617-8065-4FFA-996B-BABA844DF25D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeUrgenta.Services.Emailing", "DeUrgenta.Services.Emailing\DeUrgenta.Services.Emailing.csproj", "{73DFB4EE-F133-4FFA-ADBE-89A958E2AFF5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeUrgenta.Emailing.Service", "DeUrgenta.Services.Emailing\DeUrgenta.Emailing.Service.csproj", "{73DFB4EE-F133-4FFA-ADBE-89A958E2AFF5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

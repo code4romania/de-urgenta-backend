@@ -1,4 +1,4 @@
-namespace DeUrgenta.Services.Emailing.Services
+namespace DeUrgenta.Emailing.Service.Config
 {
     public enum EmailingSystemTypes
     {

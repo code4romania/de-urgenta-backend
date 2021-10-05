@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using DeUrgenta.Services.Emailing.Config;
-using DeUrgenta.Services.Emailing.Models;
+using DeUrgenta.Emailing.Service.Builders;
+using DeUrgenta.Emailing.Service.Config;
+using DeUrgenta.Emailing.Service.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
-namespace DeUrgenta.Services.Emailing.Services
+namespace DeUrgenta.Emailing.Service.Senders
 {
     public class SendGridSender : BaseEmailSender
     {

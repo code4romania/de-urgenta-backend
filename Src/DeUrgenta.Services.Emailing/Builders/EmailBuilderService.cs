@@ -1,24 +1,26 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 using System.Web;
-using DeUrgenta.Services.Emailing.Constants;
-using DeUrgenta.Services.Emailing.Models;
+using DeUrgenta.Emailing.Service.Config;
+using DeUrgenta.Emailing.Service.Constants;
+using DeUrgenta.Emailing.Service.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
-namespace DeUrgenta.Services.Emailing.Services
+namespace DeUrgenta.Emailing.Service.Builders
 {
     public class EmailBuilderService : IEmailBuilderService
     {
+        private readonly EmailOptions _options;
         private readonly ILogger<IEmailBuilderService> _logger;
-        private readonly ITemplateFileSelector _templateFileSelector;
         private readonly IMemoryCache _memoryCache;
 
-        public EmailBuilderService(ILogger<IEmailBuilderService> logger, ITemplateFileSelector templateFileSelector, IMemoryCache memoryCache)
+        public EmailBuilderService(ILogger<IEmailBuilderService> logger, IMemoryCache memoryCache, IOptionsMonitor<EmailOptions> options)
         {
             _logger = logger;
-            _templateFileSelector = templateFileSelector;
             _memoryCache = memoryCache;
+            _options = options.CurrentValue;
         }
 
         public async Task<Email> BuildEmail(EmailRequestModel emailRequest)
@@ -45,7 +47,7 @@ namespace DeUrgenta.Services.Emailing.Services
         {
             if (!_memoryCache.TryGetValue(templateType, out string template))
             {
-                var filePath = _templateFileSelector.GetTemplatePath(templateType);
+                var filePath = GetTemplatePath(templateType);
                 using (var streamReader = File.OpenText(filePath))
                 {
                     template = await streamReader.ReadToEndAsync();
@@ -65,6 +67,14 @@ namespace DeUrgenta.Services.Emailing.Services
             }
 
             return template;
+        }
+
+        public string GetTemplatePath(EmailTemplate template)
+        {
+            var targetDirectory = _options.TemplateFolder;
+            var filePath = EmailConstants.GetTemplatePath(template);
+
+            return Path.Combine(targetDirectory, filePath);
         }
     }
 }

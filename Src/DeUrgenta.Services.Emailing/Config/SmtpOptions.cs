@@ -1,4 +1,4 @@
-﻿namespace DeUrgenta.Services.Emailing.Config
+﻿namespace DeUrgenta.Emailing.Service.Config
 {
     public class SmtpOptions
     {

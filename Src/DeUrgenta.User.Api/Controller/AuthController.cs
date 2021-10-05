@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
-using DeUrgenta.Services.Emailing.Models;
+using DeUrgenta.Emailing.Service.Models;
 using DeUrgenta.User.Api.Models;
 using DeUrgenta.User.Api.Models.DTOs.Requests;
 using DeUrgenta.User.Api.Models.DTOs.Responses;
@@ -43,8 +43,8 @@ namespace DeUrgenta.User.Api.Controller
             _jwtService = jwtService;
             _mediator = mediator;
             _configuration = configuration;
-            _senderEmail = _configuration.GetValue<string>("AdminFromEmail");
-            _senderName = _configuration.GetValue<string>("AdminFromName");
+            _senderEmail = _configuration.GetValue<string>("Email:AdminFromEmail");
+            _senderName = _configuration.GetValue<string>("Email:AdminFromName");
         }
 
         [HttpPost]

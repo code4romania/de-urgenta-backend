@@ -2,8 +2,9 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using DeUrgenta.Services.Emailing.Config;
-using DeUrgenta.Services.Emailing.Models;
+using DeUrgenta.Emailing.Service.Builders;
+using DeUrgenta.Emailing.Service.Config;
+using DeUrgenta.Emailing.Service.Models;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Logging;
@@ -11,7 +12,7 @@ using Microsoft.Extensions.Options;
 using MimeKit;
 using MimeKit.Text;
 
-namespace DeUrgenta.Services.Emailing.Services
+namespace DeUrgenta.Emailing.Service.Senders
 {
     public class SmtpSender : BaseEmailSender
     {

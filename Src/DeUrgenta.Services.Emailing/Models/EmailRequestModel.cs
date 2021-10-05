@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DeUrgenta.Services.Emailing.Models
+namespace DeUrgenta.Emailing.Service.Models
 {
     public class EmailRequestModel
     {

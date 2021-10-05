@@ -23,7 +23,7 @@
 		<ProjectReference Include="..\DeUrgenta.Common\DeUrgenta.Common.csproj" />
 		<ProjectReference Include="..\DeUrgenta.Domain\DeUrgenta.Domain.csproj" />
 		<ProjectReference Include="..\DeUrgenta.Infra\DeUrgenta.Infra.csproj" />
-		<ProjectReference Include="..\DeUrgenta.Services.Emailing\DeUrgenta.Services.Emailing.csproj" />
+		<ProjectReference Include="..\DeUrgenta.Services.Emailing\DeUrgenta.Emailing.Service.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

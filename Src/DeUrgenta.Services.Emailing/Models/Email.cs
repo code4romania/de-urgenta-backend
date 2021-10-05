@@ -1,4 +1,4 @@
-﻿namespace DeUrgenta.Services.Emailing.Models
+﻿namespace DeUrgenta.Emailing.Service.Models
 {
     public class Email
     {

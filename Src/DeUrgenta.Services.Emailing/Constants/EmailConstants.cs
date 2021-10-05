@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using DeUrgenta.Services.Emailing.Models;
+using DeUrgenta.Emailing.Service.Models;
 
-namespace DeUrgenta.Services.Emailing.Constants
+namespace DeUrgenta.Emailing.Service.Constants
 {
     public static class EmailConstants
     {

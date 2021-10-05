@@ -1,28 +1,29 @@
-﻿using DeUrgenta.Services.Emailing.Config;
-using DeUrgenta.Services.Emailing.Services;
+﻿using DeUrgenta.Emailing.Service.Builders;
+using DeUrgenta.Emailing.Service.Config;
+using DeUrgenta.Emailing.Service.Senders;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DeUrgenta.Services.Emailing
+namespace DeUrgenta.Emailing.Service
 {
     public static class BootstrappingExtensions
     {
         public static void SetupEmailService(this IServiceCollection services, IConfiguration configuration)
         {
+            services.Configure<EmailOptions>(configuration.GetSection("Email:Options"));
             services.AddTransient<IEmailBuilderService, EmailBuilderService>();
-            services.AddSingleton<ITemplateFileSelector, TemplateFileSelector>();
 
-            var emailType = configuration.GetValue<EmailingSystemTypes>("EmailingSystem");
-
+            var emailType = configuration.GetValue<EmailingSystemTypes>("Email:EmailingSystem");
+            
             switch (emailType)
             {
                 case EmailingSystemTypes.SendGrid:
-                    services.Configure<SendGridOptions>(configuration.GetSection("SendGrid"));
+                    services.Configure<SendGridOptions>(configuration.GetSection("Email:SendGrid"));
                     services.AddSingleton<IEmailSender, SendGridSender>();
                     break;
 
                 case EmailingSystemTypes.Smtp:
-                    services.Configure<SmtpOptions>(configuration.GetSection("Smtp"));
+                    services.Configure<SmtpOptions>(configuration.GetSection("Email:Smtp"));
                     services.AddSingleton<IEmailSender, SmtpSender>();
                     break;
             }
