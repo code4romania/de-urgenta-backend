@@ -75,7 +75,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             {
                 await _dbContext.Groups.AddAsync(new Domain.Entities.Group
                 {
-                    Name = i.ToString(), Admin = user, AdminId = user.Id
+                    Name = i.ToString(), Admin = user
                 });
             }
             await _dbContext.SaveChangesAsync();
