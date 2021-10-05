@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using DeUrgenta.Common.Validation;
+﻿using DeUrgenta.Common.Validation;
 using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Models;
 using DeUrgenta.Group.Api.Options;
