@@ -19,7 +19,7 @@ namespace DeUrgenta.Tests.Helpers
             Context.Database.Migrate();
         }
 
-        private static string GetConnectionString()
+        public async Task InitializeAsync()
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
