@@ -1,11 +1,14 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Certifications.Api.CommandHandlers;
 using DeUrgenta.Certifications.Api.Commands;
 using DeUrgenta.Certifications.Api.Models;
 using DeUrgenta.Certifications.Api.Storage;
+using DeUrgenta.Certifications.Api.Tests.Builders;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
+using DeUrgenta.Domain.Entities;
 using DeUrgenta.Tests.Helpers;
 using NSubstitute;
 using Shouldly;
@@ -40,6 +43,41 @@ namespace DeUrgenta.Certifications.Api.Tests.CommandHandlers
 
             // Assert
             result.IsFailure.ShouldBeTrue();
+        }
+
+        [Fact]
+        public async Task Return_success_if_photo_is_not_provided_in_request()
+        {
+            //Arrange
+            var userSub = TestDataProviders.RandomString();
+            var certificationRequest = new CertificationRequestBuilder()
+                .WithPhoto(null)
+                .Build();
+
+            var user = new User
+            {
+                Sub = userSub,
+                FirstName = TestDataProviders.RandomString(),
+                LastName = TestDataProviders.RandomString()
+            };
+            await _dbContext.Users.AddAsync(user);
+            await _dbContext.SaveChangesAsync();
+
+            var createCertification = new CreateCertification(userSub, certificationRequest);
+
+            var storage = Substitute.For<IBlobStorage>();
+            var validator = Substitute.For<IValidateRequest<CreateCertification>>();
+            validator
+                .IsValidAsync(createCertification)
+                .Returns(Task.FromResult(true));
+
+            var sut = new CreateCertificationHandler(validator, _dbContext, storage);
+
+            //Act
+            var result = await sut.Handle(createCertification, CancellationToken.None);
+
+            //Assert
+            result.IsSuccess.ShouldBeTrue();
         }
     }
 }

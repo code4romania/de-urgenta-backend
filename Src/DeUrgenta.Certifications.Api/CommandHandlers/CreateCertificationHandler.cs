@@ -46,10 +46,14 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
             await _context.Certifications.AddAsync(certification, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            var photoUrl = await _storage.SaveAttachmentAsync(certification.Id,
-                user.Sub,
-                request.Photo.OpenReadStream(),
-                Path.GetExtension(request.Photo.FileName));
+            string photoUrl = null;
+            if (request.Photo != null)
+            {
+                photoUrl = await _storage.SaveAttachmentAsync(certification.Id,
+                    user.Sub,
+                    request.Photo.OpenReadStream(),
+                    Path.GetExtension(request.Photo.FileName));
+            }
 
             return new CertificationModel
             {
