@@ -26,7 +26,8 @@ namespace DeUrgenta.RecurringJobs.Jobs
         public async Task RunAsync()
         {
             var expiringCertifications = await _context.Certifications
-                .Where(c => (c.ExpirationDate - DateTime.Today).Days <= _config.DaysBeforeExpirationDate)
+                .Where(c => (c.ExpirationDate - DateTime.Today).Days <= _config.DaysBeforeExpirationDate
+                                    && c.ExpirationDate >= DateTime.Today)
                 .ToListAsync();
 
             foreach (var expiringCertification in expiringCertifications)

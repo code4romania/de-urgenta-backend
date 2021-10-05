@@ -114,6 +114,38 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
         }
 
         [Fact]
+        public async Task Not_trigger_notification_when_certification_already_expired()
+        {
+            //Arrange
+            var userId = Guid.NewGuid();
+            var user = new UserBuilder().WithId(userId).Build();
+            var certification = new CertificationBuilder()
+                .WithUserId(userId)
+                .WithExpirationDate(DateTime.Today.AddDays(-11))
+                .Build();
+
+            await _context.Users.AddAsync(user);
+            await _context.Certifications.AddAsync(certification);
+            await _context.SaveChangesAsync();
+
+            var jobConfig = Substitute.For<IOptionsMonitor<ExpiredCertificationJobConfig>>();
+            jobConfig.CurrentValue.Returns(new ExpiredCertificationJobConfig
+            {
+                DaysBeforeExpirationDate = 10
+            });
+
+            var sut = new ExpiredCertificationJob(_context, _jobsContext, jobConfig);
+
+            //Act
+            await sut.RunAsync();
+
+            //Assert
+            var notificationsAdded = _jobsContext.Notifications.Where(n => n.UserId == userId).ToList();
+            notificationsAdded.Should().BeEmpty();
+        }
+
+
+        [Fact]
         public async Task Not_trigger_notification_when_a_not_sent_notification_already_exists()
         {
             //Arrange
