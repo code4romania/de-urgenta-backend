@@ -247,14 +247,14 @@ namespace DeUrgenta.User.Api.Controller
         /// </summary>
         /// <returns></returns>
         [HttpGet("group-invites")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Get group invites for current user", typeof(IImmutableList<GropInviteModel>))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Get group invites for current user", typeof(IImmutableList<GroupInviteModel>))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetGroupInvitesResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<GropInviteModel>> GetGroupInvitesAsync()
+        public async Task<ActionResult<GroupInviteModel>> GetGroupInvitesAsync()
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var query = new GetGroupInvites(sub);

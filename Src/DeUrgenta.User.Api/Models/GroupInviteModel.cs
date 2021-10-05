@@ -2,7 +2,7 @@
 
 namespace DeUrgenta.User.Api.Models
 {
-    public sealed record GropInviteModel
+    public sealed record GroupInviteModel
     {
         public Guid InviteId { get; init; }
         public Guid GroupId { get; init; }

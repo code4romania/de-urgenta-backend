@@ -16,7 +16,7 @@ namespace DeUrgenta.Group.Api.Tests.CommandsHandlers
     public class AddGroupHandlerShould
     {
         private readonly DeUrgentaContext _dbContext;
-        
+
         public AddGroupHandlerShould(DatabaseFixture fixture)
         {
             _dbContext = fixture.Context;

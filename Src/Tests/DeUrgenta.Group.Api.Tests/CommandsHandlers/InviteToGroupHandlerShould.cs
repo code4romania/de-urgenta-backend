@@ -35,7 +35,8 @@ namespace DeUrgenta.Group.Api.Tests.CommandsHandlers
             var sut = new InviteToGroupHandler(validator, _dbContext);
 
             // Act
-            var result = await sut.Handle(new InviteToGroup("a-sub", Guid.NewGuid(), Guid.NewGuid()), CancellationToken.None);
+            var result = await sut.Handle(new InviteToGroup("a-sub", Guid.NewGuid(), Guid.NewGuid()),
+                CancellationToken.None);
 
             // Assert
             result.IsFailure.ShouldBeTrue();
