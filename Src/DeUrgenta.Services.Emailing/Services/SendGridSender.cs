@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DeUrgenta.Services.Emailing.Config;
 using DeUrgenta.Services.Emailing.Models;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
@@ -15,9 +16,9 @@ namespace DeUrgenta.Services.Emailing.Services
         private readonly SendGridOptions _options;
         private readonly ILogger<SendGridSender> _logger;
 
-        public SendGridSender(IEmailBuilderService emailBuilder, SendGridOptions options, ILogger<SendGridSender> logger) : base(emailBuilder)
+        public SendGridSender(IEmailBuilderService emailBuilder, IOptionsMonitor<SendGridOptions> options, ILogger<SendGridSender> logger) : base(emailBuilder)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = options.CurrentValue ?? throw new ArgumentNullException(nameof(options));
             _logger = logger;
         }
 
@@ -40,7 +41,7 @@ namespace DeUrgenta.Services.Emailing.Services
             {
                 message.Attachments = new List<Attachment>
                 {
-                    new Attachment
+                    new()
                     {
                         Filename = email.Attachment.FileName,
                         Content = Convert.ToBase64String(email.Attachment.Content)
@@ -53,12 +54,12 @@ namespace DeUrgenta.Services.Emailing.Services
 
             _logger.LogInformation("Sending email using Sendgrid");
 
-            var sendgridResponse = await client.SendEmailAsync(message, cancellationToken);
-            var statusCode = (int)sendgridResponse.StatusCode;
+            var sendGridResponse = await client.SendEmailAsync(message, cancellationToken);
+            var statusCode = (int)sendGridResponse.StatusCode;
             if (statusCode > 226 || statusCode < 200)
             {
                 // not ok response received
-                var responseMessage = await sendgridResponse.Body.ReadAsStringAsync(cancellationToken);
+                var responseMessage = await sendGridResponse.Body.ReadAsStringAsync(cancellationToken);
                 _logger.LogWarning("Received not ok(200) status code. Status code received {statusCode}. Response message {responseMessage}", statusCode, responseMessage);
             }
         }

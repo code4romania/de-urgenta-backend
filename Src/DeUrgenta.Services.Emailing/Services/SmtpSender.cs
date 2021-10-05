@@ -7,6 +7,7 @@ using DeUrgenta.Services.Emailing.Models;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using MimeKit;
 using MimeKit.Text;
 
@@ -17,9 +18,9 @@ namespace DeUrgenta.Services.Emailing.Services
         private readonly SmtpOptions _options;
         private readonly ILogger<SmtpSender> _logger;
 
-        public SmtpSender(IEmailBuilderService emailBuilder, SmtpOptions options, ILogger<SmtpSender> logger) : base(emailBuilder)
+        public SmtpSender(IEmailBuilderService emailBuilder, IOptionsMonitor<SmtpOptions> options, ILogger<SmtpSender> logger) : base(emailBuilder)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = options.CurrentValue ?? throw new ArgumentNullException(nameof(options));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 

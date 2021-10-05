@@ -11,29 +11,18 @@ namespace DeUrgenta.Services.Emailing
         {
             services.AddTransient<IEmailBuilderService, EmailBuilderService>();
             services.AddSingleton<ITemplateFileSelector, TemplateFileSelector>();
-            var emailType = configuration.GetValue<EmailingSystemTypes>("EMailingSystem");
+
+            var emailType = configuration.GetValue<EmailingSystemTypes>("EmailingSystem");
 
             switch (emailType)
             {
                 case EmailingSystemTypes.SendGrid:
-                    services.AddSingleton(new SendGridOptions
-                    {
-                        ApiKey = configuration["SendGrid:ApiKey"],
-                        ClickTracking = configuration.GetValue<bool>("SendGrid:ClickTracking")
-                    });
-
+                    services.Configure<SendGridOptions>(configuration.GetSection("SendGrid"));
                     services.AddSingleton<IEmailSender, SendGridSender>();
                     break;
 
                 case EmailingSystemTypes.Smtp:
-                    services.AddSingleton(new SmtpOptions
-                    {
-                        Host = configuration["Smtp:Host"],
-                        Port = configuration.GetValue<int>("Smtp:Port"),
-                        User = configuration["Smtp:User"],
-                        Password = configuration["Smtp:Password"]
-                    });
-
+                    services.Configure<SmtpOptions>(configuration.GetSection("Smtp"));
                     services.AddSingleton<IEmailSender, SmtpSender>();
                     break;
             }
