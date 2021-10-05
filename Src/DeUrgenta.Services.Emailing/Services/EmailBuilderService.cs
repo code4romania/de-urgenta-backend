@@ -1,10 +1,12 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 using System.Web;
+using DeUrgenta.Services.Emailing.Constants;
+using DeUrgenta.Services.Emailing.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
-namespace DeUrgenta.User.Api.Services.Emailing
+namespace DeUrgenta.Services.Emailing.Services
 {
     public class EmailBuilderService : IEmailBuilderService
     {
@@ -38,6 +40,7 @@ namespace DeUrgenta.User.Api.Services.Emailing
 
             return emailModel;
         }
+
         private async Task<string> GetTemplate(EmailTemplate templateType)
         {
             if (!_memoryCache.TryGetValue(templateType, out string template))

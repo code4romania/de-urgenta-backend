@@ -1,7 +1,9 @@
 ﻿using System.IO;
+using DeUrgenta.Services.Emailing.Constants;
+using DeUrgenta.Services.Emailing.Models;
 using Microsoft.Extensions.Configuration;
 
-namespace DeUrgenta.User.Api.Services.Emailing
+namespace DeUrgenta.Services.Emailing.Services
 {
     public class TemplateFileSelector : ITemplateFileSelector
     {
@@ -15,10 +17,9 @@ namespace DeUrgenta.User.Api.Services.Emailing
         public string GetTemplatePath(EmailTemplate template)
         {
             var targetDirectory = _configuration.GetValue<string>("TemplateFolder");
-            var directory = targetDirectory;
             var filePath = EmailConstants.GetTemplatePath(template);
 
-            return Path.Combine(directory, filePath);
+            return Path.Combine(targetDirectory, filePath);
         }
     }
 }

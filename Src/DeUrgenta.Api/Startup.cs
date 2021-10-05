@@ -23,6 +23,7 @@ using FluentValidation.AspNetCore;
 using DeUrgenta.Admin.Api;
 using DeUrgenta.Events.Api;
 using DeUrgenta.Events.Api.Controller;
+using DeUrgenta.Services.Emailing;
 
 namespace DeUrgenta.Api
 {

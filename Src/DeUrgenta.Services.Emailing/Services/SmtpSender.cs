@@ -2,13 +2,15 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using DeUrgenta.Services.Emailing.Config;
+using DeUrgenta.Services.Emailing.Models;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Logging;
 using MimeKit;
 using MimeKit.Text;
 
-namespace DeUrgenta.User.Api.Services.Emailing
+namespace DeUrgenta.Services.Emailing.Services
 {
     public class SmtpSender : BaseEmailSender
     {
@@ -40,7 +42,7 @@ namespace DeUrgenta.User.Api.Services.Emailing
                 message.Sender = new MailboxAddress(email.FromName, email.FromEmail);
                 message.Subject = email.Subject;
                 message.Body = body;
-                message.To.Add(new MailboxAddress(email.To));
+                message.To.Add(MailboxAddress.Parse(email.To));
 
                 if (email.Attachment != null)
                 {

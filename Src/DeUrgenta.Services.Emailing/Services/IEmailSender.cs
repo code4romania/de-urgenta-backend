@@ -1,7 +1,8 @@
 using System.Threading;
 using System.Threading.Tasks;
+using DeUrgenta.Services.Emailing.Models;
 
-namespace DeUrgenta.User.Api.Services.Emailing
+namespace DeUrgenta.Services.Emailing.Services
 {
     public interface IEmailSender
     {

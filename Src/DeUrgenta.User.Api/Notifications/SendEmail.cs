@@ -1,6 +1,6 @@
 using MediatR;
 using System.Collections.Generic;
-using DeUrgenta.User.Api.Services.Emailing;
+using DeUrgenta.Services.Emailing.Models;
 
 namespace DeUrgenta.User.Api.Notifications
 {

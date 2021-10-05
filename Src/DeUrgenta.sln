@@ -40,7 +40,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Certifications.Ap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Events.Api", "DeUrgenta.Events.Api\DeUrgenta.Events.Api.csproj", "{58DB7D76-8935-45B0-B89C-6FF43A2E14FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeUrgenta.Events.Api.Tests", "Tests\DeUrgenta.Events.Api.Tests\DeUrgenta.Events.Api.Tests.csproj", "{CB8FC617-8065-4FFA-996B-BABA844DF25D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Events.Api.Tests", "Tests\DeUrgenta.Events.Api.Tests\DeUrgenta.Events.Api.Tests.csproj", "{CB8FC617-8065-4FFA-996B-BABA844DF25D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeUrgenta.Services.Emailing", "DeUrgenta.Services.Emailing\DeUrgenta.Services.Emailing.csproj", "{73DFB4EE-F133-4FFA-ADBE-89A958E2AFF5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -244,6 +246,18 @@ Global
 		{CB8FC617-8065-4FFA-996B-BABA844DF25D}.Release|x64.Build.0 = Release|Any CPU
 		{CB8FC617-8065-4FFA-996B-BABA844DF25D}.Release|x86.ActiveCfg = Release|Any CPU
 		{CB8FC617-8065-4FFA-996B-BABA844DF25D}.Release|x86.Build.0 = Release|Any CPU
+		{73DFB4EE-F133-4FFA-ADBE-89A958E2AFF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73DFB4EE-F133-4FFA-ADBE-89A958E2AFF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73DFB4EE-F133-4FFA-ADBE-89A958E2AFF5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{73DFB4EE-F133-4FFA-ADBE-89A958E2AFF5}.Debug|x64.Build.0 = Debug|Any CPU
+		{73DFB4EE-F133-4FFA-ADBE-89A958E2AFF5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{73DFB4EE-F133-4FFA-ADBE-89A958E2AFF5}.Debug|x86.Build.0 = Debug|Any CPU
+		{73DFB4EE-F133-4FFA-ADBE-89A958E2AFF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73DFB4EE-F133-4FFA-ADBE-89A958E2AFF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73DFB4EE-F133-4FFA-ADBE-89A958E2AFF5}.Release|x64.ActiveCfg = Release|Any CPU
+		{73DFB4EE-F133-4FFA-ADBE-89A958E2AFF5}.Release|x64.Build.0 = Release|Any CPU
+		{73DFB4EE-F133-4FFA-ADBE-89A958E2AFF5}.Release|x86.ActiveCfg = Release|Any CPU
+		{73DFB4EE-F133-4FFA-ADBE-89A958E2AFF5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

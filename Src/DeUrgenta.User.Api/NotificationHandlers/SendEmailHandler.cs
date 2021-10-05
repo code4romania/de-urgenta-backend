@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using DeUrgenta.Services.Emailing.Models;
+using DeUrgenta.Services.Emailing.Services;
 using MediatR;
 using DeUrgenta.User.Api.Notifications;
-using DeUrgenta.User.Api.Services.Emailing;
 using Microsoft.Extensions.Logging;
 
 namespace DeUrgenta.User.Api.NotificationHandlers

@@ -1,4 +1,6 @@
-﻿namespace DeUrgenta.User.Api.Services.Emailing
+﻿using DeUrgenta.Services.Emailing.Models;
+
+namespace DeUrgenta.Services.Emailing.Services
 {
     public interface ITemplateFileSelector
     {
