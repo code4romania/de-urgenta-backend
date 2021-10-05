@@ -228,16 +228,16 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         }
         
         [Fact]
-        public async Task Return_failed_result_when_user_exceeds_group_membership_limit()
+        public async Task Invalidate_when_user_exceeds_group_membership_limit()
         {
             // Arrange
             var sut = new InviteToGroupValidator(_dbContext, _groupsConfig);
 
             // Seed user
-            var admin = _dbContext.Users.AddAsync(new User {FirstName = "Admin", LastName = "Test", Sub = "a-sub"})
-                .Result.Entity;
-            var user = _dbContext.Users.AddAsync(new User {FirstName = "User", LastName = "Test", Sub = "u-sub"})
-                .Result.Entity;
+            var adminSub = Guid.NewGuid().ToString();
+            var admin = new UserBuilder().WithSub(adminSub).Build();
+            var userSub = Guid.NewGuid().ToString();
+            var user = new UserBuilder().WithSub(userSub).Build();
             await _dbContext.SaveChangesAsync();
 
             // Seed groups
