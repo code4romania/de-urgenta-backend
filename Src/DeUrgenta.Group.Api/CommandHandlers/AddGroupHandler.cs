@@ -8,7 +8,6 @@ using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace DeUrgenta.Group.Api.CommandHandlers
 {

@@ -9,7 +9,6 @@ using DeUrgenta.Group.Api.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace DeUrgenta.Group.Api.CommandHandlers
 {
