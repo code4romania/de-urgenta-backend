@@ -7,7 +7,7 @@ using DeUrgenta.User.Api.CommandHandlers;
 using DeUrgenta.User.Api.Commands;
 using DeUrgenta.User.Api.Models;
 using NSubstitute;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.User.Api.Tests.CommandHandlers
@@ -37,7 +37,7 @@ namespace DeUrgenta.User.Api.Tests.CommandHandlers
             var result = await sut.Handle(new UpdateUser("a-sub", new UserRequest()), CancellationToken.None);
 
             // Assert
-            result.IsFailure.ShouldBeTrue();
+            result.IsFailure.Should().BeTrue();
         }
     }
 }

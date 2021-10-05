@@ -8,7 +8,7 @@ using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Tests.Helpers;
 using NSubstitute;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Backpack.Api.Tests.CommandHandlers
@@ -38,7 +38,7 @@ namespace DeUrgenta.Backpack.Api.Tests.CommandHandlers
             var result = await sut.Handle(new AddBackpackItem("a-sub", Guid.NewGuid(), new BackpackItemRequest()), CancellationToken.None);
 
             // Assert
-            result.IsFailure.ShouldBeTrue();
+            result.IsFailure.Should().BeTrue();
         }
     }
 }

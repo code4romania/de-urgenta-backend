@@ -7,7 +7,7 @@ using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Models;
 using DeUrgenta.Tests.Helpers;
 using NSubstitute;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Group.Api.Tests.CommandsHandlers
@@ -37,7 +37,7 @@ namespace DeUrgenta.Group.Api.Tests.CommandsHandlers
             var result = await sut.Handle(new AddGroup("a-sub", new GroupRequest()), CancellationToken.None);
 
             // Assert
-            result.IsFailure.ShouldBeTrue();
+            result.IsFailure.Should().BeTrue();
         }
     }
 }

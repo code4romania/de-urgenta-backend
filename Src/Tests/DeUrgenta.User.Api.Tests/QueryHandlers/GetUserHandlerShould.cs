@@ -6,7 +6,7 @@ using DeUrgenta.Tests.Helpers;
 using DeUrgenta.User.Api.Queries;
 using DeUrgenta.User.Api.QueryHandlers;
 using NSubstitute;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.User.Api.Tests.QueryHandlers
@@ -36,7 +36,7 @@ namespace DeUrgenta.User.Api.Tests.QueryHandlers
             var result = await sut.Handle(new GetUser("a-sub"), CancellationToken.None);
 
             // Assert
-            result.IsFailure.ShouldBeTrue();
+            result.IsFailure.Should().BeTrue();
         }
     }
 }
