@@ -26,13 +26,16 @@ namespace DeUrgenta.User.Api
     public static class BootstrappingExtensions
     {
         private const string SecurityOptionsSectionName = "JwtConfig";
+        private const string PasswordOptionsSectionName = "Passwords";
 
         public static IServiceCollection AddBearerAuth(this IServiceCollection services, IConfiguration configuration)
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             services.ConfigureAppOptions<JwtConfig>(SecurityOptionsSectionName);
+            services.ConfigureAppOptions<PasswordOptions>(PasswordOptionsSectionName);
 
             var jwtConfig = services.GetOptions<JwtConfig>(SecurityOptionsSectionName);
+            var passwordOptions = services.GetOptions<PasswordOptions>(PasswordOptionsSectionName);
 
             var key = Encoding.ASCII.GetBytes(jwtConfig.Secret);
 
@@ -61,16 +64,7 @@ namespace DeUrgenta.User.Api
                 jwt.TokenValidationParameters = tokenValidationParams;
             });
 
-            services.Configure<IdentityOptions>(options =>
-            {
-                // Password settings.
-                options.Password.RequireDigit = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequiredLength = 6;
-                options.Password.RequiredUniqueChars = 0;
-            });
+            services.Configure<IdentityOptions>(options => options.Password = passwordOptions);
 
             services.AddTransient<IJwtService, JwtService>();
 
