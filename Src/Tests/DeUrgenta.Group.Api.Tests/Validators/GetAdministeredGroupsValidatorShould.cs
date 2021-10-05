@@ -5,6 +5,7 @@ using DeUrgenta.Domain.Entities;
 using DeUrgenta.Group.Api.Queries;
 using DeUrgenta.Group.Api.Validators;
 using DeUrgenta.Tests.Helpers;
+using DeUrgenta.Tests.Helpers.Builders;
 using Shouldly;
 using Xunit;
 
@@ -30,7 +31,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetAdministeredGroupsValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetAdministeredGroups(sub));
+            var isValid = await sut.IsValidAsync(new GetAdministeredGroups(sub));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -42,18 +43,14 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             // Arrange
             var sut = new GetAdministeredGroupsValidator(_dbContext);
 
-            string userSub = Guid.NewGuid().ToString();
-            await _dbContext.Users.AddAsync(new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            });
+            var userSub = Guid.NewGuid().ToString();
+            var user = new UserBuilder().WithSub(userSub).Build();
 
+            await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetAdministeredGroups(userSub));
+            var isValid = await sut.IsValidAsync(new GetAdministeredGroups(userSub));
 
             // Assert
             isValid.ShouldBeTrue();

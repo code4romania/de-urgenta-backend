@@ -5,6 +5,7 @@ using DeUrgenta.Domain.Entities;
 using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Validators;
 using DeUrgenta.Tests.Helpers;
+using DeUrgenta.Tests.Helpers.Builders;
 using Shouldly;
 using Xunit;
 
@@ -30,7 +31,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new RemoveFromGroupValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new RemoveFromGroup(sub, Guid.NewGuid(), Guid.NewGuid()));
+            var isValid = await sut.IsValidAsync(new RemoveFromGroup(sub, Guid.NewGuid(), Guid.NewGuid()));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -42,14 +43,9 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             // Arrange
             var sut = new RemoveFromGroupValidator(_dbContext);
 
-            string userSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
 
-            var admin = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
+            var admin = new UserBuilder().WithSub(userSub).Build();
 
             var group = new Domain.Entities.Group
             {
@@ -64,7 +60,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new RemoveFromGroup(userSub, group.Id, admin.Id));
+            var isValid = await sut.IsValidAsync(new RemoveFromGroup(userSub, group.Id, admin.Id));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -77,14 +73,9 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             // Arrange
             var sut = new RemoveFromGroupValidator(_dbContext);
 
-            string userSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
 
-            var admin = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
+            var admin = new UserBuilder().WithSub(userSub).Build();
 
             var group = new Domain.Entities.Group
             {
@@ -99,7 +90,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new RemoveFromGroup(userSub, group.Id, Guid.NewGuid()));
+            var isValid = await sut.IsValidAsync(new RemoveFromGroup(userSub, group.Id, Guid.NewGuid()));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -111,22 +102,11 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             // Arrange
             var sut = new RemoveFromGroupValidator(_dbContext);
 
-            string userSub = Guid.NewGuid().ToString();
-            string groupUserSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
+            var groupUserSub = Guid.NewGuid().ToString();
 
-            var admin = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
-
-            var groupUser = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = groupUserSub
-            };
+            var admin = new UserBuilder().WithSub(userSub).Build();
+            var groupUser = new UserBuilder().WithSub(groupUserSub).Build();
 
             await _dbContext.Users.AddAsync(admin);
             await _dbContext.Users.AddAsync(groupUser);
@@ -134,7 +114,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new RemoveFromGroup(userSub, Guid.NewGuid(), groupUser.Id));
+            var isValid = await sut.IsValidAsync(new RemoveFromGroup(userSub, Guid.NewGuid(), groupUser.Id));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -146,22 +126,11 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             // Arrange
             var sut = new RemoveFromGroupValidator(_dbContext);
 
-            string userSub = Guid.NewGuid().ToString();
-            string groupUserSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
+            var groupUserSub = Guid.NewGuid().ToString();
 
-            var admin = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
-
-            var groupUser = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = groupUserSub
-            };
+            var admin = new UserBuilder().WithSub(userSub).Build();
+            var groupUser = new UserBuilder().WithSub(groupUserSub).Build();
 
             var group = new Domain.Entities.Group
             {
@@ -179,7 +148,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new RemoveFromGroup(groupUserSub, group.Id, groupUser.Id));
+            var isValid = await sut.IsValidAsync(new RemoveFromGroup(groupUserSub, group.Id, groupUser.Id));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -191,22 +160,11 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             // Arrange
             var sut = new RemoveFromGroupValidator(_dbContext);
 
-            string userSub = Guid.NewGuid().ToString();
-            string groupUserSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
+            var groupUserSub = Guid.NewGuid().ToString();
 
-            var admin = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
-
-            var groupUser = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = groupUserSub
-            };
+            var admin = new UserBuilder().WithSub(userSub).Build();
+            var groupUser = new UserBuilder().WithSub(groupUserSub).Build();
 
             var group = new Domain.Entities.Group
             {
@@ -223,7 +181,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new RemoveFromGroup(userSub, group.Id, groupUser.Id));
+            var isValid = await sut.IsValidAsync(new RemoveFromGroup(userSub, group.Id, groupUser.Id));
 
             // Assert
             isValid.ShouldBeTrue();

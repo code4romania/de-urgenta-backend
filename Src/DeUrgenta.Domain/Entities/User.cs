@@ -10,6 +10,7 @@ namespace DeUrgenta.Domain.Entities
         public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Email { get; set; }
         public string Sub { get; set; }
         public virtual ICollection<Certification> Certifications { get; set; } = new List<Certification>();
         public virtual ICollection<Group> GroupsAdministered { get; set; } = new List<Group>();

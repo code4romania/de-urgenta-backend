@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
 using DeUrgenta.Tests.Helpers;
+using DeUrgenta.Tests.Helpers.Builders;
 using DeUrgenta.User.Api.Commands;
 using DeUrgenta.User.Api.Validators;
 using Shouldly;
@@ -30,7 +31,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var sut = new DeleteLocationValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new DeleteLocation(sub, Guid.NewGuid()));
+            var isValid = await sut.IsValidAsync(new DeleteLocation(sub, Guid.NewGuid()));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -42,18 +43,14 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var sut = new DeleteLocationValidator(_dbContext);
 
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
-            await _dbContext.Users.AddAsync(new DeUrgenta.Domain.Entities.User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            });
+            var userSub = Guid.NewGuid().ToString();
+            var user = new UserBuilder().WithSub(userSub).Build();
 
+            await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new DeleteLocation(userSub, Guid.NewGuid()));
+            var isValid = await sut.IsValidAsync(new DeleteLocation(userSub, Guid.NewGuid()));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -65,14 +62,9 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var sut = new DeleteLocationValidator(_dbContext);
 
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
 
-            var user = new DeUrgenta.Domain.Entities.User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
+            var user = new UserBuilder().WithSub(userSub).Build();
             await _dbContext.Users.AddAsync(user);
 
             var userLocation = new UserLocation
@@ -89,7 +81,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new DeleteLocation(userSub, userLocation.Id));
+            var isValid = await sut.IsValidAsync(new DeleteLocation(userSub, userLocation.Id));
 
             // Assert
             isValid.ShouldBeTrue();

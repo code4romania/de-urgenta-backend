@@ -5,6 +5,7 @@ using DeUrgenta.Backpack.Api.Validators;
 using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
 using DeUrgenta.Tests.Helpers;
+using DeUrgenta.Tests.Helpers.Builders;
 using Shouldly;
 using Xunit;
 
@@ -30,7 +31,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new RemoveContributorValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new RemoveContributor(sub, Guid.NewGuid(), Guid.NewGuid()));
+            var isValid = await sut.IsValidAsync(new RemoveContributor(sub, Guid.NewGuid(), Guid.NewGuid()));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -43,28 +44,23 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             // Arrange
             var sut = new RemoveContributorValidator(_dbContext);
 
-            string userSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
 
-            var owner = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
+            var owner = new UserBuilder().WithSub(userSub).Build();
 
-            var backpack = new Domain.Entities.Backpack()
+            var backpack = new Domain.Entities.Backpack
             {
                 Name = "my backpack"
             };
 
             await _dbContext.Users.AddAsync(owner);
             await _dbContext.Backpacks.AddAsync(backpack);
-            await _dbContext.BackpacksToUsers.AddAsync(new BackpackToUser() { Backpack = backpack, User = owner ,IsOwner = true});
+            await _dbContext.BackpacksToUsers.AddAsync(new BackpackToUser { Backpack = backpack, User = owner ,IsOwner = true});
 
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new RemoveContributor(userSub, backpack.Id, owner.Id));
+            var isValid = await sut.IsValidAsync(new RemoveContributor(userSub, backpack.Id, owner.Id));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -77,28 +73,22 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             // Arrange
             var sut = new RemoveContributorValidator(_dbContext);
 
-            string userSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
+            var owner = new UserBuilder().WithSub(userSub).Build();
 
-            var owner = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
-
-            var backpack = new Domain.Entities.Backpack()
+            var backpack = new Domain.Entities.Backpack
             {
                 Name = "my backpack"
             };
 
             await _dbContext.Users.AddAsync(owner);
             await _dbContext.Backpacks.AddAsync(backpack);
-            await _dbContext.BackpacksToUsers.AddAsync(new BackpackToUser() { Backpack = backpack, User = owner });
+            await _dbContext.BackpacksToUsers.AddAsync(new BackpackToUser { Backpack = backpack, User = owner });
 
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new RemoveContributor(userSub, backpack.Id, Guid.NewGuid()));
+            var isValid = await sut.IsValidAsync(new RemoveContributor(userSub, backpack.Id, Guid.NewGuid()));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -110,22 +100,11 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             // Arrange
             var sut = new RemoveContributorValidator(_dbContext);
 
-            string userSub = Guid.NewGuid().ToString();
-            string contributorUserSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
+            var contributorSub = Guid.NewGuid().ToString();
 
-            var owner = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
-
-            var contributor = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = contributorUserSub
-            };
+            var owner = new UserBuilder().WithSub(userSub).Build();
+            var contributor = new UserBuilder().WithSub(contributorSub).Build();
 
             await _dbContext.Users.AddAsync(owner);
             await _dbContext.Users.AddAsync(contributor);
@@ -133,7 +112,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new RemoveContributor(userSub, Guid.NewGuid(), contributor.Id));
+            var isValid = await sut.IsValidAsync(new RemoveContributor(userSub, Guid.NewGuid(), contributor.Id));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -145,22 +124,11 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             // Arrange
             var sut = new RemoveContributorValidator(_dbContext);
 
-            string userSub = Guid.NewGuid().ToString();
-            string contributorUserSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
+            var contributorSub = Guid.NewGuid().ToString();
 
-            var owner = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
-
-            var backpackContributor = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = contributorUserSub
-            };
+            var owner = new UserBuilder().WithSub(userSub).Build();
+            var backpackContributor = new UserBuilder().WithSub(contributorSub).Build();
 
             var backpack = new Domain.Entities.Backpack
             {
@@ -178,7 +146,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new RemoveContributor(contributorUserSub, backpack.Id, owner.Id));
+            var isValid = await sut.IsValidAsync(new RemoveContributor(contributorSub, backpack.Id, owner.Id));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -190,22 +158,11 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             // Arrange
             var sut = new RemoveContributorValidator(_dbContext);
 
-            string userSub = Guid.NewGuid().ToString();
-            string backpackContributorSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
+            var backpackContributorSub = Guid.NewGuid().ToString();
 
-            var owner = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
-
-            var backpackContributor = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = backpackContributorSub
-            };
+            var owner = new UserBuilder().WithSub(userSub).Build();
+            var backpackContributor = new UserBuilder().WithSub(backpackContributorSub).Build();
 
             var backpack = new Domain.Entities.Backpack
             {
@@ -221,7 +178,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new RemoveContributor(userSub, backpack.Id, backpackContributor.Id));
+            var isValid = await sut.IsValidAsync(new RemoveContributor(userSub, backpack.Id, backpackContributor.Id));
 
             // Assert
             isValid.ShouldBeTrue();

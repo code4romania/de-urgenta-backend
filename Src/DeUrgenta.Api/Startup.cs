@@ -76,6 +76,9 @@ namespace DeUrgenta.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.ApplicationServices.UseDatabase<DeUrgentaContext>();
+            app.ConfigureBearerAuth();
+
             app.UseProblemDetails();
             app.UseConfigureSwagger();
 

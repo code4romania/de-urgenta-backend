@@ -5,6 +5,7 @@ using DeUrgenta.Domain.Entities;
 using DeUrgenta.Group.Api.Queries;
 using DeUrgenta.Group.Api.Validators;
 using DeUrgenta.Tests.Helpers;
+using DeUrgenta.Tests.Helpers.Builders;
 using Shouldly;
 using Xunit;
 
@@ -30,7 +31,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetGroupSafeLocationsValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetGroupSafeLocations(sub, Guid.NewGuid()));
+            var isValid = await sut.IsValidAsync(new GetGroupSafeLocations(sub, Guid.NewGuid()));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -40,22 +41,16 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Invalidate_request_when_no_group_found()
         {
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
-            var user = new User
-            {
-                FirstName = "Integration", 
-                LastName = "Test", 
-                Sub = userSub
-            };
+            var userSub = Guid.NewGuid().ToString();
+            var user = new UserBuilder().WithSub(userSub).Build();
 
             await _dbContext.Users.AddAsync(user);
-
             await _dbContext.SaveChangesAsync();
 
             var sut = new GetGroupSafeLocationsValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetGroupSafeLocations(userSub, Guid.NewGuid()));
+            var isValid = await sut.IsValidAsync(new GetGroupSafeLocations(userSub, Guid.NewGuid()));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -65,22 +60,11 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Invalidate_request_when_not_part_of_the_group()
         {
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
-            string adminSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
+            var adminSub = Guid.NewGuid().ToString();
 
-            var user = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            }; 
-
-            var admin = new User
-            {
-                FirstName = "Admin",
-                LastName = "User",
-                Sub = adminSub
-            };
+            var user = new UserBuilder().WithSub(userSub).Build();
+            var admin = new UserBuilder().WithSub(adminSub).Build();
 
             var group = new Domain.Entities.Group
             {
@@ -99,7 +83,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetGroupSafeLocationsValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetGroupSafeLocations(userSub, group.Id));
+            var isValid = await sut.IsValidAsync(new GetGroupSafeLocations(userSub, group.Id));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -109,15 +93,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Validate_request_when_is_admin_of_group()
         {
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
 
-            var user = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
-            
+            var user = new UserBuilder().WithSub(userSub).Build();
+
             var group = new Domain.Entities.Group
             {
                 Admin = user,
@@ -134,7 +113,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetGroupSafeLocationsValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetGroupSafeLocations(userSub, group.Id));
+            var isValid = await sut.IsValidAsync(new GetGroupSafeLocations(userSub, group.Id));
 
             // Assert
             isValid.ShouldBeTrue();
@@ -144,22 +123,11 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Validate_request_when_is_part_of_group()
         {
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
-            string adminSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
+            var adminSub = Guid.NewGuid().ToString();
 
-            var user = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
-
-            var admin = new User
-            {
-                FirstName = "Admin",
-                LastName = "User",
-                Sub = adminSub
-            };
+            var user = new UserBuilder().WithSub(userSub).Build();
+            var admin = new UserBuilder().WithSub(adminSub).Build();
 
             var group = new Domain.Entities.Group
             {
@@ -180,7 +148,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetGroupSafeLocationsValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetGroupSafeLocations(userSub, group.Id));
+            var isValid = await sut.IsValidAsync(new GetGroupSafeLocations(userSub, group.Id));
 
             // Assert
             isValid.ShouldBeTrue();

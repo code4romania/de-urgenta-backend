@@ -10,6 +10,7 @@ using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
 using DeUrgenta.Tests.Helpers;
+using DeUrgenta.Tests.Helpers.Builders;
 using NSubstitute;
 using Shouldly;
 using Xunit;
@@ -73,13 +74,9 @@ namespace DeUrgenta.Certifications.Api.Tests.CommandHandlers
         private async Task SetupExistingCertification(Guid certificationId)
         {
             var userId = Guid.NewGuid();
-            await _dbContext.Users.AddAsync(new User
-            {
-                Id = userId,
-                FirstName = TestDataProviders.RandomString(),
-                LastName = TestDataProviders.RandomString(),
-                Sub = Guid.NewGuid().ToString()
-            });
+            var user = new UserBuilder().WithId(userId).Build();
+
+            await _dbContext.Users.AddAsync(user);
             await _dbContext.Certifications.AddAsync(new Certification
             {
                 Name = TestDataProviders.RandomString(),

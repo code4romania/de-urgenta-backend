@@ -6,6 +6,7 @@ using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Models;
 using DeUrgenta.Group.Api.Validators;
 using DeUrgenta.Tests.Helpers;
+using DeUrgenta.Tests.Helpers.Builders;
 using Shouldly;
 using Xunit;
 
@@ -31,7 +32,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new UpdateGroupValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new UpdateGroup(sub, Guid.NewGuid(), new GroupRequest()));
+            var isValid = await sut.IsValidAsync(new UpdateGroup(sub, Guid.NewGuid(), new GroupRequest()));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -42,20 +43,15 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         {
             // Arrange
             var sut = new UpdateGroupValidator(_dbContext);
-            string userSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
 
-            var user = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
+            var user = new UserBuilder().WithSub(userSub).Build();
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new UpdateGroup(userSub, Guid.NewGuid(), new GroupRequest()));
+            var isValid = await sut.IsValidAsync(new UpdateGroup(userSub, Guid.NewGuid(), new GroupRequest()));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -67,22 +63,11 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             // Arrange
             var sut = new UpdateGroupValidator(_dbContext);
 
-            string userSub = Guid.NewGuid().ToString();
-            string groupUserSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
+            var groupUserSub = Guid.NewGuid().ToString();
 
-            var admin = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
-
-            var groupUser = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = groupUserSub
-            };
+            var admin = new UserBuilder().WithSub(userSub).Build();
+            var groupUser = new UserBuilder().WithSub(groupUserSub).Build();
 
             var group = new Domain.Entities.Group
             {
@@ -100,7 +85,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new UpdateGroup(groupUserSub, Guid.NewGuid(), new GroupRequest()));
+            var isValid = await sut.IsValidAsync(new UpdateGroup(groupUserSub, Guid.NewGuid(), new GroupRequest()));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -112,14 +97,9 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             // Arrange
             var sut = new UpdateGroupValidator(_dbContext);
 
-            string userSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
 
-            var admin = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
+            var admin = new UserBuilder().WithSub(userSub).Build();
 
             var group = new Domain.Entities.Group
             {
@@ -134,7 +114,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new UpdateGroup(userSub, group.Id, new GroupRequest()));
+            var isValid = await sut.IsValidAsync(new UpdateGroup(userSub, group.Id, new GroupRequest()));
 
             // Assert
             isValid.ShouldBeTrue();

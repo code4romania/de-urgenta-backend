@@ -27,6 +27,11 @@ namespace DeUrgenta.Domain.Configurations
                 .HasMaxLength(100);
 
             builder
+                .Property(x => x.Email)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            builder
                 .Property(x => x.Sub)
                 .IsRequired();
 

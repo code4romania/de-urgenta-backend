@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Queries;
 using DeUrgenta.Backpack.Api.Validators;
 using DeUrgenta.Domain;
-using DeUrgenta.Domain.Entities;
 using DeUrgenta.Tests.Helpers;
+using DeUrgenta.Tests.Helpers.Builders;
 using Shouldly;
 using Xunit;
 
@@ -30,7 +30,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new GetMyBackpacksValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetMyBackpacks(sub));
+            var isValid = await sut.IsValidAsync(new GetMyBackpacks(sub));
 
             // Assert
             isValid.ShouldBeFalse();
@@ -42,18 +42,14 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new GetMyBackpacksValidator(_dbContext);
 
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
-            await _dbContext.Users.AddAsync(new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            });
+            var userSub = Guid.NewGuid().ToString();
+            var user = new UserBuilder().WithSub(userSub).Build();
+            await _dbContext.Users.AddAsync(user);
 
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetMyBackpacks(userSub));
+            var isValid = await sut.IsValidAsync(new GetMyBackpacks(userSub));
 
             // Assert
             isValid.ShouldBeTrue();
