@@ -11,7 +11,7 @@ using DeUrgenta.Domain.Entities;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
 using NSubstitute;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Certifications.Api.Tests.CommandHandlers
@@ -42,7 +42,7 @@ namespace DeUrgenta.Certifications.Api.Tests.CommandHandlers
             var result = await sut.Handle(new CreateCertification("a-sub", new CertificationRequest()), CancellationToken.None);
 
             // Assert
-            result.IsFailure.ShouldBeTrue();
+            result.IsFailure.Should().BeTrue();
         }
 
         [Fact]
@@ -73,7 +73,7 @@ namespace DeUrgenta.Certifications.Api.Tests.CommandHandlers
             var result = await sut.Handle(createCertification, CancellationToken.None);
 
             //Assert
-            result.IsSuccess.ShouldBeTrue();
+            result.IsSuccess.Should().BeTrue();
         }
     }
 }

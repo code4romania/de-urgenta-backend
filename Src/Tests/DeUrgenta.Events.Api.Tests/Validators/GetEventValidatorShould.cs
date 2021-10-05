@@ -3,7 +3,7 @@ using DeUrgenta.Domain;
 using DeUrgenta.Events.Api.Queries;
 using DeUrgenta.Events.Api.Validators;
 using DeUrgenta.Tests.Helpers;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Events.Api.Tests.Validators
@@ -30,7 +30,7 @@ namespace DeUrgenta.Events.Api.Tests.Validators
             bool isValid = await sut.IsValidAsync(new GetEvent(new Models.EventModelRequest { EventTypeId = eventTypeId }));
 
             // Assert
-            isValid.ShouldBeFalse();
+            isValid.Should().BeFalse();
         }
 
         [Theory]
@@ -44,7 +44,7 @@ namespace DeUrgenta.Events.Api.Tests.Validators
             bool isValid = await sut.IsValidAsync(new GetEvent(new Models.EventModelRequest { EventTypeId = eventTypeId }));
 
             // Assert
-            isValid.ShouldBeTrue();
+            isValid.Should().BeTrue();
         }
     }
 }

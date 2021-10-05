@@ -8,7 +8,7 @@ using DeUrgenta.Group.Api.Options;
 using DeUrgenta.Group.Api.Validators;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Group.Api.Tests.Validators
@@ -38,7 +38,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new AddGroup(sub, new GroupRequest()));
 
             // Assert
-            isValid.ShouldBeFalse();
+            isValid.Should().BeFalse();
         }
 
         [Fact]
@@ -57,7 +57,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new AddGroup(userSub, new GroupRequest()));
 
             // Assert
-            isValid.ShouldBeTrue();
+            isValid.Should().BeTrue();
         }
         
         [Fact]
@@ -85,7 +85,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var result = await sut.IsValidAsync(new AddGroup(user.Sub, new GroupRequest {Name = "TestGroup"}));
 
             // Assert
-            result.ShouldBeFalse();
+            result.Should().BeFalse();
         }
     }
 }
