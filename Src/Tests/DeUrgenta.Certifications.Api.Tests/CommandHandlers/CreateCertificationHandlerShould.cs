@@ -9,6 +9,7 @@ using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
 using DeUrgenta.Tests.Helpers;
+using DeUrgenta.Tests.Helpers.Builders;
 using NSubstitute;
 using Shouldly;
 using Xunit;
@@ -53,12 +54,8 @@ namespace DeUrgenta.Certifications.Api.Tests.CommandHandlers
                 .WithPhoto(null)
                 .Build();
 
-            var user = new User
-            {
-                Sub = userSub,
-                FirstName = TestDataProviders.RandomString(),
-                LastName = TestDataProviders.RandomString()
-            };
+            var user = new UserBuilder().WithSub(userSub).Build();
+            
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
 
