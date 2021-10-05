@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\DeUrgenta.Domain\DeUrgenta.Domain.csproj" />
-    <ProjectReference Include="..\..\DeUrgenta.RecurringJobs\DeUrgenta.RecurringJobs.csproj" />
   </ItemGroup>
 
   <ItemGroup>

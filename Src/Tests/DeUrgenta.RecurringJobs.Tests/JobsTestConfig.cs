@@ -2,14 +2,14 @@
 using System.IO;
 using Microsoft.Extensions.Configuration;
 
-namespace DeUrgenta.Tests.Helpers
+namespace DeUrgenta.RecurringJobs.Tests
 {
-    public class TestConfig
+    public class JobsTestConfig
     {
-        public string ConnectionString { get; set; }
+        public string JobsConnectionString { get; set; }
         public bool UseDbCheckpoint { get; set; }
 
-        public TestConfig()
+        public JobsTestConfig()
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -17,7 +17,7 @@ namespace DeUrgenta.Tests.Helpers
                 .AddEnvironmentVariables()
                 .Build();
 
-            ConnectionString = configuration.GetConnectionString("TestingDbConnectionString");
+            JobsConnectionString = configuration.GetConnectionString("JobsTestingDbConnectionString");
             UseDbCheckpoint = Convert.ToBoolean(configuration.GetSection("UseDbCheckpoint").Value);
         }
     }

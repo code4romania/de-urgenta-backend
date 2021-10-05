@@ -1,7 +1,7 @@
 ﻿using System;
 using DeUrgenta.RecurringJobs.Domain.Entities;
 
-namespace DeUrgenta.Tests.Helpers.Builders
+namespace DeUrgenta.RecurringJobs.Tests.Builders
 {
     public class NotificationBuilder
     {

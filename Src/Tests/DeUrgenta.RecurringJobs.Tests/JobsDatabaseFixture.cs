@@ -9,16 +9,17 @@ namespace DeUrgenta.RecurringJobs.Tests
 {
     public class JobsDatabaseFixture : DatabaseFixture
     {
+        private readonly JobsTestConfig _testConfig;
         private readonly Checkpoint _emptyJobsDatabaseCheckpoint;
 
         public JobsContext JobsContext;
 
         public JobsDatabaseFixture()
-            : base()
         {
+            _testConfig = new JobsTestConfig();
             var optionsBuilder = new DbContextOptionsBuilder<JobsContext>();
-            optionsBuilder.UseNpgsql(TestConfig.JobsConnectionString);
-            if (TestConfig.UseDbCheckpoint)
+            optionsBuilder.UseNpgsql(_testConfig.JobsConnectionString);
+            if (_testConfig.UseDbCheckpoint)
             {
                 _emptyJobsDatabaseCheckpoint = new Checkpoint
                 {
@@ -37,10 +38,10 @@ namespace DeUrgenta.RecurringJobs.Tests
         {
             await base.InitializeAsync();
 
-            if (!TestConfig.UseDbCheckpoint)
+            if (!_testConfig.UseDbCheckpoint)
                 return;
 
-            await using var conn = new NpgsqlConnection(TestConfig.JobsConnectionString);
+            await using var conn = new NpgsqlConnection(_testConfig.JobsConnectionString);
             await conn.OpenAsync();
 
             await _emptyJobsDatabaseCheckpoint.Reset(conn);
@@ -50,10 +51,10 @@ namespace DeUrgenta.RecurringJobs.Tests
         {
             await base.DisposeAsync();
 
-            if (!TestConfig.UseDbCheckpoint)
+            if (!_testConfig.UseDbCheckpoint)
                 return;
 
-            await using var conn = new NpgsqlConnection(TestConfig.JobsConnectionString);
+            await using var conn = new NpgsqlConnection(_testConfig.JobsConnectionString);
             await conn.OpenAsync();
 
             await _emptyJobsDatabaseCheckpoint.Reset(conn);

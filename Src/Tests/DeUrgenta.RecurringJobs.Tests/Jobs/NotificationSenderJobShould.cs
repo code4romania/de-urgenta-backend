@@ -5,8 +5,8 @@ using DeUrgenta.RecurringJobs.Domain;
 using DeUrgenta.RecurringJobs.Domain.Entities;
 using DeUrgenta.RecurringJobs.Jobs;
 using DeUrgenta.RecurringJobs.Services;
+using DeUrgenta.RecurringJobs.Tests.Builders;
 using DeUrgenta.Tests.Helpers;
-using DeUrgenta.Tests.Helpers.Builders;
 using NSubstitute;
 using Xunit;
 

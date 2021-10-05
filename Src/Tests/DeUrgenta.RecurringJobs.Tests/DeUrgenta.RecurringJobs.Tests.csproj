@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -24,6 +24,12 @@
   <ItemGroup>
     <ProjectReference Include="..\..\DeUrgenta.RecurringJobs\DeUrgenta.RecurringJobs.csproj" />
     <ProjectReference Include="..\DeUrgenta.Tests.Helpers\DeUrgenta.Tests.Helpers.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.testing.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
