@@ -116,8 +116,10 @@ namespace DeUrgenta.User.Api
             }
         }
 
-        public static IServiceCollection AddUserApiServices(this IServiceCollection services)
+        public static IServiceCollection AddUserApiServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.Configure<GroupsConfig>(configuration.GetSection(GroupsConfig.SectionName));
+            
             services.AddTransient<IValidateRequest<GetUser>, GetUserValidator>();
             services.AddTransient<IValidateRequest<UpdateUser>, UpdateUserValidator>();
             services.AddTransient<IValidateRequest<GetBackpackInvites>, GetBackpackInvitesValidator>();
