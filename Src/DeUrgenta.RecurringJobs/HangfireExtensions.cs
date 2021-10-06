@@ -48,6 +48,9 @@ namespace DeUrgenta.RecurringJobs
 
             services.AddScoped<INotificationService, NotificationService>();
 
+            services.Configure<EventArchivalJobConfig>(configuration.GetSection("RecurringJobsConfig:EventArchivalJobConfig"));
+            services.AddScoped<IEventArchivalJob, EventArchivalJob>();
+
             services.Configure<ExpiredCertificationJobConfig>(configuration.GetSection("RecurringJobsConfig:ExpiredCertificationJobConfig"));
             services.AddScoped<IExpiredCertificationJob, ExpiredCertificationJob>();
 
