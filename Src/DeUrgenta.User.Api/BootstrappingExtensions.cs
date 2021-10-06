@@ -10,7 +10,6 @@ using DeUrgenta.User.Api.Models.DTOs.Requests;
 using DeUrgenta.User.Api.Options;
 using DeUrgenta.User.Api.Queries;
 using DeUrgenta.User.Api.Services;
-using DeUrgenta.User.Api.Services.Emailing;
 using DeUrgenta.User.Api.Validators;
 using DeUrgenta.User.Api.Validators.RequestValidators;
 using FluentValidation;
@@ -83,39 +82,7 @@ namespace DeUrgenta.User.Api
             builder.ApplicationServices.UseDatabase<UserDbContext>();
             return builder;
         }
-
-        public static void SetupEmailService(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddTransient<IEmailBuilderService, EmailBuilderService>();
-            services.AddSingleton<ITemplateFileSelector, TemplateFileSelector>();
-            var emailType = configuration.GetValue<EmailingSystemTypes>("EMailingSystem");
-
-            switch (emailType)
-            {
-                case EmailingSystemTypes.SendGrid:
-                    services.AddSingleton(new SendGridOptions
-                    {
-                        ApiKey = configuration["SendGrid:ApiKey"],
-                        ClickTracking = configuration.GetValue<bool>("SendGrid:ClickTracking")
-                    });
-
-                    services.AddSingleton<IEmailSender, SendGridSender>();
-                    break;
-
-                case EmailingSystemTypes.Smtp:
-                    services.AddSingleton(new SmtpOptions
-                    {
-                        Host = configuration["Smtp:Host"],
-                        Port = configuration.GetValue<int>("Smtp:Port"),
-                        User = configuration["Smtp:User"],
-                        Password = configuration["Smtp:Password"]
-                    });
-
-                    services.AddSingleton<IEmailSender, SmtpSender>();
-                    break;
-            }
-        }
-
+        
         public static IServiceCollection AddUserApiServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<GroupsConfig>(configuration.GetSection(GroupsConfig.SectionName));

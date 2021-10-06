@@ -2,22 +2,26 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using DeUrgenta.Emailing.Service.Builders;
+using DeUrgenta.Emailing.Service.Config;
+using DeUrgenta.Emailing.Service.Models;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using MimeKit;
 using MimeKit.Text;
 
-namespace DeUrgenta.User.Api.Services.Emailing
+namespace DeUrgenta.Emailing.Service.Senders
 {
     public class SmtpSender : BaseEmailSender
     {
         private readonly SmtpOptions _options;
         private readonly ILogger<SmtpSender> _logger;
 
-        public SmtpSender(IEmailBuilderService emailBuilder, SmtpOptions options, ILogger<SmtpSender> logger) : base(emailBuilder)
+        public SmtpSender(IEmailBuilderService emailBuilder, IOptions<SmtpOptions> options, ILogger<SmtpSender> logger) : base(emailBuilder)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = options.Value ?? throw new ArgumentNullException(nameof(options));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -40,7 +44,7 @@ namespace DeUrgenta.User.Api.Services.Emailing
                 message.Sender = new MailboxAddress(email.FromName, email.FromEmail);
                 message.Subject = email.Subject;
                 message.Body = body;
-                message.To.Add(new MailboxAddress(email.To));
+                message.To.Add(MailboxAddress.Parse(email.To));
 
                 if (email.Attachment != null)
                 {

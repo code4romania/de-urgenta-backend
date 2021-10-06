@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using DeUrgenta.Emailing.Service.Models;
+using DeUrgenta.Emailing.Service.Senders;
 using MediatR;
 using DeUrgenta.User.Api.Notifications;
-using DeUrgenta.User.Api.Services.Emailing;
 using Microsoft.Extensions.Logging;
 
 namespace DeUrgenta.User.Api.NotificationHandlers
@@ -28,8 +29,6 @@ namespace DeUrgenta.User.Api.NotificationHandlers
                     DestinationAddress = notification.DestinationAddress,
                     PlaceholderContent = notification.PlaceholderContent,
                     TemplateType = notification.TemplateType,
-                    SenderName = notification.SenderName,
-                    SenderEmail = notification.SenderEmail,
                     Subject = notification.Subject
                 };
                 await _emailSender.SendAsync(email, cancellationToken);
