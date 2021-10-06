@@ -6,9 +6,11 @@ using CSharpFunctionalExtensions;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Group.Api.Models;
+using DeUrgenta.Group.Api.Options;
 using DeUrgenta.Group.Api.Queries;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace DeUrgenta.Group.Api.QueryHandlers
 {
@@ -16,14 +18,18 @@ namespace DeUrgenta.Group.Api.QueryHandlers
     {
         private readonly IValidateRequest<GetMyGroups> _validator;
         private readonly DeUrgentaContext _context;
+        private readonly GroupsConfig _groupsConfig;
 
-        public GetMyGroupsHandler(IValidateRequest<GetMyGroups> validator, DeUrgentaContext context)
+        public GetMyGroupsHandler(IValidateRequest<GetMyGroups> validator, DeUrgentaContext context,
+            IOptions<GroupsConfig> groupsConfig)
         {
             _validator = validator;
             _context = context;
+            _groupsConfig = groupsConfig.Value;
         }
 
-        public async Task<Result<IImmutableList<GroupModel>>> Handle(GetMyGroups request, CancellationToken cancellationToken)
+        public async Task<Result<IImmutableList<GroupModel>>> Handle(GetMyGroups request,
+            CancellationToken cancellationToken)
         {
             var isValid = await _validator.IsValidAsync(request);
 
@@ -45,6 +51,7 @@ namespace DeUrgenta.Group.Api.QueryHandlers
                     Id = g.Id,
                     Name = g.Name,
                     NumberOfMembers = g.GroupMembers.Count,
+                    MaxNumberOfMembers = _groupsConfig.UsersLimit,
                     AdminId = g.AdminId,
                     AdminFirstName = g.Admin.FirstName,
                     AdminLastName = g.Admin.LastName

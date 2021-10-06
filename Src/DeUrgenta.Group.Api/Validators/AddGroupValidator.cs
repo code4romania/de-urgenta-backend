@@ -13,12 +13,6 @@ namespace DeUrgenta.Group.Api.Validators
         private readonly DeUrgentaContext _context;
         private readonly GroupsConfig _groupsConfig;
 
-        public AddGroupValidator(DeUrgentaContext context, GroupsConfig groupsConfig)
-        {
-            _context = context;
-            _groupsConfig = groupsConfig;
-        }
-        
         public AddGroupValidator(DeUrgentaContext context, IOptions<GroupsConfig> groupsConfig)
         {
             _context = context;
@@ -32,7 +26,7 @@ namespace DeUrgenta.Group.Api.Validators
             {
                 return false;
             }
-            
+
             if (user.GroupsAdministered.Count >= _groupsConfig.MaxCreatedGroupsPerUser)
             {
                 return false;

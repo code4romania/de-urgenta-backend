@@ -9,6 +9,7 @@ using DeUrgenta.Group.Api.Validators;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
 using FluentAssertions;
+using Microsoft.Extensions.Options;
 using Xunit;
 
 namespace DeUrgenta.Group.Api.Tests.Validators
@@ -17,12 +18,13 @@ namespace DeUrgenta.Group.Api.Tests.Validators
     public class AddGroupValidatorShould
     {
         private readonly DeUrgentaContext _dbContext;
-        private readonly GroupsConfig _groupsConfig;
+        private readonly IOptions<GroupsConfig> _groupsConfig;
 
         public AddGroupValidatorShould(DatabaseFixture fixture)
         {
             _dbContext = fixture.Context;
-            _groupsConfig = new GroupsConfig {MaxCreatedGroupsPerUser = 5};
+            var options = new GroupsConfig {MaxCreatedGroupsPerUser = 5};
+            _groupsConfig = Microsoft.Extensions.Options.Options.Create<GroupsConfig>(options);
         }
 
         [Theory]
@@ -52,14 +54,14 @@ namespace DeUrgenta.Group.Api.Tests.Validators
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
-            
+
             // Act
             var isValid = await sut.IsValidAsync(new AddGroup(userSub, new GroupRequest()));
 
             // Assert
             isValid.Should().BeTrue();
         }
-        
+
         [Fact]
         public async Task Invalidate_when_user_exceeds_group_creation_limit()
         {
@@ -70,15 +72,13 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var userSub = Guid.NewGuid().ToString();
             var user = new UserBuilder().WithSub(userSub).Build();
             await _dbContext.SaveChangesAsync();
-            
+
             // Seed groups
             for (int i = 0; i < 5; i++)
             {
-                await _dbContext.Groups.AddAsync(new Domain.Entities.Group
-                {
-                    Name = i.ToString(), Admin = user
-                });
+                await _dbContext.Groups.AddAsync(new GroupBuilder().WithAdmin(user).Build());
             }
+
             await _dbContext.SaveChangesAsync();
 
             // Act

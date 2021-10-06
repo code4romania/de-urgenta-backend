@@ -5,8 +5,10 @@ using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Models;
+using DeUrgenta.Group.Api.Options;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace DeUrgenta.Group.Api.CommandHandlers
 {
@@ -14,11 +16,14 @@ namespace DeUrgenta.Group.Api.CommandHandlers
     {
         private readonly IValidateRequest<UpdateGroup> _validator;
         private readonly DeUrgentaContext _context;
+        private readonly GroupsConfig _groupsConfig;
 
-        public UpdateGroupHandler(IValidateRequest<UpdateGroup> validator, DeUrgentaContext context)
+        public UpdateGroupHandler(IValidateRequest<UpdateGroup> validator, DeUrgentaContext context,
+            IOptions<GroupsConfig> groupsConfig)
         {
             _validator = validator;
             _context = context;
+            _groupsConfig = groupsConfig.Value;
         }
 
         public async Task<Result<GroupModel>> Handle(UpdateGroup request, CancellationToken cancellationToken)
@@ -44,6 +49,7 @@ namespace DeUrgenta.Group.Api.CommandHandlers
                 Id = group.Id,
                 Name = group.Name,
                 NumberOfMembers = group.GroupMembers.Count,
+                MaxNumberOfMembers = _groupsConfig.UsersLimit,
                 AdminId = group.AdminId,
                 AdminFirstName = group.Admin.FirstName,
                 AdminLastName = group.Admin.LastName
