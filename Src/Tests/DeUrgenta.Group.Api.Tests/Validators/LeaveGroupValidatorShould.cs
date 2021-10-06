@@ -65,11 +65,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
 
             var user = new UserBuilder().WithSub(userSub).Build();
 
-            var group = new Domain.Entities.Group
-            {
-                Admin = user,
-                Name = "my group"
-            };
+            var group = new GroupBuilder().WithAdmin(user).Build();
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Groups.AddAsync(group);
@@ -93,13 +89,9 @@ namespace DeUrgenta.Group.Api.Tests.Validators
 
             var user = new UserBuilder().WithSub(userSub).Build();
 
-            var group = new Domain.Entities.Group
-            {
-                Admin = user,
-                Name = "my group"
-            };
+            var group = new GroupBuilder().WithAdmin(user).Build();
 
-            var userToGroups = new UserToGroup { Group = group, User = user };
+            var userToGroups = new UserToGroup {Group = group, User = user};
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Groups.AddAsync(group);
@@ -124,13 +116,9 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var user = new UserBuilder().WithSub(userSub).Build();
             var admin = new UserBuilder().WithSub(adminSub).Build();
 
-            var group = new Domain.Entities.Group
-            {
-                Admin = admin,
-                Name = "my group"
-            };
+            var group = new GroupBuilder().WithAdmin(admin).Build();
 
-            var userToGroups = new UserToGroup { Group = group, User = user };
+            var userToGroups = new UserToGroup {Group = group, User = user};
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Groups.AddAsync(group);

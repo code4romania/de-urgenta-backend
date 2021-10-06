@@ -85,17 +85,9 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var user = new UserBuilder().WithSub(userSub).Build();
             var adminUser = new UserBuilder().WithSub(adminSub).Build();
 
-            var group = new Domain.Entities.Group
-            {
-                Admin = adminUser,
-                Name = "a group"
-            };
+            var group = new GroupBuilder().WithAdmin(adminUser).Build();
 
-            var groupSafeLocation = new GroupSafeLocation
-            {
-                Group = group,
-                Name = "A safe location"
-            };
+            var groupSafeLocation = new GroupSafeLocation {Group = group, Name = "A safe location"};
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Users.AddAsync(adminUser);
@@ -121,17 +113,9 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var userSub = Guid.NewGuid().ToString();
             var user = new UserBuilder().WithSub(userSub).Build();
 
-            var group = new Domain.Entities.Group
-            {
-                Admin = user,
-                Name = "my group"
-            };
+            var group = new GroupBuilder().WithAdmin(user).Build();
 
-            var groupSafeLocation = new GroupSafeLocation
-            {
-                Group = group,
-                Name = "A safe location"
-            };
+            var groupSafeLocation = new GroupSafeLocation {Group = group, Name = "A safe location"};
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Groups.AddAsync(group);

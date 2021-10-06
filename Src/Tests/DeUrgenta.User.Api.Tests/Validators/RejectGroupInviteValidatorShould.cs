@@ -56,20 +56,11 @@ namespace DeUrgenta.User.Api.Tests.Validators
             await _dbContext.Users.AddAsync(admin);
             await _dbContext.Users.AddAsync(otherUser);
 
-            var group = new Group
-            {
-                Admin = admin,
-                Name = "group"
-            };
+            var group = new GroupBuilder().WithAdmin(admin).Build();
 
             await _dbContext.Groups.AddAsync(group);
 
-            var groupInvite = new GroupInvite
-            {
-                InvitationReceiver = user,
-                InvitationSender = admin,
-                Group = group
-            };
+            var groupInvite = new GroupInvite {InvitationReceiver = user, InvitationSender = admin, Group = group};
 
             await _dbContext.GroupInvites.AddAsync(groupInvite);
             await _dbContext.SaveChangesAsync();
@@ -96,11 +87,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Users.AddAsync(admin);
 
-            var group = new Group
-            {
-                Admin = admin,
-                Name = "group"
-            };
+            var group = new GroupBuilder().WithAdmin(admin).Build();
 
             await _dbContext.Groups.AddAsync(group);
 
@@ -128,18 +115,9 @@ namespace DeUrgenta.User.Api.Tests.Validators
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Users.AddAsync(admin);
 
-            var group = new Group
-            {
-                Admin = admin,
-                Name = "group"
-            };
+            var group = new GroupBuilder().WithAdmin(admin).Build();
 
-            var groupInvite = new GroupInvite
-            {
-                InvitationReceiver = user,
-                InvitationSender = admin,
-                Group = group
-            };
+            var groupInvite = new GroupInvite {InvitationReceiver = user, InvitationSender = admin, Group = group};
             await _dbContext.GroupInvites.AddAsync(groupInvite);
             await _dbContext.Groups.AddAsync(group);
 

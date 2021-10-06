@@ -19,10 +19,11 @@ namespace DeUrgenta.User.Api.Tests.Validators
     {
         private readonly DeUrgentaContext _dbContext;
         private readonly IOptions<GroupsConfig> _defaultOptions = Substitute.For<IOptions<GroupsConfig>>();
+
         public AcceptGroupInviteValidatorShould(DatabaseFixture fixture)
         {
             _dbContext = fixture.Context;
-            _defaultOptions.Value.Returns(new GroupsConfig { UsersLimit = 30 });
+            _defaultOptions.Value.Returns(new GroupsConfig {UsersLimit = 30});
         }
 
         [Theory]
@@ -60,20 +61,11 @@ namespace DeUrgenta.User.Api.Tests.Validators
             await _dbContext.Users.AddAsync(admin);
             await _dbContext.Users.AddAsync(otherUser);
 
-            var group = new Group
-            {
-                Admin = admin,
-                Name = "group"
-            };
+            var group = new GroupBuilder().WithAdmin(admin).Build();
 
             await _dbContext.Groups.AddAsync(group);
 
-            var groupInvite = new GroupInvite
-            {
-                InvitationReceiver = user,
-                InvitationSender = admin,
-                Group = group
-            };
+            var groupInvite = new GroupInvite {InvitationReceiver = user, InvitationSender = admin, Group = group};
 
             await _dbContext.GroupInvites.AddAsync(groupInvite);
             await _dbContext.SaveChangesAsync();
@@ -100,11 +92,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Users.AddAsync(admin);
 
-            var group = new Group
-            {
-                Admin = admin,
-                Name = "group"
-            };
+            var group = new GroupBuilder().WithAdmin(admin).Build();
 
             await _dbContext.Groups.AddAsync(group);
 
@@ -121,36 +109,30 @@ namespace DeUrgenta.User.Api.Tests.Validators
         public async Task Invalidate_when_exceeds_group_users_limit()
         {
             var options = Substitute.For<IOptions<GroupsConfig>>();
-            options.Value.Returns(new GroupsConfig { UsersLimit = 2 });
+            options.Value.Returns(new GroupsConfig {UsersLimit = 2});
             var sut = new AcceptGroupInviteValidator(_dbContext, options);
 
             // Arrange
             var userSub = Guid.NewGuid().ToString();
             var user = new UserBuilder().WithSub(userSub).Build();
-            
+
             var secondUserSub = Guid.NewGuid().ToString();
             var secondUser = new UserBuilder().WithSub(secondUserSub).Build();
-            
+
             var adminSub = Guid.NewGuid().ToString();
             var admin = new UserBuilder().WithSub(adminSub).Build();
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Users.AddAsync(admin);
 
-            var group = new Group
-            {
-                Admin = admin,
-                Name = "group"
-            };
+            var group = new GroupBuilder().WithAdmin(admin).Build();
 
-            await _dbContext.UsersToGroups.AddAsync(new UserToGroup { Group = group, User = admin });
-            await _dbContext.UsersToGroups.AddAsync(new UserToGroup { Group = group, User = user });
-            
+            await _dbContext.UsersToGroups.AddAsync(new UserToGroup {Group = group, User = admin});
+            await _dbContext.UsersToGroups.AddAsync(new UserToGroup {Group = group, User = user});
+
             var groupInvite = new GroupInvite
             {
-                InvitationReceiver = secondUser,
-                InvitationSender = admin,
-                Group = group
+                InvitationReceiver = secondUser, InvitationSender = admin, Group = group
             };
             await _dbContext.GroupInvites.AddAsync(groupInvite);
             await _dbContext.Groups.AddAsync(group);
@@ -163,7 +145,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             // Assert
             isValid.Should().BeFalse();
         }
-        
+
         [Fact]
         public async Task Validate_when_an_invite_exists()
         {
@@ -179,18 +161,9 @@ namespace DeUrgenta.User.Api.Tests.Validators
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Users.AddAsync(admin);
 
-            var group = new Group
-            {
-                Admin = admin,
-                Name = "group"
-            };
+            var group = new GroupBuilder().WithAdmin(admin).Build();
 
-            var groupInvite = new GroupInvite
-            {
-                InvitationReceiver = user,
-                InvitationSender = admin,
-                Group = group
-            };
+            var groupInvite = new GroupInvite {InvitationReceiver = user, InvitationSender = admin, Group = group};
             await _dbContext.GroupInvites.AddAsync(groupInvite);
             await _dbContext.Groups.AddAsync(group);
 

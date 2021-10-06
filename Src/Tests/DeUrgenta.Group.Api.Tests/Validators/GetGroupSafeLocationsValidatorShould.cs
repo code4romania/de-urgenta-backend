@@ -66,13 +66,9 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var user = new UserBuilder().WithSub(userSub).Build();
             var admin = new UserBuilder().WithSub(adminSub).Build();
 
-            var group = new Domain.Entities.Group
-            {
-                Admin = admin,
-                Name = "A group"
-            };
+            var group = new GroupBuilder().WithAdmin(admin).Build();
 
-            var adminToGroup = new UserToGroup { Group = group, User = admin };
+            var adminToGroup = new UserToGroup {Group = group, User = admin};
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Groups.AddAsync(group);
@@ -97,12 +93,8 @@ namespace DeUrgenta.Group.Api.Tests.Validators
 
             var user = new UserBuilder().WithSub(userSub).Build();
 
-            var group = new Domain.Entities.Group
-            {
-                Admin = user,
-                Name = "A group"
-            };
-            var userToGroup = new UserToGroup { Group = group, User = user };
+            var group = new GroupBuilder().WithAdmin(user).Build();
+            var userToGroup = new UserToGroup {Group = group, User = user};
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Groups.AddAsync(group);
@@ -129,14 +121,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var user = new UserBuilder().WithSub(userSub).Build();
             var admin = new UserBuilder().WithSub(adminSub).Build();
 
-            var group = new Domain.Entities.Group
-            {
-                Admin = admin,
-                Name = "A group"
-            };
+            var group = new GroupBuilder().WithAdmin(admin).Build();
 
-            var userToGroup = new UserToGroup { Group = group, User = user };
-            var adminToGroup = new UserToGroup { Group = group, User = admin };
+            var userToGroup = new UserToGroup {Group = group, User = user};
+            var adminToGroup = new UserToGroup {Group = group, User = admin};
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Groups.AddAsync(group);

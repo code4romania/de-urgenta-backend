@@ -6,25 +6,31 @@ using CSharpFunctionalExtensions;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Group.Api.Models;
+using DeUrgenta.Group.Api.Options;
 using DeUrgenta.Group.Api.Queries;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace DeUrgenta.Group.Api.QueryHandlers
 {
-    public class GetAdministeredGroupsHandler : IRequestHandler<GetAdministeredGroups, Result<IImmutableList<GroupModel>>>
+    public class
+        GetAdministeredGroupsHandler : IRequestHandler<GetAdministeredGroups, Result<IImmutableList<GroupModel>>>
     {
         private readonly IValidateRequest<GetAdministeredGroups> _validator;
         private readonly DeUrgentaContext _context;
+        private readonly GroupsConfig _groupsConfig;
 
         public GetAdministeredGroupsHandler(IValidateRequest<GetAdministeredGroups> validator,
-            DeUrgentaContext context)
+            DeUrgentaContext context, IOptions<GroupsConfig> groupsConfig)
         {
             _validator = validator;
             _context = context;
+            _groupsConfig = groupsConfig.Value;
         }
 
-        public async Task<Result<IImmutableList<GroupModel>>> Handle(GetAdministeredGroups request, CancellationToken cancellationToken)
+        public async Task<Result<IImmutableList<GroupModel>>> Handle(GetAdministeredGroups request,
+            CancellationToken cancellationToken)
         {
             var isValid = await _validator.IsValidAsync(request);
             if (!isValid)
@@ -37,12 +43,13 @@ namespace DeUrgenta.Group.Api.QueryHandlers
             var groups = await _context
                 .Groups
                 .Where(g => g.AdminId == user.Id)
-                .Include(g=>g.Admin)
+                .Include(g => g.Admin)
                 .Select(g => new GroupModel
                 {
-                    Id = g.Id, 
+                    Id = g.Id,
                     Name = g.Name,
                     NumberOfMembers = g.GroupMembers.Count,
+                    MaxNumberOfMembers = _groupsConfig.UsersLimit,
                     AdminId = g.AdminId,
                     AdminFirstName = g.Admin.FirstName,
                     AdminLastName = g.Admin.LastName
