@@ -6,7 +6,7 @@ using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Tests.Helpers;
 using NSubstitute;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Backpack.Api.Tests.QueryHandlers
@@ -36,7 +36,7 @@ namespace DeUrgenta.Backpack.Api.Tests.QueryHandlers
             var result = await sut.Handle(new GetBackpacks("a-sub"), CancellationToken.None);
 
             // Assert
-            result.IsFailure.ShouldBeTrue();
+            result.IsFailure.Should().BeTrue();
         }
     }
 }

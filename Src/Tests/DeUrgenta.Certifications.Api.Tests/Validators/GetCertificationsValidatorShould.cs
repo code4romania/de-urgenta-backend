@@ -5,7 +5,7 @@ using DeUrgenta.Certifications.Api.Validators;
 using DeUrgenta.Domain;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Certifications.Api.Tests.Validators
@@ -32,7 +32,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new GetCertifications(sub));
 
             // Assert
-            isValid.ShouldBeFalse();
+            isValid.Should().BeFalse();
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new GetCertifications(userSub));
 
             // Assert
-            isValid.ShouldBeTrue();
+            isValid.Should().BeTrue();
         }
     }
 }

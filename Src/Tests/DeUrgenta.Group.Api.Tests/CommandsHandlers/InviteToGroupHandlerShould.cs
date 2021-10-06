@@ -7,7 +7,7 @@ using DeUrgenta.Group.Api.CommandHandlers;
 using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Tests.Helpers;
 using NSubstitute;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Group.Api.Tests.CommandsHandlers
@@ -35,10 +35,11 @@ namespace DeUrgenta.Group.Api.Tests.CommandsHandlers
             var sut = new InviteToGroupHandler(validator, _dbContext);
 
             // Act
-            var result = await sut.Handle(new InviteToGroup("a-sub", Guid.NewGuid(), Guid.NewGuid()), CancellationToken.None);
+            var result = await sut.Handle(new InviteToGroup("a-sub", Guid.NewGuid(), Guid.NewGuid()),
+                CancellationToken.None);
 
             // Assert
-            result.IsFailure.ShouldBeTrue();
+            result.IsFailure.Should().BeTrue();
         }
     }
 }

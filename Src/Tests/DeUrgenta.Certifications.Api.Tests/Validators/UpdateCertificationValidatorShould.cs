@@ -7,7 +7,7 @@ using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Certifications.Api.Tests.Validators
@@ -34,7 +34,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new UpdateCertification(sub, Guid.NewGuid(), new CertificationRequest()));
 
             // Assert
-            isValid.ShouldBeFalse();
+            isValid.Should().BeFalse();
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new UpdateCertification(userSub, Guid.NewGuid(), new CertificationRequest()));
 
             // Assert
-            isValid.ShouldBeFalse();
+            isValid.Should().BeFalse();
         }
 
         [Fact]
@@ -85,7 +85,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new UpdateCertification(userSub, certificationId, new CertificationRequest()));
 
             // Assert
-            isValid.ShouldBeFalse();
+            isValid.Should().BeFalse();
         }
 
         [Fact]
@@ -116,7 +116,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new UpdateCertification(ownerSub, certificationId, new CertificationRequest()));
 
             // Assert
-            isValid.ShouldBeTrue();
+            isValid.Should().BeTrue();
         }
 
     }

@@ -6,7 +6,7 @@ using DeUrgenta.Backpack.Api.Validators;
 using DeUrgenta.Domain;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Backpack.Api.Tests.Validators
@@ -34,7 +34,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new CreateBackpack(sub, new BackpackModelRequest()));
 
             // Assert
-            isValid.ShouldBeFalse();
+            isValid.Should().BeFalse();
         }
 
         [Fact]
@@ -54,7 +54,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new CreateBackpack(userSub, new BackpackModelRequest()));
 
             // Assert
-            isValid.ShouldBeTrue();
+            isValid.Should().BeTrue();
         }
     }
 }

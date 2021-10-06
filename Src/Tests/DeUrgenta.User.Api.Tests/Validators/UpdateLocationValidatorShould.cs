@@ -7,7 +7,7 @@ using DeUrgenta.Tests.Helpers.Builders;
 using DeUrgenta.User.Api.Commands;
 using DeUrgenta.User.Api.Models;
 using DeUrgenta.User.Api.Validators;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.User.Api.Tests.Validators
@@ -35,7 +35,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new UpdateLocation(sub, Guid.NewGuid(), new UserLocationRequest()));
 
             // Assert
-            isValid.ShouldBeFalse();
+            isValid.Should().BeFalse();
         }
 
         [Fact]
@@ -54,7 +54,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new UpdateLocation(userSub, Guid.NewGuid(), new UserLocationRequest()));
 
             // Assert
-            isValid.ShouldBeFalse();
+            isValid.Should().BeFalse();
         }
 
         [Fact]
@@ -85,7 +85,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new UpdateLocation(userSub, userLocation.Id, new UserLocationRequest()));
 
             // Assert
-            isValid.ShouldBeTrue();
+            isValid.Should().BeTrue();
         }
     }
 }

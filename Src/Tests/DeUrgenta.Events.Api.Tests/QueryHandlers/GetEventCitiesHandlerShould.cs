@@ -6,7 +6,7 @@ using DeUrgenta.Events.Api.Queries;
 using DeUrgenta.Events.Api.QueryHandlers;
 using DeUrgenta.Tests.Helpers;
 using NSubstitute;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Events.Api.Tests.QueryHandlers
@@ -36,7 +36,7 @@ namespace DeUrgenta.Events.Api.Tests.QueryHandlers
             var result = await sut.Handle(new GetEventCities(null), CancellationToken.None);
 
             // Assert
-            result.IsFailure.ShouldBeTrue();
+            result.IsFailure.Should().BeTrue();
         }
     }
 }

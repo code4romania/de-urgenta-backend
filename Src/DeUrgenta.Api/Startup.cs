@@ -47,9 +47,9 @@ namespace DeUrgenta.Api
             services.AddDatabase<DeUrgentaContext>(Configuration.GetConnectionString("DbConnectionString"));
             services.AddExceptionHandling(WebHostEnvironment);
 
-            services.AddUserApiServices();
+            services.AddUserApiServices(Configuration);
             services.AddBackpackApiServices();
-            services.AddGroupApiServices();
+            services.AddGroupApiServices(Configuration);
             services.AddCertificationsApiServices();         
             services.AddEventsApiServices();
             services.AddAdminApiServices();

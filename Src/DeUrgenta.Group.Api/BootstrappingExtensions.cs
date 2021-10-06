@@ -1,17 +1,19 @@
 ﻿using DeUrgenta.Common.Validation;
 using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Models;
+using DeUrgenta.Group.Api.Options;
 using DeUrgenta.Group.Api.Queries;
 using DeUrgenta.Group.Api.Validators;
 using DeUrgenta.Group.Api.Validators.RequestValidators;
 using FluentValidation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DeUrgenta.Group.Api
 {
     public static class BootstrappingExtensions
     {
-        public static IServiceCollection AddGroupApiServices(this IServiceCollection services)
+        public static IServiceCollection AddGroupApiServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<IValidateRequest<AddGroup>, AddGroupValidator>();
             services.AddTransient<IValidateRequest<AddSafeLocation>, AddSafeLocationValidator>();
@@ -29,6 +31,8 @@ namespace DeUrgenta.Group.Api
             services.AddTransient<IValidator<GroupRequest>, GroupRequestValidator>();
             services.AddTransient<IValidator<SafeLocationRequest>, SafeLocationRequestValidator>();
 
+            services.Configure<GroupsConfig>(configuration.GetSection(GroupsConfig.SectionName));
+            
             return services;
         }
     }

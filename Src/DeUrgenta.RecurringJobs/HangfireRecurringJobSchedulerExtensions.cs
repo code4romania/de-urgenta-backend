@@ -13,7 +13,6 @@ namespace DeUrgenta.RecurringJobs
         {
             var expiredCertificationJobConfig = configuration.GetSection("RecurringJobsConfig:ExpiredCertificationJobConfig")
                 .Get<ExpiredCertificationJobConfig>();
-
             if (expiredCertificationJobConfig.IsEnabled)
             {
                 RecurringJob.AddOrUpdate<IExpiredCertificationJob>(
@@ -44,6 +43,18 @@ namespace DeUrgenta.RecurringJobs
                     nameof(NotificationCleanupJob),
                     job => job.RunAsync(),
                     cleanupNotificationsJob.CronExpression,
+                    TimeZoneInfo.Utc
+                );
+            }
+            
+            var eventArchivalJobConfig = configuration.GetSection("RecurringJobsConfig:EventArchivalJobConfig")
+                .Get<EventArchivalJobConfig>();
+            if (eventArchivalJobConfig.IsEnabled)
+            {
+                RecurringJob.AddOrUpdate<IEventArchivalJob>(
+                    nameof(EventArchivalJob),
+                    job => job.RunAsync(),
+                    eventArchivalJobConfig.CronExpression,
                     TimeZoneInfo.Utc
                 );
             }

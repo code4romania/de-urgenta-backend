@@ -7,7 +7,7 @@ using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Tests.Helpers;
 using NSubstitute;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Certifications.Api.Tests.CommandHandlers
@@ -37,7 +37,7 @@ namespace DeUrgenta.Certifications.Api.Tests.CommandHandlers
             var result = await sut.Handle(new DeleteCertification("a-sub", Guid.NewGuid()), CancellationToken.None);
 
             // Assert
-            result.IsFailure.ShouldBeTrue();
+            result.IsFailure.Should().BeTrue();
         }
     }
 }

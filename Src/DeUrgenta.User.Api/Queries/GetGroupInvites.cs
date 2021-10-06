@@ -5,7 +5,7 @@ using MediatR;
 
 namespace DeUrgenta.User.Api.Queries
 {
-    public class GetGroupInvites : IRequest<Result<IImmutableList<GropInviteModel>>>
+    public class GetGroupInvites : IRequest<Result<IImmutableList<GroupInviteModel>>>
     {
         public string UserSub { get; }
 

@@ -2,17 +2,27 @@
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Group.Api.Commands;
+using DeUrgenta.Group.Api.Options;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace DeUrgenta.Group.Api.Validators
 {
     public class InviteToGroupValidator : IValidateRequest<InviteToGroup>
     {
         private readonly DeUrgentaContext _context;
+        private readonly GroupsConfig _groupsConfig;
 
-        public InviteToGroupValidator(DeUrgentaContext context)
+        public InviteToGroupValidator(DeUrgentaContext context, GroupsConfig groupsConfig)
         {
             _context = context;
+            _groupsConfig = groupsConfig;
+        }
+        
+        public InviteToGroupValidator(DeUrgentaContext context, IOptions<GroupsConfig> groupsConfig)
+        {
+            _context = context;
+            _groupsConfig = groupsConfig.Value;
         }
 
         public async Task<bool> IsValidAsync(InviteToGroup request)
@@ -50,6 +60,11 @@ namespace DeUrgenta.Group.Api.Validators
 
             var group = await _context.Groups.FirstOrDefaultAsync(g => g.Id == request.GroupId);
             if (group == null)
+            {
+                return false;
+            }
+            
+            if (invitedUser.GroupsMember.Count >= _groupsConfig.MaxJoinedGroupsPerUser)
             {
                 return false;
             }

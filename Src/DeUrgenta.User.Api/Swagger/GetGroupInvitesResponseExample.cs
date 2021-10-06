@@ -6,11 +6,11 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace DeUrgenta.User.Api.Swagger
 {
-    public class GetGroupInvitesResponseExample : IExamplesProvider<IImmutableList<GropInviteModel>>
+    public class GetGroupInvitesResponseExample : IExamplesProvider<IImmutableList<GroupInviteModel>>
     {
-        public IImmutableList<GropInviteModel> GetExamples()
+        public IImmutableList<GroupInviteModel> GetExamples()
         {
-            return new List<GropInviteModel>
+            return new List<GroupInviteModel>
             {
                 new()
                 {
