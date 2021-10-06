@@ -6,20 +6,21 @@ using DeUrgenta.Emailing.Service.Constants;
 using DeUrgenta.Emailing.Service.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace DeUrgenta.Emailing.Service.Builders
 {
     public class EmailBuilderService : IEmailBuilderService
     {
-        private readonly EmailOptions _options;
+        private readonly EmailConfigOptions _configOptions;
         private readonly ILogger<IEmailBuilderService> _logger;
         private readonly IMemoryCache _memoryCache;
 
-        public EmailBuilderService(ILogger<IEmailBuilderService> logger, IMemoryCache memoryCache, EmailOptions options)
+        public EmailBuilderService(ILogger<IEmailBuilderService> logger, IMemoryCache memoryCache, IOptions<EmailConfigOptions> options)
         {
             _logger = logger;
             _memoryCache = memoryCache;
-            _options = options;
+            _configOptions = options.Value;
         }
 
         public async Task<Email> BuildEmail(EmailRequestModel emailRequest)
@@ -30,10 +31,10 @@ namespace DeUrgenta.Emailing.Service.Builders
             template = FormatTemplate(template, emailRequest);
             var emailModel = new Email
             {
-                FromName = emailRequest.SenderName,
-                FromEmail = emailRequest.SenderEmail,
+                FromName = _configOptions.AdminFromName,
+                FromEmail = _configOptions.AdminFromEmail,
                 To = emailRequest.DestinationAddress,
-                SenderName = emailRequest.SenderName,
+                SenderName = _configOptions.AdminFromName,
                 Subject = EmailConstants.GetSubject(emailRequest.TemplateType),
                 Content = template,
                 Attachment = emailRequest.Attachment
@@ -70,7 +71,7 @@ namespace DeUrgenta.Emailing.Service.Builders
 
         public string GetTemplatePath(EmailTemplate template)
         {
-            var targetDirectory = _options.TemplateFolder;
+            var targetDirectory = _configOptions.TemplateFolder;
             var filePath = EmailConstants.GetTemplatePath(template);
 
             return Path.Combine(targetDirectory, filePath);

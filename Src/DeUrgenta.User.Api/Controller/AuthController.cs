@@ -28,8 +28,6 @@ namespace DeUrgenta.User.Api.Controller
         private readonly IJwtService _jwtService;
         private readonly IMediator _mediator;
         private readonly IConfiguration _configuration;
-        private readonly string _senderEmail;
-        private readonly string _senderName;
 
         public AuthManagementController(
             UserManager<IdentityUser> userManager,
@@ -43,8 +41,6 @@ namespace DeUrgenta.User.Api.Controller
             _jwtService = jwtService;
             _mediator = mediator;
             _configuration = configuration;
-            _senderEmail = _configuration.GetValue<string>("Email:AdminFromEmail");
-            _senderName = _configuration.GetValue<string>("Email:AdminFromName");
         }
 
         [HttpPost]
@@ -137,8 +133,6 @@ namespace DeUrgenta.User.Api.Controller
         private async Task SendRegistrationEmail(string userName, string userEmail, string callbackUrl)
         {
             var email = new SendEmail(userEmail,
-                _senderName,
-                _senderEmail,
                 "[Aplicatia de urgenta] Confirmare adresa email",// TODO: add I18n
             EmailTemplate.AccountConfirmation);
 
@@ -151,8 +145,6 @@ namespace DeUrgenta.User.Api.Controller
         private async Task SendResetPasswordEmail(string userName, string userEmail, string callbackUrl)
         {
             var email = new SendEmail(userEmail,
-              _senderName,
-              _senderEmail,
               "[Aplicatia de urgenta] Resetare parolă",// TODO: add I18n
           EmailTemplate.ResetPassword);
 

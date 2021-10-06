@@ -10,7 +10,7 @@ namespace DeUrgenta.Emailing.Service
     {
         public static void SetupEmailService(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<EmailOptions>(configuration.GetSection("Email:Options"));
+            services.Configure<EmailConfigOptions>(configuration.GetSection("Email:Config"));
             services.AddTransient<IEmailBuilderService, EmailBuilderService>();
 
             var emailType = configuration.GetValue<EmailingSystemTypes>("Email:EmailingSystem");

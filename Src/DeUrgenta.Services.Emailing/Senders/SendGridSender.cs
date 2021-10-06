@@ -6,6 +6,7 @@ using DeUrgenta.Emailing.Service.Builders;
 using DeUrgenta.Emailing.Service.Config;
 using DeUrgenta.Emailing.Service.Models;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
@@ -16,9 +17,9 @@ namespace DeUrgenta.Emailing.Service.Senders
         private readonly SendGridOptions _options;
         private readonly ILogger<SendGridSender> _logger;
 
-        public SendGridSender(IEmailBuilderService emailBuilder, SendGridOptions options, ILogger<SendGridSender> logger) : base(emailBuilder)
+        public SendGridSender(IEmailBuilderService emailBuilder, IOptions<SendGridOptions> options, ILogger<SendGridSender> logger) : base(emailBuilder)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
+            _options = options.Value ?? throw new ArgumentNullException(nameof(options));
             _logger = logger;
         }
 
