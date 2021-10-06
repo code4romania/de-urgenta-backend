@@ -18,13 +18,15 @@ namespace DeUrgenta.Emailing.Service.Constants
         private static readonly Dictionary<EmailTemplate, string> Subjects = new()
         {
             { EmailTemplate.AccountConfirmation, "Bine ai venit!"},
-            { EmailTemplate.ResetPassword, "Resetare parolă"}
+            { EmailTemplate.ResetPassword, "Resetare parolă"},
+            { EmailTemplate.ExpiredCertification, "Certificare expirată" }
         };
 
         private static readonly Dictionary<EmailTemplate, string> TemplatePaths = new()
         {
             { EmailTemplate.AccountConfirmation, "accountConfirmationTemplate.html"},
-            { EmailTemplate.ResetPassword, "resetPasswordTemplate.html"}
+            { EmailTemplate.ResetPassword, "resetPasswordTemplate.html"},
+            { EmailTemplate.ExpiredCertification , "expiredCertification.html" }
         };
     }
 }

@@ -10,6 +10,8 @@ namespace DeUrgenta.Emailing.Service
     {
         public static void SetupEmailService(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddMemoryCache();
+
             services.Configure<EmailConfigOptions>(configuration.GetSection("Email:Config"));
             services.AddTransient<IEmailBuilderService, EmailBuilderService>();
 

@@ -3,6 +3,7 @@
     public enum EmailTemplate
     {
         AccountConfirmation,  
-        ResetPassword
+        ResetPassword,
+        ExpiredCertification
     }
 }
