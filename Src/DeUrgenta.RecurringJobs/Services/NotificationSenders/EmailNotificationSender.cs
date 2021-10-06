@@ -42,6 +42,7 @@ namespace DeUrgenta.RecurringJobs.Services.NotificationSenders
             }
         }
 
+        //todo extract this in a builder when we add the next notification type
         private async Task<EmailRequestModel> CreateExpiredCertificationEmail(Notification notification)
         {
             var user = await _context.Users.FindAsync(notification.UserId);
