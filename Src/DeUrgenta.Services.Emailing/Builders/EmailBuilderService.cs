@@ -6,7 +6,6 @@ using DeUrgenta.Emailing.Service.Constants;
 using DeUrgenta.Emailing.Service.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace DeUrgenta.Emailing.Service.Builders
 {
@@ -16,11 +15,11 @@ namespace DeUrgenta.Emailing.Service.Builders
         private readonly ILogger<IEmailBuilderService> _logger;
         private readonly IMemoryCache _memoryCache;
 
-        public EmailBuilderService(ILogger<IEmailBuilderService> logger, IMemoryCache memoryCache, IOptionsMonitor<EmailOptions> options)
+        public EmailBuilderService(ILogger<IEmailBuilderService> logger, IMemoryCache memoryCache, EmailOptions options)
         {
             _logger = logger;
             _memoryCache = memoryCache;
-            _options = options.CurrentValue;
+            _options = options;
         }
 
         public async Task<Email> BuildEmail(EmailRequestModel emailRequest)
