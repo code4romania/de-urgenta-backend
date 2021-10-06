@@ -38,20 +38,11 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             eventType = _context.EventTypes.AddAsync(eventType).Result.Entity;
             await _context.SaveChangesAsync();
             
-            var eventEntity = new Event
-            {
-                Address = "",
-                Author = "",
-                City = "",
-                ContentBody = "",
-                EventType = eventType,
-                EventTypeId = eventType.Id,
-                Id = Guid.NewGuid(),
-                IsArchived = false,
-                OccursOn = DateTime.UnixEpoch,
-                OrganizedBy = "",
-                Title = ""
-            };
+            var eventEntity = new EventBuilder()
+                .WithEventTypeId(eventType.Id)
+                .WithDate(DateTime.UnixEpoch)
+                .Build();
+            
             var eventEntry = await _context.Events.AddAsync(eventEntity);
             await _context.SaveChangesAsync();
 
@@ -75,21 +66,12 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             var eventType = new EventType {Name = "TestType"};
             eventType = _context.EventTypes.AddAsync(eventType).Result.Entity;
             await _context.SaveChangesAsync();
+
+            var eventEntity = new EventBuilder()
+                .WithEventTypeId(eventType.Id)
+                .WithDate(DateTime.Today.AddDays(1))
+                .Build();
             
-            var eventEntity = new Event
-            {
-                Address = "",
-                Author = "",
-                City = "",
-                ContentBody = "",
-                EventType = eventType,
-                EventTypeId = eventType.Id,
-                Id = Guid.NewGuid(),
-                IsArchived = false,
-                OccursOn = DateTime.Today.AddDays(1),
-                OrganizedBy = "",
-                Title = ""
-            };
             var eventEntry = await _context.Events.AddAsync(eventEntity);
             await _context.SaveChangesAsync();
 
