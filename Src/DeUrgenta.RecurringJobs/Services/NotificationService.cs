@@ -26,10 +26,12 @@ namespace DeUrgenta.RecurringJobs.Services
                 return;
             }
 
+            var sendingTasks = new List<Task>();
             foreach (var notificationSender in _notificationSenders)
             {
-                await notificationSender.SendNotificationAsync(notificationId);
+                sendingTasks.Add(notificationSender.SendNotificationAsync(notificationId));
             }
+            await Task.WhenAll(sendingTasks);
         }
     }
 }

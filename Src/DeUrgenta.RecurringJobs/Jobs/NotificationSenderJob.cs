@@ -21,15 +21,17 @@ namespace DeUrgenta.RecurringJobs.Jobs
 
         public async Task RunAsync()
         {
-            var notificationIdsToSend = await _jobsContext.Notifications
+            var notificationsToSend = await _jobsContext.Notifications
                 .Where(n => n.Status == NotificationStatus.NotSent 
                                     && n.ScheduledDate.Date == DateTime.Today)
-                .Select(n => n.Id)
                 .ToListAsync();
 
-            foreach (var notificationId in notificationIdsToSend)
+            foreach (var notification in notificationsToSend)
             {
-                await _notificationService.SendNotificationAsync(notificationId);
+                await _notificationService.SendNotificationAsync(notification.Id);
+
+                notification.Status = NotificationStatus.Sent;
+                await _jobsContext.SaveChangesAsync();
             }
         }
     }

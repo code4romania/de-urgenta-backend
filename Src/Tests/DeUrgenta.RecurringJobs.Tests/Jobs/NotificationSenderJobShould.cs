@@ -7,6 +7,7 @@ using DeUrgenta.RecurringJobs.Jobs;
 using DeUrgenta.RecurringJobs.Services;
 using DeUrgenta.RecurringJobs.Tests.Builders;
 using DeUrgenta.Tests.Helpers;
+using FluentAssertions;
 using NSubstitute;
 using Xunit;
 
@@ -114,6 +115,30 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
 
             //Assert
             await notificationService.DidNotReceive().SendNotificationAsync(notification.Id);
+        }
+
+        [Fact]
+        public async Task Update_notification_status_to_sent_after_sending()
+        {
+            //Arrange
+            var notification = new NotificationBuilder()
+                .WithScheduledDate(DateTime.Today)
+                .WithStatus(NotificationStatus.NotSent)
+                .Build();
+
+            await _jobsContext.Notifications.AddAsync(notification);
+            await _jobsContext.SaveChangesAsync();
+
+            var notificationService = Substitute.For<INotificationService>();
+            notificationService.SendNotificationAsync(notification.Id).Returns(Task.CompletedTask);
+
+            var sut = new NotificationSenderJob(notificationService, _jobsContext);
+
+            //Act
+            await sut.RunAsync();
+
+            //Assert
+            notification.Status.Should().Be(NotificationStatus.Sent);
         }
     }
 }

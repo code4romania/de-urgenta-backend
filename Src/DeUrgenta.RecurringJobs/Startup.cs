@@ -1,4 +1,5 @@
 using DeUrgenta.Domain;
+using DeUrgenta.Emailing.Service;
 using DeUrgenta.Infra.Extensions;
 using DeUrgenta.RecurringJobs.Domain;
 using Hangfire;
@@ -26,7 +27,9 @@ namespace DeUrgenta.RecurringJobs
             services.AddDatabase<DeUrgentaContext>(Configuration.GetConnectionString("DbConnectionString"));
             services.AddDatabase<JobsContext>(Configuration.GetConnectionString("JobsConnectionString"));
             services.AddHangfireServices();
+
             services.AddRecurringJobs(Configuration);
+            services.SetupEmailService(Configuration);
 
             services.AddControllers();
         }

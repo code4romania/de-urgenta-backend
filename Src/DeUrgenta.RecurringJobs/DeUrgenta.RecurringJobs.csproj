@@ -27,11 +27,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DeUrgenta.Domain\DeUrgenta.Domain.csproj" />
+    <ProjectReference Include="..\DeUrgenta.Emailing.Service\DeUrgenta.Emailing.Service.csproj" />
     <ProjectReference Include="..\DeUrgenta.Infra\DeUrgenta.Infra.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Domain\Migrations\" />
+    <Folder Include="EmailTemplates\" />
   </ItemGroup>
 
 </Project>
