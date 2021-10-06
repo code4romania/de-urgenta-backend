@@ -31,7 +31,6 @@ namespace DeUrgenta.RecurringJobs.Services
             {
                 sendingTasks.Add(notificationSender.SendNotificationAsync(notificationId));
             }
-
             await Task.WhenAll(sendingTasks);
         }
     }
