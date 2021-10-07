@@ -1,4 +1,4 @@
-name: .NET Recurring Jobs
+name: .NET API
 
 on:
   push:
