@@ -11,12 +11,12 @@ using MediatR;
 
 namespace DeUrgenta.Admin.Api.CommandHandlers
 {
-    public class CreateBlogHandler : IRequestHandler<CreateBlogPost, Result<BlogPostModel>>
+    public class CreateBlogPostHandler : IRequestHandler<CreateBlogPost, Result<BlogPostModel>>
     {
         private readonly IValidateRequest<CreateBlogPost> _validator;
         private readonly DeUrgentaContext _context;
 
-        public CreateBlogHandler(IValidateRequest<CreateBlogPost> validator,DeUrgentaContext context)
+        public CreateBlogPostHandler(IValidateRequest<CreateBlogPost> validator,DeUrgentaContext context)
         {
             _validator = validator;
             _context = context;
