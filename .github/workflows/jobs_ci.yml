@@ -54,3 +54,5 @@ jobs:
       env:
         # Connection string
         ConnectionStrings__TestingDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass; 
+        ConnectionStrings__JobsTestingDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass; 
+
