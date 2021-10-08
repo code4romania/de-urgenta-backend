@@ -19,10 +19,11 @@ namespace DeUrgenta.Invite.Api
 
             services.AddScoped<InviteValidatorFactory>();
 
-            services.AddScoped<CreateGroupInviteValidator>()
-                .AddScoped<ICreateInviteValidator, CreateGroupInviteValidator>(s => s.GetService<CreateGroupInviteValidator>());
-            services.AddScoped<CreateBackpackInviteValidator>()
-                .AddScoped<ICreateInviteValidator, CreateBackpackInviteValidator>(s => s.GetService<CreateBackpackInviteValidator>());
+            services.AddScoped<CreateGroupInviteValidator>();
+            services.AddScoped<CreateBackpackInviteValidator>();
+
+            services.AddScoped<ICreateInviteValidator, CreateGroupInviteValidator>(s => s.GetService<CreateGroupInviteValidator>());
+            services.AddScoped<ICreateInviteValidator, CreateBackpackInviteValidator>(s => s.GetService<CreateBackpackInviteValidator>());
 
             services.Configure<GroupsConfig>(configuration.GetSection(GroupsConfig.SectionName));
 

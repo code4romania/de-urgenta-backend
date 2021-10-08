@@ -18,7 +18,7 @@ namespace DeUrgenta.Invite.Api.Validators
             {
                 InviteType.Group => (ICreateInviteValidator)_serviceProvider.GetService(typeof(CreateGroupInviteValidator)),
                 InviteType.Backpack => (ICreateInviteValidator)_serviceProvider.GetService(typeof(CreateBackpackInviteValidator)),
-                _ => null
+                _ => throw new ArgumentException(nameof(inviteType))
             };
         }
     }
