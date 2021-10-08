@@ -68,8 +68,11 @@ namespace DeUrgenta.Api
                     .AllowAnyMethod()
                     .AllowAnyHeader();
             }));
+
             services.SetupEmailService(Configuration);
             services.SetupStorageService(Configuration);
+
+            services.SetupHealthChecks(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,7 +94,11 @@ namespace DeUrgenta.Api
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
+            app.UseEndpoints(endpoints => {
+                endpoints.MapAppHealthChecks();
+
+                endpoints.MapControllers();
+            });
 
             app.SetupStaticFiles(Configuration, WebHostEnvironment);
            
