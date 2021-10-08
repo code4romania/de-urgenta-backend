@@ -24,6 +24,8 @@ using DeUrgenta.Admin.Api;
 using DeUrgenta.Emailing.Service;
 using DeUrgenta.Events.Api;
 using DeUrgenta.Events.Api.Controller;
+using DeUrgenta.Invite.Api;
+using DeUrgenta.Invite.Api.Controllers;
 
 namespace DeUrgenta.Api
 {
@@ -53,6 +55,7 @@ namespace DeUrgenta.Api
             services.AddCertificationsApiServices();         
             services.AddEventsApiServices();
             services.AddAdminApiServices();
+            services.AddInviteApiServices(Configuration);
 
             var applicationAssemblies = GetAssemblies();
 
@@ -106,6 +109,7 @@ namespace DeUrgenta.Api
                 typeof(GroupController).GetTypeInfo().Assembly,
                 typeof(UserController).GetTypeInfo().Assembly,
                 typeof(EventController).GetTypeInfo().Assembly,
+                typeof(InviteController).GetTypeInfo().Assembly,
 
                 // Common
 

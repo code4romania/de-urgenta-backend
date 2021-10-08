@@ -23,8 +23,8 @@ namespace DeUrgenta.Domain
         public DbSet<BlogPost> Blogs { get; set; }
         public DbSet<GroupInvite> GroupInvites { get; set; }
         public DbSet<BackpackInvite> BackpackInvites { get; set; }
-
         public DbSet<BackpackToUser> BackpacksToUsers { get; set; }
+        public DbSet<Invite> Invites { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -52,6 +52,7 @@ namespace DeUrgenta.Domain
             modelBuilder.ApplyConfiguration(new BackpackInviteEntityConfiguration());
 
             modelBuilder.ApplyConfiguration(new EventTypeEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new InviteEntityConfiguration());
         }
     }
 }
