@@ -15,6 +15,11 @@ namespace DeUrgenta.Admin.Api
             services.AddTransient<IValidateRequest<UpdateEvent>, UpdateEventValidator>();
             services.AddTransient<IValidateRequest<GetEvents>, GetEventsValidator>();
 
+            services.AddTransient<IValidateRequest<CreateBlogPost>, CreateBlogPostValidator>();
+            services.AddTransient<IValidateRequest<DeleteBlogPost>, DeleteBlogPostValidator>();
+            services.AddTransient<IValidateRequest<UpdateBlogPost>, UpdateBlogPostValidator>();
+            services.AddTransient<IValidateRequest<GetBlogPosts>, GetBlogPostsValidator>();
+
             return services;
         }
     }
