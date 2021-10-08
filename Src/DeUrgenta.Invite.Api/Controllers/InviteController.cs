@@ -13,9 +13,12 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace DeUrgenta.Invite.Api.Controllers
 {
+    [Authorize]
     [Route("invite")]
+    [Produces("application/json")]
+    [Consumes("application/json")]
     [ApiController]
-    public class InviteController: ControllerBase
+    public class InviteController : ControllerBase
     {
         private readonly IMediator _mediator;
 
@@ -24,7 +27,11 @@ namespace DeUrgenta.Invite.Api.Controllers
             _mediator = mediator;
         }
 
-        [Authorize]
+        /// <summary>
+        /// Generate an invite to a group or backpack
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [SwaggerResponse(StatusCodes.Status200OK, "Invite created")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]

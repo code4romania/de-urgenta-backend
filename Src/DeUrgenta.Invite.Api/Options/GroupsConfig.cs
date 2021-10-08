@@ -2,7 +2,7 @@
 {
     public class GroupsConfig
     {
-        public const string SectionName = "Group";
+        public const string SectionName = "Groups";
 
         public int UsersLimit { get; set; }
     }
