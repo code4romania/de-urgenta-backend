@@ -12,12 +12,7 @@ namespace DeUrgenta.RecurringJobs
                 .AddHealthChecks()
                 .AddNpgSql(configuration.GetConnectionString("DbConnectionString"), name: "de-urgenta-db")
                 .AddNpgSql(configuration.GetConnectionString("JobsConnectionString"), name: "jobs-db")
-                .AddEmailingService(configuration)
-                .AddHangfire(setup =>
-                {
-                    setup.MaximumJobsFailed = 1;
-                    setup.MinimumAvailableServers = 1;
-                });
+                .AddEmailingService(configuration);
 
             services
                 .AddHealthChecksUI()

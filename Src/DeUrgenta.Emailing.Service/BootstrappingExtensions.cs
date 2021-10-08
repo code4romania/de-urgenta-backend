@@ -38,7 +38,10 @@ namespace DeUrgenta.Emailing.Service
         {
             var checksEnabled = configuration.GetValue<bool>("Email:EnableHealthChecks");
 
-            if (!checksEnabled) return builder;
+            if (!checksEnabled)
+            {
+                return builder;
+            }
 
             var emailType = configuration.GetValue<EmailingSystemTypes>("Email:EmailingSystem");
 
