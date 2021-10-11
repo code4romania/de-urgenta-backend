@@ -12,12 +12,22 @@ namespace DeUrgenta.Invite.Api.Validators
             _serviceProvider = serviceProvider;
         }
 
-        public ICreateInviteValidator GetInstance(InviteType inviteType)
+        public ICreateInviteValidator GetCreateValidatorInstance(InviteType inviteType)
         {
             return inviteType switch
             {
                 InviteType.Group => (ICreateInviteValidator)_serviceProvider.GetService(typeof(CreateGroupInviteValidator)),
                 InviteType.Backpack => (ICreateInviteValidator)_serviceProvider.GetService(typeof(CreateBackpackInviteValidator)),
+                _ => throw new ArgumentException(nameof(inviteType))
+            };
+        }
+
+        public IAcceptInviteValidator GetAcceptValidatorInstance(InviteType inviteType)
+        {
+            return inviteType switch
+            {
+                InviteType.Group => (IAcceptInviteValidator)_serviceProvider.GetService(typeof(AcceptGroupInviteValidator)),
+                InviteType.Backpack => (IAcceptInviteValidator)_serviceProvider.GetService(typeof(AcceptBackpackInviteValidator)),
                 _ => throw new ArgumentException(nameof(inviteType))
             };
         }

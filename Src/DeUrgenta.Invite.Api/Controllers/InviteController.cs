@@ -52,5 +52,24 @@ namespace DeUrgenta.Invite.Api.Controllers
 
             return Ok(result.Value);
         }
+
+        /// <summary>
+        /// Accept an invite to a group or backpack 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<AcceptInviteModel>> AcceptInvite(AcceptInviteRequest request)
+        {
+            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var result = await _mediator.Send(new AcceptInvite(sub, request.InviteId));
+
+            if (result.IsFailure)
+            {
+                return BadRequest();
+            }
+
+            return Ok(result.Value);
+        }
     }
 }

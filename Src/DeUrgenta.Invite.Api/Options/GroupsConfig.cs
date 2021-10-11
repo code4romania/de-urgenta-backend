@@ -5,5 +5,7 @@
         public const string SectionName = "Groups";
 
         public int UsersLimit { get; set; }
+
+        public int MaxJoinedGroupsPerUser { get; set; }
     }
 }

@@ -12,14 +12,14 @@ namespace DeUrgenta.Invite.Api.Tests.Validators.RequestValidators
         public void Invalidate_request_when_destination_id_is_empty()
         {
             // Arrange
-            var certificationRequest = new InviteRequest
+            var inviteRequest = new InviteRequest
             {
                 DestinationId = Guid.Empty
             };
             var sut = new InviteRequestValidator();
 
             // Act
-            var result = sut.TestValidate(certificationRequest);
+            var result = sut.TestValidate(inviteRequest);
 
             // Assert
             result.ShouldHaveValidationErrorFor(c => c.DestinationId)
@@ -31,14 +31,14 @@ namespace DeUrgenta.Invite.Api.Tests.Validators.RequestValidators
         public void Invalidate_request_when_type_is_not_known()
         {
             // Arrange
-            var certificationRequest = new InviteRequest
+            var inviteRequest = new InviteRequest
             {
                 Type = (InviteType)3
             };
             var sut = new InviteRequestValidator();
 
             // Act
-            var result = sut.TestValidate(certificationRequest);
+            var result = sut.TestValidate(inviteRequest);
 
             // Assert
             result.ShouldHaveValidationErrorFor(c => c.Type)
@@ -48,7 +48,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators.RequestValidators
         [Fact]
         public void Validate_request_when_all_fields_are_valid()
         {
-            var certificationRequest = new InviteRequest
+            var inviteRequest = new InviteRequest
             {
                 DestinationId = Guid.NewGuid(),
                 Type = InviteType.Backpack
@@ -56,7 +56,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators.RequestValidators
             var sut = new InviteRequestValidator();
 
             // Act
-            var result = sut.TestValidate(certificationRequest);
+            var result = sut.TestValidate(inviteRequest);
 
             // Assert
             result.ShouldNotHaveAnyValidationErrors();
