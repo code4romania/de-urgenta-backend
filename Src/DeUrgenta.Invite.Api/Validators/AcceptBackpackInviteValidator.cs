@@ -23,6 +23,14 @@ namespace DeUrgenta.Invite.Api.Validators
                 return false;
             }
 
+            var userIsAlreadyAContributor = await _context.BackpacksToUsers
+                .AnyAsync(u => u.UserId == request.UserId
+                                    && u.BackpackId == request.DestinationId);
+            if (userIsAlreadyAContributor)
+            {
+                return false;
+            }
+
             return true;
         }
     }

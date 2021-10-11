@@ -204,6 +204,39 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
         }
 
         [Fact]
+        public async Task Invalidate_request_if_user_already_a_group_member()
+        {
+            //Arrange
+            var sub = Guid.NewGuid().ToString();
+            var inviteId = Guid.NewGuid();
+            var groupId = Guid.NewGuid();
+
+            var user = new UserBuilder().WithSub(sub).Build();
+            await _context.Users.AddAsync(user);
+
+            var group = new GroupBuilder().WithId(groupId).Build();
+            await _context.Groups.AddAsync(group);
+
+            var userToGroups = new UserToGroupBuilder().WithGroup(group).WithUser(user).Build();
+            await _context.UsersToGroups.AddAsync(userToGroups);
+          
+            var invite = new InviteBuilder().WithType(InviteType.Group).WithId(inviteId).WithDestinationId(groupId).Build();
+            await _context.Invites.AddAsync(invite);
+
+            await _context.SaveChangesAsync();
+
+            AcceptInvite request = new(sub, inviteId);
+
+            var sut = new AcceptInviteValidator(_context, new InviteValidatorFactory(_serviceProvider));
+
+            //Act
+            var isValid = await sut.IsValidAsync(request);
+
+            //Assert
+            isValid.Should().BeFalse();
+        }
+
+        [Fact]
         public async Task Validate_request_if_accept_group_invite_request_is_valid()
         {
             //Arrange
@@ -243,6 +276,39 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             var user = new UserBuilder().WithSub(sub).Build();
             await _context.Users.AddAsync(user);
+
+            var invite = new InviteBuilder().WithType(InviteType.Backpack).WithId(inviteId).WithDestinationId(backpackId).Build();
+            await _context.Invites.AddAsync(invite);
+
+            await _context.SaveChangesAsync();
+
+            AcceptInvite request = new(sub, inviteId);
+
+            var sut = new AcceptInviteValidator(_context, new InviteValidatorFactory(_serviceProvider));
+
+            //Act
+            var isValid = await sut.IsValidAsync(request);
+
+            //Assert
+            isValid.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task Invalidate_request_if_user_already_a_backpack_contributor()
+        {
+            //Arrange
+            var sub = Guid.NewGuid().ToString();
+            var inviteId = Guid.NewGuid();
+            var backpackId = Guid.NewGuid();
+
+            var user = new UserBuilder().WithSub(sub).Build();
+            await _context.Users.AddAsync(user);
+
+            var backpack = new BackpackBuilder().WithId(backpackId).Build();
+            await _context.Backpacks.AddAsync(backpack);
+
+            var backpackToUser = new BackpackToUserBuilder().WithBackpack(backpack).WithUser(user).Build();
+            await _context.BackpacksToUsers.AddAsync(backpackToUser);
 
             var invite = new InviteBuilder().WithType(InviteType.Backpack).WithId(inviteId).WithDestinationId(backpackId).Build();
             await _context.Invites.AddAsync(invite);

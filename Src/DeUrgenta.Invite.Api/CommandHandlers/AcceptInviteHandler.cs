@@ -6,6 +6,7 @@ using DeUrgenta.Domain;
 using DeUrgenta.Invite.Api.Commands;
 using DeUrgenta.Invite.Api.Models;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Invite.Api.CommandHandlers
 {
@@ -13,10 +14,12 @@ namespace DeUrgenta.Invite.Api.CommandHandlers
     {
         private readonly IValidateRequest<AcceptInvite> _validator;
         private readonly DeUrgentaContext _context;
+        private readonly InviteHandlerFactory _handlerFactory;
 
-        public AcceptInviteHandler(DeUrgentaContext context, IValidateRequest<AcceptInvite> validator)
+        public AcceptInviteHandler(DeUrgentaContext context, IValidateRequest<AcceptInvite> validator, InviteHandlerFactory handlerFactory)
         {
             _validator = validator;
+            _handlerFactory = handlerFactory;
             _context = context;
         }
 
@@ -28,9 +31,10 @@ namespace DeUrgenta.Invite.Api.CommandHandlers
                 return Result.Failure<AcceptInviteModel>("Validation failed");
             }
 
+            var invite = await _context.Invites.FirstAsync(i => i.Id == request.InviteId, cancellationToken);
+            var handlerInstance = _handlerFactory.GetHandlerInstance(invite.Type);
 
-
-            return new AcceptInviteModel { };
+            return await handlerInstance.HandleAsync(request, cancellationToken);
         }
     }
 }

@@ -18,12 +18,6 @@ namespace DeUrgenta.Tests.Helpers.Builders
             User = _user
         };
 
-        public BackpackToUserBuilder WithBackpackId(Guid backpackId)
-        {
-            _backpackId = backpackId;
-            return this;
-        }
-
         public BackpackToUserBuilder WithBackpack(Backpack backpack)
         {
             _backpackId = backpack.Id;

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.Invite.Api.Commands;
@@ -56,13 +57,21 @@ namespace DeUrgenta.Invite.Api.Controllers
         /// <summary>
         /// Accept an invite to a group or backpack 
         /// </summary>
-        /// <param name="request"></param>
+        /// <param name="inviteId"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<AcceptInviteModel>> AcceptInvite(AcceptInviteRequest request)
+        [Route("{inviteId:guid}")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Accept invite ro group or backpack", typeof(AcceptInviteModel))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
+        
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(Guid))]
+        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
+        public async Task<ActionResult<AcceptInviteModel>> AcceptInvite([FromRoute] Guid inviteId)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var result = await _mediator.Send(new AcceptInvite(sub, request.InviteId));
+            var result = await _mediator.Send(new AcceptInvite(sub, inviteId));
 
             if (result.IsFailure)
             {

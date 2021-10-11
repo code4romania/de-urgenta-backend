@@ -1,4 +1,5 @@
 ﻿using DeUrgenta.Common.Validation;
+using DeUrgenta.Invite.Api.CommandHandlers;
 using DeUrgenta.Invite.Api.Commands;
 using DeUrgenta.Invite.Api.Models;
 using DeUrgenta.Invite.Api.Options;
@@ -15,7 +16,6 @@ namespace DeUrgenta.Invite.Api
         public static IServiceCollection AddInviteApiServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<IValidator<InviteRequest>, InviteRequestValidator>();
-            services.AddTransient<IValidator<AcceptInviteRequest>, AcceptInviteRequestValidator>();
             services.AddTransient<IValidateRequest<CreateInvite>, CreateInviteValidator>();
             services.AddTransient<IValidateRequest<AcceptInvite>, AcceptInviteValidator>();
 
@@ -30,8 +30,14 @@ namespace DeUrgenta.Invite.Api
             services.AddScoped<AcceptBackpackInviteValidator>();
             services.AddScoped<IAcceptInviteValidator, AcceptGroupInviteValidator>(s => s.GetService<AcceptGroupInviteValidator>());
             services.AddScoped<IAcceptInviteValidator, AcceptBackpackInviteValidator>(s => s.GetService<AcceptBackpackInviteValidator>());
+            
+            services.AddScoped<InviteHandlerFactory>();
 
-
+            services.AddScoped<AcceptGroupInviteHandler>();
+            services.AddScoped<AcceptBackpackInviteHandler>();
+            services.AddScoped<IInviteHandler, AcceptGroupInviteHandler>(s => s.GetService<AcceptGroupInviteHandler>());
+            services.AddScoped<IInviteHandler, AcceptBackpackInviteHandler>(s => s.GetService<AcceptBackpackInviteHandler>());
+            
             services.Configure<GroupsConfig>(configuration.GetSection(GroupsConfig.SectionName));
 
             return services;
