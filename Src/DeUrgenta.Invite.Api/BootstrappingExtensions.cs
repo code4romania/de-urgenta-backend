@@ -1,5 +1,4 @@
 ﻿using DeUrgenta.Common.Validation;
-using DeUrgenta.Invite.Api.CommandHandlers;
 using DeUrgenta.Invite.Api.Commands;
 using DeUrgenta.Invite.Api.Models;
 using DeUrgenta.Invite.Api.Options;
@@ -18,6 +17,8 @@ namespace DeUrgenta.Invite.Api
             services.AddTransient<IValidator<InviteRequest>, InviteRequestValidator>();
             services.AddTransient<IValidateRequest<CreateInvite>, CreateInviteValidator>();
             services.AddTransient<IValidateRequest<AcceptInvite>, AcceptInviteValidator>();
+            services.AddTransient<IValidateRequest<AcceptGroupInvite>, AcceptGroupInviteValidator>();
+            services.AddTransient<IValidateRequest<AcceptBackpackInvite>, AcceptBackpackInviteValidator>();
 
             services.AddScoped<InviteValidatorFactory>();
 
@@ -25,18 +26,6 @@ namespace DeUrgenta.Invite.Api
             services.AddScoped<CreateBackpackInviteValidator>();
             services.AddScoped<ICreateInviteValidator, CreateGroupInviteValidator>(s => s.GetService<CreateGroupInviteValidator>());
             services.AddScoped<ICreateInviteValidator, CreateBackpackInviteValidator>(s => s.GetService<CreateBackpackInviteValidator>());
-
-            services.AddScoped<AcceptGroupInviteValidator>();
-            services.AddScoped<AcceptBackpackInviteValidator>();
-            services.AddScoped<IAcceptInviteValidator, AcceptGroupInviteValidator>(s => s.GetService<AcceptGroupInviteValidator>());
-            services.AddScoped<IAcceptInviteValidator, AcceptBackpackInviteValidator>(s => s.GetService<AcceptBackpackInviteValidator>());
-            
-            services.AddScoped<InviteHandlerFactory>();
-
-            services.AddScoped<AcceptGroupInviteHandler>();
-            services.AddScoped<AcceptBackpackInviteHandler>();
-            services.AddScoped<IInviteHandler, AcceptGroupInviteHandler>(s => s.GetService<AcceptGroupInviteHandler>());
-            services.AddScoped<IInviteHandler, AcceptBackpackInviteHandler>(s => s.GetService<AcceptBackpackInviteHandler>());
             
             services.Configure<GroupsConfig>(configuration.GetSection(GroupsConfig.SectionName));
 

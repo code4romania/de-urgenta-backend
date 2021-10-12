@@ -21,15 +21,5 @@ namespace DeUrgenta.Invite.Api.Validators
                 _ => throw new ArgumentException(nameof(inviteType))
             };
         }
-
-        public IAcceptInviteValidator GetAcceptValidatorInstance(InviteType inviteType)
-        {
-            return inviteType switch
-            {
-                InviteType.Group => (IAcceptInviteValidator)_serviceProvider.GetService(typeof(AcceptGroupInviteValidator)),
-                InviteType.Backpack => (IAcceptInviteValidator)_serviceProvider.GetService(typeof(AcceptBackpackInviteValidator)),
-                _ => throw new ArgumentException(nameof(inviteType))
-            };
-        }
     }
 }

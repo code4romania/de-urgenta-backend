@@ -7,6 +7,7 @@ using DeUrgenta.Invite.Api.Commands;
 using DeUrgenta.Invite.Api.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using InviteType = DeUrgenta.Domain.Entities.InviteType;
 
 namespace DeUrgenta.Invite.Api.CommandHandlers
 {
@@ -14,12 +15,12 @@ namespace DeUrgenta.Invite.Api.CommandHandlers
     {
         private readonly IValidateRequest<AcceptInvite> _validator;
         private readonly DeUrgentaContext _context;
-        private readonly InviteHandlerFactory _handlerFactory;
+        private readonly IMediator _mediator;
 
-        public AcceptInviteHandler(DeUrgentaContext context, IValidateRequest<AcceptInvite> validator, InviteHandlerFactory handlerFactory)
+        public AcceptInviteHandler(DeUrgentaContext context, IValidateRequest<AcceptInvite> validator, IMediator mediator)
         {
             _validator = validator;
-            _handlerFactory = handlerFactory;
+            _mediator = mediator;
             _context = context;
         }
 
@@ -32,9 +33,17 @@ namespace DeUrgenta.Invite.Api.CommandHandlers
             }
 
             var invite = await _context.Invites.FirstAsync(i => i.Id == request.InviteId, cancellationToken);
-            var handlerInstance = _handlerFactory.GetHandlerInstance(invite.Type);
 
-            return await handlerInstance.HandleAsync(request, cancellationToken);
+            if (invite.Type == InviteType.Group)
+            {
+                var acceptGroupInvite = new AcceptGroupInvite(request.UserSub, invite.DestinationId);
+                return await _mediator.Send(acceptGroupInvite, cancellationToken);
+            }
+            else
+            {
+                var acceptBackpackInvite = new AcceptBackpackInvite(request.UserSub, invite.DestinationId);
+                return await _mediator.Send(acceptBackpackInvite, cancellationToken);
+            }
         }
     }
 }

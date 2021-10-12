@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using DeUrgenta.Domain;
-using DeUrgenta.Domain.Entities;
 using DeUrgenta.Invite.Api.Commands;
 using DeUrgenta.Invite.Api.Validators;
 using DeUrgenta.Tests.Helpers;
@@ -12,25 +11,30 @@ using Xunit;
 namespace DeUrgenta.Invite.Api.Tests.Validators
 {
     [Collection(TestsConstants.DbCollectionName)]
-    public class AcceptInviteValidatorShould
+    public class AcceptBackpackInviteValidatorShould
     {
         private readonly DeUrgentaContext _context;
-       
-        public AcceptInviteValidatorShould(DatabaseFixture fixture)
+
+        public AcceptBackpackInviteValidatorShould(DatabaseFixture fixture)
         {
             _context = fixture.Context;
-
         }
 
         [Fact]
-        public async Task Invalidate_request_if_users_does_not_exist()
+        public async Task Invalidate_request_if_backpack_does_not_exist()
         {
             //Arrange
             var sub = Guid.NewGuid().ToString();
-            var inviteId = Guid.NewGuid();
-            AcceptInvite request = new(sub, inviteId);
+            var backpackId = Guid.NewGuid();
 
-            var sut = new AcceptInviteValidator(_context);
+            var user = new UserBuilder().WithSub(sub).Build();
+            await _context.Users.AddAsync(user);
+
+            await _context.SaveChangesAsync();
+
+            AcceptBackpackInvite request = new(sub, backpackId);
+
+            var sut = new AcceptBackpackInviteValidator(_context);
 
             //Act
             var isValid = await sut.IsValidAsync(request);
@@ -40,19 +44,26 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
         }
 
         [Fact]
-        public async Task Invalidate_request_if_invite_does_not_exist()
+        public async Task Invalidate_request_if_user_already_a_backpack_contributor()
         {
             //Arrange
             var sub = Guid.NewGuid().ToString();
-            var inviteId = Guid.NewGuid();
+            var backpackId = Guid.NewGuid();
 
             var user = new UserBuilder().WithSub(sub).Build();
             await _context.Users.AddAsync(user);
+
+            var backpack = new BackpackBuilder().WithId(backpackId).Build();
+            await _context.Backpacks.AddAsync(backpack);
+
+            var backpackToUser = new BackpackToUserBuilder().WithBackpack(backpack).WithUser(user).Build();
+            await _context.BackpacksToUsers.AddAsync(backpackToUser);
+            
             await _context.SaveChangesAsync();
 
-            AcceptInvite request = new(sub, inviteId);
+            AcceptBackpackInvite request = new(sub, backpackId);
 
-            var sut = new AcceptInviteValidator(_context);
+            var sut = new AcceptBackpackInviteValidator(_context);
 
             //Act
             var isValid = await sut.IsValidAsync(request);
@@ -62,49 +73,23 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
         }
 
         [Fact]
-        public async Task Invalidate_request_if_invite_is_already_accepted()
+        public async Task Validate_request_if_accept_backpack_invite_request_is_valid()
         {
             //Arrange
             var sub = Guid.NewGuid().ToString();
-            var inviteId = Guid.NewGuid();
+            var backpackId = Guid.NewGuid();
 
             var user = new UserBuilder().WithSub(sub).Build();
             await _context.Users.AddAsync(user);
 
-            var invite = new InviteBuilder().WithStatus(InviteStatus.Accepted).WithId(inviteId).Build();
-            await _context.Invites.AddAsync(invite);
+            var backpack = new BackpackBuilder().WithId(backpackId).Build();
+            await _context.Backpacks.AddAsync(backpack);
 
             await _context.SaveChangesAsync();
 
-            AcceptInvite request = new(sub, inviteId);
+            AcceptBackpackInvite request = new(sub, backpackId);
 
-            var sut = new AcceptInviteValidator(_context);
-
-            //Act
-            var isValid = await sut.IsValidAsync(request);
-
-            //Assert
-            isValid.Should().BeFalse();
-        }
-
-        [Fact]
-        public async Task Validate_request_if_request_is_valid()
-        {
-            //Arrange
-            var sub = Guid.NewGuid().ToString();
-            var inviteId = Guid.NewGuid();
-
-            var user = new UserBuilder().WithSub(sub).Build();
-            await _context.Users.AddAsync(user);
-
-            var invite = new InviteBuilder().WithId(inviteId).Build();
-            await _context.Invites.AddAsync(invite);
-
-            await _context.SaveChangesAsync();
-
-            AcceptInvite request = new(sub, inviteId);
-
-            var sut = new AcceptInviteValidator(_context);
+            var sut = new AcceptBackpackInviteValidator(_context);
 
             //Act
             var isValid = await sut.IsValidAsync(request);

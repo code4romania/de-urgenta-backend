@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Invite.Api.Commands;
 using DeUrgenta.Invite.Api.Options;
@@ -7,7 +8,7 @@ using Microsoft.Extensions.Options;
 
 namespace DeUrgenta.Invite.Api.Validators
 {
-    public class AcceptGroupInviteValidator : IAcceptInviteValidator
+    public class AcceptGroupInviteValidator : IValidateRequest<AcceptGroupInvite>
     {
         private DeUrgentaContext _context;
         private readonly GroupsConfig _config;
@@ -18,16 +19,18 @@ namespace DeUrgenta.Invite.Api.Validators
             _config = config.Value;
         }
 
-        public async Task<bool> ValidateAsync(AcceptInvite request)
+        public async Task<bool> IsValidAsync(AcceptGroupInvite request)
         {
-            var group = await _context.Groups.FirstOrDefaultAsync(g => g.Id == request.DestinationId);
+            var group = await _context.Groups.FirstOrDefaultAsync(g => g.Id == request.GroupId);
             if (group == null)
             {
                 return false;
             }
 
+            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub);
+
             var noOfGroupsUserIsAMemberOf = await _context.UsersToGroups
-                .CountAsync(u => u.UserId == request.UserId);
+                .CountAsync(u => u.UserId == user.Id);
 
             if (noOfGroupsUserIsAMemberOf >= _config.MaxJoinedGroupsPerUser)
             {
@@ -35,15 +38,15 @@ namespace DeUrgenta.Invite.Api.Validators
             }
 
             var noOfGroupMembers = await _context.UsersToGroups
-                .CountAsync(u => u.GroupId == request.DestinationId);
+                .CountAsync(u => u.GroupId == request.GroupId);
             if (noOfGroupMembers >= _config.UsersLimit)
             {
                 return false;
             }
 
             var userIsAlreadyAMember = await _context.UsersToGroups
-                .AnyAsync(u => u.UserId == request.UserId
-                                     && u.GroupId == request.DestinationId);
+                .AnyAsync(u => u.UserId == user.Id
+                               && u.GroupId == request.GroupId);
             if (userIsAlreadyAMember)
             {
                 return false;
