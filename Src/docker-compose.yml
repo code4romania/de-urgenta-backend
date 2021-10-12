@@ -22,7 +22,8 @@
         ASPNETCORE_URLS: ${ASPNETCORE_URLS}
         ConnectionStrings__DbConnectionString: ${DB_CONNECTION_STRING}
         ConnectionStrings__IdentityDbConnectionString: ${DB_CONNECTION_STRING}
-        SendGrid__ApiKey: ${EMAIL_SENDGRID_APIKEY}
+        HealthChecksUI__HealthChecks__0__Uri: https://localhost/healthz
+        SendGrid__ApiKey: ${SENDGRID_API_KEY}
       ports:
         - 5040:80
       restart: unless-stopped
@@ -39,6 +40,7 @@
         ConnectionStrings__DbConnectionString: ${DB_CONNECTION_STRING}
         Hangfire__Dashboard__Username: ${HANGFIRE_USERNAME}
         Hangfire__Dashboard__Password: ${HANGFIRE_PASSWORD}
+        HealthChecksUI__HealthChecks__0__Uri: https://localhost/healthz
       ports:
         - 5041:80
       restart: unless-stopped
