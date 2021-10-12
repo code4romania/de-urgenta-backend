@@ -22,7 +22,7 @@
         ASPNETCORE_URLS: ${ASPNETCORE_URLS}
         ConnectionStrings__DbConnectionString: ${DB_CONNECTION_STRING}
         ConnectionStrings__IdentityDbConnectionString: ${DB_CONNECTION_STRING}
-        SendGrid__ApiKey: ${SENDGRID_API_KEY}
+        SendGrid__ApiKey: ${EMAIL_SENDGRID_APIKEY}
       ports:
         - 5040:80
       restart: unless-stopped
