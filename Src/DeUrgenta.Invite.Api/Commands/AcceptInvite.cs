@@ -7,8 +7,8 @@ namespace DeUrgenta.Invite.Api.Commands
 {
     public class AcceptInvite : IRequest<Result<AcceptInviteModel>>
     {
-        public string UserSub { get; set; }
-        public Guid InviteId { get; set; }
+        public string UserSub { get; }
+        public Guid InviteId { get; }
 
         public AcceptInvite(string sub, Guid inviteId)
         {
