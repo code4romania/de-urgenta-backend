@@ -27,6 +27,10 @@
 		<PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
 		<PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.1" />
+		<PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="5.0.2" />
+		<PackageReference Include="AspNetCore.HealthChecks.UI" Version="5.0.1" />
+		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="5.0.1" />
+		<PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="5.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
