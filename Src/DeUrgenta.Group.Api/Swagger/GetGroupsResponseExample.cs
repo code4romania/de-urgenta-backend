@@ -16,25 +16,25 @@ namespace DeUrgenta.Group.Api.Swagger
                 {
                     Name = "Grup personal", 
                     Id = Guid.NewGuid(),
-                    AdminId = Guid.NewGuid(),
-                    AdminFirstName = "Gnaeus Pompeius",
-                    AdminLastName= "Magnus"
+                    IsCurrentUserAdmin = true,
+                    MaxNumberOfMembers = 30,
+                    NumberOfMembers = 13
                 },
                 new ()
                 {
                     Name = "Grupul familiei",
                     Id = Guid.NewGuid(),
-                    AdminId = Guid.NewGuid(),
-                    AdminFirstName = "Marcus Licinius",
-                    AdminLastName= "Crassus"
+                    IsCurrentUserAdmin = false,
+                    MaxNumberOfMembers = 30,
+                    NumberOfMembers = 2
                 },
                 new ()
                 {
                     Name = "Colegii", 
                     Id = Guid.NewGuid(),
-                    AdminId = Guid.NewGuid(),
-                    AdminFirstName = "Gaius Julius",
-                    AdminLastName= "Caesar"
+                    IsCurrentUserAdmin = false,
+                    MaxNumberOfMembers = 30,
+                    NumberOfMembers = 4
                 }
             }.ToImmutableList();
         }

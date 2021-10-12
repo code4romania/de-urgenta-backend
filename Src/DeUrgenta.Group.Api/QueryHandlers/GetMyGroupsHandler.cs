@@ -52,9 +52,7 @@ namespace DeUrgenta.Group.Api.QueryHandlers
                     Name = g.Name,
                     NumberOfMembers = g.GroupMembers.Count,
                     MaxNumberOfMembers = _groupsConfig.UsersLimit,
-                    AdminId = g.AdminId,
-                    AdminFirstName = g.Admin.FirstName,
-                    AdminLastName = g.Admin.LastName
+                    IsCurrentUserAdmin = g.AdminId == user.Id
                 })
                 .ToListAsync(cancellationToken);
 

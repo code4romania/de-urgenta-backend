@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using DeUrgenta.Domain;
-using DeUrgenta.Domain.Entities;
 using DeUrgenta.Group.Api.Queries;
 using DeUrgenta.Group.Api.Validators;
 using DeUrgenta.Tests.Helpers;
