@@ -36,8 +36,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             _serviceProvider = new ServiceCollection()
                     .AddSingleton(x => _context)
                     .AddInviteApiServices(configuration)
-                    
-                .BuildServiceProvider();
+                    .BuildServiceProvider();
         }
 
         [Fact]

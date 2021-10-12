@@ -27,7 +27,7 @@ namespace DeUrgenta.Invite.Api.Validators
 
             request.UserId = user.Id;
 
-            var inviteTypeValidator = _validatorFactory.GetInstance(request.Type);
+            var inviteTypeValidator = _validatorFactory.GetCreateValidatorInstance(request.Type);
 
             return await inviteTypeValidator.ValidateAsync(request);
         }

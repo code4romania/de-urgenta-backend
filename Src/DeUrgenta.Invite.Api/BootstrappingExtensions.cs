@@ -16,15 +16,17 @@ namespace DeUrgenta.Invite.Api
         {
             services.AddTransient<IValidator<InviteRequest>, InviteRequestValidator>();
             services.AddTransient<IValidateRequest<CreateInvite>, CreateInviteValidator>();
+            services.AddTransient<IValidateRequest<AcceptInvite>, AcceptInviteValidator>();
+            services.AddTransient<IValidateRequest<AcceptGroupInvite>, AcceptGroupInviteValidator>();
+            services.AddTransient<IValidateRequest<AcceptBackpackInvite>, AcceptBackpackInviteValidator>();
 
             services.AddScoped<InviteValidatorFactory>();
 
             services.AddScoped<CreateGroupInviteValidator>();
             services.AddScoped<CreateBackpackInviteValidator>();
-
             services.AddScoped<ICreateInviteValidator, CreateGroupInviteValidator>(s => s.GetService<CreateGroupInviteValidator>());
             services.AddScoped<ICreateInviteValidator, CreateBackpackInviteValidator>(s => s.GetService<CreateBackpackInviteValidator>());
-
+            
             services.Configure<GroupsConfig>(configuration.GetSection(GroupsConfig.SectionName));
 
             return services;

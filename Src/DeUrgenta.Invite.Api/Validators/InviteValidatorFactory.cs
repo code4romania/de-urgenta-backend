@@ -12,7 +12,7 @@ namespace DeUrgenta.Invite.Api.Validators
             _serviceProvider = serviceProvider;
         }
 
-        public ICreateInviteValidator GetInstance(InviteType inviteType)
+        public ICreateInviteValidator GetCreateValidatorInstance(InviteType inviteType)
         {
             return inviteType switch
             {
