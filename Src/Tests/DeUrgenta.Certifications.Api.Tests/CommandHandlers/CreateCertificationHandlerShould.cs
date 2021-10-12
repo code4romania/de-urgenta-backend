@@ -33,7 +33,7 @@ namespace DeUrgenta.Certifications.Api.Tests.CommandHandlers
             var validator = Substitute.For<IValidateRequest<CreateCertification>>();
             validator
                 .IsValidAsync(Arg.Any<CreateCertification>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new CreateCertificationHandler(validator, _dbContext, storage);
 
@@ -64,7 +64,7 @@ namespace DeUrgenta.Certifications.Api.Tests.CommandHandlers
             var validator = Substitute.For<IValidateRequest<CreateCertification>>();
             validator
                 .IsValidAsync(createCertification)
-                .Returns(Task.FromResult(true));
+                .Returns(Task.FromResult(ValidationResult.Ok));
 
             var sut = new CreateCertificationHandler(validator, _dbContext, storage);
 

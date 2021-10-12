@@ -112,7 +112,7 @@ namespace DeUrgenta.Admin.Api.Controller
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> DeleteBlogPostAsync([FromRoute] Guid blogPostId)
+        public async Task<IActionResult> DeleteBlogPostAsync([FromRoute] Guid blogPostId)
         {
             var command = new DeleteBlogPost(blogPostId);
             var result = await _mediator.Send(command);

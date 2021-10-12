@@ -29,7 +29,7 @@ namespace DeUrgenta.Backpack.Api.Tests.CommandHandlers
             var validator = Substitute.For<IValidateRequest<DeleteBackpackItem>>();
             validator
                 .IsValidAsync(Arg.Any<DeleteBackpackItem>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new DeleteBackpackItemHandler(validator, _dbContext);
 

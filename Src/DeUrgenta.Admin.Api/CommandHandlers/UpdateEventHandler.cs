@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Admin.Api.CommandHandlers
 {
-    public class UpdateEventHandler : IRequestHandler<UpdateEvent, Result<EventResponseModel>>
+    public class UpdateEventHandler : IRequestHandler<UpdateEvent, Result<EventResponseModel, ValidationResult>>
     {
         private readonly IValidateRequest<UpdateEvent> _validator;
         private readonly DeUrgentaContext _context;
@@ -22,12 +22,12 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result<EventResponseModel>> Handle(UpdateEvent request, CancellationToken cancellationToken)
+        public async Task<Result<EventResponseModel, ValidationResult>> Handle(UpdateEvent request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<EventResponseModel>("Validation failed");
+                return validationResult;
             }
 
             var eventType = await _context.EventTypes.FirstAsync(et => et.Id == request.Event.EventTypeId, cancellationToken);

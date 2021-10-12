@@ -29,7 +29,7 @@ namespace DeUrgenta.Group.Api.Tests.QueriesHandlers
             var validator = Substitute.For<IValidateRequest<GetGroupMembers>>();
             validator
                 .IsValidAsync(Arg.Any<GetGroupMembers>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new GetGroupMembersHandler(validator, _dbContext);
 

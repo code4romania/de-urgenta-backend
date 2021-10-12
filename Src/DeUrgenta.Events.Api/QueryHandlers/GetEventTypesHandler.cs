@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace DeUrgenta.Events.Api.QueryHandlers
 {
-    public class GetEventTypesHandler : IRequestHandler<GetEventTypes, Result<IImmutableList<EventTypeModel>>>
+    public class GetEventTypesHandler : IRequestHandler<GetEventTypes, Result<IImmutableList<EventTypeModel>, ValidationResult>>
     {
         private readonly IValidateRequest<GetEventTypes> _validator;
         private readonly DeUrgentaContext _context;
@@ -23,13 +23,13 @@ namespace DeUrgenta.Events.Api.QueryHandlers
             _context = context;
         }
 
-        public async Task<Result<IImmutableList<EventTypeModel>>> Handle(GetEventTypes request,
+        public async Task<Result<IImmutableList<EventTypeModel>, ValidationResult>> Handle(GetEventTypes request,
             CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<IImmutableList<EventTypeModel>>("Validation failed");
+                return validationResult;
             }
 
             var courseTypes = await _context.EventTypes

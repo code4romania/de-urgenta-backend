@@ -23,8 +23,8 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
 
         public async Task<Result<BackpackItemModel>> Handle(UpdateBackpackItem request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
                 return Result.Failure<BackpackItemModel>("Validation failed");
             }

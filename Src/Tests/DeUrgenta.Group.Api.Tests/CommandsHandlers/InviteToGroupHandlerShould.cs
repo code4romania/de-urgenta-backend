@@ -30,7 +30,7 @@ namespace DeUrgenta.Group.Api.Tests.CommandsHandlers
 
             validator
                 .IsValidAsync(Arg.Any<InviteToGroup>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new InviteToGroupHandler(validator, _dbContext);
 

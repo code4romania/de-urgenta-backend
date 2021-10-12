@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.User.Api.CommandHandlers
 {
-    public class RejectBackpackInviteHandler : IRequestHandler<RejectBackpackInvite, Result>
+    public class RejectBackpackInviteHandler : IRequestHandler<RejectBackpackInvite, Result<Unit, ValidationResult>>
     {
         private readonly IValidateRequest<RejectBackpackInvite> _validator;
         private readonly DeUrgentaContext _context;
@@ -20,12 +20,12 @@ namespace DeUrgenta.User.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result> Handle(RejectBackpackInvite request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, ValidationResult>> Handle(RejectBackpackInvite request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure("Validation failed");
+                return validationResult;
             }
 
             var invite = await _context
@@ -35,7 +35,7 @@ namespace DeUrgenta.User.Api.CommandHandlers
             _context.BackpackInvites.Remove(invite);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Result.Success();
+            return Unit.Value;
         }
     }
 }

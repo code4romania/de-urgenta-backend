@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Backpack.Api.CommandHandlers
 {
-    public class RemoveContributorHandler : IRequestHandler<RemoveContributor, Result>
+    public class RemoveContributorHandler : IRequestHandler<RemoveContributor, Result<Unit, ValidationResult>>
     {
         private readonly IValidateRequest<RemoveContributor> _validator;
         private readonly DeUrgentaContext _context;
@@ -20,12 +20,12 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result> Handle(RemoveContributor request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, ValidationResult>> Handle(RemoveContributor request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure("Validation failed");
+                return validationResult;
             }
 
             var backpackToUser = await _context
@@ -35,7 +35,7 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Result.Success();
+            return Unit.Value;
         }
     }
 }

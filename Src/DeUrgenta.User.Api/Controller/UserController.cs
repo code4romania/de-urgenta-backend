@@ -228,7 +228,7 @@ namespace DeUrgenta.User.Api.Controller
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> DeleteLocationAsync([FromRoute] Guid locationId)
+        public async Task<IActionResult> DeleteLocationAsync([FromRoute] Guid locationId)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var result = await _mediator.Send(new DeleteLocation(sub, locationId));
@@ -281,7 +281,7 @@ namespace DeUrgenta.User.Api.Controller
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> AcceptGroupInviteAsync([FromRoute] Guid groupInviteId)
+        public async Task<IActionResult> AcceptGroupInviteAsync([FromRoute] Guid groupInviteId)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var command = new AcceptGroupInvite(sub, groupInviteId);
@@ -308,7 +308,7 @@ namespace DeUrgenta.User.Api.Controller
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> RejectGroupInviteAsync([FromRoute] Guid groupInviteId)
+        public async Task<IActionResult> RejectGroupInviteAsync([FromRoute] Guid groupInviteId)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var command = new RejectGroupInvite(sub, groupInviteId);
@@ -361,7 +361,7 @@ namespace DeUrgenta.User.Api.Controller
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> AcceptBackpackInviteAsync([FromRoute] Guid backpackInviteId)
+        public async Task<IActionResult> AcceptBackpackInviteAsync([FromRoute] Guid backpackInviteId)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var command = new AcceptBackpackInvite(sub, backpackInviteId);
@@ -388,7 +388,7 @@ namespace DeUrgenta.User.Api.Controller
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> RejectBackpackInviteAsync([FromRoute] Guid backpackInviteId)
+        public async Task<IActionResult> RejectBackpackInviteAsync([FromRoute] Guid backpackInviteId)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var command = new RejectBackpackInvite(sub, backpackInviteId);

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Backpack.Api.Validators;
+using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
 using DeUrgenta.Tests.Helpers;
@@ -34,7 +35,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new InviteToBackpackContributors(sub, Guid.NewGuid(), Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -53,14 +54,14 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Backpacks.AddAsync(backpack);
-            await _dbContext.BackpacksToUsers.AddAsync(new BackpackToUser {Backpack = backpack, User = user, IsOwner = true});
+            await _dbContext.BackpacksToUsers.AddAsync(new BackpackToUser { Backpack = backpack, User = user, IsOwner = true });
             await _dbContext.SaveChangesAsync();
 
             // Act
             var isValid = await sut.IsValidAsync(new InviteToBackpackContributors(userSub, backpack.Id, user.Id));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -79,7 +80,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new InviteToBackpackContributors(userSub, Guid.NewGuid(), Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -98,7 +99,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
 
             await _dbContext.Users.AddAsync(owner);
             await _dbContext.Backpacks.AddAsync(backpack);
-            await _dbContext.BackpacksToUsers.AddAsync(new BackpackToUser { Backpack = backpack, User = owner, IsOwner = true});
+            await _dbContext.BackpacksToUsers.AddAsync(new BackpackToUser { Backpack = backpack, User = owner, IsOwner = true });
 
             await _dbContext.SaveChangesAsync();
 
@@ -106,7 +107,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new InviteToBackpackContributors(userSub, backpack.Id, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -136,8 +137,8 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.Users.AddAsync(owner);
             await _dbContext.Users.AddAsync(invitedContributor);
             await _dbContext.Backpacks.AddAsync(backpack);
-            await _dbContext.BackpacksToUsers.AddAsync(new BackpackToUser {Backpack = backpack, User = owner, IsOwner = true});
-            
+            await _dbContext.BackpacksToUsers.AddAsync(new BackpackToUser { Backpack = backpack, User = owner, IsOwner = true });
+
             await _dbContext.BackpackInvites.AddAsync(backpackInvite);
 
             await _dbContext.SaveChangesAsync();
@@ -146,7 +147,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new InviteToBackpackContributors(userSub, backpackInvite.Id, invitedContributor.Id));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -179,7 +180,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new InviteToBackpackContributors(userSub, backpack.Id, nonContributor.Id));
 
             // Assert
-            isValid.Should().BeTrue();
+            isValid.Should().BeOfType<ValidationPassed>();
         }
 
         [Fact]
@@ -204,14 +205,14 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.Backpacks.AddAsync(backpack);
             await _dbContext.BackpacksToUsers.AddAsync(new BackpackToUser { Backpack = backpack, User = contributor, IsOwner = true });
             await _dbContext.BackpacksToUsers.AddAsync(new BackpackToUser { Backpack = backpack, User = nonContributor, IsOwner = false });
-            
+
             await _dbContext.SaveChangesAsync();
 
             // Act
             var isValid = await sut.IsValidAsync(new InviteToBackpackContributors(userSub, backpack.Id, nonContributor.Id));
 
             // Assert
-            isValid.Should().BeTrue();
+            isValid.Should().BeOfType<ValidationPassed>();
         }
     }
 }

@@ -30,7 +30,7 @@ namespace DeUrgenta.Certifications.Api.Tests.QueryHandlers
             var validator = Substitute.For<IValidateRequest<GetCertifications>>();
             validator
                 .IsValidAsync(Arg.Any<GetCertifications>()) 
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new GetCertificationsHandler(validator, _dbContext, storage);
 

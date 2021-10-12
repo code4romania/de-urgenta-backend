@@ -29,7 +29,7 @@ namespace DeUrgenta.User.Api.Tests.CommandHandlers
             var validator = Substitute.For<IValidateRequest<RejectGroupInvite>>();
             validator
                 .IsValidAsync(Arg.Any<RejectGroupInvite>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new RejectGroupInviteHandler(validator, _dbContext);
 

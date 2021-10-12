@@ -25,8 +25,8 @@ namespace DeUrgenta.Backpack.Api.QueryHandlers
 
         public async Task<Result<IImmutableList<BackpackModel>>> Handle(GetBackpacks request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
                 return Result.Failure<IImmutableList<BackpackModel>>("Validation failed");
             }

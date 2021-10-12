@@ -29,8 +29,8 @@ namespace DeUrgenta.Certifications.Api.QueryHandlers
         public async Task<Result<IImmutableList<CertificationModel>>> Handle(GetCertifications request,
             CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
                 return Result.Failure<IImmutableList<CertificationModel>>("Validation failed");
             }

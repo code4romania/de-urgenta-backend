@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
 using DeUrgenta.Tests.Helpers;
@@ -34,7 +35,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new RejectGroupInvite(sub, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -69,7 +70,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new RejectGroupInvite(userSub, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -97,7 +98,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new RejectGroupInvite(userSub, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -127,7 +128,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new RejectGroupInvite(userSub, groupInvite.Id));
 
             // Assert
-            isValid.Should().BeTrue();
+            isValid.Should().BeOfType<ValidationPassed>();
         }
     }
 }

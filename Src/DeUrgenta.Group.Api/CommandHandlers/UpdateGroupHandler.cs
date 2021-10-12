@@ -28,8 +28,8 @@ namespace DeUrgenta.Group.Api.CommandHandlers
 
         public async Task<Result<GroupModel>> Handle(UpdateGroup request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
                 return Result.Failure<GroupModel>("Validation failed");
             }

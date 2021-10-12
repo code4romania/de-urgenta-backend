@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Admin.Api.CommandHandlers
 {
-    public class DeleteBlogPostHandler : IRequestHandler<DeleteBlogPost, Result>
+    public class DeleteBlogPostHandler : IRequestHandler<DeleteBlogPost, Result<Unit, ValidationResult>>
     {
         private readonly IValidateRequest<DeleteBlogPost> _validator;
         private readonly DeUrgentaContext _context;
@@ -20,12 +20,12 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result> Handle(DeleteBlogPost request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, ValidationResult>> Handle(DeleteBlogPost request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure("Validation failed");
+                return validationResult;
             }
 
             var blogPostToBeDeleted =
@@ -33,7 +33,7 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
             _context.Remove(blogPostToBeDeleted);
             await _context.SaveChangesAsync(cancellationToken);
             
-            return Result.Success();
+            return Unit.Value;
         }
     }
 }

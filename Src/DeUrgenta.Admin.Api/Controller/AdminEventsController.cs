@@ -118,7 +118,7 @@ namespace DeUrgenta.Admin.Api.Controller
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> DeleteEventAsync([FromRoute] Guid eventId)
+        public async Task<IActionResult> DeleteEventAsync([FromRoute] Guid eventId)
         {
             var command = new DeleteEvent(eventId);
             var result = await _mediator.Send(command);

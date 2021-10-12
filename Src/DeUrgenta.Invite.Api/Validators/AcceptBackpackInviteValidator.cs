@@ -15,12 +15,12 @@ namespace DeUrgenta.Invite.Api.Validators
             _context = context;
         }
 
-        public async Task<bool> IsValidAsync(AcceptBackpackInvite request)
+        public async Task<ValidationResult> IsValidAsync(AcceptBackpackInvite request)
         {
             var backpack = await _context.Backpacks.FirstOrDefaultAsync(b => b.Id == request.BackpackId);
             if (backpack == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub);
@@ -30,10 +30,10 @@ namespace DeUrgenta.Invite.Api.Validators
                                     && u.BackpackId == request.BackpackId);
             if (userIsAlreadyAContributor)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
-            return true;
+            return ValidationResult.Ok;
         }
 
     }

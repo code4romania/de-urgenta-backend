@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Admin.Api.Models;
 using DeUrgenta.Admin.Api.Validators;
+using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
 using DeUrgenta.Tests.Helpers;
@@ -42,7 +43,7 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
             }));
             
             // Assert
-            result.Should().BeFalse();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -67,7 +68,7 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
             }));
 
             // Assert
-            result.Should().BeTrue();
+            result.Should().BeOfType<ValidationPassed>();
         }
 
     }

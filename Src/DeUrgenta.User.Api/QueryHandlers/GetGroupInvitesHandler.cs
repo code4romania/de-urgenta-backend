@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.User.Api.QueryHandlers
 {
-    public class GetGroupInvitesHandler : IRequestHandler<GetGroupInvites, Result<IImmutableList<GroupInviteModel>>>
+    public class GetGroupInvitesHandler : IRequestHandler<GetGroupInvites, Result<IImmutableList<GroupInviteModel>, ValidationResult>>
     {
         private readonly IValidateRequest<GetGroupInvites> _validator;
         private readonly DeUrgentaContext _context;
@@ -23,12 +23,12 @@ namespace DeUrgenta.User.Api.QueryHandlers
             _context = context;
         }
 
-        public async Task<Result<IImmutableList<GroupInviteModel>>> Handle(GetGroupInvites request, CancellationToken cancellationToken)
+        public async Task<Result<IImmutableList<GroupInviteModel>, ValidationResult>> Handle(GetGroupInvites request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<IImmutableList<GroupInviteModel>>("Validation failed");
+                return validationResult;
             }
 
             var groupInvites = await _context

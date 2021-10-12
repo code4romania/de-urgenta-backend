@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using DeUrgenta.Certifications.Api.Commands;
 using DeUrgenta.Certifications.Api.Models;
 using DeUrgenta.Certifications.Api.Validators;
+using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
@@ -34,7 +35,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new CreateCertification(sub, new CertificationRequest()));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -53,7 +54,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new CreateCertification(userSub, new CertificationRequest()));
 
             // Assert
-            isValid.Should().BeTrue();
+            isValid.Should().BeOfType<ValidationPassed>();
         }
     }
 }

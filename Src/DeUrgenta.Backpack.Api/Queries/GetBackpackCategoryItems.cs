@@ -2,12 +2,13 @@
 using System.Collections.Immutable;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Backpack.Api.Models;
+using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Entities;
 using MediatR;
 
 namespace DeUrgenta.Backpack.Api.Queries
 {
-    public class GetBackpackCategoryItems : IRequest<Result<IImmutableList<BackpackItemModel>>>
+    public class GetBackpackCategoryItems : IRequest<Result<IImmutableList<BackpackItemModel>, ValidationResult>>
     {
         public string UserSub { get; }
         public Guid BackpackId { get; }

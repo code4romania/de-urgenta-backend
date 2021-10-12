@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.User.Api.CommandHandlers
 {
-    public class AcceptGroupInviteHandler : IRequestHandler<AcceptGroupInvite, Result>
+    public class AcceptGroupInviteHandler : IRequestHandler<AcceptGroupInvite, Result<Unit, ValidationResult>>
     {
         private readonly IValidateRequest<AcceptGroupInvite> _validator;
         private readonly DeUrgentaContext _context;
@@ -21,12 +21,12 @@ namespace DeUrgenta.User.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result> Handle(AcceptGroupInvite request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, ValidationResult>> Handle(AcceptGroupInvite request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure("Validation failed");
+                return validationResult;
             }
 
             // remove invite
@@ -55,7 +55,7 @@ namespace DeUrgenta.User.Api.CommandHandlers
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Result.Success();
+            return Unit.Value;
         }
     }
 }

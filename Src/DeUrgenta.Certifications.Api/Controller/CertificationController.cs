@@ -125,7 +125,7 @@ namespace DeUrgenta.Certifications.Api.Controller
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> DeleteCertificationAsync([FromRoute] Guid certificationId)
+        public async Task<IActionResult> DeleteCertificationAsync([FromRoute] Guid certificationId)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
 

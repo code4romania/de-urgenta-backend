@@ -1,11 +1,12 @@
 ﻿using System;
 using CSharpFunctionalExtensions;
+using DeUrgenta.Common.Validation;
 using DeUrgenta.Invite.Api.Models;
 using MediatR;
 
 namespace DeUrgenta.Invite.Api.Commands
 {
-    public class CreateInvite : IRequest<Result<InviteModel>>
+    public class CreateInvite : IRequest<Result<InviteModel, ValidationResult>>
     {
         public string UserSub { get; set; }
         public Guid DestinationId { get; set; }

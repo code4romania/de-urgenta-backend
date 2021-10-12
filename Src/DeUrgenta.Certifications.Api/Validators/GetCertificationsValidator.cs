@@ -15,11 +15,11 @@ namespace DeUrgenta.Certifications.Api.Validators
             _context = context;
         }
 
-        public async Task<bool> IsValidAsync(GetCertifications request)
+        public async Task<ValidationResult> IsValidAsync(GetCertifications request)
         {
             var isExistingUser = await _context.Users.AnyAsync(u => u.Sub == request.UserSub);
 
-            return isExistingUser;
+            return isExistingUser ? ValidationResult.Ok : ValidationResult.GenericValidationError;
         }
     }
 }

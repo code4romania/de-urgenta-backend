@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
 using DeUrgenta.Group.Api.Commands;
@@ -24,7 +25,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         {
             _dbContext = fixture.Context;
             var groupsConfig = new GroupsConfig {MaxJoinedGroupsPerUser = 5};
-            _groupsConfig = Microsoft.Extensions.Options.Options.Create<GroupsConfig>(groupsConfig);
+            _groupsConfig = Microsoft.Extensions.Options.Options.Create(groupsConfig);
         }
 
         [Theory]
@@ -40,7 +41,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new InviteToGroup(sub, Guid.NewGuid(), Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -65,7 +66,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new InviteToGroup(userSub, group.Id, user.Id));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -84,7 +85,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new InviteToGroup(userSub, Guid.NewGuid(), Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -110,7 +111,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new InviteToGroup(userSub, group.Id, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -145,7 +146,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new InviteToGroup(userSub, group.Id, invitedGroupUser.Id));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -175,7 +176,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new InviteToGroup(userSub, group.Id, nonGroupUser.Id));
 
             // Assert
-            isValid.Should().BeTrue();
+            isValid.Should().BeOfType<ValidationPassed>();
         }
 
         [Fact]
@@ -204,7 +205,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new InviteToGroup(userSub, group.Id, nonGroupUser.Id));
 
             // Assert
-            isValid.Should().BeTrue();
+            isValid.Should().BeOfType<ValidationPassed>();
         }
 
         [Fact]
@@ -253,7 +254,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var result = await sut.IsValidAsync(new InviteToGroup("a-sub", mainGroup.Id, user.Id));
 
             // Assert
-            result.Should().BeFalse();
+            result.Should().BeOfType<GenericValidationError>();
         }
     }
 }

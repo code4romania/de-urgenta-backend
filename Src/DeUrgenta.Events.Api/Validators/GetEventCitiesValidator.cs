@@ -15,14 +15,15 @@ namespace DeUrgenta.Events.Api.Validators
             _context = context;
         }
 
-        public async Task<bool> IsValidAsync(GetEventCities request)
+        public async Task<ValidationResult> IsValidAsync(GetEventCities request)
         {
             if (!await _context.EventTypes.AnyAsync(x => x.Id == request.EventTypeId))
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
-            return true;
+
+            return ValidationResult.Ok;
         }
     }
 }

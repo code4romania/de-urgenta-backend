@@ -25,19 +25,19 @@ namespace DeUrgenta.Group.Api.Validators
             _groupsConfig = groupsConfig.Value;
         }
 
-        public async Task<bool> IsValidAsync(InviteToGroup request)
+        public async Task<ValidationResult> IsValidAsync(InviteToGroup request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
             var invitedUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == request.UserId);
 
             if (user == null || invitedUser == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             if (user.Id == invitedUser.Id)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             var isPartOfGroup = await _context.UsersToGroups.AnyAsync(utg =>
@@ -46,7 +46,7 @@ namespace DeUrgenta.Group.Api.Validators
 
             if (!isPartOfGroup)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             var isAlreadyInvited = await _context.GroupInvites.AnyAsync(utg =>
@@ -55,21 +55,21 @@ namespace DeUrgenta.Group.Api.Validators
 
             if (isAlreadyInvited)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             var group = await _context.Groups.FirstOrDefaultAsync(g => g.Id == request.GroupId);
             if (group == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
             
             if (invitedUser.GroupsMember.Count >= _groupsConfig.MaxJoinedGroupsPerUser)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
-            return true;
+            return ValidationResult.Ok;
         }
     }
 }

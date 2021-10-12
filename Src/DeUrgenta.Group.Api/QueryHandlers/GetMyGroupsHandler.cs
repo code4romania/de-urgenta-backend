@@ -31,9 +31,9 @@ namespace DeUrgenta.Group.Api.QueryHandlers
         public async Task<Result<IImmutableList<GroupModel>>> Handle(GetMyGroups request,
             CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request);
 
-            if (!isValid)
+            if (validationResult.IsFailure)
             {
                 return Result.Failure<IImmutableList<GroupModel>>("Validation failed");
             }

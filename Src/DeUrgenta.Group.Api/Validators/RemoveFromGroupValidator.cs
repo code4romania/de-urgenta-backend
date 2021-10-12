@@ -15,26 +15,26 @@ namespace DeUrgenta.Group.Api.Validators
             _context = context;
         }
 
-        public async Task<bool> IsValidAsync(RemoveFromGroup request)
+        public async Task<ValidationResult> IsValidAsync(RemoveFromGroup request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
             var targetUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == request.UserId);
             
             if (user == null || targetUser == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             if (user.Id == request.UserId)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             var isAdmin =await _context.Groups.AnyAsync(g => g.Admin.Id == user.Id);
             
             if (!isAdmin)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             bool requestedUserIsInGroup = await _context
@@ -43,10 +43,10 @@ namespace DeUrgenta.Group.Api.Validators
 
             if (!requestedUserIsInGroup)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
-            return true;
+            return ValidationResult.Ok;
         }
     }
 }

@@ -15,26 +15,26 @@ namespace DeUrgenta.Backpack.Api.Validators
             _context = context;
         }
 
-        public async Task<bool> IsValidAsync(RemoveContributor request)
+        public async Task<ValidationResult> IsValidAsync(RemoveContributor request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
             var targetUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == request.UserId);
 
             if (user == null || targetUser == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             if (user.Id == request.UserId)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             var isOwner = await _context.BackpacksToUsers.AnyAsync(btu => btu.User.Id == user.Id && btu.Backpack.Id == request.BackpackId && btu.IsOwner);
 
             if (!isOwner)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             bool requestedUserIsContributor = await _context
@@ -43,10 +43,10 @@ namespace DeUrgenta.Backpack.Api.Validators
 
             if (!requestedUserIsContributor)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
-            return true;
+            return ValidationResult.Ok;
         }
     }
 }

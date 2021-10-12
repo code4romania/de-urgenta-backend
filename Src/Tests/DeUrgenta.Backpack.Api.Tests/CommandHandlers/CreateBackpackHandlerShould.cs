@@ -29,7 +29,7 @@ namespace DeUrgenta.Backpack.Api.Tests.CommandHandlers
             var validator = Substitute.For<IValidateRequest<CreateBackpack>>();
             validator
                 .IsValidAsync(Arg.Any<CreateBackpack>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new CreateBackpackHandler(validator, _dbContext);
 

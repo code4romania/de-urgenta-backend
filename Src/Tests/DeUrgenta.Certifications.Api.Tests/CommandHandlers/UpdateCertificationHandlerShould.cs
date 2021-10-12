@@ -35,7 +35,7 @@ namespace DeUrgenta.Certifications.Api.Tests.CommandHandlers
             var validator = Substitute.For<IValidateRequest<UpdateCertification>>();
             validator
                 .IsValidAsync(Arg.Any<UpdateCertification>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new UpdateCertificationHandler(validator, _dbContext, storage);
 
@@ -59,7 +59,7 @@ namespace DeUrgenta.Certifications.Api.Tests.CommandHandlers
             var validator = Substitute.For<IValidateRequest<UpdateCertification>>();
             validator
                 .IsValidAsync(updateCertification)
-                .Returns(Task.FromResult(true));
+                .Returns(Task.FromResult(ValidationResult.Ok));
             await SetupExistingCertification(certificationId);
 
             var sut = new UpdateCertificationHandler(validator, _dbContext, storage);

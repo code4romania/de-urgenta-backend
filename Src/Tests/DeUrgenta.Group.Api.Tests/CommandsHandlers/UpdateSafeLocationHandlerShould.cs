@@ -30,7 +30,7 @@ namespace DeUrgenta.Group.Api.Tests.CommandsHandlers
             var validator = Substitute.For<IValidateRequest<UpdateSafeLocation>>();
             validator
                 .IsValidAsync(Arg.Any<UpdateSafeLocation>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new UpdateSafeLocationHandler(validator, _dbContext);
 

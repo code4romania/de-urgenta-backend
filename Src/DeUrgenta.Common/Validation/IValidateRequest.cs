@@ -5,6 +5,10 @@ namespace DeUrgenta.Common.Validation
 {
     public interface IValidateRequest<in T> where T : IBaseRequest
     {
-        Task<bool> IsValidAsync(T request);
+        public ValidationPassed ValidationPass()
+        {
+            return new();
+        }
+        Task<ValidationResult> IsValidAsync(T request);
     }
 }

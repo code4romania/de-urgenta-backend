@@ -179,7 +179,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetBackpackContributorsResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> InviteToBackpackContributorsAsync([FromRoute] Guid backpackId, [FromRoute] Guid userId)
+        public async Task<IActionResult> InviteToBackpackContributorsAsync([FromRoute] Guid backpackId, [FromRoute] Guid userId)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
 
@@ -207,7 +207,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerRequestExample(typeof(BackpackModelRequest), typeof(AddOrUpdateBackpackRequestExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> RemoveContributorAsync([FromRoute] Guid backpackId, [FromRoute] Guid userId)
+        public async Task<IActionResult> RemoveContributorAsync([FromRoute] Guid backpackId, [FromRoute] Guid userId)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
 
@@ -234,7 +234,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> RemoveCurrentContributorAsync([FromRoute] Guid backpackId)
+        public async Task<IActionResult> RemoveCurrentContributorAsync([FromRoute] Guid backpackId)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
 
@@ -262,7 +262,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> DeleteBackpackAsync([FromRoute] Guid backpackId)
+        public async Task<IActionResult> DeleteBackpackAsync([FromRoute] Guid backpackId)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
 

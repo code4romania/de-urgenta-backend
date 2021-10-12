@@ -28,7 +28,7 @@ namespace DeUrgenta.User.Api.Tests.QueryHandlers
             var validator = Substitute.For<IValidateRequest<GetGroupInvites>>();
             validator
                 .IsValidAsync(Arg.Any<GetGroupInvites>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new GetGroupInvitesHandler(validator, _dbContext);
 

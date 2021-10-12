@@ -141,7 +141,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> DeleteBackpackItemAsync([FromRoute] Guid itemId)
+        public async Task<IActionResult> DeleteBackpackItemAsync([FromRoute] Guid itemId)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var command = new DeleteBackpackItem(sub, itemId);

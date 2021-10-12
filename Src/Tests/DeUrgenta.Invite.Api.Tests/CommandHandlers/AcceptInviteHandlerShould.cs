@@ -33,7 +33,7 @@ namespace DeUrgenta.Invite.Api.Tests.CommandHandlers
             var request = new AcceptInvite(userSub, inviteId);
 
             var validator = Substitute.For<IValidateRequest<AcceptInvite>>();
-            validator.IsValidAsync(request).Returns(false);
+            validator.IsValidAsync(request).Returns(ValidationResult.GenericValidationError);
             var mediator = Substitute.For<IMediator>();
             var sut = new AcceptInviteHandler(_context, validator, mediator);
 

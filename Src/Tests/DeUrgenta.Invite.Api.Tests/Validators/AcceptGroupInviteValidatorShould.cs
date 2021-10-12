@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Invite.Api.Commands;
 using DeUrgenta.Invite.Api.Options;
@@ -26,7 +27,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
                 UsersLimit = 2,
                 MaxJoinedGroupsPerUser = 2
             };
-            _groupsConfig = Microsoft.Extensions.Options.Options.Create<GroupsConfig>(options);
+            _groupsConfig = Microsoft.Extensions.Options.Options.Create(options);
         }
 
         [Fact]
@@ -49,7 +50,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -80,7 +81,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
 
         }
 
@@ -112,7 +113,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -141,7 +142,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -167,7 +168,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeTrue();
+            isValid.Should().BeOfType<ValidationPassed>();
         }
     }
 }

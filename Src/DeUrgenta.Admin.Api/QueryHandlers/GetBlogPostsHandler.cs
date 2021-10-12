@@ -12,7 +12,7 @@ using MediatR;
 
 namespace DeUrgenta.Admin.Api.QueryHandlers
 {
-    public class GetBlogPostsHandler : IRequestHandler<GetBlogPosts, Result<PagedResult<BlogPostModel>>>
+    public class GetBlogPostsHandler : IRequestHandler<GetBlogPosts, Result<PagedResult<BlogPostModel>, ValidationResult>>
     {
         private readonly IValidateRequest<GetBlogPosts> _validator;
         private readonly DeUrgentaContext _context;
@@ -23,13 +23,13 @@ namespace DeUrgenta.Admin.Api.QueryHandlers
             _context = context;
         }
 
-        public async Task<Result<PagedResult<BlogPostModel>>> Handle(GetBlogPosts request,
+        public async Task<Result<PagedResult<BlogPostModel>, ValidationResult>> Handle(GetBlogPosts request,
             CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<PagedResult<BlogPostModel>>("Validation failed");
+                return validationResult;
             }
 
             var pagedBlogPosts = await _context.Blogs

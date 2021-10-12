@@ -16,25 +16,25 @@ namespace DeUrgenta.Invite.Api.Validators
             _context = context;
         }
 
-        public async Task<bool> IsValidAsync(AcceptInvite request)
+        public async Task<ValidationResult> IsValidAsync(AcceptInvite request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
             if (user == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             var invite = await _context.Invites.FirstOrDefaultAsync(i => i.Id == request.InviteId);
             if (invite == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
             if (invite.InviteStatus == InviteStatus.Accepted)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
-            return true;
+            return ValidationResult.Ok;
         }
     }
 }

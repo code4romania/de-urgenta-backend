@@ -29,7 +29,7 @@ namespace DeUrgenta.Backpack.Api.Tests.CommandHandlers
             var validator = Substitute.For<IValidateRequest<RemoveContributor>>();
             validator
                 .IsValidAsync(Arg.Any<RemoveContributor>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new RemoveContributorHandler(validator, _dbContext);
 

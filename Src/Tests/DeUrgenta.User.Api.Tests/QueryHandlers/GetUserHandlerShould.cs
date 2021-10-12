@@ -28,7 +28,7 @@ namespace DeUrgenta.User.Api.Tests.QueryHandlers
             var validator = Substitute.For<IValidateRequest<GetUser>>();
             validator
                 .IsValidAsync(Arg.Any<GetUser>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new GetUserHandler(validator, _dbContext);
 

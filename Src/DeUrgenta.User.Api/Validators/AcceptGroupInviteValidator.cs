@@ -20,13 +20,13 @@ namespace DeUrgenta.User.Api.Validators
             _options = options;
         }
 
-        public async Task<bool> IsValidAsync(AcceptGroupInvite request)
+        public async Task<ValidationResult> IsValidAsync(AcceptGroupInvite request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
 
             if (user == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             var invite = await _context
@@ -35,7 +35,7 @@ namespace DeUrgenta.User.Api.Validators
 
             if (invite is null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             var config = _options.Value;
@@ -48,10 +48,10 @@ namespace DeUrgenta.User.Api.Validators
             
             if (exceedsLimit)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
-            return true;
+            return ValidationResult.Ok;
         }
     }
 }

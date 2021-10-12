@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Certifications.Api.CommandHandlers
 {
-    public class CreateCertificationHandler : IRequestHandler<CreateCertification, Result<CertificationModel>>
+    public class CreateCertificationHandler : IRequestHandler<CreateCertification, Result<CertificationModel, ValidationResult>>
     {
         private readonly IValidateRequest<CreateCertification> _validator;
         private readonly DeUrgentaContext _context;
@@ -26,12 +26,12 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
             _storage = storage;
         }
 
-        public async Task<Result<CertificationModel>> Handle(CreateCertification request, CancellationToken cancellationToken)
+        public async Task<Result<CertificationModel, ValidationResult>> Handle(CreateCertification request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<CertificationModel>("Validation failed");
+                return validationResult;
             }
 
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);

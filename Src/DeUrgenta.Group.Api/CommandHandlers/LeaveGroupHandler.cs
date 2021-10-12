@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Group.Api.CommandHandlers
 {
-    public class LeaveGroupHandler : IRequestHandler<LeaveGroup, Result>
+    public class LeaveGroupHandler : IRequestHandler<LeaveGroup, Result<Unit, ValidationResult>>
     {
         private readonly IValidateRequest<LeaveGroup> _validator;
         private readonly DeUrgentaContext _context;
@@ -20,12 +20,12 @@ namespace DeUrgenta.Group.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result> Handle(LeaveGroup request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, ValidationResult>> Handle(LeaveGroup request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure("Validation failed");
+                return validationResult;
             }
 
             
@@ -42,7 +42,7 @@ namespace DeUrgenta.Group.Api.CommandHandlers
             _context.UsersToGroups.Remove(groupAssignment);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Result.Success();
+            return Unit.Value;
         }
     }
 }

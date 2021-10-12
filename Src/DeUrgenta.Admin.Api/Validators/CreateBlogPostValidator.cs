@@ -6,9 +6,9 @@ namespace DeUrgenta.Admin.Api.Validators
 {
     public class CreateBlogPostValidator : IValidateRequest<CreateBlogPost>
     {
-        public Task<bool> IsValidAsync(CreateBlogPost request)
+        public Task<ValidationResult> IsValidAsync(CreateBlogPost request)
         {
-            return Task.FromResult(true);
+            return Task.FromResult(ValidationResult.Ok);
         }
     }
 }

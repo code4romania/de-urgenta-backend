@@ -15,20 +15,20 @@ namespace DeUrgenta.User.Api.Validators
             _context = context;
         }
 
-        public async Task<bool> IsValidAsync(RejectGroupInvite request)
+        public async Task<ValidationResult> IsValidAsync(RejectGroupInvite request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
 
             if (user == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             var inviteExists = await _context
                 .GroupInvites
                 .AnyAsync(bi => bi.InvitationReceiver.Sub == request.UserSub && bi.Id == request.GroupInviteId);
 
-            return inviteExists;
+            return inviteExists ? ValidationResult.Ok : ValidationResult.GenericValidationError;
         }
     }
 }

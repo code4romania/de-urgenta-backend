@@ -12,7 +12,7 @@ using InviteType = DeUrgenta.Invite.Api.Models.InviteType;
 
 namespace DeUrgenta.Invite.Api.CommandHandlers
 {
-    public class AcceptBackpackInviteHandler : IRequestHandler<AcceptBackpackInvite, Result<AcceptInviteModel>>
+    public class AcceptBackpackInviteHandler : IRequestHandler<AcceptBackpackInvite, Result<AcceptInviteModel, ValidationResult>>
     {
         private readonly DeUrgentaContext _context;
         private readonly IValidateRequest<AcceptBackpackInvite> _validator;
@@ -23,12 +23,12 @@ namespace DeUrgenta.Invite.Api.CommandHandlers
             _validator = validator;
         }
 
-        public async Task<Result<AcceptInviteModel>> Handle(AcceptBackpackInvite request, CancellationToken cancellationToken)
+        public async Task<Result<AcceptInviteModel, ValidationResult>> Handle(AcceptBackpackInvite request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<AcceptInviteModel>("Validation failed");
+                return validationResult;
             }
 
             var backpack = await _context.Backpacks.FirstAsync(b => b.Id == request.BackpackId, cancellationToken);

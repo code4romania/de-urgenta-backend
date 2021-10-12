@@ -19,12 +19,12 @@ namespace DeUrgenta.Invite.Api.Validators
             _config = config.Value;
         }
 
-        public async Task<bool> IsValidAsync(AcceptGroupInvite request)
+        public async Task<ValidationResult> IsValidAsync(AcceptGroupInvite request)
         {
             var group = await _context.Groups.FirstOrDefaultAsync(g => g.Id == request.GroupId);
             if (group == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub);
@@ -34,14 +34,14 @@ namespace DeUrgenta.Invite.Api.Validators
 
             if (noOfGroupsUserIsAMemberOf >= _config.MaxJoinedGroupsPerUser)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             var noOfGroupMembers = await _context.UsersToGroups
                 .CountAsync(u => u.GroupId == request.GroupId);
             if (noOfGroupMembers >= _config.UsersLimit)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             var userIsAlreadyAMember = await _context.UsersToGroups
@@ -49,10 +49,10 @@ namespace DeUrgenta.Invite.Api.Validators
                                && u.GroupId == request.GroupId);
             if (userIsAlreadyAMember)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
-            return true;
+            return ValidationResult.Ok;
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System;
 using CSharpFunctionalExtensions;
+using DeUrgenta.Common.Validation;
 using MediatR;
 
 namespace DeUrgenta.Certifications.Api.Commands
 {
-    public class DeleteCertification : IRequest<Result>
+    public class DeleteCertification : IRequest<Result<Unit, ValidationResult>>
     {
         public string UserSub { get; }
         public Guid CertificationId { get; }

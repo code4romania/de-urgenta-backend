@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Admin.Api.CommandHandlers
 {
-    public class UpdateBlogPostHandler : IRequestHandler<UpdateBlogPost, Result<BlogPostModel>>
+    public class UpdateBlogPostHandler : IRequestHandler<UpdateBlogPost, Result<BlogPostModel, ValidationResult>>
     {
         private readonly IValidateRequest<UpdateBlogPost> _validator;
         private readonly DeUrgentaContext _context;
@@ -22,12 +22,12 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result<BlogPostModel>> Handle(UpdateBlogPost request, CancellationToken cancellationToken)
+        public async Task<Result<BlogPostModel, ValidationResult>> Handle(UpdateBlogPost request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<BlogPostModel>("Validation failed");
+                return validationResult;
             }
 
             var blogPost = await _context.Blogs.FirstAsync(x=>x.Id == request.BlogPostId, cancellationToken: cancellationToken);
@@ -38,14 +38,14 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
 
             await _context.SaveChangesAsync(cancellationToken);
             
-            return Result.Success(new BlogPostModel
+            return new BlogPostModel
             {
                 Id = blogPost.Id,
                 Author = blogPost.Author,
                 Title = blogPost.Title,
                 ContentBody = blogPost.ContentBody,
                 PublishedOn = blogPost.PublishedOn
-            });
+            };
         }
     }
 }

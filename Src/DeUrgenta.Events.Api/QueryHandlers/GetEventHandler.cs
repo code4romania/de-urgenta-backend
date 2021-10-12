@@ -13,7 +13,7 @@ using DeUrgenta.Common.Models.Events;
 
 namespace DeUrgenta.Events.Api.QueryHandlers
 {
-    public class GetEventHandler : IRequestHandler<GetEvent, Result<IImmutableList<EventResponseModel>>>
+    public class GetEventHandler : IRequestHandler<GetEvent, Result<IImmutableList<EventResponseModel>, ValidationResult>>
     {
         private readonly IValidateRequest<GetEvent> _validator;
         private readonly DeUrgentaContext _context;
@@ -24,12 +24,12 @@ namespace DeUrgenta.Events.Api.QueryHandlers
             _context = context;
         }
 
-        public async Task<Result<IImmutableList<EventResponseModel>>> Handle(GetEvent request, CancellationToken cancellationToken)
+        public async Task<Result<IImmutableList<EventResponseModel>, ValidationResult>> Handle(GetEvent request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<IImmutableList<EventResponseModel>>("Validation failed");
+                return validationResult;
             }
 
             var events = await _context.Events

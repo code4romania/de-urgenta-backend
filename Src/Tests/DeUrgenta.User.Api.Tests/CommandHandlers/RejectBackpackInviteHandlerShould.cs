@@ -29,7 +29,7 @@ namespace DeUrgenta.User.Api.Tests.CommandHandlers
             var validator = Substitute.For<IValidateRequest<RejectBackpackInvite>>();
             validator
                 .IsValidAsync(Arg.Any<RejectBackpackInvite>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new RejectBackpackInviteHandler(validator, _dbContext);
 

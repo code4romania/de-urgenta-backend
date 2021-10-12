@@ -13,22 +13,22 @@ namespace DeUrgenta.Backpack.Api.Validators
         {
             _context = context;
         }
-        public async Task<bool> IsValidAsync(AddBackpackItem request)
+        public async Task<ValidationResult> IsValidAsync(AddBackpackItem request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
             if (user == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             var isContributor = await _context.BackpacksToUsers.AnyAsync(btu => btu.User.Id == user.Id && btu.Backpack.Id == request.BackpackId);
 
             if (!isContributor)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
-            return true;
+            return ValidationResult.Ok;
         }
     }
 }

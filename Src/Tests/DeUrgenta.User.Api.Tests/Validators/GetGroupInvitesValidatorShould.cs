@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
@@ -33,7 +34,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new GetGroupInvites(sub));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -52,7 +53,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new GetGroupInvites(userSub));
 
             // Assert
-            isValid.Should().BeTrue();
+            isValid.Should().BeOfType<ValidationPassed>();
         }
     }
 }

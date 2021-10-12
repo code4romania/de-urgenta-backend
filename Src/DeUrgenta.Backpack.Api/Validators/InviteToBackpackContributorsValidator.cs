@@ -15,19 +15,19 @@ namespace DeUrgenta.Backpack.Api.Validators
             _context = context;
         }
 
-        public async Task<bool> IsValidAsync(InviteToBackpackContributors request)
+        public async Task<ValidationResult> IsValidAsync(InviteToBackpackContributors request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
             var invitedUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == request.UserId);
 
             if (user == null || invitedUser == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             if (user.Id == invitedUser.Id)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             var isContributor = await _context.BackpacksToUsers.AnyAsync(btu =>
@@ -36,7 +36,7 @@ namespace DeUrgenta.Backpack.Api.Validators
 
             if (!isContributor)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             var isAlreadyInvited = await _context.BackpackInvites.AnyAsync(utg =>
@@ -45,16 +45,16 @@ namespace DeUrgenta.Backpack.Api.Validators
 
             if (isAlreadyInvited)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             var backpack = await _context.Backpacks.FirstOrDefaultAsync(g => g.Id == request.BackpackId);
             if (backpack == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
-            return true;
+            return ValidationResult.Ok;
         }
     }
 }
