@@ -7,8 +7,8 @@ namespace DeUrgenta.Invite.Api.Commands
 {
     public class AcceptBackpackInvite : IRequest<Result<AcceptInviteModel>>
     {
-        public string UserSub { get; set; }
-        public Guid BackpackId { get; set; }
+        public string UserSub { get; }
+        public Guid BackpackId { get; }
 
         public AcceptBackpackInvite(string userSub, Guid backpackId)
         {

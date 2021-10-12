@@ -31,12 +31,6 @@ namespace DeUrgenta.Tests.Helpers.Builders
             return this;
         }
 
-        public UserToGroupBuilder WithUserId(Guid userId)
-        {
-            _userId = userId;
-            return this;
-        }
-
         public UserToGroupBuilder WithUser(User user)
         {
             _user = user;
