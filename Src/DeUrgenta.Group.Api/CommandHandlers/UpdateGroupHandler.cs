@@ -50,9 +50,7 @@ namespace DeUrgenta.Group.Api.CommandHandlers
                 Name = group.Name,
                 NumberOfMembers = group.GroupMembers.Count,
                 MaxNumberOfMembers = _groupsConfig.UsersLimit,
-                AdminId = group.AdminId,
-                AdminFirstName = group.Admin.FirstName,
-                AdminLastName = group.Admin.LastName
+                IsCurrentUserAdmin = group.AdminId == user.Id
             };
         }
     }

@@ -64,7 +64,6 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var adminUser = new UserBuilder().Build();
 
             var group = new GroupBuilder().WithAdmin(adminUser).Build();
-            ;
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Groups.AddAsync(group);

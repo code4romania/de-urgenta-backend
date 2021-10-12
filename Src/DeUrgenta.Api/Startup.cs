@@ -52,7 +52,7 @@ namespace DeUrgenta.Api
             services.AddUserApiServices(Configuration);
             services.AddBackpackApiServices();
             services.AddGroupApiServices(Configuration);
-            services.AddCertificationsApiServices();         
+            services.AddCertificationsApiServices();
             services.AddEventsApiServices();
             services.AddAdminApiServices();
             services.AddInviteApiServices(Configuration);
