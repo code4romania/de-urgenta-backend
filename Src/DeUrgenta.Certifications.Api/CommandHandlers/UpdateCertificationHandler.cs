@@ -30,7 +30,7 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
             var validationResult = await _validator.IsValidAsync(request);
             if (validationResult.IsFailure)
             {
-                return ValidationResult.GenericValidationError;
+                return validationResult;
             }
 
             var certification = await _context.Certifications

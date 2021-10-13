@@ -28,7 +28,7 @@ namespace DeUrgenta.User.Api.QueryHandlers
             var validationResult = await _validator.IsValidAsync(request);
             if (validationResult.IsFailure)
             {
-                return ValidationResult.GenericValidationError;
+                return validationResult;
             }
 
             var user = await _context.Users

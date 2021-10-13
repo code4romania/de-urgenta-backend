@@ -26,7 +26,7 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
             var validationResult = await _validator.IsValidAsync(request);
             if (validationResult.IsFailure)
             {
-                return ValidationResult.GenericValidationError;
+                return validationResult;
             }
             var backpack = await _context.Backpacks.FirstAsync(b => b.Id == request.BackpackId, cancellationToken);
             backpack.Name = request.Backpack.Name;

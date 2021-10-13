@@ -25,7 +25,7 @@ namespace DeUrgenta.Group.Api.CommandHandlers
             var validationResult = await _validator.IsValidAsync(request);
             if (validationResult.IsFailure)
             {
-                return ValidationResult.GenericValidationError;
+                return validationResult;
             }
 
             var safeLocation = await _context

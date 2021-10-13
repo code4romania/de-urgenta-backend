@@ -32,7 +32,7 @@ namespace DeUrgenta.Certifications.Api.QueryHandlers
             var validationResult = await _validator.IsValidAsync(request);
             if (validationResult.IsFailure)
             {
-                return ValidationResult.GenericValidationError;
+                return validationResult;
             }
 
             var certifications = await _context.Certifications

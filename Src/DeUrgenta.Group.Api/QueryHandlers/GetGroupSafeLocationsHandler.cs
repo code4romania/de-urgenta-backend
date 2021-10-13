@@ -28,7 +28,7 @@ namespace DeUrgenta.Group.Api.QueryHandlers
             var validationResult = await _validator.IsValidAsync(request);
             if (validationResult.IsFailure)
             {
-                return ValidationResult.GenericValidationError;
+                return validationResult;
             }
 
             var group = await _context.Groups

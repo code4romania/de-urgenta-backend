@@ -35,7 +35,7 @@ namespace DeUrgenta.Group.Api.QueryHandlers
 
             if (validationResult.IsFailure)
             {
-                return ValidationResult.GenericValidationError;
+                return validationResult;
             }
 
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);

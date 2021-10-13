@@ -28,7 +28,7 @@ namespace DeUrgenta.Backpack.Api.QueryHandlers
             var validationResult = await _validator.IsValidAsync(request);
             if (validationResult.IsFailure)
             {
-                return ValidationResult.GenericValidationError;
+                return validationResult;
             }
 
             var backpacks = await _context.BackpacksToUsers
