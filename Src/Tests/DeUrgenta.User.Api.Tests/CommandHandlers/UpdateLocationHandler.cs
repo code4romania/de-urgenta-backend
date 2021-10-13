@@ -6,6 +6,7 @@ using DeUrgenta.Domain;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.User.Api.CommandHandlers;
 using DeUrgenta.User.Api.Commands;
+using DeUrgenta.User.Api.Models;
 using NSubstitute;
 using FluentAssertions;
 using Xunit;
@@ -22,23 +23,23 @@ namespace DeUrgenta.User.Api.Tests.CommandHandlers
             _dbContext = fixture.Context;
         }
 
-        //todo test the actual sut in the class name
-        //[Fact]
-        //public async Task Return_failed_result_when_validation_fails()
-        //{
-        //    // Arrange
-        //    var validator = Substitute.For<IValidateRequest<AcceptGroupInvite>>();
-        //    validator
-        //        .IsValidAsync(Arg.Any<AcceptGroupInvite>())
-        //        .Returns(Task.FromResult(false));
+        [Fact]
+        public async Task Return_failed_result_when_validation_fails()
+        {
+            // Arrange
+            var validator = Substitute.For<IValidateRequest<UpdateLocation>>();
+            validator
+                .IsValidAsync(Arg.Any<UpdateLocation>())
+                .Returns(Task.FromResult(false));
+            UserLocationRequest userLocationRequest = new();
 
-        //    var sut = new AcceptGroupInviteHandler(validator, _dbContext);
+            var sut = new UpdateLocationHandler(validator, _dbContext);
 
-        //    // Act
-        //    var result = await sut.Handle(new AcceptGroupInvite("a-sub", Guid.NewGuid()), CancellationToken.None);
+            // Act
+            var result = await sut.Handle(new UpdateLocation("a-sub", Guid.NewGuid(), userLocationRequest), CancellationToken.None);
 
-        //    // Assert
-        //    result.IsFailure.Should().BeTrue();
-        //}
+            // Assert
+            result.IsFailure.Should().BeTrue();
+        }
     }
 }

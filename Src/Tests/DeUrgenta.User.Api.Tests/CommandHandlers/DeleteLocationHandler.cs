@@ -22,22 +22,22 @@ namespace DeUrgenta.User.Api.Tests.CommandHandlers
             _dbContext = fixture.Context;
         }
 
-        //[Fact]
-        //public async Task Return_failed_result_when_validation_fails()
-        //{
-        //    // Arrange
-        //    var validator = Substitute.For<IValidateRequest<AcceptGroupInvite>>();
-        //    validator
-        //        .IsValidAsync(Arg.Any<AcceptGroupInvite>())
-        //        .Returns(Task.FromResult(false));
+        [Fact]
+        public async Task Return_failed_result_when_validation_fails()
+        {
+            // Arrange
+            var validator = Substitute.For<IValidateRequest<DeleteLocation>>();
+            validator
+                .IsValidAsync(Arg.Any<DeleteLocation>())
+                .Returns(Task.FromResult(false));
 
-        //    var sut = new AcceptGroupInviteHandler(validator, _dbContext);
+            var sut = new DeleteLocationHandler(validator, _dbContext);
 
-        //    // Act
-        //    var result = await sut.Handle(new AcceptGroupInvite("a-sub", Guid.NewGuid()), CancellationToken.None);
+            // Act
+            var result = await sut.Handle(new DeleteLocation("a-sub", Guid.NewGuid()), CancellationToken.None);
 
-        //    // Assert
-        //    result.IsFailure.Should().BeTrue();
-        //}
+            // Assert
+            result.IsFailure.Should().BeTrue();
+        }
     }
 }
