@@ -16,19 +16,25 @@ namespace DeUrgenta.Group.Api.Swagger
                 {
                     Id = Guid.NewGuid(),
                     FirstName = "Freddie",
-                    LastName = "Mercury"
+                    LastName = "Mercury",
+                    HasValidCertification = true,
+                    IsGroupAdmin = true
                 },
                 new()
                 {
                     Id = Guid.NewGuid(),
                     FirstName = "Doru",
-                    LastName = "Puscas"
+                    LastName = "Puscas",
+                    HasValidCertification = false,
+                    IsGroupAdmin = false
                 },
                 new()
                 {
                     Id = Guid.NewGuid(),
                     FirstName = "Bruno",
-                    LastName = "Mars"
+                    LastName = "Mars",
+                    HasValidCertification = true,
+                    IsGroupAdmin = false
                 },
             }.ToImmutableList();
         }
