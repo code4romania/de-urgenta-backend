@@ -240,33 +240,6 @@ namespace DeUrgenta.User.Api.Controller
 
             return NoContent();
         }
-        
-        /// <summary>
-        /// Accept a group invite
-        /// </summary>
-        /// <returns></returns>
-        [HttpPut]
-        [Route("group-invite/{groupInviteId:guid}")]
-
-        [SwaggerResponse(StatusCodes.Status204NoContent, "Group invite accepted")]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
-
-        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> AcceptGroupInviteAsync([FromRoute] Guid groupInviteId)
-        {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new AcceptGroupInvite(sub, groupInviteId);
-            var result = await _mediator.Send(command);
-
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
-        }
 
         /// <summary>
         /// Gets backpack invites

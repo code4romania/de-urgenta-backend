@@ -35,6 +35,8 @@ namespace DeUrgenta.Invite.Api.CommandHandlers
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
 
             await _context.UsersToGroups.AddAsync(new UserToGroup { User = user, Group = group }, cancellationToken);
+            await _context.BackpacksToUsers.AddAsync(new BackpackToUser { Backpack = group.Backpack, User = user }, cancellationToken);
+
             await _context.SaveChangesAsync(cancellationToken);
 
             return new AcceptInviteModel
