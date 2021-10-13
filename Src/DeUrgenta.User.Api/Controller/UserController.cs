@@ -241,32 +241,5 @@ namespace DeUrgenta.User.Api.Controller
 
             return NoContent();
         }
-        
-        /// <summary>
-        /// Reject a backpack invite
-        /// </summary>
-        /// <returns></returns>
-        [HttpDelete]
-        [Route("backpack-invite/{backpackInviteId:guid}")]
-
-        [SwaggerResponse(StatusCodes.Status204NoContent, "Group invite rejected")]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
-
-        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> RejectBackpackInviteAsync([FromRoute] Guid backpackInviteId)
-        {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new RejectBackpackInvite(sub, backpackInviteId);
-            var result = await _mediator.Send(command);
-
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
-        }
     }
 }
