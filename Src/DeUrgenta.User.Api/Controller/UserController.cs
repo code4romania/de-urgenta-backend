@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
@@ -121,7 +122,7 @@ namespace DeUrgenta.User.Api.Controller
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetUserLocationTypesResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<BackpackInviteModel>> GetUserLocationTypesAsync()
+        public async Task<ActionResult<List<IndexedItemModel>>> GetUserLocationTypesAsync()
         {
             var query = new GetUserLocationTypes();
             var locationTypes = await _mediator.Send(query);
@@ -212,135 +213,7 @@ namespace DeUrgenta.User.Api.Controller
             return result.ToActionResult();
         }
 
-
-        /// <summary>
-        /// Gets group invites
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("group-invites")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Get group invites for current user", typeof(IImmutableList<GroupInviteModel>))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
-
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetGroupInvitesResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<GroupInviteModel>> GetGroupInvitesAsync()
-        {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var query = new GetGroupInvites(sub);
-            var result = await _mediator.Send(query);
-
-            return result.ToActionResult();
-        }
-
-        /// <summary>
-        /// Accept a group invite
-        /// </summary>
-        /// <returns></returns>
-        [HttpPut]
-        [Route("group-invite/{groupInviteId:guid}")]
-
-        [SwaggerResponse(StatusCodes.Status204NoContent, "Group invite accepted")]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
-
-        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<IActionResult> AcceptGroupInviteAsync([FromRoute] Guid groupInviteId)
-        {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new AcceptGroupInvite(sub, groupInviteId);
-            var result = await _mediator.Send(command);
-
-            return result.ToActionResult();
-        }
-
-        /// <summary>
-        /// Reject a group invite
-        /// </summary>
-        /// <returns></returns>
-        [HttpDelete]
-        [Route("group-invite/{groupInviteId:guid}")]
-
-        [SwaggerResponse(StatusCodes.Status204NoContent, "Group invite rejected")]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
-
-        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<IActionResult> RejectGroupInviteAsync([FromRoute] Guid groupInviteId)
-        {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new RejectGroupInvite(sub, groupInviteId);
-            var result = await _mediator.Send(command);
-
-            return result.ToActionResult();
-        }
-
-        /// <summary>
-        /// Gets backpack invites
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("backpack-invites")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Get backpack invites for current user", typeof(IImmutableList<BackpackInviteModel>))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
-
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetGroupInvitesResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<BackpackInviteModel>> GetBackpackInvitesAsync()
-        {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var query = new GetBackpackInvites(sub);
-            var result = await _mediator.Send(query);
-
-            return result.ToActionResult();
-        }
-
-        /// <summary>
-        /// Accept a backpack invite
-        /// </summary>
-        /// <returns></returns>
-        [HttpPut]
-        [Route("backpack-invite/{backpackInviteId:guid}")]
-
-        [SwaggerResponse(StatusCodes.Status204NoContent, "Group invite accepted")]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
-
-        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<IActionResult> AcceptBackpackInviteAsync([FromRoute] Guid backpackInviteId)
-        {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new AcceptBackpackInvite(sub, backpackInviteId);
-            var result = await _mediator.Send(command);
-
-            return result.ToActionResult();
-        }
-
-        /// <summary>
-        /// Reject a backpack invite
-        /// </summary>
-        /// <returns></returns>
-        [HttpDelete]
-        [Route("backpack-invite/{backpackInviteId:guid}")]
-
-        [SwaggerResponse(StatusCodes.Status204NoContent, "Group invite rejected")]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
-
-        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<IActionResult> RejectBackpackInviteAsync([FromRoute] Guid backpackInviteId)
-        {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new RejectBackpackInvite(sub, backpackInviteId);
-            var result = await _mediator.Send(command);
-
-            return result.ToActionResult();
+            return NoContent();
         }
     }
 }

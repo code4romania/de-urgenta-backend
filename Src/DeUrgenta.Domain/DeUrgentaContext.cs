@@ -21,8 +21,6 @@ namespace DeUrgenta.Domain
         public DbSet<UserToGroup> UsersToGroups { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<BlogPost> Blogs { get; set; }
-        public DbSet<GroupInvite> GroupInvites { get; set; }
-        public DbSet<BackpackInvite> BackpackInvites { get; set; }
         public DbSet<BackpackToUser> BackpacksToUsers { get; set; }
         public DbSet<Invite> Invites { get; set; }
 
@@ -47,9 +45,6 @@ namespace DeUrgenta.Domain
 
             modelBuilder.ApplyConfiguration(new BlogPostEntityConfiguration());
             modelBuilder.ApplyConfiguration(new EventEntityConfiguration());
-
-            modelBuilder.ApplyConfiguration(new GroupInviteEntityConfiguration());
-            modelBuilder.ApplyConfiguration(new BackpackInviteEntityConfiguration());
 
             modelBuilder.ApplyConfiguration(new EventTypeEntityConfiguration());
             modelBuilder.ApplyConfiguration(new InviteEntityConfiguration());

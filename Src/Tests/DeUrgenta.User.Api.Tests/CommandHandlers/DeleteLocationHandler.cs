@@ -26,15 +26,15 @@ namespace DeUrgenta.User.Api.Tests.CommandHandlers
         public async Task Return_failed_result_when_validation_fails()
         {
             // Arrange
-            var validator = Substitute.For<IValidateRequest<AcceptGroupInvite>>();
+            var validator = Substitute.For<IValidateRequest<DeleteLocation>>();
             validator
                 .IsValidAsync(Arg.Any<AcceptGroupInvite>())
                 .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
-            var sut = new AcceptGroupInviteHandler(validator, _dbContext);
+            var sut = new DeleteLocationHandler(validator, _dbContext);
 
             // Act
-            var result = await sut.Handle(new AcceptGroupInvite("a-sub", Guid.NewGuid()), CancellationToken.None);
+            var result = await sut.Handle(new DeleteLocation("a-sub", Guid.NewGuid()), CancellationToken.None);
 
             // Assert
             result.IsFailure.Should().BeTrue();

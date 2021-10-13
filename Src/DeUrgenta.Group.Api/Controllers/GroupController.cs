@@ -135,27 +135,6 @@ namespace DeUrgenta.Group.Api.Controllers
         }
 
         /// <summary>
-        /// Invites a user as member to a group
-        /// </summary>
-        [HttpPut]
-        [Route("{groupId:guid}/member/{userId:guid}/invite")]
-        [SwaggerResponse(StatusCodes.Status204NoContent, "Invitation sent")]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
-
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetGroupMembersResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<IActionResult> InviteUserToGroupAsync([FromRoute] Guid groupId, [FromRoute] Guid userId)
-        {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new InviteToGroup(sub, groupId, userId);
-            var result = await _mediator.Send(command);
-
-            return result.ToActionResult();
-        }
-
-        /// <summary>
         /// Removes a user from group members
         /// </summary>
         [HttpDelete]
