@@ -7,8 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DeUrgenta.Common.Extensions
 {
-
-    public static class ControllerExtensions
+    public static class ActionResultExtensions
     {
         public static ActionResult ToActionResult<T>(this Result<T, ValidationResult> result)
         {
