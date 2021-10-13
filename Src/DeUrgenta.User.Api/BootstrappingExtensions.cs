@@ -90,13 +90,11 @@ namespace DeUrgenta.User.Api
             services.AddTransient<IValidateRequest<GetUser>, GetUserValidator>();
             services.AddTransient<IValidateRequest<UpdateUser>, UpdateUserValidator>();
             services.AddTransient<IValidateRequest<GetBackpackInvites>, GetBackpackInvitesValidator>();
-            services.AddTransient<IValidateRequest<GetGroupInvites>, GetGroupInvitesValidator>();
             services.AddTransient<IValidateRequest<GetUserLocations>, GetUserLocationsValidator>();
 
             services.AddTransient<IValidateRequest<AcceptBackpackInvite>, AcceptBackpackInviteValidator>();
             services.AddTransient<IValidateRequest<AcceptGroupInvite>, AcceptGroupInviteValidator>();
             services.AddTransient<IValidateRequest<RejectBackpackInvite>, RejectBackpackInviteValidator>();
-            services.AddTransient<IValidateRequest<RejectGroupInvite>, RejectGroupInviteValidator>();
 
             services.AddTransient<IValidateRequest<AddLocation>, AddLocationValidator>();
             services.AddTransient<IValidateRequest<DeleteLocation>, DeleteLocationValidator>();
