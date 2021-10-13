@@ -164,36 +164,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
 
             return Ok(result.Value);
         }
-
-        /// <summary>
-        /// Invites a user to contribute to a backpack
-        /// </summary>
-        [HttpPut]
-        [Route("{backpackId:guid}/contributor/{userId:guid}/invite")]
-
-        [SwaggerResponse(StatusCodes.Status204NoContent, "Invitation sent")]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
-
-        [SwaggerRequestExample(typeof(BackpackModelRequest), typeof(AddOrUpdateBackpackRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetBackpackContributorsResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> InviteToBackpackContributorsAsync([FromRoute] Guid backpackId, [FromRoute] Guid userId)
-        {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-
-            var command = new InviteToBackpackContributors(sub, backpackId, userId);
-            var result = await _mediator.Send(command);
-
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
-        }
-
+        
         /// <summary>
         /// Removes a user from contributors of a backpack
         /// </summary>
