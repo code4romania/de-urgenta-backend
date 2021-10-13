@@ -23,7 +23,6 @@ namespace DeUrgenta.Group.Api
             services.AddTransient<IValidateRequest<GetGroupMembers>, GetGroupMembersValidator>();
             services.AddTransient<IValidateRequest<GetGroupSafeLocations>, GetGroupSafeLocationsValidator>();
             services.AddTransient<IValidateRequest<GetMyGroups>, GetMyGroupsValidator>();
-            services.AddTransient<IValidateRequest<InviteToGroup>, InviteToGroupValidator>();
             services.AddTransient<IValidateRequest<LeaveGroup>, LeaveGroupValidator>();
             services.AddTransient<IValidateRequest<RemoveFromGroup>, RemoveFromGroupValidator>();
             services.AddTransient<IValidateRequest<UpdateGroup>, UpdateGroupValidator>();

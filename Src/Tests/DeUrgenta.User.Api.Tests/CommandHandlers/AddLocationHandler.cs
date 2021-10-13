@@ -1,11 +1,11 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.User.Api.CommandHandlers;
 using DeUrgenta.User.Api.Commands;
+using DeUrgenta.User.Api.Models;
 using NSubstitute;
 using FluentAssertions;
 using Xunit;
@@ -26,15 +26,16 @@ namespace DeUrgenta.User.Api.Tests.CommandHandlers
         public async Task Return_failed_result_when_validation_fails()
         {
             // Arrange
-            var validator = Substitute.For<IValidateRequest<AcceptGroupInvite>>();
+            var validator = Substitute.For<IValidateRequest<AddLocation>>();
             validator
-                .IsValidAsync(Arg.Any<AcceptGroupInvite>())
+                .IsValidAsync(Arg.Any<AddLocation>())
                 .Returns(Task.FromResult(false));
+            UserLocationRequest userLocationRequest = new();
 
-            var sut = new AcceptGroupInviteHandler(validator, _dbContext);
+            var sut = new AddLocationHandler(validator, _dbContext);
 
             // Act
-            var result = await sut.Handle(new AcceptGroupInvite("a-sub", Guid.NewGuid()), CancellationToken.None);
+            var result = await sut.Handle(new AddLocation("a-sub", userLocationRequest), CancellationToken.None);
 
             // Assert
             result.IsFailure.Should().BeTrue();

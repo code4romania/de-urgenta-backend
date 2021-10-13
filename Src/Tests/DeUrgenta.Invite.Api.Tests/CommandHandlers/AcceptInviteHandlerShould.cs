@@ -21,7 +21,6 @@ namespace DeUrgenta.Invite.Api.Tests.CommandHandlers
         public AcceptInviteHandlerShould(DatabaseFixture fixture)
         {
             _context = fixture.Context;
-
         }
 
         [Fact]
