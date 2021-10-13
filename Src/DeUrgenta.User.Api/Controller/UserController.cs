@@ -212,8 +212,5 @@ namespace DeUrgenta.User.Api.Controller
 
             return result.ToActionResult();
         }
-
-            return NoContent();
-        }
     }
 }

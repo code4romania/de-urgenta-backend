@@ -142,11 +142,6 @@ namespace DeUrgenta.Backpack.Api.Controllers
         }
 
         /// <summary>
-
-            return NoContent();
-        }
-
-        /// <summary>
         /// Removes a user from contributors of a backpack
         /// </summary>
         [HttpDelete]

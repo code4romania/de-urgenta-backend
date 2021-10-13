@@ -10,8 +10,7 @@ namespace DeUrgenta.Common.Extensions
 
     public static class ControllerExtensions
     {
-
-        public static Microsoft.AspNetCore.Mvc.ActionResult ToActionResult<T>(this Result<T, ValidationResult> result)
+        public static ActionResult ToActionResult<T>(this Result<T, ValidationResult> result)
         {
             if (result.IsSuccess)
             {
