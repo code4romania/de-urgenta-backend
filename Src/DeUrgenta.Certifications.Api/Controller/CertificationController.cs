@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using DeUrgenta.Common.Swagger;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
+using DeUrgenta.Common.Extensions;
 
 namespace DeUrgenta.Certifications.Api.Controller
 {
@@ -46,12 +47,8 @@ namespace DeUrgenta.Certifications.Api.Controller
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var query = new GetCertifications(sub);
             var result = await _mediator.Send(query);
-            
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-            return Ok(result.Value);
+
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -75,12 +72,7 @@ namespace DeUrgenta.Certifications.Api.Controller
             var command = new CreateCertification(sub, certification);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -105,12 +97,7 @@ namespace DeUrgenta.Certifications.Api.Controller
             var command = new UpdateCertification(sub, certificationId, certification);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -132,12 +119,7 @@ namespace DeUrgenta.Certifications.Api.Controller
             var command = new DeleteCertification(sub, certificationId);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
+            return result.ToActionResult();
         }
     }
 }

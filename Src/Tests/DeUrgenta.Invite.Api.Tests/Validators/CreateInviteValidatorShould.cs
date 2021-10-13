@@ -194,7 +194,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            isValid.Should().BeOfType<ValidationPassedResult>();
         }
 
         [Fact]
@@ -292,7 +292,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            isValid.Should().BeOfType<ValidationPassedResult>();
         }
     }
 }

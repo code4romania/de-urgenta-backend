@@ -2,9 +2,9 @@
 
 namespace DeUrgenta.Common.Validation
 {
-    public record ValidationPassed : ValidationResult
+    public record ValidationPassedResult : ValidationResult
     {
-        public ValidationPassed() : base(true, ImmutableList.Create<string>())
+        public ValidationPassedResult() : base(true, ImmutableDictionary<string, string>.Empty)
         {
         }
     }

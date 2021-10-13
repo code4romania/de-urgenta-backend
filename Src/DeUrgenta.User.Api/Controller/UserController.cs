@@ -2,6 +2,7 @@ using System;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
+using DeUrgenta.Common.Extensions;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.Infra.Models;
 using DeUrgenta.User.Api.Commands;
@@ -50,12 +51,7 @@ namespace DeUrgenta.User.Api.Controller
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var result = await _mediator.Send(new GetUser(sub));
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -75,12 +71,7 @@ namespace DeUrgenta.User.Api.Controller
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var result = await _mediator.Send(new UpdateUser(sub, user));
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
+            return result.ToActionResult();
         }
 
 
@@ -153,12 +144,7 @@ namespace DeUrgenta.User.Api.Controller
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var result = await _mediator.Send(new GetUserLocations(sub));
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -180,12 +166,7 @@ namespace DeUrgenta.User.Api.Controller
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var result = await _mediator.Send(new AddLocation(sub, location));
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -207,12 +188,7 @@ namespace DeUrgenta.User.Api.Controller
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var result = await _mediator.Send(new UpdateLocation(sub, locationId, location));
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -233,12 +209,7 @@ namespace DeUrgenta.User.Api.Controller
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var result = await _mediator.Send(new DeleteLocation(sub, locationId));
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
+            return result.ToActionResult();
         }
 
 
@@ -260,12 +231,7 @@ namespace DeUrgenta.User.Api.Controller
             var query = new GetGroupInvites(sub);
             var result = await _mediator.Send(query);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -287,12 +253,7 @@ namespace DeUrgenta.User.Api.Controller
             var command = new AcceptGroupInvite(sub, groupInviteId);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -314,12 +275,7 @@ namespace DeUrgenta.User.Api.Controller
             var command = new RejectGroupInvite(sub, groupInviteId);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -340,12 +296,7 @@ namespace DeUrgenta.User.Api.Controller
             var query = new GetBackpackInvites(sub);
             var result = await _mediator.Send(query);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -367,12 +318,7 @@ namespace DeUrgenta.User.Api.Controller
             var command = new AcceptBackpackInvite(sub, backpackInviteId);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -394,12 +340,7 @@ namespace DeUrgenta.User.Api.Controller
             var command = new RejectBackpackInvite(sub, backpackInviteId);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
+            return result.ToActionResult();
         }
     }
 }

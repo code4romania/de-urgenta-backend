@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using DeUrgenta.Common.Extensions;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.Invite.Api.Commands;
 using DeUrgenta.Invite.Api.Models;
@@ -46,12 +47,7 @@ namespace DeUrgenta.Invite.Api.Controllers
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var result = await _mediator.Send(new CreateInvite(sub, request));
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -73,12 +69,7 @@ namespace DeUrgenta.Invite.Api.Controllers
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var result = await _mediator.Send(new AcceptInvite(sub, inviteId));
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
     }
 }

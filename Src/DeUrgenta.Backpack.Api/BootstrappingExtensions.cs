@@ -27,6 +27,7 @@ namespace DeUrgenta.Backpack.Api
             services.AddTransient<IValidateRequest<UpdateBackpackItem>, UpdateBackpackItemValidator>();
             services.AddTransient<IValidateRequest<GetBackpackCategoryItems>, GetBackpackCategoryItemsValidator>();
             services.AddTransient<IValidateRequest<GetBackpackItems>, GetBackpackItemsValidator>();
+
             services.AddTransient<IValidator<BackpackItemRequest>, BackpackItemRequestValidator>();
             services.AddTransient<IValidator<BackpackModelRequest>, BackpackModelRequestValidator>();
 

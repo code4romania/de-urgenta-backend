@@ -2,13 +2,13 @@
 
 namespace DeUrgenta.Common.Validation
 {
-    public abstract record ValidationResult(bool IsSuccess, ImmutableList<string> Messages)
+    public abstract record ValidationResult(bool IsSuccess, ImmutableDictionary<string, string> Messages)
     {
-        public static ValidationResult Ok { get; } = new ValidationPassed();
+        public static ValidationResult Ok { get; } = new ValidationPassedResult();
         public static ValidationResult GenericValidationError { get; } = new GenericValidationError();
 
         public bool IsFailure { get; } = !IsSuccess;
 
-        public ImmutableList<string> Messages { get; init; } = Messages ?? ImmutableList<string>.Empty;
+        public ImmutableDictionary<string, string> Messages { get; } = Messages ?? ImmutableDictionary<string, string>.Empty;
     }
 }

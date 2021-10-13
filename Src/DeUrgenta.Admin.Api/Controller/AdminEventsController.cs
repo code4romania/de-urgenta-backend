@@ -4,6 +4,7 @@ using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Admin.Api.Models;
 using DeUrgenta.Admin.Api.Queries;
 using DeUrgenta.Admin.Api.Swagger.Events;
+using DeUrgenta.Common.Extensions;
 using DeUrgenta.Common.Models.Events;
 using DeUrgenta.Common.Models.Pagination;
 using DeUrgenta.Common.Swagger;
@@ -45,12 +46,7 @@ namespace DeUrgenta.Admin.Api.Controller
             var query = new GetEvents(pagination);
             var result = await _mediator.Send(query);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -71,12 +67,7 @@ namespace DeUrgenta.Admin.Api.Controller
             var command = new CreateEvent(eventModel);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -98,12 +89,7 @@ namespace DeUrgenta.Admin.Api.Controller
             var command = new UpdateEvent(eventId, eventModel);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -123,12 +109,7 @@ namespace DeUrgenta.Admin.Api.Controller
             var command = new DeleteEvent(eventId);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
+            return result.ToActionResult();
         }
     }
 }

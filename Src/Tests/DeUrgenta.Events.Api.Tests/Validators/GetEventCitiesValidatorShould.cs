@@ -47,7 +47,7 @@ namespace DeUrgenta.Events.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new GetEventCities(eventTypeId));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            isValid.Should().BeOfType<ValidationPassedResult>();
         }
     }
 }

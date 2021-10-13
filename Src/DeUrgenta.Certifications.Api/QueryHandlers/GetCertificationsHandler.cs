@@ -13,7 +13,7 @@ using DeUrgenta.Certifications.Api.Storage;
 
 namespace DeUrgenta.Certifications.Api.QueryHandlers
 {
-    public class GetCertificationsHandler : IRequestHandler<GetCertifications, Result<IImmutableList<CertificationModel>>>
+    public class GetCertificationsHandler : IRequestHandler<GetCertifications, Result<IImmutableList<CertificationModel>, ValidationResult>>
     {
         private readonly IValidateRequest<GetCertifications> _validator;
         private readonly DeUrgentaContext _context;
@@ -26,13 +26,13 @@ namespace DeUrgenta.Certifications.Api.QueryHandlers
             _storage = storage;
         }
 
-        public async Task<Result<IImmutableList<CertificationModel>>> Handle(GetCertifications request,
+        public async Task<Result<IImmutableList<CertificationModel>, ValidationResult>> Handle(GetCertifications request,
             CancellationToken cancellationToken)
         {
             var validationResult = await _validator.IsValidAsync(request);
             if (validationResult.IsFailure)
             {
-                return Result.Failure<IImmutableList<CertificationModel>>("Validation failed");
+                return ValidationResult.GenericValidationError;
             }
 
             var certifications = await _context.Certifications

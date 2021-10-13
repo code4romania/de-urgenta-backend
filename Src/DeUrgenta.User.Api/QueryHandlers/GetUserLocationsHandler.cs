@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.User.Api.QueryHandlers
 {
-    public class GetUserLocationsHandler : IRequestHandler<GetUserLocations, Result<IImmutableList<UserLocationModel>>>
+    public class GetUserLocationsHandler : IRequestHandler<GetUserLocations, Result<IImmutableList<UserLocationModel>, ValidationResult>>
     {
         private readonly IValidateRequest<GetUserLocations> _validator;
         private readonly DeUrgentaContext _context;
@@ -23,12 +23,12 @@ namespace DeUrgenta.User.Api.QueryHandlers
             _context = context;
         }
 
-        public async Task<Result<IImmutableList<UserLocationModel>>> Handle(GetUserLocations request, CancellationToken cancellationToken)
+        public async Task<Result<IImmutableList<UserLocationModel>, ValidationResult>> Handle(GetUserLocations request, CancellationToken cancellationToken)
         {
             var validationResult = await _validator.IsValidAsync(request);
             if (validationResult.IsFailure)
             {
-                return Result.Failure<IImmutableList<UserLocationModel>>("Validation failed");
+                return ValidationResult.GenericValidationError;
             }
 
             var user = await _context.Users

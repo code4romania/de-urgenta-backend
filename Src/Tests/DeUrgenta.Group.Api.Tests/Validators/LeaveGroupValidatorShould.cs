@@ -130,7 +130,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new LeaveGroup(userSub, group.Id));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            isValid.Should().BeOfType<ValidationPassedResult>();
         }
     }
 }

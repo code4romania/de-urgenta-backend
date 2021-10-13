@@ -114,7 +114,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
                     new SafeLocationRequest()));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            isValid.Should().BeOfType<ValidationPassedResult>();
         }
     }
 }

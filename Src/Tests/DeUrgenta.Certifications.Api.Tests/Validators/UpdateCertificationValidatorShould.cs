@@ -117,7 +117,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new UpdateCertification(ownerSub, certificationId, new CertificationRequest()));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            isValid.Should().BeOfType<ValidationPassedResult>();
         }
 
     }

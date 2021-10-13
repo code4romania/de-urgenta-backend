@@ -176,7 +176,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new InviteToGroup(userSub, group.Id, nonGroupUser.Id));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            isValid.Should().BeOfType<ValidationPassedResult>();
         }
 
         [Fact]
@@ -205,7 +205,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new InviteToGroup(userSub, group.Id, nonGroupUser.Id));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            isValid.Should().BeOfType<ValidationPassedResult>();
         }
 
         [Fact]

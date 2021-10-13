@@ -112,7 +112,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new GetBackpackContributors(userSub, backpack.Id));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            isValid.Should().BeOfType<ValidationPassedResult>();
         }
 
         [Fact]
@@ -136,7 +136,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new GetBackpackContributors(userSub, backpack.Id));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            isValid.Should().BeOfType<ValidationPassedResult>();
         }
     }
 }

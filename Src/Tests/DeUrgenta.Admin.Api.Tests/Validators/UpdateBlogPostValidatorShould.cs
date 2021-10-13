@@ -68,7 +68,7 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
             }));
 
             // Assert
-            result.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassedResult>();
         }
 
     }

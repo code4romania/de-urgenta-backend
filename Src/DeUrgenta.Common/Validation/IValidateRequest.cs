@@ -5,7 +5,7 @@ namespace DeUrgenta.Common.Validation
 {
     public interface IValidateRequest<in T> where T : IBaseRequest
     {
-        public ValidationPassed ValidationPass()
+        public ValidationPassedResult ValidationPass()
         {
             return new();
         }

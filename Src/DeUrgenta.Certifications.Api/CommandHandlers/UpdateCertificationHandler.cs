@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Certifications.Api.CommandHandlers
 {
-    public class UpdateCertificationHandler : IRequestHandler<UpdateCertification, Result<CertificationModel>>
+    public class UpdateCertificationHandler : IRequestHandler<UpdateCertification, Result<CertificationModel, ValidationResult>>
     {
         private readonly IValidateRequest<UpdateCertification> _validator;
         private readonly DeUrgentaContext _context;
@@ -25,12 +25,12 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
             _validator = validator;
         }
 
-        public async Task<Result<CertificationModel>> Handle(UpdateCertification request, CancellationToken cancellationToken)
+        public async Task<Result<CertificationModel, ValidationResult>> Handle(UpdateCertification request, CancellationToken cancellationToken)
         {
             var validationResult = await _validator.IsValidAsync(request);
             if (validationResult.IsFailure)
             {
-                return Result.Failure<CertificationModel>("Validation failed");
+                return ValidationResult.GenericValidationError;
             }
 
             var certification = await _context.Certifications

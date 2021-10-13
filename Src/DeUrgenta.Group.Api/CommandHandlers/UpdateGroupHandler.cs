@@ -12,7 +12,7 @@ using Microsoft.Extensions.Options;
 
 namespace DeUrgenta.Group.Api.CommandHandlers
 {
-    public class UpdateGroupHandler : IRequestHandler<UpdateGroup, Result<GroupModel>>
+    public class UpdateGroupHandler : IRequestHandler<UpdateGroup, Result<GroupModel, ValidationResult>>
     {
         private readonly IValidateRequest<UpdateGroup> _validator;
         private readonly DeUrgentaContext _context;
@@ -26,12 +26,12 @@ namespace DeUrgenta.Group.Api.CommandHandlers
             _groupsConfig = groupsConfig.Value;
         }
 
-        public async Task<Result<GroupModel>> Handle(UpdateGroup request, CancellationToken cancellationToken)
+        public async Task<Result<GroupModel, ValidationResult>> Handle(UpdateGroup request, CancellationToken cancellationToken)
         {
             var validationResult = await _validator.IsValidAsync(request);
             if (validationResult.IsFailure)
             {
-                return Result.Failure<GroupModel>("Validation failed");
+                return ValidationResult.GenericValidationError;
             }
 
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);

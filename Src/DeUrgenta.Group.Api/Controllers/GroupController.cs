@@ -2,6 +2,7 @@
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
+using DeUrgenta.Common.Extensions;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Models;
@@ -47,12 +48,7 @@ namespace DeUrgenta.Group.Api.Controllers
             var query = new GetMyGroups(sub);
             var result = await _mediator.Send(query);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -70,12 +66,7 @@ namespace DeUrgenta.Group.Api.Controllers
             var query = new GetAdministeredGroups(sub);
             var result = await _mediator.Send(query);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -97,12 +88,7 @@ namespace DeUrgenta.Group.Api.Controllers
             var command = new AddGroup(sub, group);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -124,12 +110,7 @@ namespace DeUrgenta.Group.Api.Controllers
             var command = new UpdateGroup(sub, groupId, group);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -150,12 +131,7 @@ namespace DeUrgenta.Group.Api.Controllers
             var query = new GetGroupMembers(sub, groupId);
             var result = await _mediator.Send(query);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -176,12 +152,7 @@ namespace DeUrgenta.Group.Api.Controllers
             var command = new InviteToGroup(sub, groupId, userId);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -201,12 +172,7 @@ namespace DeUrgenta.Group.Api.Controllers
             var command = new RemoveFromGroup(sub, groupId, userId);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -226,12 +192,7 @@ namespace DeUrgenta.Group.Api.Controllers
             var command = new LeaveGroup(sub, groupId);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -252,12 +213,7 @@ namespace DeUrgenta.Group.Api.Controllers
             var command = new DeleteGroup(sub, groupId);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -276,12 +232,7 @@ namespace DeUrgenta.Group.Api.Controllers
             var query = new GetGroupSafeLocations(sub, groupId);
             var result = await _mediator.Send(query);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -304,12 +255,7 @@ namespace DeUrgenta.Group.Api.Controllers
             var query = new AddSafeLocation(sub, groupId, safeLocation);
             var result = await _mediator.Send(query);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -333,12 +279,7 @@ namespace DeUrgenta.Group.Api.Controllers
             var query = new UpdateSafeLocation(sub, locationId, safeLocation);
             var result = await _mediator.Send(query);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -360,12 +301,7 @@ namespace DeUrgenta.Group.Api.Controllers
             var command = new DeleteSafeLocation(sub, locationId);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
+            return result.ToActionResult();
         }
     }
 }

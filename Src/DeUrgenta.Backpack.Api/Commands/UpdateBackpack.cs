@@ -1,11 +1,12 @@
 ﻿using System;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Backpack.Api.Models;
+using DeUrgenta.Common.Validation;
 using MediatR;
 
 namespace DeUrgenta.Backpack.Api.Commands
 {
-    public class UpdateBackpack : IRequest<Result<BackpackModel>>
+    public class UpdateBackpack : IRequest<Result<BackpackModel, ValidationResult>>
     {
         public string UserSub { get; }
         public Guid BackpackId { get; }

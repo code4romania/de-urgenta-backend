@@ -1,11 +1,12 @@
 ﻿using System;
 using CSharpFunctionalExtensions;
+using DeUrgenta.Common.Validation;
 using DeUrgenta.Group.Api.Models;
 using MediatR;
 
 namespace DeUrgenta.Group.Api.Commands
 {
-    public class UpdateSafeLocation : IRequest<Result<SafeLocationResponseModel>>
+    public class UpdateSafeLocation : IRequest<Result<SafeLocationResponseModel, ValidationResult>>
     {
         public string UserSub { get; }
         public Guid SafeLocationId { get; }

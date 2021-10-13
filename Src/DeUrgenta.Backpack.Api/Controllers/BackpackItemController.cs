@@ -6,6 +6,7 @@ using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Backpack.Api.Models;
 using DeUrgenta.Backpack.Api.Queries;
 using DeUrgenta.Backpack.Api.Swagger.BackpackItem;
+using DeUrgenta.Common.Extensions;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.Domain.Entities;
 using MediatR;
@@ -47,10 +48,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var query = new GetBackpackItems(sub, backpackId);
             var result = await _mediator.Send(query);
 
-            if (result.IsFailure)
-                return BadRequest();
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -69,10 +67,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var query = new GetBackpackCategoryItems(sub, backpackId, categoryId);
             var result = await _mediator.Send(query);
 
-            if (result.IsFailure)
-                return BadRequest();
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -95,10 +90,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var command = new AddBackpackItem(sub, backpackId, backpackItem);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-                return BadRequest();
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -122,10 +114,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var command = new UpdateBackpackItem(sub, itemId, backpackItem);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-                return BadRequest();
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -147,10 +136,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var command = new DeleteBackpackItem(sub, itemId);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-                return BadRequest();
-
-            return NoContent();
+            return result.ToActionResult();
         }
     }
 }

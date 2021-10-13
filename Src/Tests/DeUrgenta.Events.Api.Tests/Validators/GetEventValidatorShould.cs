@@ -31,7 +31,7 @@ namespace DeUrgenta.Events.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new GetEvent(new Models.EventModelRequest { EventTypeId = eventTypeId }));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            isValid.Should().BeOfType<ValidationPassedResult>();
         }
 
         [Theory]
@@ -45,7 +45,7 @@ namespace DeUrgenta.Events.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new GetEvent(new Models.EventModelRequest { EventTypeId = eventTypeId }));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            isValid.Should().BeOfType<ValidationPassedResult>();
         }
     }
 }

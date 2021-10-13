@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.User.Api.QueryHandlers
 {
-    public class GetUserHandler : IRequestHandler<GetUser, Result<UserModel>>
+    public class GetUserHandler : IRequestHandler<GetUser, Result<UserModel, ValidationResult>>
     {
         private readonly IValidateRequest<GetUser> _validator;
         private readonly DeUrgentaContext _context;
@@ -22,12 +22,12 @@ namespace DeUrgenta.User.Api.QueryHandlers
             _context = context;
         }
 
-        public async Task<Result<UserModel>> Handle(GetUser request, CancellationToken cancellationToken)
+        public async Task<Result<UserModel, ValidationResult>> Handle(GetUser request, CancellationToken cancellationToken)
         {
             var validationResult = await _validator.IsValidAsync(request);
             if (validationResult.IsFailure)
             {
-                return Result.Failure<UserModel>("Validation failed");
+                return ValidationResult.GenericValidationError;
             }
 
             var user = await _context.Users.Where(x => x.Sub == request.UserSub).FirstAsync(cancellationToken);

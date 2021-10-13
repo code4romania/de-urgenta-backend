@@ -15,8 +15,7 @@ namespace DeUrgenta.Common.Swagger
                 Detail = "There was an unhandled exception in the backend",
                 Status = 500,
                 Type = "https://httpstatuses.com/500",
-                Title = "Internal Server Error",
-
+                Title = "Internal Server Error"
             };
         }
     }
