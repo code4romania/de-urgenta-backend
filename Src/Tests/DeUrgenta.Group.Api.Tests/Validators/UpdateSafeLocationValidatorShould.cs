@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
 using DeUrgenta.Group.Api.Commands;
@@ -36,7 +37,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
                 await sut.IsValidAsync(new UpdateSafeLocation(sub, Guid.NewGuid(), new SafeLocationRequest()));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -55,7 +56,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
                 await sut.IsValidAsync(new UpdateSafeLocation(userSub, Guid.NewGuid(), new SafeLocationRequest()));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -86,7 +87,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
                     new SafeLocationRequest()));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -113,7 +114,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
                     new SafeLocationRequest()));
 
             // Assert
-            isValid.Should().BeTrue();
+            isValid.Should().BeOfType<ValidationPassed>();
         }
     }
 }

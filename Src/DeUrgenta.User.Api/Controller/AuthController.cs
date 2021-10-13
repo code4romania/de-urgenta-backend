@@ -3,9 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using CSharpFunctionalExtensions;
 using DeUrgenta.Emailing.Service.Models;
-using DeUrgenta.User.Api.Models;
 using DeUrgenta.User.Api.Models.DTOs.Requests;
 using DeUrgenta.User.Api.Models.DTOs.Responses;
 using DeUrgenta.User.Api.Notifications;
@@ -181,7 +179,7 @@ namespace DeUrgenta.User.Api.Controller
             }
 
             var jwtToken = _jwtService.GenerateJwtToken(existingUser);
-            Result<UserModel> userDetails = await _mediator.Send(new GetUser(existingUser.Id));
+            var userDetails = await _mediator.Send(new GetUser(existingUser.Id));
 
             if (userDetails.IsFailure)
             {

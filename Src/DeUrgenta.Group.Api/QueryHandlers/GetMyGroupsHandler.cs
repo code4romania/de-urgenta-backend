@@ -14,7 +14,7 @@ using Microsoft.Extensions.Options;
 
 namespace DeUrgenta.Group.Api.QueryHandlers
 {
-    public class GetMyGroupsHandler : IRequestHandler<GetMyGroups, Result<IImmutableList<GroupModel>>>
+    public class GetMyGroupsHandler : IRequestHandler<GetMyGroups, Result<IImmutableList<GroupModel>, ValidationResult>>
     {
         private readonly IValidateRequest<GetMyGroups> _validator;
         private readonly DeUrgentaContext _context;
@@ -28,14 +28,14 @@ namespace DeUrgenta.Group.Api.QueryHandlers
             _groupsConfig = groupsConfig.Value;
         }
 
-        public async Task<Result<IImmutableList<GroupModel>>> Handle(GetMyGroups request,
+        public async Task<Result<IImmutableList<GroupModel>, ValidationResult>> Handle(GetMyGroups request,
             CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request);
 
-            if (!isValid)
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<IImmutableList<GroupModel>>("Validation failed");
+                return validationResult;
             }
 
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);

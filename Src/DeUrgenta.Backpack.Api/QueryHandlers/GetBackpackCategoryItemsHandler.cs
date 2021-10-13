@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Backpack.Api.QueryHandlers
 {
-    public class GetBackpackCategoryItemsHandler : IRequestHandler<GetBackpackCategoryItems, Result<IImmutableList<BackpackItemModel>>>
+    public class GetBackpackCategoryItemsHandler : IRequestHandler<GetBackpackCategoryItems, Result<IImmutableList<BackpackItemModel>, ValidationResult>>
     {
         private readonly IValidateRequest<GetBackpackCategoryItems> _validator;
         private readonly DeUrgentaContext _context;
@@ -22,12 +22,12 @@ namespace DeUrgenta.Backpack.Api.QueryHandlers
             _validator = validator;
             _context = context;
         }
-        public async Task<Result<IImmutableList<BackpackItemModel>>> Handle(GetBackpackCategoryItems request, CancellationToken cancellationToken)
+        public async Task<Result<IImmutableList<BackpackItemModel>, ValidationResult>> Handle(GetBackpackCategoryItems request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<IImmutableList<BackpackItemModel>>("Validation failed");
+                return validationResult;
             }
 
             var backpackItems = await _context.BackpackItems

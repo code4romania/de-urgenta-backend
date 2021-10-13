@@ -19,20 +19,20 @@ namespace DeUrgenta.Group.Api.Validators
             _groupsConfig = groupsConfig.Value;
         }
 
-        public async Task<bool> IsValidAsync(AddGroup request)
+        public async Task<ValidationResult> IsValidAsync(AddGroup request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
             if (user == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             if (user.GroupsAdministered.Count >= _groupsConfig.MaxCreatedGroupsPerUser)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
-            return true;
+            return ValidationResult.Ok;
         }
     }
 }

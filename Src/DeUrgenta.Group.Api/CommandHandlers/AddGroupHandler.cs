@@ -13,7 +13,7 @@ using Microsoft.Extensions.Options;
 
 namespace DeUrgenta.Group.Api.CommandHandlers
 {
-    public class AddGroupHandler : IRequestHandler<AddGroup, Result<GroupModel>>
+    public class AddGroupHandler : IRequestHandler<AddGroup, Result<GroupModel, ValidationResult>>
     {
         private readonly IValidateRequest<AddGroup> _validator;
         private readonly DeUrgentaContext _context;
@@ -27,12 +27,12 @@ namespace DeUrgenta.Group.Api.CommandHandlers
             _groupsConfig = groupsConfig.Value;
         }
 
-        public async Task<Result<GroupModel>> Handle(AddGroup request, CancellationToken cancellationToken)
+        public async Task<Result<GroupModel, ValidationResult>> Handle(AddGroup request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<GroupModel>("Validation failed");
+                return validationResult;
             }
 
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);

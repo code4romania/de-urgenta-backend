@@ -15,16 +15,16 @@ namespace DeUrgenta.Admin.Api.Validators
             _context = context;
         }
 
-        public async Task<bool> IsValidAsync(DeleteEvent request)
+        public async Task<ValidationResult> IsValidAsync(DeleteEvent request)
         {
             var @event = await _context.Events.FirstOrDefaultAsync(x => x.Id == request.EventId);
             
             if (@event == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
-            return true;
+            return ValidationResult.Ok;
         }
     }
 }

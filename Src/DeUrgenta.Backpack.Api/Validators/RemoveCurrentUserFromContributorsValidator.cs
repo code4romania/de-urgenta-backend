@@ -15,12 +15,12 @@ namespace DeUrgenta.Backpack.Api.Validators
             _context = context;
         }
 
-        public async Task<bool> IsValidAsync(RemoveCurrentUserFromContributors request)
+        public async Task<ValidationResult> IsValidAsync(RemoveCurrentUserFromContributors request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
             if (user == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             var isOwner = await _context
@@ -29,7 +29,7 @@ namespace DeUrgenta.Backpack.Api.Validators
 
             if (isOwner)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             var isPartOfGroup = await _context
@@ -38,10 +38,10 @@ namespace DeUrgenta.Backpack.Api.Validators
 
             if (!isPartOfGroup)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
-            return true;
+            return ValidationResult.Ok;
         }
     }
 }

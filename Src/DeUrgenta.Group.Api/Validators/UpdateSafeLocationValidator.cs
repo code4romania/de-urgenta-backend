@@ -15,12 +15,12 @@ namespace DeUrgenta.Group.Api.Validators
             _context = context;
         }
 
-        public async Task<bool> IsValidAsync(UpdateSafeLocation request)
+        public async Task<ValidationResult> IsValidAsync(UpdateSafeLocation request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
             if (user == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             var isGroupAdmin = await _context.GroupsSafeLocations
@@ -28,10 +28,10 @@ namespace DeUrgenta.Group.Api.Validators
 
             if (!isGroupAdmin)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
-            return true;
+            return ValidationResult.Ok;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Backpack.Api.Validators;
+using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
 using DeUrgenta.Tests.Helpers;
@@ -34,7 +35,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new RemoveContributor(sub, Guid.NewGuid(), Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
 
@@ -55,7 +56,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
 
             await _dbContext.Users.AddAsync(owner);
             await _dbContext.Backpacks.AddAsync(backpack);
-            await _dbContext.BackpacksToUsers.AddAsync(new BackpackToUser { Backpack = backpack, User = owner ,IsOwner = true});
+            await _dbContext.BackpacksToUsers.AddAsync(new BackpackToUser { Backpack = backpack, User = owner, IsOwner = true });
 
             await _dbContext.SaveChangesAsync();
 
@@ -63,7 +64,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new RemoveContributor(userSub, backpack.Id, owner.Id));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
 
         }
 
@@ -91,7 +92,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new RemoveContributor(userSub, backpack.Id, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -115,7 +116,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new RemoveContributor(userSub, Guid.NewGuid(), contributor.Id));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -149,7 +150,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new RemoveContributor(contributorSub, backpack.Id, owner.Id));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -181,7 +182,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new RemoveContributor(userSub, backpack.Id, backpackContributor.Id));
 
             // Assert
-            isValid.Should().BeTrue();
+            isValid.Should().BeOfType<ValidationPassed>();
         }
     }
 }

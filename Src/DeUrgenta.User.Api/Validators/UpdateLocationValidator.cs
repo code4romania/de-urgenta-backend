@@ -16,11 +16,11 @@ namespace DeUrgenta.User.Api.Validators
             _context = context;
         }
 
-        public async Task<bool> IsValidAsync(UpdateLocation request)
+        public async Task<ValidationResult> IsValidAsync(UpdateLocation request)
         {
             var locationExists = await _context.Users.AnyAsync(u => u.Sub == request.UserSub && u.Locations.Any(l => l.Id == request.LocationId));
 
-            return locationExists;
+            return locationExists ? ValidationResult.Ok : ValidationResult.GenericValidationError;
         }
     }
 }

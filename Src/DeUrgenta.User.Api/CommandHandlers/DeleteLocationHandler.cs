@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.User.Api.CommandHandlers
 {
-    public class DeleteLocationHandler : IRequestHandler<DeleteLocation, Result>
+    public class DeleteLocationHandler : IRequestHandler<DeleteLocation, Result<Unit, ValidationResult>>
     {
         private readonly IValidateRequest<DeleteLocation> _validator;
         private readonly DeUrgentaContext _context;
@@ -20,12 +20,12 @@ namespace DeUrgenta.User.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result> Handle(DeleteLocation request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, ValidationResult>> Handle(DeleteLocation request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure("Validation failed");
+                return validationResult;
             }
 
             var location = await _context.UserLocations.FirstAsync(l => request.LocationId == l.Id, cancellationToken);
@@ -33,7 +33,7 @@ namespace DeUrgenta.User.Api.CommandHandlers
             _context.UserLocations.Remove(location);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Result.Success();
+            return Unit.Value;
         }
     }
 }

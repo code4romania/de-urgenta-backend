@@ -11,7 +11,7 @@ using MediatR;
 
 namespace DeUrgenta.Admin.Api.CommandHandlers
 {
-    public class CreateBlogPostHandler : IRequestHandler<CreateBlogPost, Result<BlogPostModel>>
+    public class CreateBlogPostHandler : IRequestHandler<CreateBlogPost, Result<BlogPostModel, ValidationResult>>
     {
         private readonly IValidateRequest<CreateBlogPost> _validator;
         private readonly DeUrgentaContext _context;
@@ -21,12 +21,12 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
             _validator = validator;
             _context = context;
         }
-        public async Task<Result<BlogPostModel>> Handle(CreateBlogPost request, CancellationToken cancellationToken)
+        public async Task<Result<BlogPostModel, ValidationResult>> Handle(CreateBlogPost request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<BlogPostModel>("Validation failed");
+                return validationResult;
             }
 
             var blogPost = new BlogPost()
@@ -40,14 +40,14 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
             await _context.AddAsync(blogPost, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(new BlogPostModel
+            return new BlogPostModel
             {
                 Id = blogPost.Id,
                 Author = blogPost.Author,
                 Title = blogPost.Title,
                 ContentBody = blogPost.ContentBody,
                 PublishedOn = blogPost.PublishedOn
-            });
+            };
         }
     }
 }

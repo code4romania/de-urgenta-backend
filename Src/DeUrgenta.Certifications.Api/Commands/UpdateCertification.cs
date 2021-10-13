@@ -1,11 +1,12 @@
 ﻿using System;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Certifications.Api.Models;
+using DeUrgenta.Common.Validation;
 using MediatR;
 
 namespace DeUrgenta.Certifications.Api.Commands
 {
-    public class UpdateCertification : IRequest<Result<CertificationModel>>
+    public class UpdateCertification : IRequest<Result<CertificationModel, ValidationResult>>
     {
         public string UserSub { get; }
         public Guid CertificationId { get; }

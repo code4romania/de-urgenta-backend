@@ -3,23 +3,22 @@
 	<PropertyGroup>
 		<TargetFramework>net5.0</TargetFramework>
 	</PropertyGroup>
+
 	<PropertyGroup>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);1591</NoWarn>
 	</PropertyGroup>
-	
+
 	<ItemGroup>
 		<PackageReference Include="CSharpFunctionalExtensions" Version="2.15.1" />
+		<PackageReference Include="FluentValidation" Version="10.3.0" />
+		<PackageReference Include="MediatR" Version="9.0.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="6.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\DeUrgenta.Common\DeUrgenta.Common.csproj" />
 		<ProjectReference Include="..\DeUrgenta.Domain\DeUrgenta.Domain.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Reference Include="Microsoft.AspNetCore.Mvc.Core">
-			<HintPath>C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\5.0.9\Microsoft.AspNetCore.Mvc.Core.dll</HintPath>
-		</Reference>
 	</ItemGroup>
 
 </Project>

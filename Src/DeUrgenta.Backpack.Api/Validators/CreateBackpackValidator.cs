@@ -15,15 +15,15 @@ namespace DeUrgenta.Backpack.Api.Validators
             _context = context;
         }
 
-        public async Task<bool> IsValidAsync(CreateBackpack request)
+        public async Task<ValidationResult> IsValidAsync(CreateBackpack request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
             if (user == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
-            return true;
+            return ValidationResult.Ok;
         }
     }
 }

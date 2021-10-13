@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Models;
@@ -23,7 +24,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         {
             _dbContext = fixture.Context;
             var options = new GroupsConfig {MaxCreatedGroupsPerUser = 5};
-            _groupsConfig = Microsoft.Extensions.Options.Options.Create<GroupsConfig>(options);
+            _groupsConfig = Microsoft.Extensions.Options.Options.Create(options);
         }
 
         [Theory]
@@ -39,7 +40,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new AddGroup(sub, new GroupRequest()));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -58,7 +59,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new AddGroup(userSub, new GroupRequest()));
 
             // Assert
-            isValid.Should().BeTrue();
+            isValid.Should().BeOfType<ValidationPassed>();
         }
 
         [Fact]
@@ -84,7 +85,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var result = await sut.IsValidAsync(new AddGroup(user.Sub, new GroupRequest {Name = "TestGroup"}));
 
             // Assert
-            result.Should().BeFalse();
+            result.Should().BeOfType<GenericValidationError>();
         }
     }
 }

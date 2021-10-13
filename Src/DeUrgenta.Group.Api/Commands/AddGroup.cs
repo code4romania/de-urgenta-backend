@@ -1,10 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
+using DeUrgenta.Common.Validation;
 using DeUrgenta.Group.Api.Models;
 using MediatR;
 
 namespace DeUrgenta.Group.Api.Commands
 {
-    public class AddGroup : IRequest<Result<GroupModel>>
+    public class AddGroup : IRequest<Result<GroupModel, ValidationResult>>
     {
         public string UserSub { get; }
         public GroupRequest Group { get; }

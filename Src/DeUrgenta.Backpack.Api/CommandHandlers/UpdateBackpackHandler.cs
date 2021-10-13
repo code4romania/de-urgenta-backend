@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Backpack.Api.CommandHandlers
 {
-    public class UpdateBackpackHandler : IRequestHandler<UpdateBackpack, Result<BackpackModel>>
+    public class UpdateBackpackHandler : IRequestHandler<UpdateBackpack, Result<BackpackModel, ValidationResult>>
     {
         private readonly IValidateRequest<UpdateBackpack> _validator;
         private readonly DeUrgentaContext _context;
@@ -21,12 +21,12 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result<BackpackModel>> Handle(UpdateBackpack request, CancellationToken cancellationToken)
+        public async Task<Result<BackpackModel, ValidationResult>> Handle(UpdateBackpack request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<BackpackModel>("Validation failed");
+                return validationResult;
             }
             var backpack = await _context.Backpacks.FirstAsync(b => b.Id == request.BackpackId, cancellationToken);
             backpack.Name = request.Backpack.Name;

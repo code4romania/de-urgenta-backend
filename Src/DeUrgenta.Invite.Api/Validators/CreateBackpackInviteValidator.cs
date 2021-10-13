@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Invite.Api.Commands;
 using Microsoft.EntityFrameworkCore;
@@ -14,23 +15,24 @@ namespace DeUrgenta.Invite.Api.Validators
             _context = context;
         }
 
-        public async Task<bool> ValidateAsync(CreateInvite request)
+        public async Task<ValidationResult> ValidateAsync(CreateInvite request)
         {
             var backpack = await _context.Backpacks.FirstOrDefaultAsync(b => b.Id == request.DestinationId);
             if (backpack == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             var userHasAccessToBackpack = await _context.BackpacksToUsers
                 .AnyAsync(u => u.UserId == request.UserId
                                     && u.BackpackId == request.DestinationId);
+
             if (!userHasAccessToBackpack)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
-            return true;
+            return ValidationResult.Ok;
         }
     }
 }

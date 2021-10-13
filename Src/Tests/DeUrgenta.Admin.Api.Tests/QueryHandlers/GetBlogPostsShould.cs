@@ -29,7 +29,7 @@ namespace DeUrgenta.Admin.Api.Tests.QueryHandlers
             var validator = Substitute.For<IValidateRequest<GetBlogPosts>>();
             validator
                 .IsValidAsync(Arg.Any<GetBlogPosts>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new GetBlogPostsHandler(validator, _dbContext);
 

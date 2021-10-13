@@ -28,7 +28,7 @@ namespace DeUrgenta.Events.Api.Tests.QueryHandlers
             var validator = Substitute.For<IValidateRequest<GetEventTypes>>();
             validator
                 .IsValidAsync(Arg.Any<GetEventTypes>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new GetEventTypesHandler(validator, _dbContext);
 

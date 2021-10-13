@@ -17,12 +17,12 @@ namespace DeUrgenta.Invite.Api.Validators
             _validatorFactory = validatorFactory;
         }
 
-        public async Task<bool> IsValidAsync(CreateInvite request)
+        public async Task<ValidationResult> IsValidAsync(CreateInvite request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
             if (user == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             request.UserId = user.Id;

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Group.Api.QueryHandlers
 {
-    public class GetGroupMembersHandler : IRequestHandler<GetGroupMembers, Result<IImmutableList<GroupMemberModel>>>
+    public class GetGroupMembersHandler : IRequestHandler<GetGroupMembers, Result<IImmutableList<GroupMemberModel>, ValidationResult>>
     {
         private readonly IValidateRequest<GetGroupMembers> _validator;
         private readonly DeUrgentaContext _context;
@@ -23,12 +23,12 @@ namespace DeUrgenta.Group.Api.QueryHandlers
             _context = context;
         }
 
-        public async Task<Result<IImmutableList<GroupMemberModel>>> Handle(GetGroupMembers request, CancellationToken cancellationToken)
+        public async Task<Result<IImmutableList<GroupMemberModel>, ValidationResult>> Handle(GetGroupMembers request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<IImmutableList<GroupMemberModel>>("Validation failed");
+                return validationResult;
             }
 
             var groupMembers = await _context

@@ -29,7 +29,7 @@ namespace DeUrgenta.Group.Api.Tests.CommandsHandlers
             var validator = Substitute.For<IValidateRequest<RemoveFromGroup>>();
             validator
                 .IsValidAsync(Arg.Any<RemoveFromGroup>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new RemoveFromGroupHandler(validator, _dbContext);
 

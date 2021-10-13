@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
 using DeUrgenta.Group.Api.Queries;
@@ -34,7 +35,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new GetGroupSafeLocations(sub, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -53,7 +54,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new GetGroupSafeLocations(userSub, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -82,7 +83,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new GetGroupSafeLocations(userSub, group.Id));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -108,7 +109,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new GetGroupSafeLocations(userSub, group.Id));
 
             // Assert
-            isValid.Should().BeTrue();
+            isValid.Should().BeOfType<ValidationPassed>();
         }
 
         [Fact]
@@ -139,7 +140,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new GetGroupSafeLocations(userSub, group.Id));
 
             // Assert
-            isValid.Should().BeTrue();
+            isValid.Should().BeOfType<ValidationPassed>();
         }
     }
 }

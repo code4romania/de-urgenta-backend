@@ -29,7 +29,7 @@ namespace DeUrgenta.Group.Api.Tests.CommandsHandlers
             var validator = Substitute.For<IValidateRequest<DeleteSafeLocation>>();
             validator
                 .IsValidAsync(Arg.Any<DeleteSafeLocation>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new DeleteSafeLocationHandler(validator, _dbContext);
 

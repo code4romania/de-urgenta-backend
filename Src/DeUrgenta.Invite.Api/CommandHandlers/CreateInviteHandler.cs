@@ -12,7 +12,7 @@ using InviteType = DeUrgenta.Invite.Api.Models.InviteType;
 
 namespace DeUrgenta.Invite.Api.CommandHandlers
 {
-    public class CreateInviteHandler : IRequestHandler<CreateInvite, Result<InviteModel>>
+    public class CreateInviteHandler : IRequestHandler<CreateInvite, Result<InviteModel, ValidationResult>>
     {
         private readonly IValidateRequest<CreateInvite> _validator;
         private readonly DeUrgentaContext _context;
@@ -23,12 +23,12 @@ namespace DeUrgenta.Invite.Api.CommandHandlers
             _validator = validator;
         }
 
-        public async Task<Result<InviteModel>> Handle(CreateInvite request, CancellationToken cancellationToken)
+        public async Task<Result<InviteModel, ValidationResult>> Handle(CreateInvite request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<InviteModel>("Validation failed");
+                return validationResult;
             }
 
             var invite = new Domain.Entities.Invite

@@ -4,6 +4,7 @@ using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Admin.Api.Models;
 using DeUrgenta.Admin.Api.Queries;
 using DeUrgenta.Admin.Api.Swagger.Blog;
+using DeUrgenta.Common.Extensions;
 using DeUrgenta.Common.Models.Pagination;
 using DeUrgenta.Common.Swagger;
 using MediatR;
@@ -43,12 +44,8 @@ namespace DeUrgenta.Admin.Api.Controller
         {
             var query = new GetBlogPosts(pagination);
             var result = await _mediator.Send(query);
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -68,12 +65,7 @@ namespace DeUrgenta.Admin.Api.Controller
             var command = new CreateBlogPost(blogPost);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -94,12 +86,7 @@ namespace DeUrgenta.Admin.Api.Controller
             var command = new UpdateBlogPost(blogPostId, blogPost);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -112,17 +99,12 @@ namespace DeUrgenta.Admin.Api.Controller
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> DeleteBlogPostAsync([FromRoute] Guid blogPostId)
+        public async Task<IActionResult> DeleteBlogPostAsync([FromRoute] Guid blogPostId)
         {
             var command = new DeleteBlogPost(blogPostId);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
+            return result.ToActionResult();
         }
     }
 }

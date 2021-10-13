@@ -8,6 +8,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
+using DeUrgenta.Common.Extensions;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.Common.Models.Events;
 using DeUrgenta.Common.Models.Pagination;
@@ -43,12 +44,8 @@ namespace DeUrgenta.Events.Api.Controller
         {
             var query = new GetEventTypes();
             var result = await _mediator.Send(query);
-            
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-            return Ok(result.Value);
+
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -68,11 +65,7 @@ namespace DeUrgenta.Events.Api.Controller
             var query = new GetEventCities(eventTypeId);
             var result = await _mediator.Send(query);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -92,12 +85,7 @@ namespace DeUrgenta.Events.Api.Controller
             var command = new GetEvent(filter);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
     }
 }

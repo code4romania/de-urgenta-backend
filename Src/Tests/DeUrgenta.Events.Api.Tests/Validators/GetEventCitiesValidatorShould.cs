@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Events.Api.Queries;
 using DeUrgenta.Events.Api.Validators;
@@ -27,10 +28,10 @@ namespace DeUrgenta.Events.Api.Tests.Validators
             var sut = new GetEventCitiesValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetEventCities(eventTypeId));
+            var isValid = await sut.IsValidAsync(new GetEventCities(eventTypeId));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Theory]
@@ -43,10 +44,10 @@ namespace DeUrgenta.Events.Api.Tests.Validators
             var sut = new GetEventCitiesValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetEventCities(eventTypeId));
+            var isValid = await sut.IsValidAsync(new GetEventCities(eventTypeId));
 
             // Assert
-            isValid.Should().BeTrue();
+            isValid.Should().BeOfType<ValidationPassed>();
         }
     }
 }

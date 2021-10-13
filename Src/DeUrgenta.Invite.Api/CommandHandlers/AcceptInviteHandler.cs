@@ -11,7 +11,7 @@ using InviteType = DeUrgenta.Domain.Entities.InviteType;
 
 namespace DeUrgenta.Invite.Api.CommandHandlers
 {
-    public class AcceptInviteHandler : IRequestHandler<AcceptInvite, Result<AcceptInviteModel>>
+    public class AcceptInviteHandler : IRequestHandler<AcceptInvite, Result<AcceptInviteModel, ValidationResult>>
     {
         private readonly IValidateRequest<AcceptInvite> _validator;
         private readonly DeUrgentaContext _context;
@@ -24,12 +24,12 @@ namespace DeUrgenta.Invite.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result<AcceptInviteModel>> Handle(AcceptInvite request, CancellationToken cancellationToken)
+        public async Task<Result<AcceptInviteModel, ValidationResult>> Handle(AcceptInvite request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<AcceptInviteModel>("Validation failed");
+                return validationResult;
             }
 
             var invite = await _context.Invites.FirstAsync(i => i.Id == request.InviteId, cancellationToken);

@@ -14,12 +14,12 @@ namespace DeUrgenta.Admin.Api.Validators
         {
             _context = context;
         }
-        
-        public async Task<bool> IsValidAsync(UpdateBlogPost request)
+
+        public async Task<ValidationResult> IsValidAsync(UpdateBlogPost request)
         {
             var blogPostExists = await _context.Blogs.AnyAsync(x => x.Id == request.BlogPostId);
-            
-            return blogPostExists;
+
+            return blogPostExists ? ValidationResult.Ok : ValidationResult.GenericValidationError;
         }
     }
 }

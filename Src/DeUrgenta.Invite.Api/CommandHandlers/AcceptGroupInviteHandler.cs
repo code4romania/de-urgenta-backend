@@ -12,7 +12,7 @@ using InviteType = DeUrgenta.Invite.Api.Models.InviteType;
 
 namespace DeUrgenta.Invite.Api.CommandHandlers
 {
-    public class AcceptGroupInviteHandler : IRequestHandler<AcceptGroupInvite, Result<AcceptInviteModel>>
+    public class AcceptGroupInviteHandler : IRequestHandler<AcceptGroupInvite, Result<AcceptInviteModel, ValidationResult>>
     {
         private readonly DeUrgentaContext _context;
         private readonly IValidateRequest<AcceptGroupInvite> _validator;
@@ -23,12 +23,12 @@ namespace DeUrgenta.Invite.Api.CommandHandlers
             _validator = validator;
         }
 
-        public async Task<Result<AcceptInviteModel>> Handle(AcceptGroupInvite request, CancellationToken cancellationToken)
+        public async Task<Result<AcceptInviteModel, ValidationResult>> Handle(AcceptGroupInvite request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<AcceptInviteModel>("Validation failed");
+                return validationResult;
             }
             
             var group = await _context.Groups.FirstAsync(g => g.Id == request.GroupId, cancellationToken);

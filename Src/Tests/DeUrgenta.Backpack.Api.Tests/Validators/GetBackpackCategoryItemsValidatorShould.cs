@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Queries;
 using DeUrgenta.Backpack.Api.Validators;
+using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain;
 using DeUrgenta.Domain.Entities;
 using DeUrgenta.Tests.Helpers;
@@ -34,7 +35,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new GetBackpackCategoryItems(sub, Guid.NewGuid(), BackpackCategoryType.WaterAndFood));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -66,7 +67,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new GetBackpackCategoryItems(nonContributor.Sub, backpackId, BackpackCategoryType.FirstAid));
 
             // Assert
-            isValid.Should().BeFalse();
+            isValid.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -95,7 +96,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new GetBackpackCategoryItems(contributorSub, backpackId, BackpackCategoryType.WaterAndFood));
 
             // Assert
-            isValid.Should().BeTrue();
+            isValid.Should().BeOfType<ValidationPassed>();
         }
         
     }

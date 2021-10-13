@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
+using DeUrgenta.Common.Extensions;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.Infra.Models;
 using DeUrgenta.User.Api.Commands;
@@ -51,12 +52,7 @@ namespace DeUrgenta.User.Api.Controller
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var result = await _mediator.Send(new GetUser(sub));
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -76,12 +72,7 @@ namespace DeUrgenta.User.Api.Controller
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var result = await _mediator.Send(new UpdateUser(sub, user));
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
+            return result.ToActionResult();
         }
 
 
@@ -154,12 +145,7 @@ namespace DeUrgenta.User.Api.Controller
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var result = await _mediator.Send(new GetUserLocations(sub));
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -181,12 +167,7 @@ namespace DeUrgenta.User.Api.Controller
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var result = await _mediator.Send(new AddLocation(sub, location));
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -208,12 +189,7 @@ namespace DeUrgenta.User.Api.Controller
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var result = await _mediator.Send(new UpdateLocation(sub, locationId, location));
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
+            return result.ToActionResult();
         }
 
         /// <summary>
@@ -229,17 +205,12 @@ namespace DeUrgenta.User.Api.Controller
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> DeleteLocationAsync([FromRoute] Guid locationId)
+        public async Task<IActionResult> DeleteLocationAsync([FromRoute] Guid locationId)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var result = await _mediator.Send(new DeleteLocation(sub, locationId));
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
+            return result.ToActionResult();
         }
     }
 }

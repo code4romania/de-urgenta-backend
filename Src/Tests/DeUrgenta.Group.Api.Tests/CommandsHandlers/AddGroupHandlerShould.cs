@@ -26,7 +26,7 @@ namespace DeUrgenta.Group.Api.Tests.CommandsHandlers
         {
             _dbContext = fixture.Context;
             var options = new GroupsConfig {UsersLimit = 35};
-            _groupsConfig = Microsoft.Extensions.Options.Options.Create<GroupsConfig>(options);
+            _groupsConfig = Microsoft.Extensions.Options.Options.Create(options);
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace DeUrgenta.Group.Api.Tests.CommandsHandlers
             var validator = Substitute.For<IValidateRequest<AddGroup>>();
             validator
                 .IsValidAsync(Arg.Any<AddGroup>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new AddGroupHandler(validator, _dbContext, _groupsConfig);
 
@@ -54,7 +54,7 @@ namespace DeUrgenta.Group.Api.Tests.CommandsHandlers
             var validator = Substitute.For<IValidateRequest<AddGroup>>();
             validator
                 .IsValidAsync(Arg.Any<AddGroup>())
-                .Returns(Task.FromResult(true));
+                .Returns(Task.FromResult(ValidationResult.Ok));
 
             var userId = Guid.NewGuid();
             var userSub = TestDataProviders.RandomString();
