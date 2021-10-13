@@ -1,5 +1,6 @@
 ﻿using DeUrgenta.RecurringJobs.Jobs;
 using DeUrgenta.RecurringJobs.Jobs.Config;
+using DeUrgenta.RecurringJobs.Jobs.Interfaces;
 using DeUrgenta.RecurringJobs.Services;
 using DeUrgenta.RecurringJobs.Services.NotificationSenders;
 using Hangfire;
