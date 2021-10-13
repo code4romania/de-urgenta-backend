@@ -55,7 +55,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new CreateBackpack(userSub, new BackpackModelRequest()));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassedResult>();
+            isValid.Should().BeOfType<ValidationPassed>();
         }
     }
 }

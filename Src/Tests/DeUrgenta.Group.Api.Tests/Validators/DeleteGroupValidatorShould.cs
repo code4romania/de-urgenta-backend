@@ -99,7 +99,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new DeleteGroup(userSub, group.Id));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassedResult>();
+            isValid.Should().BeOfType<ValidationPassed>();
         }
     }
 }

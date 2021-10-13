@@ -54,7 +54,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new AddLocation(userSub, new UserLocationRequest()));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassedResult>();
+            isValid.Should().BeOfType<ValidationPassed>();
         }
     }
 }

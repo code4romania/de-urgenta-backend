@@ -147,7 +147,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new AcceptBackpackInvite(userSub, backpackInvite.Id));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassedResult>();
+            isValid.Should().BeOfType<ValidationPassed>();
         }
     }
 }

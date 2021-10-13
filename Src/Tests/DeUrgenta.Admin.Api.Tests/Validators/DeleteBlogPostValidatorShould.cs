@@ -57,7 +57,7 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
             var result = await sut.IsValidAsync(new DeleteBlogPost(blogPost.Id));
 
             // Assert
-            result.Should().BeOfType<ValidationPassedResult>();
+            result.Should().BeOfType<ValidationPassed>();
         }
 
     }

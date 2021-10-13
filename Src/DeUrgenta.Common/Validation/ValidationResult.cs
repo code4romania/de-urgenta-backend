@@ -4,7 +4,7 @@ namespace DeUrgenta.Common.Validation
 {
     public abstract record ValidationResult(bool IsSuccess, ImmutableDictionary<string, string> Messages)
     {
-        public static ValidationResult Ok { get; } = new ValidationPassedResult();
+        public static ValidationResult Ok { get; } = new ValidationPassed();
         public static ValidationResult GenericValidationError { get; } = new GenericValidationError();
 
         public bool IsFailure { get; } = !IsSuccess;

@@ -21,7 +21,7 @@ namespace DeUrgenta.Events.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new GetEventTypes());
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassedResult>();
+            isValid.Should().BeOfType<ValidationPassed>();
         }
     }
 }
