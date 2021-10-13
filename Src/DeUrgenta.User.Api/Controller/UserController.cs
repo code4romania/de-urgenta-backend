@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
@@ -130,7 +131,7 @@ namespace DeUrgenta.User.Api.Controller
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetUserLocationTypesResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<BackpackInviteModel>> GetUserLocationTypesAsync()
+        public async Task<ActionResult<List<IndexedItemModel>>> GetUserLocationTypesAsync()
         {
             var query = new GetUserLocationTypes();
             var locationTypes = await _mediator.Send(query);
@@ -239,31 +240,6 @@ namespace DeUrgenta.User.Api.Controller
             }
 
             return NoContent();
-        }
-
-        /// <summary>
-        /// Gets backpack invites
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("backpack-invites")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Get backpack invites for current user", typeof(IImmutableList<BackpackInviteModel>))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
-
-        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<BackpackInviteModel>> GetBackpackInvitesAsync()
-        {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var query = new GetBackpackInvites(sub);
-            var result = await _mediator.Send(query);
-
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
         }
 
         /// <summary>
