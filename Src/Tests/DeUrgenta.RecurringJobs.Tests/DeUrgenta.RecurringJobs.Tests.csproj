@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\DeUrgenta.Domain.RecurringJobs\DeUrgenta.Domain.RecurringJobs.csproj" />
     <ProjectReference Include="..\..\DeUrgenta.RecurringJobs\DeUrgenta.RecurringJobs.csproj" />
     <ProjectReference Include="..\DeUrgenta.Tests.Helpers\DeUrgenta.Tests.Helpers.csproj" />
   </ItemGroup>

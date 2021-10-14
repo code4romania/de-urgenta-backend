@@ -1,7 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using DeUrgenta.Events.Api.Queries;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Immutable;
@@ -10,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System;
 using DeUrgenta.Common.Models.Events;
+using DeUrgenta.Domain.Api;
 
 namespace DeUrgenta.Events.Api.QueryHandlers
 {

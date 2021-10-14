@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using DeUrgenta.RecurringJobs.Domain;
-using DeUrgenta.RecurringJobs.Domain.Entities;
 using DeUrgenta.RecurringJobs.Services;
 using Microsoft.EntityFrameworkCore;
+using DeUrgenta.Domain.RecurringJobs;
+using DeUrgenta.Domain.RecurringJobs.Entities;
 
 namespace DeUrgenta.RecurringJobs.Jobs
 {

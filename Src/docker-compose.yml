@@ -9,12 +9,23 @@
         POSTGRES_USER: ${POSTGRES_USER}
         POSTGRES_DB: ${POSTGRES_DB}
       ports:
-        - 5432:5432
-
+        - 5432:5432        
+      depends_on: 
+        - "migrations"
+        
+    migrations:
+      build: 
+        context: .
+        dockerfile: DeUrgenta.Domains.Migrator.Dockerfile
+      environment:
+        ConnectionStrings__DbConnectionString: ${DB_CONNECTION_STRING}
+        ConnectionStrings__IdentityDbConnectionString: ${DB_CONNECTION_STRING}
+        ConnectionStrings__JobsConnectionString: ${DB_CONNECTION_STRING}
     api:
       container_name: deurgenta_api
       depends_on:
         - "postgres"
+        - "migrations"
       build:
         context: .
         dockerfile: Dockerfile
@@ -28,20 +39,21 @@
         - 5040:80
       restart: unless-stopped
 
-    recurring-jobs:
-      container_name: deurgenta_recurring_jobs
-      depends_on:
-        - "postgres"
-      build:
-        context: .
-        dockerfile: DeUrgenta.RecurringJobs.Dockerfile
-      environment:
-        ASPNETCORE_URLS: ${ASPNETCORE_URLS}
-        ConnectionStrings__DbConnectionString: ${DB_CONNECTION_STRING}
-        ConnectionStrings__JobsConnectionString: ${DB_CONNECTION_STRING}
-        Hangfire__Dashboard__Username: ${HANGFIRE_USERNAME}
-        Hangfire__Dashboard__Password: ${HANGFIRE_PASSWORD}
-        HealthChecksUI__HealthChecks__0__Uri: ${HEALTHCHECKSUI__HEALTHCHECKS__0__URI}
-      ports:
-        - 5041:80
-      restart: unless-stopped
+    #recurring-jobs:
+    #  container_name: deurgenta_recurring_jobs
+    #  depends_on:
+    #    - "postgres"
+    #    - "migrations"
+    #  build:
+    #    context: .
+    #    dockerfile: DeUrgenta.RecurringJobs.Dockerfile
+    #  environment:
+    #    ASPNETCORE_URLS: ${ASPNETCORE_URLS}
+    #    ConnectionStrings__DbConnectionString: ${DB_CONNECTION_STRING}
+    #    ConnectionStrings__JobsConnectionString: ${DB_CONNECTION_STRING}
+    #    Hangfire__Dashboard__Username: ${HANGFIRE_USERNAME}
+    #    Hangfire__Dashboard__Password: ${HANGFIRE_PASSWORD}
+    #    HealthChecksUI__HealthChecks__0__Uri: ${HEALTHCHECKSUI__HEALTHCHECKS__0__URI}
+    #  ports:
+    #    - 5041:80
+    #  restart: unless-stopped

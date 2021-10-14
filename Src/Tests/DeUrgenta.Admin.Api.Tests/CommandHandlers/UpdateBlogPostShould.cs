@@ -5,7 +5,7 @@ using DeUrgenta.Admin.Api.CommandHandlers;
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Admin.Api.Models;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Tests.Helpers;
 using FluentAssertions;
 using NSubstitute;

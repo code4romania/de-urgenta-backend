@@ -5,7 +5,6 @@ using DeUrgenta.Certifications.Api.Controller;
 using DeUrgenta.Api.Extensions;
 using DeUrgenta.Backpack.Api;
 using DeUrgenta.Common.Swagger;
-using DeUrgenta.Domain;
 using DeUrgenta.Group.Api;
 using DeUrgenta.Group.Api.Controllers;
 using Hellang.Middleware.ProblemDetails;
@@ -21,6 +20,7 @@ using Microsoft.Extensions.DependencyInjection;
 using DeUrgenta.Certifications.Api;
 using FluentValidation.AspNetCore;
 using DeUrgenta.Admin.Api;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Emailing.Service;
 using DeUrgenta.Events.Api;
 using DeUrgenta.Events.Api.Controller;
@@ -82,9 +82,6 @@ namespace DeUrgenta.Api
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.ApplicationServices.UseDatabase<DeUrgentaContext>();
-            app.ConfigureBearerAuth();
 
             app.UseProblemDetails();
             app.UseConfigureSwagger();

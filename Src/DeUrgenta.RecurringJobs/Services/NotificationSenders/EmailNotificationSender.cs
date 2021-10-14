@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Emailing.Service.Models;
 using DeUrgenta.Emailing.Service.Senders;
-using DeUrgenta.RecurringJobs.Domain;
-using DeUrgenta.RecurringJobs.Domain.Entities;
+using DeUrgenta.Domain.RecurringJobs;
+using DeUrgenta.Domain.RecurringJobs.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.RecurringJobs.Services.NotificationSenders

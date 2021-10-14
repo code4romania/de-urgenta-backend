@@ -22,13 +22,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\DeUrgenta.Domain\DeUrgenta.Domain.csproj" />
+		<ProjectReference Include="..\DeUrgenta.Domain.Api\DeUrgenta.Domain.Api.csproj" />
+		<ProjectReference Include="..\DeUrgenta.Domain.RecurringJobs\DeUrgenta.Domain.RecurringJobs.csproj" />
 		<ProjectReference Include="..\DeUrgenta.Emailing.Service\DeUrgenta.Emailing.Service.csproj" />
 		<ProjectReference Include="..\DeUrgenta.Infra\DeUrgenta.Infra.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Domain\Migrations\" />
 		<Folder Include="EmailTemplates\" />
 	</ItemGroup>
 

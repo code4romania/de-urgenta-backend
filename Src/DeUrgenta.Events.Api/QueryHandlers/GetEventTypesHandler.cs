@@ -2,13 +2,13 @@
 using DeUrgenta.Events.Api.Models;
 using DeUrgenta.Events.Api.Queries;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using DeUrgenta.Domain.Api;
 
 namespace DeUrgenta.Events.Api.QueryHandlers
 {

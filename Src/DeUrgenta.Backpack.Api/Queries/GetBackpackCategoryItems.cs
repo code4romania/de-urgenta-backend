@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Backpack.Api.Models;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Domain.Api.Entities;
 using MediatR;
 
 namespace DeUrgenta.Backpack.Api.Queries

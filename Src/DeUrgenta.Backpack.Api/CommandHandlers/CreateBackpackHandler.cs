@@ -4,8 +4,8 @@ using CSharpFunctionalExtensions;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Backpack.Api.Models;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Domain.Api;
+using DeUrgenta.Domain.Api.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,7 +32,7 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
 
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
 
-            var backpack = new Domain.Entities.Backpack { Name = request.Backpack.Name };
+            var backpack = new Domain.Api.Entities.Backpack { Name = request.Backpack.Name };
             var backpackToUser = new BackpackToUser { Backpack = backpack, User = user, IsOwner = true };
 
             await _context.Backpacks.AddAsync(backpack, cancellationToken);

@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using DeUrgenta.Domain;
-using DeUrgenta.RecurringJobs.Domain;
+using DeUrgenta.Domain.RecurringJobs;
 using Microsoft.EntityFrameworkCore;
+using DeUrgenta.Domain.Api;
 
 namespace DeUrgenta.RecurringJobs.Jobs
 {

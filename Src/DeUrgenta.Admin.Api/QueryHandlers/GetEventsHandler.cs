@@ -7,7 +7,7 @@ using DeUrgenta.Common.Extensions;
 using DeUrgenta.Common.Models.Events;
 using DeUrgenta.Common.Models.Pagination;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
