@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using Figgle;
 using System.IO;
 using System.Threading.Tasks;
 using DeUrgenta.Domain.Api;
@@ -8,11 +9,10 @@ using DeUrgenta.Domain.RecurringJobs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Colorful;
+
 
 namespace DeUrgenta.Domains.Migrator
 {
-
     public class Program
     {
         static async Task Main()
@@ -25,13 +25,12 @@ namespace DeUrgenta.Domains.Migrator
 
             var services = new ServiceCollection();
 
-            Console.WriteAscii("Domains Migrator");
-            Console.WriteLine("Registering contexts");
-
+            Console.WriteLine(FiggleFonts.Ogre.Render("Domains Migrator"));
+            Console.WriteLine("Registering contexts.");
             services.AddDatabase<DeUrgentaContext>(configuration.GetConnectionString("DbConnectionString"));
             services.AddDatabase<UserDbContext>(configuration.GetConnectionString("IdentityDbConnectionString"));
             services.AddDatabase<JobsContext>(configuration.GetConnectionString("JobsConnectionString"));
-            Console.WriteLine("==================================");
+            Console.WriteLine("Done: Registering contexts.");
 
             var serviceProvider = services.BuildServiceProvider();
 
@@ -43,17 +42,18 @@ namespace DeUrgenta.Domains.Migrator
                 serviceProvider.GetService<UserDbContext>(),
                 serviceProvider.GetService<JobsContext>()
             };
-            Console.WriteLine("==================================");
-
+            Console.WriteLine("Done: Getting contexts");
             Console.WriteLine("Applying migrations");
 
             foreach (var dbContext in dbContexts)
             {
+                Console.WriteLine($"Migrating {dbContext.GetType().Name}.");
                 await dbContext.CreateAndMigrateAsync();
+                Console.WriteLine($"Done: Migrating {dbContext.GetType().Name}.");
+                Console.WriteLine("--------------------------------------------");
             }
-            Console.WriteLine("==================================");
-            Console.WriteLine("All good. Have a nice day!");
 
+            Console.WriteLine("All good. Have a nice day!");
         }
     }
 }
