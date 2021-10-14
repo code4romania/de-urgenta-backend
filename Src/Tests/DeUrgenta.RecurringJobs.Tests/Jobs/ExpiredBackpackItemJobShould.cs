@@ -42,6 +42,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
 
             var backpackItem = new BackpackItemBuilder()
                 .WithExpirationDate(DateTime.Today.AddDays(daysAfterCurrentDate))
+                .WithCategory(BackpackCategoryType.WaterAndFood)
                 .Build();
             await _context.BackpackItems.AddAsync(backpackItem);
 
@@ -279,7 +280,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                     ItemDetails = new ItemDetails{ ItemId = backpackItem.Id },
                     UserId = userId,
                     Status = NotificationStatus.NotSent,
-                    Type = NotificationType.BackpackWaterAndFood,
+                    Type = NotificationType.BackpackFirstAid,
                     ScheduledDate = DateTime.Today
                 },
                 new()
@@ -287,7 +288,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                     ItemDetails = new ItemDetails{ ItemId = backpackItem.Id },
                     UserId = userId,
                     Status = NotificationStatus.NotSent,
-                    Type = NotificationType.BackpackWaterAndFood,
+                    Type = NotificationType.BackpackFirstAid,
                     ScheduledDate = backpackItem.ExpirationDate.Value
                 }
             }, opt => opt.Excluding(n => n.Id)
@@ -345,7 +346,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                     ItemDetails = new ItemDetails{ ItemId = backpackItem.Id },
                     UserId = userId,
                     Status = NotificationStatus.NotSent,
-                    Type = NotificationType.BackpackWaterAndFood,
+                    Type = NotificationType.BackpackFirstAid,
                     ScheduledDate = DateTime.Today
                 },
                 new()
@@ -353,7 +354,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                     ItemDetails = new ItemDetails{ ItemId = backpackItem.Id },
                     UserId = userId,
                     Status = NotificationStatus.NotSent,
-                    Type = NotificationType.BackpackWaterAndFood,
+                    Type = NotificationType.BackpackFirstAid,
                     ScheduledDate = backpackItem.ExpirationDate.Value
                 }
             }, opt => opt.Excluding(n => n.Id)
