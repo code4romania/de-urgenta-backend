@@ -1,13 +1,13 @@
-﻿using DeUrgenta.I18n.Service.Domain.Configuration;
-using DeUrgenta.I18n.Service.Domain.Entities;
+﻿using DeUrgenta.I18n.Service.Configuration;
+using DeUrgenta.I18n.Service.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace DeUrgenta.I18n.Service.Domain
+namespace DeUrgenta.I18n.Service
 {
-    public class I18nDbContext: DbContext
+    internal class I18nDbContext: DbContext
     {
-        public DbSet<Language> Languages { get; set; }
-        public DbSet<StringResource> StringResources { get; set; }
+        internal DbSet<Language> Languages { get; set; }
+        internal DbSet<StringResource> StringResources { get; set; }
 
 
         public I18nDbContext(DbContextOptions<I18nDbContext> options) : base(options)
@@ -17,6 +17,7 @@ namespace DeUrgenta.I18n.Service.Domain
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             modelBuilder.HasPostgresExtension("uuid-ossp");
             modelBuilder.HasDefaultSchema("i18n");
 
