@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,14 +36,15 @@ namespace DeUrgenta.Group.Api.QueryHandlers
                 .UsersToGroups
                 .Where(x => x.GroupId == request.GroupId)
                 .Include(x => x.User)
-                .Include(x=>x.Group)
-                .Select(x => new {x.User, x.Group})
+                .Include(x => x.Group)
+                .Select(x => new { x.User, x.Group, HasValidCertification = x.User.Certifications.Any(c => c.ExpirationDate.Date > DateTime.Today) })
                 .Select(x => new GroupMemberModel
                 {
-                    Id = x.User.Id, 
-                    FirstName = x.User.FirstName, 
+                    Id = x.User.Id,
+                    FirstName = x.User.FirstName,
                     LastName = x.User.LastName,
-                    IsGroupAdmin = x.Group.AdminId == x.User.Id
+                    IsGroupAdmin = x.Group.AdminId == x.User.Id,
+                    HasValidCertification = x.HasValidCertification
                 })
                 .ToListAsync(cancellationToken);
 
