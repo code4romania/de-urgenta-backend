@@ -45,7 +45,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore /p:ContinuousIntegrationBuild=true DeUrgenta.sln
     - name: Build Migrator
-      run: dotnet build --no-restore /p:ContinuousIntegrationBuild=true DeUrgenta.Domains.Migrator.sln
+      run: dotnet build /p:ContinuousIntegrationBuild=true DeUrgenta.Domains.Migrator.sln
     - name: Apply migrations for test db
       run: |
         cd ./DeUrgenta.Domains.Migrator/bin/Debug/net5.0
