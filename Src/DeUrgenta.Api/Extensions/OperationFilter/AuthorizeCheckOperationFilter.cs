@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace DeUrgenta.Api.Extensions
+namespace DeUrgenta.Api.Extensions.OperationFilter
 {
     public class AuthorizeCheckOperationFilter : IOperationFilter
     {

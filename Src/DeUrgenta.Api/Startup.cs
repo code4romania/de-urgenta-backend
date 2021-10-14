@@ -24,6 +24,7 @@ using DeUrgenta.Admin.Api;
 using DeUrgenta.Emailing.Service;
 using DeUrgenta.Events.Api;
 using DeUrgenta.Events.Api.Controller;
+using DeUrgenta.I18n.Service;
 using DeUrgenta.Invite.Api;
 using DeUrgenta.Invite.Api.Controllers;
 
@@ -44,6 +45,7 @@ namespace DeUrgenta.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.SetupI18nService(Configuration);
             services.AddBearerAuth(Configuration);
             services.AddControllers().AddFluentValidation();
             services.AddDatabase<DeUrgentaContext>(Configuration.GetConnectionString("DbConnectionString"));
@@ -82,6 +84,7 @@ namespace DeUrgenta.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.ConfigureI18n();
 
             app.ApplicationServices.UseDatabase<DeUrgentaContext>();
             app.ConfigureBearerAuth();
@@ -101,7 +104,6 @@ namespace DeUrgenta.Api
             });
 
             app.SetupStaticFiles(Configuration, WebHostEnvironment);
-           
             app.UseCors(CorsPolicyName);
         }
 
