@@ -3,6 +3,11 @@
     public enum NotificationType
     {
         Certification,
-        //food items, etc.
+        BackpackWaterAndFood,
+        BackpackHygiene,
+        BackpackFirstAid,
+        BackpackPapersAndDocuments,
+        BackpackSurvivingArticles,
+        BackpackRandomStuff
     }
 }
