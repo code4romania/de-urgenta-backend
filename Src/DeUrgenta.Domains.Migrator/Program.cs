@@ -4,12 +4,12 @@ using System.IO;
 using System.Threading.Tasks;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Domain.Identity;
-using DeUrgenta.Infra.Extensions;
+using DeUrgenta.Domain.I18n;
 using DeUrgenta.Domain.RecurringJobs;
+using DeUrgenta.Infra.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
 
 namespace DeUrgenta.Domains.Migrator
 {
@@ -29,7 +29,8 @@ namespace DeUrgenta.Domains.Migrator
             Console.WriteLine("Registering contexts.");
             services.AddDatabase<DeUrgentaContext>(configuration.GetConnectionString("DbConnectionString"));
             services.AddDatabase<UserDbContext>(configuration.GetConnectionString("IdentityDbConnectionString"));
-            services.AddDatabase<JobsContext>(configuration.GetConnectionString("JobsConnectionString"));
+            services.AddDatabase<JobsContext>(configuration.GetConnectionString("I18nDbConnectionString"));
+            services.AddDatabase<I18nDbContext>(configuration.GetConnectionString("JobsConnectionString"));
             Console.WriteLine("Done: Registering contexts.");
 
             var serviceProvider = services.BuildServiceProvider();
@@ -40,7 +41,8 @@ namespace DeUrgenta.Domains.Migrator
             {
                 serviceProvider.GetService<DeUrgentaContext>(),
                 serviceProvider.GetService<UserDbContext>(),
-                serviceProvider.GetService<JobsContext>()
+                serviceProvider.GetService<JobsContext>(),
+                serviceProvider.GetService<I18nDbContext>()
             };
             Console.WriteLine("Done: Getting contexts");
             Console.WriteLine("Applying migrations");

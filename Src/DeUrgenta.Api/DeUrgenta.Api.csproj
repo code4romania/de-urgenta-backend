@@ -41,6 +41,7 @@
 	  <ProjectReference Include="..\DeUrgenta.Domain.Api\DeUrgenta.Domain.Api.csproj" />
 	  <ProjectReference Include="..\DeUrgenta.Events.Api\DeUrgenta.Events.Api.csproj" />
 	  <ProjectReference Include="..\DeUrgenta.Group.Api\DeUrgenta.Group.Api.csproj" />
+	  <ProjectReference Include="..\DeUrgenta.I18n.Service\DeUrgenta.I18n.Service.csproj" />
 	  <ProjectReference Include="..\DeUrgenta.Infra\DeUrgenta.Infra.csproj" />
 	  <ProjectReference Include="..\DeUrgenta.Invite.Api\DeUrgenta.Invite.Api.csproj" />
 	  <ProjectReference Include="..\DeUrgenta.User.Api\DeUrgenta.User.Api.csproj" />

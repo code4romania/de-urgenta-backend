@@ -9,12 +9,18 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
 COPY ["DeUrgenta.RecurringJobs/DeUrgenta.RecurringJobs.csproj", "DeUrgenta.RecurringJobs/"]
 COPY ["DeUrgenta.Domain.Api/DeUrgenta.Domain.Api.csproj", "DeUrgenta.Domain.Api/"]
+COPY ["DeUrgenta.Domain.RecurringJobs/DeUrgenta.Domain.RecurringJobs.csproj", "DeUrgenta.Domain.RecurringJobs/"]
 COPY ["DeUrgenta.Infra/DeUrgenta.Infra.csproj", "DeUrgenta.Infra/"]
 COPY ["DeUrgenta.Emailing.Service/DeUrgenta.Emailing.Service.csproj", "DeUrgenta.Emailing.Service/"]
 
 RUN dotnet restore "DeUrgenta.RecurringJobs/DeUrgenta.RecurringJobs.csproj"
 
-COPY . .
+COPY ["DeUrgenta.RecurringJobs", "DeUrgenta.RecurringJobs/"]
+COPY ["DeUrgenta.Domain.Api", "DeUrgenta.Domain.Api/"]
+COPY ["DeUrgenta.Domain.RecurringJobs", "DeUrgenta.Domain.RecurringJobs/"]
+COPY ["DeUrgenta.Infra", "DeUrgenta.Infra/"]
+COPY ["DeUrgenta.Emailing.Service", "DeUrgenta.Emailing.Service/"]
+
 WORKDIR "/src/DeUrgenta.RecurringJobs"
 RUN dotnet build "DeUrgenta.RecurringJobs.csproj" -c Release -o /app/build
 

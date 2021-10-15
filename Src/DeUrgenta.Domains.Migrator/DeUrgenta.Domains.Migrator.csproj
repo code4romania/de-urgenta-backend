@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DeUrgenta.Domain.Api\DeUrgenta.Domain.Api.csproj" />
+    <ProjectReference Include="..\DeUrgenta.Domain.I18n\DeUrgenta.Domain.I18n.csproj" />
     <ProjectReference Include="..\DeUrgenta.Domain.Identity\DeUrgenta.Domain.Identity.csproj" />
     <ProjectReference Include="..\DeUrgenta.Domain.RecurringJobs\DeUrgenta.Domain.RecurringJobs.csproj" />
     <ProjectReference Include="..\DeUrgenta.Infra\DeUrgenta.Infra.csproj" />
