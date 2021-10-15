@@ -130,7 +130,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             await _jobsContext.SaveChangesAsync();
 
             var notificationService = Substitute.For<INotificationService>();
-            notificationService.SendNotificationAsync(notification.Id).Returns(Task.CompletedTask);
+            notificationService.SendNotificationAsync(notification.Id).Returns(Task.FromResult(NotificationStatus.PartlySent));
 
             var sut = new NotificationSenderJob(notificationService, _jobsContext);
 
@@ -138,7 +138,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             await sut.RunAsync();
 
             //Assert
-            notification.Status.Should().Be(NotificationStatus.Sent);
+            notification.Status.Should().Be(NotificationStatus.PartlySent);
         }
     }
 }

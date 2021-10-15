@@ -25,52 +25,66 @@ namespace DeUrgenta.Emailing.Service.Senders
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public override async Task SendAsync(Email email, CancellationToken cancellationToken = default)
+        public override async Task<bool> SendAsync(Email email, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(email.To))
             {
-                return;
+                return false;
             }
 
-            using (var client = new SmtpClient())
+            try
             {
-                await client.ConnectAsync(_options.Host, _options.Port, SecureSocketOptions.Auto, cancellationToken);
-
-                await client.AuthenticateAsync(_options.User, _options.Password, cancellationToken);
-
-                var body = new TextPart(TextFormat.Html) { Text = email.Content };
-                var message = new MimeMessage();
-                message.From.Add(new MailboxAddress(email.FromName, email.FromEmail));
-                message.Sender = new MailboxAddress(email.FromName, email.FromEmail);
-                message.Subject = email.Subject;
-                message.Body = body;
-                message.To.Add(MailboxAddress.Parse(email.To));
-
-                if (email.Attachment != null)
+                using (var client = new SmtpClient())
                 {
-                    var attachment = new MimePart("application", "vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-                    {
-                        Content = new MimeContent(new MemoryStream(email.Attachment.Content)),
-                        ContentDisposition = new ContentDisposition(ContentDisposition.Attachment),
-                        ContentTransferEncoding = ContentEncoding.Base64,
-                        FileName = email.Attachment.FileName
-                    };
-                    var multipart = new Multipart("mixed");
-                    multipart.Add(body);
-                    multipart.Add(attachment);
+                    await client.ConnectAsync(_options.Host, _options.Port, SecureSocketOptions.Auto, cancellationToken);
+                    await client.AuthenticateAsync(_options.User, _options.Password, cancellationToken);
 
-                    message.Body = multipart;
+                    var message = BuildMimeMessage(email);
+
+                    _logger.LogInformation("Sending email using SmtpSender");
+
+                    await client.SendAsync(message, cancellationToken);
+                    await client.DisconnectAsync(true, cancellationToken);
                 }
-                else
-                {
-                    message.Body = body;
-                }
-
-                _logger.LogInformation("Sending email using SmtpSender");
-
-                await client.SendAsync(message, cancellationToken);
-                await client.DisconnectAsync(true, cancellationToken);
             }
+            catch (Exception e)
+            {
+                _logger.LogError($"Error occurred sending email via SMTP: {e.Message}");
+                return false;
+            }
+
+            return true;
+        }
+
+        private static MimeMessage BuildMimeMessage(Email email)
+        {
+            var body = new TextPart(TextFormat.Html) { Text = email.Content };
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress(email.FromName, email.FromEmail));
+            message.Sender = new MailboxAddress(email.FromName, email.FromEmail);
+            message.Subject = email.Subject;
+            message.Body = body;
+            message.To.Add(MailboxAddress.Parse(email.To));
+
+            if (email.Attachment != null)
+            {
+                var attachment = new MimePart("application", "vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                {
+                    Content = new MimeContent(new MemoryStream(email.Attachment.Content)),
+                    ContentDisposition = new ContentDisposition(ContentDisposition.Attachment),
+                    ContentTransferEncoding = ContentEncoding.Base64,
+                    FileName = email.Attachment.FileName
+                };
+                var multipart = new Multipart("mixed") { body, attachment };
+
+                message.Body = multipart;
+            }
+            else
+            {
+                message.Body = body;
+            }
+
+            return message;
         }
     }
 }

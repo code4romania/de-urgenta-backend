@@ -23,7 +23,7 @@ namespace DeUrgenta.Emailing.Service.Senders
             _logger = logger;
         }
 
-        public override async Task SendAsync(Email email, CancellationToken cancellationToken = default)
+        public override async Task<bool> SendAsync(Email email, CancellationToken cancellationToken = default)
         {
             // note that SendGridClient doesn't implement IDisposable,
             // so if we start using this in production mode, we should refactor this
@@ -62,7 +62,10 @@ namespace DeUrgenta.Emailing.Service.Senders
                 // not ok response received
                 var responseMessage = await sendGridResponse.Body.ReadAsStringAsync(cancellationToken);
                 _logger.LogWarning("Received not ok(200) status code. Status code received {statusCode}. Response message {responseMessage}", statusCode, responseMessage);
+                return false;
             }
+
+            return true;
         }
     }
 }
