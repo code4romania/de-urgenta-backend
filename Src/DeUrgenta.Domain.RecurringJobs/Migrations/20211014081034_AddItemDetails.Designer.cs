@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace DeUrgenta.RecurringJobs.Domain.Migrations
+namespace DeUrgenta.Domain.RecurringJobs.Migrations
 {
     [DbContext(typeof(JobsContext))]
     [Migration("20211014081034_AddItemDetails")]

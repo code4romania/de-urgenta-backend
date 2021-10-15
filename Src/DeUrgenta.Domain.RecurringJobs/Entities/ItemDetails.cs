@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace DeUrgenta.RecurringJobs.Domain.Entities
+namespace DeUrgenta.Domain.RecurringJobs.Entities
 {
     public class ItemDetails
     {

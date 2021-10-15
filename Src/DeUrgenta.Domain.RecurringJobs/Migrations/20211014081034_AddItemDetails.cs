@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace DeUrgenta.RecurringJobs.Domain.Migrations
+namespace DeUrgenta.Domain.RecurringJobs.Migrations
 {
     public partial class AddItemDetails : Migration
     {

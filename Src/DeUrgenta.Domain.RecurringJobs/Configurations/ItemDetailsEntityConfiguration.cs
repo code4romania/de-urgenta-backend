@@ -1,8 +1,8 @@
-﻿using DeUrgenta.RecurringJobs.Domain.Entities;
+﻿using DeUrgenta.Domain.RecurringJobs.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DeUrgenta.RecurringJobs.Domain.Configurations
+namespace DeUrgenta.Domain.RecurringJobs.Configurations
 {
     public class ItemDetailsEntityConfiguration : IEntityTypeConfiguration<ItemDetails>
     {
