@@ -4,6 +4,7 @@
     {
         AccountConfirmation,  
         ResetPassword,
-        ExpiredCertification
+        ExpiredCertification,
+        ExpiredBackBackpackItem
     }
 }

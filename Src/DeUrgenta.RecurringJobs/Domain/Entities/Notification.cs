@@ -13,5 +13,6 @@ namespace DeUrgenta.RecurringJobs.Domain.Entities
         public DateTime ScheduledDate { get; set; }
 
         public virtual CertificationDetails CertificationDetails { get; set; }
+        public virtual ItemDetails ItemDetails { get; set; }
     }
 }

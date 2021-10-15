@@ -5,6 +5,7 @@ using DeUrgenta.Domain;
 using DeUrgenta.RecurringJobs.Domain;
 using DeUrgenta.RecurringJobs.Domain.Entities;
 using DeUrgenta.RecurringJobs.Jobs.Config;
+using DeUrgenta.RecurringJobs.Jobs.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 

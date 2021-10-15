@@ -10,6 +10,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Builders
         private DateTime _scheduledDate = DateTime.Today;
         private Guid _certificationId = Guid.NewGuid();
         private NotificationStatus _status = NotificationStatus.NotSent;
+        private Guid _itemId = Guid.NewGuid();
 
         public Notification Build() =>
             new()
@@ -22,6 +23,10 @@ namespace DeUrgenta.RecurringJobs.Tests.Builders
                 CertificationDetails = new CertificationDetails
                 {
                     CertificationId = _certificationId
+                },
+                ItemDetails = new ItemDetails
+                {
+                    ItemId = _itemId
                 }
             };
 
@@ -46,6 +51,12 @@ namespace DeUrgenta.RecurringJobs.Tests.Builders
         public NotificationBuilder WithStatus(NotificationStatus notificationStatus)
         {
             _status = notificationStatus;
+            return this;
+        }
+
+        public NotificationBuilder WithItemId(Guid backpackItemId)
+        {
+            _itemId = backpackItemId;
             return this;
         }
     }
