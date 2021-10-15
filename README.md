@@ -66,6 +66,7 @@ docker-compose -d up migrator postgres
 ```
 de-urgenta-backend\Src> dotnet ef migrations add <Migration-name> --project DeUrgenta.Domain.Api --startup-project DeUrgenta.Api --context DeUrgentaContext
 de-urgenta-backend\Src> dotnet ef migrations add <Migration-name> --project DeUrgenta.Domain.Identity --startup-project DeUrgenta.Api --context UserDbContext
+de-urgenta-backend\Src> dotnet ef migrations add <Migration-name> --project DeUrgenta.Domain.I18n --startup-project DeUrgenta.Api --context I18nDbContext
 de-urgenta-backend\Src> dotnet ef migrations add <Migration-name> --project DeUrgenta.Domain.RecurringJobs --startup-project DeUrgenta.RecurringJobs --context JobsContext
 ```
 

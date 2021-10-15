@@ -13,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DeUrgenta.Domains.Migrator
 {
-
     public class Program
     {
         static async Task Main()
@@ -42,7 +41,8 @@ namespace DeUrgenta.Domains.Migrator
             {
                 serviceProvider.GetService<DeUrgentaContext>(),
                 serviceProvider.GetService<UserDbContext>(),
-                serviceProvider.GetService<JobsContext>()
+                serviceProvider.GetService<JobsContext>(),
+                serviceProvider.GetService<I18nDbContext>()
             };
             Console.WriteLine("Done: Getting contexts");
             Console.WriteLine("Applying migrations");
