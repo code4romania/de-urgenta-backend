@@ -16,8 +16,14 @@ COPY ["DeUrgenta.Group.Api/DeUrgenta.Group.Api.csproj", "DeUrgenta.Group.Api/"]
 COPY ["DeUrgenta.User.Api/DeUrgenta.User.Api.csproj", "DeUrgenta.User.Api/"]
 COPY ["DeUrgenta.Domain.Api/DeUrgenta.Domain.Api.csproj", "DeUrgenta.Domain.Api/"]
 COPY ["DeUrgenta.Domain.Identity/DeUrgenta.Domain.Identity.csproj", "DeUrgenta.Domain.Identity/"]
+COPY ["DeUrgenta.Domain.I18n/DeUrgenta.Domain.I18n.csproj", "DeUrgenta.Domain.I18n/"]
 COPY ["DeUrgenta.Infra/DeUrgenta.Infra.csproj", "DeUrgenta.Infra/"]
 COPY ["DeUrgenta.Common/DeUrgenta.Common.csproj", "DeUrgenta.Common/"]
+
+COPY ["DeUrgenta.Emailing.Service/DeUrgenta.Emailing.Service.csproj", "DeUrgenta.Emailing.Service/"]
+COPY ["DeUrgenta.Events.Api/DeUrgenta.Events.Api.csproj", "DeUrgenta.Events.Api/"]
+COPY ["DeUrgenta.I18n.Service/DeUrgenta.I18n.Service.csproj", "DeUrgenta.I18n.Service/"]
+COPY ["DeUrgenta.Invite.Api/DeUrgenta.Invite.Api.csproj", "DeUrgenta.Invite.Api/"]
 
 RUN dotnet restore "DeUrgenta.Api/DeUrgenta.Api.csproj"
 

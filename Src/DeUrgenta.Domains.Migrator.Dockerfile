@@ -8,6 +8,8 @@ WORKDIR /src
 COPY ["DeUrgenta.Domains.Migrator/DeUrgenta.Domains.Migrator.csproj", "DeUrgenta.Domains.Migrator/"]
 COPY ["DeUrgenta.Domain.Identity/DeUrgenta.Domain.Identity.csproj", "DeUrgenta.Domain.Identity/"]
 COPY ["DeUrgenta.Domain.Api/DeUrgenta.Domain.Api.csproj", "DeUrgenta.Domain.Api/"]
+COPY ["DeUrgenta.Domain.I18n/DeUrgenta.Domain.I18n.csproj", "DeUrgenta.Domain.I18n/"]
+COPY ["DeUrgenta.Domain.RecurringJobs/DeUrgenta.Domain.RecurringJobs.csproj", "DeUrgenta.Domain.RecurringJobs/"]
 COPY ["DeUrgenta.Infra/DeUrgenta.Infra.csproj", "DeUrgenta.Infra/"]
 
 RUN dotnet restore "DeUrgenta.Domains.Migrator/DeUrgenta.Domains.Migrator.csproj"
@@ -16,6 +18,8 @@ COPY ["DeUrgenta.Api/appsettings.json", "DeUrgenta.Domains.Migrator/"]
 COPY ["DeUrgenta.Domains.Migrator", "DeUrgenta.Domains.Migrator/"]
 COPY ["DeUrgenta.Domain.Api", "DeUrgenta.Domain.Api/"]
 COPY ["DeUrgenta.Domain.Identity", "DeUrgenta.Domain.Identity/"]
+COPY ["DeUrgenta.Domain.I18n", "DeUrgenta.Domain.I18n/"]
+COPY ["DeUrgenta.Domain.RecurringJobs", "DeUrgenta.Domain.RecurringJobs/"]
 COPY ["DeUrgenta.Infra", "DeUrgenta.Infra/"]
 
 WORKDIR "/src/DeUrgenta.Domains.Migrator"
