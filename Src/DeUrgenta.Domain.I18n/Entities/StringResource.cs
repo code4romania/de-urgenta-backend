@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DeUrgenta.I18n.Service.Entities
+namespace DeUrgenta.Domain.I18n.Entities
 {
-    internal sealed class StringResource
+    public sealed class StringResource
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

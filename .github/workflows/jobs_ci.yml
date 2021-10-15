@@ -54,6 +54,7 @@ jobs:
         # Connection strings
         ConnectionStrings__DbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass; 
         ConnectionStrings__IdentityDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass; 
+        ConnectionStrings__I18nDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;
         ConnectionStrings__JobsConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;
         
     - name: Run unit & integration tests

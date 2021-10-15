@@ -1,9 +1,9 @@
 ﻿using System;
-using DeUrgenta.I18n.Service.Entities;
+using DeUrgenta.Domain.I18n.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DeUrgenta.I18n.Service.Configuration
+namespace DeUrgenta.Domain.I18n.Configuration
 {
     internal class LanguageEntityConfiguration : IEntityTypeConfiguration<Language>
     {

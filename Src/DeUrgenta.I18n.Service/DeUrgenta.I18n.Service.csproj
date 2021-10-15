@@ -12,6 +12,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\DeUrgenta.Domain.I18n\DeUrgenta.Domain.I18n.csproj" />
 		<ProjectReference Include="..\DeUrgenta.Infra\DeUrgenta.Infra.csproj" />
 	</ItemGroup>
 

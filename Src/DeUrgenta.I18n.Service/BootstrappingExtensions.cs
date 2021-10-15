@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Linq;
+using DeUrgenta.Domain.I18n;
 using DeUrgenta.I18n.Service.Providers;
 using DeUrgenta.Infra.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -9,7 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DeUrgenta.I18n.Service
 {
-
     public static class BootstrappingExtensions
     {
         public static void SetupI18nService(this IServiceCollection services, IConfiguration configuration)
@@ -36,7 +36,6 @@ namespace DeUrgenta.I18n.Service
 
         public static IApplicationBuilder ConfigureI18n(this IApplicationBuilder builder)
         {
-            builder.ApplicationServices.UseDatabase<I18nDbContext>();
             builder.UseRequestLocalization();
 
             return builder;

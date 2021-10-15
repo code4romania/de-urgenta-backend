@@ -54,6 +54,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Domain.Identity",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Infra", "DeUrgenta.Infra\DeUrgenta.Infra.csproj", "{01630F98-F0CE-446C-A8F4-00BA75E6AD7A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Domain.I18n", "DeUrgenta.Domain.I18n\DeUrgenta.Domain.I18n.csproj", "{03B51C69-5167-41D9-A279-89009C3AD72C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -328,6 +330,18 @@ Global
 		{01630F98-F0CE-446C-A8F4-00BA75E6AD7A}.Release|x64.Build.0 = Release|Any CPU
 		{01630F98-F0CE-446C-A8F4-00BA75E6AD7A}.Release|x86.ActiveCfg = Release|Any CPU
 		{01630F98-F0CE-446C-A8F4-00BA75E6AD7A}.Release|x86.Build.0 = Release|Any CPU
+		{03B51C69-5167-41D9-A279-89009C3AD72C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03B51C69-5167-41D9-A279-89009C3AD72C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03B51C69-5167-41D9-A279-89009C3AD72C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{03B51C69-5167-41D9-A279-89009C3AD72C}.Debug|x64.Build.0 = Debug|Any CPU
+		{03B51C69-5167-41D9-A279-89009C3AD72C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{03B51C69-5167-41D9-A279-89009C3AD72C}.Debug|x86.Build.0 = Debug|Any CPU
+		{03B51C69-5167-41D9-A279-89009C3AD72C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03B51C69-5167-41D9-A279-89009C3AD72C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03B51C69-5167-41D9-A279-89009C3AD72C}.Release|x64.ActiveCfg = Release|Any CPU
+		{03B51C69-5167-41D9-A279-89009C3AD72C}.Release|x64.Build.0 = Release|Any CPU
+		{03B51C69-5167-41D9-A279-89009C3AD72C}.Release|x86.ActiveCfg = Release|Any CPU
+		{03B51C69-5167-41D9-A279-89009C3AD72C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
