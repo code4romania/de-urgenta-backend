@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using DeUrgenta.Backpack.Api.Models;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Domain.Api.Entities;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace DeUrgenta.Backpack.Api.Swagger.BackpackItem

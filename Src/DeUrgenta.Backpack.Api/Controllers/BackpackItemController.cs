@@ -8,7 +8,7 @@ using DeUrgenta.Backpack.Api.Queries;
 using DeUrgenta.Backpack.Api.Swagger.BackpackItem;
 using DeUrgenta.Common.Extensions;
 using DeUrgenta.Common.Swagger;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Domain.Api.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

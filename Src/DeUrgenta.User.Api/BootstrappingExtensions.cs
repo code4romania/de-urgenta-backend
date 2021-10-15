@@ -2,9 +2,9 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using DeUrgenta.Common.Validation;
+using DeUrgenta.Domain.Identity;
 using DeUrgenta.Infra.Extensions;
 using DeUrgenta.User.Api.Commands;
-using DeUrgenta.User.Api.Domain;
 using DeUrgenta.User.Api.Models;
 using DeUrgenta.User.Api.Models.DTOs.Requests;
 using DeUrgenta.User.Api.Options;
@@ -14,7 +14,6 @@ using DeUrgenta.User.Api.Validators;
 using DeUrgenta.User.Api.Validators.RequestValidators;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -77,12 +76,6 @@ namespace DeUrgenta.User.Api
             return services;
         }
 
-        public static IApplicationBuilder ConfigureBearerAuth(this IApplicationBuilder builder)
-        {
-            builder.ApplicationServices.UseDatabase<UserDbContext>();
-            return builder;
-        }
-        
         public static IServiceCollection AddUserApiServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<GroupsConfig>(configuration.GetSection(GroupsConfig.SectionName));

@@ -6,7 +6,7 @@ using DeUrgenta.Certifications.Api.Models;
 using DeUrgenta.Certifications.Api.Storage;
 using DeUrgenta.Certifications.Api.Tests.Builders;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
 using NSubstitute;

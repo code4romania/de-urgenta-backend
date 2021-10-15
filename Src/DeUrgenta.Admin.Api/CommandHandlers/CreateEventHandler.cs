@@ -5,7 +5,8 @@ using CSharpFunctionalExtensions;
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Common.Models.Events;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
+using DeUrgenta.Domain.Api.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,7 +32,7 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
             }
             var eventType = await _context.EventTypes.FirstAsync(et => et.Id == request.Event.EventTypeId, cancellationToken);
 
-            var @event = new Domain.Entities.Event
+            var @event = new Event
             {
                 Title = request.Event.Title,
                 Author = request.Event.Author,

@@ -38,7 +38,7 @@
 	  <ProjectReference Include="..\DeUrgenta.Backpack.Api\DeUrgenta.Backpack.Api.csproj" />
 	  <ProjectReference Include="..\DeUrgenta.Certifications.Api\DeUrgenta.Certifications.Api.csproj" />
 	  <ProjectReference Include="..\DeUrgenta.Common\DeUrgenta.Common.csproj" />
-	  <ProjectReference Include="..\DeUrgenta.Domain\DeUrgenta.Domain.csproj" />
+	  <ProjectReference Include="..\DeUrgenta.Domain.Api\DeUrgenta.Domain.Api.csproj" />
 	  <ProjectReference Include="..\DeUrgenta.Events.Api\DeUrgenta.Events.Api.csproj" />
 	  <ProjectReference Include="..\DeUrgenta.Group.Api\DeUrgenta.Group.Api.csproj" />
 	  <ProjectReference Include="..\DeUrgenta.I18n.Service\DeUrgenta.I18n.Service.csproj" />

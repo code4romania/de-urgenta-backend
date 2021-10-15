@@ -1,7 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using DeUrgenta.Domain;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Domain.Api;
+using DeUrgenta.Domain.Api.Entities;
+using DeUrgenta.Domain.RecurringJobs;
 using DeUrgenta.RecurringJobs.Jobs;
 using DeUrgenta.RecurringJobs.Jobs.Config;
 using DeUrgenta.Tests.Helpers;

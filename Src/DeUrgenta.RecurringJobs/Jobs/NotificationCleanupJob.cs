@@ -1,12 +1,14 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using DeUrgenta.RecurringJobs.Domain;
-using DeUrgenta.RecurringJobs.Domain.Entities;
+using DeUrgenta.Domain.RecurringJobs;
+using DeUrgenta.Domain.RecurringJobs.Entities;
 using DeUrgenta.RecurringJobs.Jobs.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.RecurringJobs.Jobs
 {
+    
+
     public class NotificationCleanupJob : INotificationCleanupJob
     {
         private readonly JobsContext _jobsContext;

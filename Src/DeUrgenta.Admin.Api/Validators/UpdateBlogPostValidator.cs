@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Admin.Api.Validators

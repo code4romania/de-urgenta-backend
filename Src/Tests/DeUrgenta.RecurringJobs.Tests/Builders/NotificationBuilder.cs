@@ -1,5 +1,5 @@
 ﻿using System;
-using DeUrgenta.RecurringJobs.Domain.Entities;
+using DeUrgenta.Domain.RecurringJobs.Entities;
 
 namespace DeUrgenta.RecurringJobs.Tests.Builders
 {

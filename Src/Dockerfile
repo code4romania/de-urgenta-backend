@@ -14,7 +14,8 @@ COPY ["DeUrgenta.Certifications.Api/DeUrgenta.Certifications.Api.csproj", "DeUrg
 COPY ["DeUrgenta.Admin.Api/DeUrgenta.Admin.Api.csproj", "DeUrgenta.Admin.Api/"]
 COPY ["DeUrgenta.Group.Api/DeUrgenta.Group.Api.csproj", "DeUrgenta.Group.Api/"]
 COPY ["DeUrgenta.User.Api/DeUrgenta.User.Api.csproj", "DeUrgenta.User.Api/"]
-COPY ["DeUrgenta.Domain/DeUrgenta.Domain.csproj", "DeUrgenta.Domain/"]
+COPY ["DeUrgenta.Domain.Api/DeUrgenta.Domain.Api.csproj", "DeUrgenta.Domain.Api/"]
+COPY ["DeUrgenta.Domain.Identity/DeUrgenta.Domain.Identity.csproj", "DeUrgenta.Domain.Identity/"]
 COPY ["DeUrgenta.Infra/DeUrgenta.Infra.csproj", "DeUrgenta.Infra/"]
 COPY ["DeUrgenta.Common/DeUrgenta.Common.csproj", "DeUrgenta.Common/"]
 

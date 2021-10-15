@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using DeUrgenta.Domain;
-using DeUrgenta.RecurringJobs.Domain;
-using DeUrgenta.RecurringJobs.Domain.Entities;
+using DeUrgenta.Domain.Api;
+using DeUrgenta.Domain.RecurringJobs;
+using DeUrgenta.Domain.RecurringJobs.Entities;
 using DeUrgenta.RecurringJobs.Jobs.Config;
 using DeUrgenta.RecurringJobs.Jobs.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 
 namespace DeUrgenta.RecurringJobs.Jobs
 {
+
     public class ExpiredCertificationJob : IExpiredCertificationJob
     {
         private readonly DeUrgentaContext _context;

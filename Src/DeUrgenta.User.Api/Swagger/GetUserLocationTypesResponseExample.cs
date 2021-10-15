@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Domain.Api.Entities;
 using DeUrgenta.Infra.Models;
 using Swashbuckle.AspNetCore.Filters;
 

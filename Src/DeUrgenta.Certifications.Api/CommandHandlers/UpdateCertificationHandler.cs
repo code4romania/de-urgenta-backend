@@ -6,7 +6,7 @@ using DeUrgenta.Certifications.Api.Commands;
 using DeUrgenta.Certifications.Api.Models;
 using DeUrgenta.Certifications.Api.Storage;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

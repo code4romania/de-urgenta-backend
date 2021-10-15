@@ -2,7 +2,6 @@
 using DeUrgenta.Certifications.Api.Models;
 using DeUrgenta.Certifications.Api.Queries;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Immutable;
@@ -10,6 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Certifications.Api.Storage;
+using DeUrgenta.Domain.Api;
 
 namespace DeUrgenta.Certifications.Api.QueryHandlers
 {

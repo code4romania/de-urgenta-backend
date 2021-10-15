@@ -44,11 +44,18 @@ jobs:
       run: dotnet restore DeUrgenta.RecurringJobs.sln
     - name: Build
       run: dotnet build --no-restore /p:ContinuousIntegrationBuild=true DeUrgenta.RecurringJobs.sln
+    - name: Build Migrator
+      run: dotnet build /p:ContinuousIntegrationBuild=true DeUrgenta.Domains.Migrator.sln
     - name: Apply migrations for test db
       run: |
-        dotnet tool install --global dotnet-ef
-        dotnet ef database update --no-build --project DeUrgenta.Domain --startup-project DeUrgenta.RecurringJobs --context DeUrgentaContext --connection "Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;"
-        dotnet ef database update --no-build --project DeUrgenta.RecurringJobs --startup-project DeUrgenta.RecurringJobs --context JobsContext --connection "Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;"
+        cd ./DeUrgenta.Domains.Migrator/bin/Debug/net5.0
+        dotnet DeUrgenta.Domains.Migrator.dll
+      env:
+        # Connection strings
+        ConnectionStrings__DbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass; 
+        ConnectionStrings__IdentityDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass; 
+        ConnectionStrings__JobsConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;
+        
     - name: Run unit & integration tests
       run: dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover DeUrgenta.RecurringJobs.sln
       env:

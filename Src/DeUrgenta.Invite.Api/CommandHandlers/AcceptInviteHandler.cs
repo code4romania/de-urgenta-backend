@@ -2,12 +2,12 @@
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Invite.Api.Commands;
 using DeUrgenta.Invite.Api.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using InviteType = DeUrgenta.Domain.Entities.InviteType;
+using InviteType = DeUrgenta.Domain.Api.Entities.InviteType;
 
 namespace DeUrgenta.Invite.Api.CommandHandlers
 {
