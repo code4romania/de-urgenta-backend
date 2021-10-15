@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using DeUrgenta.Domain.I18n;
 using DeUrgenta.I18n.Service.Models;
 using Microsoft.EntityFrameworkCore;
-// ReSharper disable SpecifyStringComparison
 
 namespace DeUrgenta.I18n.Service.Providers
 {
