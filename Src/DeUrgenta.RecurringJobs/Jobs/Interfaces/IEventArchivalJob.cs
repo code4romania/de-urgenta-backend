@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace DeUrgenta.RecurringJobs.Jobs
+namespace DeUrgenta.RecurringJobs.Jobs.Interfaces
 {
     public interface IEventArchivalJob
     {

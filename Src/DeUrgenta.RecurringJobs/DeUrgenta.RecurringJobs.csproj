@@ -29,7 +29,6 @@
 
 	<ItemGroup>
 		<Folder Include="Domain\Migrations\" />
-		<Folder Include="EmailTemplates\" />
 	</ItemGroup>
 
 </Project>

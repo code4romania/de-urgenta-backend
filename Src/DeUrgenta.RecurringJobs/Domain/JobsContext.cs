@@ -11,7 +11,8 @@ namespace DeUrgenta.RecurringJobs.Domain
 
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<CertificationDetails> CertificationDetails { get; set; }
-        
+        public DbSet<ItemDetails> ItemDetails { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -20,6 +21,7 @@ namespace DeUrgenta.RecurringJobs.Domain
 
             modelBuilder.ApplyConfiguration(new NotificationEntityConfiguration());
             modelBuilder.ApplyConfiguration(new CertificationDetailsEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new ItemDetailsEntityConfiguration());
         }
     }
 }

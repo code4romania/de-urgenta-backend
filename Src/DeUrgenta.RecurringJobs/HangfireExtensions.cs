@@ -1,7 +1,9 @@
 ﻿using DeUrgenta.RecurringJobs.Jobs;
 using DeUrgenta.RecurringJobs.Jobs.Config;
+using DeUrgenta.RecurringJobs.Jobs.Interfaces;
 using DeUrgenta.RecurringJobs.Services;
 using DeUrgenta.RecurringJobs.Services.NotificationSenders;
+using DeUrgenta.RecurringJobs.Services.NotificationSenders.EmailBuilders;
 using Hangfire;
 using Hangfire.Dashboard;
 using Hangfire.Dashboard.BasicAuthorization;
@@ -39,6 +41,13 @@ namespace DeUrgenta.RecurringJobs
             }
             if (notificationSendersConfig.EmailNotificationSenderEnabled)
             {
+                services.AddScoped<EmailRequestBuilderFactory>();
+
+                services.AddScoped<CertificationEmailRequestBuilder>();
+                services.AddScoped<BackpackItemEmailRequestBuilder>();
+                services.AddScoped<IEmailRequestBuilder, CertificationEmailRequestBuilder>(s => s.GetService<CertificationEmailRequestBuilder>());
+                services.AddScoped<IEmailRequestBuilder, BackpackItemEmailRequestBuilder>(s => s.GetService<BackpackItemEmailRequestBuilder>());
+                
                 services.AddScoped<INotificationSender, EmailNotificationSender>();
             }
             if (notificationSendersConfig.PushNotificationSenderEnabled)
@@ -59,6 +68,9 @@ namespace DeUrgenta.RecurringJobs
 
             services.Configure<NotificationCleanupJobConfig>(configuration.GetSection("RecurringJobsConfig:NotificationCleanupJobConfig"));
             services.AddScoped<INotificationCleanupJob, NotificationCleanupJob>();
+
+            services.Configure<ExpiredBackpackItemJobConfig>(configuration.GetSection("RecurringJobsConfig:ExpiredBackpackItemJobConfig"));
+            services.AddScoped<IExpiredBackpackItemJob, ExpiredBackpackItemJob>();
         }
 
         public static void UseAuthenticatedHangfireDashboard(this IApplicationBuilder app, IConfiguration configuration)

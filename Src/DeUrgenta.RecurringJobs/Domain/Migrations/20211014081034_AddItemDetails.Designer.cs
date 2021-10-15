@@ -3,15 +3,17 @@ using System;
 using DeUrgenta.RecurringJobs.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DeUrgenta.RecurringJobs.Domain.Migrations
 {
     [DbContext(typeof(JobsContext))]
-    partial class JobsContextModelSnapshot : ModelSnapshot
+    [Migration("20211014081034_AddItemDetails")]
+    partial class AddItemDetails
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
