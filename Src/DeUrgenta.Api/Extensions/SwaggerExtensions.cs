@@ -36,7 +36,7 @@ namespace DeUrgenta.Api.Extensions
                 });
 
                 c.OperationFilter<AuthorizeCheckOperationFilter>();
-                c.OperationFilter<AddRequiredHeaderParameter>();
+                c.OperationFilter<AddRequiredHeaderParameterOperationFilter>();
 
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
