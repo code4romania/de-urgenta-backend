@@ -8,8 +8,9 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
 COPY ["DeUrgenta.RecurringJobs/DeUrgenta.RecurringJobs.csproj", "DeUrgenta.RecurringJobs/"]
-COPY ["DeUrgenta.Domain/DeUrgenta.Domain.csproj", "DeUrgenta.Domain/"]
+COPY ["DeUrgenta.Domain.Api/DeUrgenta.Domain.Api.csproj", "DeUrgenta.Domain.Api/"]
 COPY ["DeUrgenta.Infra/DeUrgenta.Infra.csproj", "DeUrgenta.Infra/"]
+COPY ["DeUrgenta.Emailing.Service/DeUrgenta.Emailing.Service.csproj", "DeUrgenta.Emailing.Service/"]
 
 RUN dotnet restore "DeUrgenta.RecurringJobs/DeUrgenta.RecurringJobs.csproj"
 

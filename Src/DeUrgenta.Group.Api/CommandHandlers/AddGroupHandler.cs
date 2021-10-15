@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Domain.Api;
+using DeUrgenta.Domain.Api.Entities;
 using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Models;
 using DeUrgenta.Group.Api.Options;
@@ -39,7 +39,7 @@ namespace DeUrgenta.Group.Api.CommandHandlers
 
             var newBackpack = new Backpack {Name = $"Backpack for {request.Group.Name}"};
 
-            var group = new Domain.Entities.Group {Admin = user, Name = request.Group.Name, Backpack = newBackpack};
+            var group = new Domain.Api.Entities.Group {Admin = user, Name = request.Group.Name, Backpack = newBackpack};
 
             var newGroup = await _context.Groups.AddAsync(group, cancellationToken);
 

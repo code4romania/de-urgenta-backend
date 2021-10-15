@@ -4,7 +4,7 @@ using DeUrgenta.Admin.Api.Queries;
 using DeUrgenta.Admin.Api.QueryHandlers;
 using DeUrgenta.Common.Models.Pagination;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Tests.Helpers;
 using FluentAssertions;
 using NSubstitute;

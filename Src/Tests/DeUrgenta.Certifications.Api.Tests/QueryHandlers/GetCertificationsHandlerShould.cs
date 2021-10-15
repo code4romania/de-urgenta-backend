@@ -4,7 +4,7 @@ using DeUrgenta.Certifications.Api.Queries;
 using DeUrgenta.Certifications.Api.QueryHandlers;
 using DeUrgenta.Certifications.Api.Storage;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Tests.Helpers;
 using NSubstitute;
 using FluentAssertions;

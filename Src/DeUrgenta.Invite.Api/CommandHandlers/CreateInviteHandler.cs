@@ -3,8 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Domain.Api;
+using DeUrgenta.Domain.Api.Entities;
 using DeUrgenta.Invite.Api.Commands;
 using DeUrgenta.Invite.Api.Models;
 using MediatR;
@@ -31,11 +31,11 @@ namespace DeUrgenta.Invite.Api.CommandHandlers
                 return validationResult;
             }
 
-            var invite = new Domain.Entities.Invite
+            var invite = new Domain.Api.Entities.Invite
             {
                 InviteStatus = InviteStatus.Sent,
                 SentOn = DateTime.Today,
-                Type = (Domain.Entities.InviteType)request.Type,
+                Type = (Domain.Api.Entities.InviteType)request.Type,
                 DestinationId = request.DestinationId
             };
             await _context.Invites.AddAsync(invite, cancellationToken);

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using DeUrgenta.Certifications.Api.CommandHandlers;
 using DeUrgenta.Certifications.Api.Commands;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Tests.Helpers;
 using NSubstitute;
 using FluentAssertions;

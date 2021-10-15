@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Respawn;

@@ -7,8 +7,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using Microsoft.EntityFrameworkCore;
+using DeUrgenta.Domain.RecurringJobs;
 
 namespace DeUrgenta.RecurringJobs
 {
@@ -49,8 +50,6 @@ namespace DeUrgenta.RecurringJobs
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
-
-            app.ApplicationServices.UseDatabase<JobsContext>();
 
             app.UseAuthenticatedHangfireDashboard(Configuration);
             app.ScheduleJobs(Configuration);

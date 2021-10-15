@@ -1,7 +1,7 @@
 ﻿using System;
 using DeUrgenta.Backpack.Api.Models;
 using DeUrgenta.Backpack.Api.Validators.RequestValidators;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Domain.Api.Entities;
 using DeUrgenta.Tests.Helpers;
 using FluentValidation.TestHelper;
 using Xunit;

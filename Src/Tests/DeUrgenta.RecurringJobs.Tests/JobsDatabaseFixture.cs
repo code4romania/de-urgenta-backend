@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using DeUrgenta.RecurringJobs.Domain;
+using DeUrgenta.Domain.RecurringJobs;
 using DeUrgenta.Tests.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;

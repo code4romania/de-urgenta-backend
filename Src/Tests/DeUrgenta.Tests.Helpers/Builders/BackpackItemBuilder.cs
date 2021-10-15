@@ -1,5 +1,5 @@
 ﻿using System;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Domain.Api.Entities;
 
 namespace DeUrgenta.Tests.Helpers.Builders
 {

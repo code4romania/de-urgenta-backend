@@ -1,5 +1,5 @@
 using System;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Domain.Api.Entities;
 using DeUrgenta.User.Api.Models;
 using Swashbuckle.AspNetCore.Filters;
 

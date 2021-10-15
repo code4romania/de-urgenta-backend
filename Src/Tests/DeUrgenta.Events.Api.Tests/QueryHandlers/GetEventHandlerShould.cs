@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Events.Api.Queries;
 using DeUrgenta.Events.Api.QueryHandlers;
 using DeUrgenta.Tests.Helpers;

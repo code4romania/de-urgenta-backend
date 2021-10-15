@@ -5,8 +5,8 @@ using CSharpFunctionalExtensions;
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Admin.Api.Models;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Domain.Api;
+using DeUrgenta.Domain.Api.Entities;
 using MediatR;
 
 namespace DeUrgenta.Admin.Api.CommandHandlers

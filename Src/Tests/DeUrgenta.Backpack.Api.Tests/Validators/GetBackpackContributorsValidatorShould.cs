@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Queries;
 using DeUrgenta.Backpack.Api.Validators;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Domain.Api;
+using DeUrgenta.Domain.Api.Entities;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
 using FluentAssertions;
@@ -67,7 +67,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var user = new UserBuilder().WithSub(userSub).Build();
             var owner = new UserBuilder().WithSub(ownerSub).Build();
 
-            var backpack = new Domain.Entities.Backpack
+            var backpack = new Domain.Api.Entities.Backpack
             {
                 Name = "A backpack"
             };
@@ -96,7 +96,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var user = new UserBuilder().WithSub(userSub).Build();
             var owner = new UserBuilder().WithSub(ownerSub).Build();
 
-            var backpack = new Domain.Entities.Backpack { Name = "A backpack" };
+            var backpack = new Domain.Api.Entities.Backpack { Name = "A backpack" };
 
             await _dbContext.Users.AddAsync(user);
 
@@ -122,7 +122,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var userSub = Guid.NewGuid().ToString();
             var user = new UserBuilder().WithSub(userSub).Build();
 
-            var backpack = new Domain.Entities.Backpack { Name = "A backpack" };
+            var backpack = new Domain.Api.Entities.Backpack { Name = "A backpack" };
             
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Backpacks.AddAsync(backpack);

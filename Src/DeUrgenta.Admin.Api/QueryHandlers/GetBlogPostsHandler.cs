@@ -7,7 +7,7 @@ using DeUrgenta.Admin.Api.Queries;
 using DeUrgenta.Common.Extensions;
 using DeUrgenta.Common.Models.Pagination;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using MediatR;
 
 namespace DeUrgenta.Admin.Api.QueryHandlers

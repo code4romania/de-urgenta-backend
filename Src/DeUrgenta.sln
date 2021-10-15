@@ -7,9 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Api", "DeUrgenta.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Backpack.Api", "DeUrgenta.Backpack.Api\DeUrgenta.Backpack.Api.csproj", "{7885DAF5-3471-45AE-9F78-884B05DA1E67}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Domain", "DeUrgenta.Domain\DeUrgenta.Domain.csproj", "{4472F523-5178-42FC-AC20-21D027B0D433}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Infra", "DeUrgenta.Infra\DeUrgenta.Infra.csproj", "{46600B30-1137-4377-BF2C-A860595F1570}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Domain.Api", "DeUrgenta.Domain.Api\DeUrgenta.Domain.Api.csproj", "{4472F523-5178-42FC-AC20-21D027B0D433}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Certifications.Api", "DeUrgenta.Certifications.Api\DeUrgenta.Certifications.Api.csproj", "{3E93429F-1F9E-4BAF-92EC-00105E90FE5A}"
 EndProject
@@ -44,11 +42,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Events.Api.Tests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Emailing.Service", "DeUrgenta.Emailing.Service\DeUrgenta.Emailing.Service.csproj", "{BDFEF135-FDC4-4A18-810E-E4CE302137F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeUrgenta.Admin.Api.Tests", "Tests\DeUrgenta.Admin.Api.Tests\DeUrgenta.Admin.Api.Tests.csproj", "{AD77BFCF-54CC-4471-968E-FFAE77DFE38B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Admin.Api.Tests", "Tests\DeUrgenta.Admin.Api.Tests\DeUrgenta.Admin.Api.Tests.csproj", "{AD77BFCF-54CC-4471-968E-FFAE77DFE38B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeUrgenta.Invite.Api", "DeUrgenta.Invite.Api\DeUrgenta.Invite.Api.csproj", "{019066EF-DE42-4345-B7BB-3A87988D2D0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Invite.Api", "DeUrgenta.Invite.Api\DeUrgenta.Invite.Api.csproj", "{019066EF-DE42-4345-B7BB-3A87988D2D0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeUrgenta.Invite.Api.Tests", "Tests\DeUrgenta.Invite.Api.Tests\DeUrgenta.Invite.Api.Tests.csproj", "{FC5BE36E-624D-4462-A2B5-7A172799E444}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Invite.Api.Tests", "Tests\DeUrgenta.Invite.Api.Tests\DeUrgenta.Invite.Api.Tests.csproj", "{FC5BE36E-624D-4462-A2B5-7A172799E444}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Domain.Identity", "DeUrgenta.Domain.Identity\DeUrgenta.Domain.Identity.csproj", "{1FAC5532-76FD-4B70-9C1C-777144D69EA0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeUrgenta.Infra", "DeUrgenta.Infra\DeUrgenta.Infra.csproj", "{01630F98-F0CE-446C-A8F4-00BA75E6AD7A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -96,18 +98,6 @@ Global
 		{4472F523-5178-42FC-AC20-21D027B0D433}.Release|x64.Build.0 = Release|Any CPU
 		{4472F523-5178-42FC-AC20-21D027B0D433}.Release|x86.ActiveCfg = Release|Any CPU
 		{4472F523-5178-42FC-AC20-21D027B0D433}.Release|x86.Build.0 = Release|Any CPU
-		{46600B30-1137-4377-BF2C-A860595F1570}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{46600B30-1137-4377-BF2C-A860595F1570}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{46600B30-1137-4377-BF2C-A860595F1570}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{46600B30-1137-4377-BF2C-A860595F1570}.Debug|x64.Build.0 = Debug|Any CPU
-		{46600B30-1137-4377-BF2C-A860595F1570}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{46600B30-1137-4377-BF2C-A860595F1570}.Debug|x86.Build.0 = Debug|Any CPU
-		{46600B30-1137-4377-BF2C-A860595F1570}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{46600B30-1137-4377-BF2C-A860595F1570}.Release|Any CPU.Build.0 = Release|Any CPU
-		{46600B30-1137-4377-BF2C-A860595F1570}.Release|x64.ActiveCfg = Release|Any CPU
-		{46600B30-1137-4377-BF2C-A860595F1570}.Release|x64.Build.0 = Release|Any CPU
-		{46600B30-1137-4377-BF2C-A860595F1570}.Release|x86.ActiveCfg = Release|Any CPU
-		{46600B30-1137-4377-BF2C-A860595F1570}.Release|x86.Build.0 = Release|Any CPU
 		{3E93429F-1F9E-4BAF-92EC-00105E90FE5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3E93429F-1F9E-4BAF-92EC-00105E90FE5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E93429F-1F9E-4BAF-92EC-00105E90FE5A}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -300,6 +290,30 @@ Global
 		{FC5BE36E-624D-4462-A2B5-7A172799E444}.Release|x64.Build.0 = Release|Any CPU
 		{FC5BE36E-624D-4462-A2B5-7A172799E444}.Release|x86.ActiveCfg = Release|Any CPU
 		{FC5BE36E-624D-4462-A2B5-7A172799E444}.Release|x86.Build.0 = Release|Any CPU
+		{1FAC5532-76FD-4B70-9C1C-777144D69EA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FAC5532-76FD-4B70-9C1C-777144D69EA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FAC5532-76FD-4B70-9C1C-777144D69EA0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1FAC5532-76FD-4B70-9C1C-777144D69EA0}.Debug|x64.Build.0 = Debug|Any CPU
+		{1FAC5532-76FD-4B70-9C1C-777144D69EA0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1FAC5532-76FD-4B70-9C1C-777144D69EA0}.Debug|x86.Build.0 = Debug|Any CPU
+		{1FAC5532-76FD-4B70-9C1C-777144D69EA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FAC5532-76FD-4B70-9C1C-777144D69EA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FAC5532-76FD-4B70-9C1C-777144D69EA0}.Release|x64.ActiveCfg = Release|Any CPU
+		{1FAC5532-76FD-4B70-9C1C-777144D69EA0}.Release|x64.Build.0 = Release|Any CPU
+		{1FAC5532-76FD-4B70-9C1C-777144D69EA0}.Release|x86.ActiveCfg = Release|Any CPU
+		{1FAC5532-76FD-4B70-9C1C-777144D69EA0}.Release|x86.Build.0 = Release|Any CPU
+		{01630F98-F0CE-446C-A8F4-00BA75E6AD7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01630F98-F0CE-446C-A8F4-00BA75E6AD7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01630F98-F0CE-446C-A8F4-00BA75E6AD7A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{01630F98-F0CE-446C-A8F4-00BA75E6AD7A}.Debug|x64.Build.0 = Debug|Any CPU
+		{01630F98-F0CE-446C-A8F4-00BA75E6AD7A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{01630F98-F0CE-446C-A8F4-00BA75E6AD7A}.Debug|x86.Build.0 = Debug|Any CPU
+		{01630F98-F0CE-446C-A8F4-00BA75E6AD7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01630F98-F0CE-446C-A8F4-00BA75E6AD7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01630F98-F0CE-446C-A8F4-00BA75E6AD7A}.Release|x64.ActiveCfg = Release|Any CPU
+		{01630F98-F0CE-446C-A8F4-00BA75E6AD7A}.Release|x64.Build.0 = Release|Any CPU
+		{01630F98-F0CE-446C-A8F4-00BA75E6AD7A}.Release|x86.ActiveCfg = Release|Any CPU
+		{01630F98-F0CE-446C-A8F4-00BA75E6AD7A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
