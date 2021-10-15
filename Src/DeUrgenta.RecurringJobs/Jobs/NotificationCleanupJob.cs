@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using DeUrgenta.Domain.RecurringJobs;
 using DeUrgenta.Domain.RecurringJobs.Entities;
+using DeUrgenta.RecurringJobs.Jobs.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.RecurringJobs.Jobs

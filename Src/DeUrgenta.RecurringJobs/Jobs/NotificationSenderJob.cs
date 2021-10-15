@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using DeUrgenta.RecurringJobs.Jobs.Interfaces;
 using DeUrgenta.RecurringJobs.Services;
 using Microsoft.EntityFrameworkCore;
 using DeUrgenta.Domain.RecurringJobs;

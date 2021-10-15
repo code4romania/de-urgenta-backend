@@ -18,34 +18,32 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
     public class EventArchivalJobShould
     {
         private readonly DeUrgentaContext _context;
-        private readonly JobsContext _jobsContext;
 
         public EventArchivalJobShould(JobsDatabaseFixture fixture)
         {
             _context = fixture.Context;
-            _jobsContext = fixture.JobsContext;
         }
 
         [Fact]
         public async Task Archive_event_when_the_event_is_due()
         {
             //Arrange
-            var eventType = new EventType {Name = "TestType"};
+            var eventType = new EventType { Name = "TestType" };
             eventType = _context.EventTypes.AddAsync(eventType).Result.Entity;
             await _context.SaveChangesAsync();
-            
+
             var eventEntity = new EventBuilder()
                 .WithEventTypeId(eventType.Id)
                 .WithDate(DateTime.UnixEpoch)
                 .Build();
-            
-            var eventEntry = await _context.Events.AddAsync(eventEntity);
+
+            await _context.Events.AddAsync(eventEntity);
             await _context.SaveChangesAsync();
 
             var jobConfig = Substitute.For<IOptionsMonitor<EventArchivalJobConfig>>();
             jobConfig.CurrentValue.Returns(new EventArchivalJobConfig());
 
-            var sut = new EventArchivalJob(_context, _jobsContext);
+            var sut = new EventArchivalJob(_context);
 
             //Act
             await sut.RunAsync();
@@ -59,7 +57,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
         public async Task Do_not_archive_event_when_the_event_is_due()
         {
             //Arrange
-            var eventType = new EventType {Name = "TestType"};
+            var eventType = new EventType { Name = "TestType" };
             eventType = _context.EventTypes.AddAsync(eventType).Result.Entity;
             await _context.SaveChangesAsync();
 
@@ -67,14 +65,14 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithEventTypeId(eventType.Id)
                 .WithDate(DateTime.Today.AddDays(1))
                 .Build();
-            
-            var eventEntry = await _context.Events.AddAsync(eventEntity);
+
+            await _context.Events.AddAsync(eventEntity);
             await _context.SaveChangesAsync();
 
             var jobConfig = Substitute.For<IOptionsMonitor<EventArchivalJobConfig>>();
             jobConfig.CurrentValue.Returns(new EventArchivalJobConfig());
 
-            var sut = new EventArchivalJob(_context, _jobsContext);
+            var sut = new EventArchivalJob(_context);
 
             //Act
             await sut.RunAsync();

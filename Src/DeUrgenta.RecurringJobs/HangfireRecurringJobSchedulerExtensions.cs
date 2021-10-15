@@ -1,6 +1,7 @@
 ﻿using System;
 using DeUrgenta.RecurringJobs.Jobs;
 using DeUrgenta.RecurringJobs.Jobs.Config;
+using DeUrgenta.RecurringJobs.Jobs.Interfaces;
 using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -55,6 +56,18 @@ namespace DeUrgenta.RecurringJobs
                     nameof(EventArchivalJob),
                     job => job.RunAsync(),
                     eventArchivalJobConfig.CronExpression,
+                    TimeZoneInfo.Utc
+                );
+            }
+
+            var expiredBackpackItemJobConfig = configuration.GetSection("RecurringJobsConfig:ExpiredBackpackItemJobConfig")
+                .Get<ExpiredBackpackItemJobConfig>();
+            if (expiredBackpackItemJobConfig.IsEnabled)
+            {
+                RecurringJob.AddOrUpdate<IExpiredBackpackItemJob>(
+                    nameof(ExpiredBackpackItemJob),
+                    job => job.RunAsync(),
+                    expiredBackpackItemJobConfig.CronExpression,
                     TimeZoneInfo.Utc
                 );
             }
