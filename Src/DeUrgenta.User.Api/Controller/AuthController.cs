@@ -49,8 +49,10 @@ namespace DeUrgenta.User.Api.Controller
 
             if (existingUser != null)
             {
-                // User already exits, return same result as per valid email to avoid user enumeration.
-                return Ok("Email was sent");
+                //TODO: add I18n
+                //TODO: consider returning a 200 with a more complex object as indicated here
+                //https://stackoverflow.com/a/53144807/2780791
+                return Conflict("Adresa de e-mail este deja utilizată");
             }
 
             var newUser = new IdentityUser { Email = user.Email, UserName = user.Email };

@@ -1,4 +1,5 @@
 using System.Reflection;
+using AspNetCoreRateLimit;
 using DeUrgenta.Admin.Api.Controller;
 using DeUrgenta.Backpack.Api.Controllers;
 using DeUrgenta.Certifications.Api.Controller;
@@ -45,6 +46,8 @@ namespace DeUrgenta.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            ConfigureRateLimit(services);
+
             services.SetupI18nService(Configuration);
             services.AddBearerAuth(Configuration);
             services.AddControllers().AddFluentValidation();
@@ -75,6 +78,29 @@ namespace DeUrgenta.Api
             services.SetupStorageService(Configuration);
 
             services.SetupHealthChecks(Configuration);
+
+
+        }
+
+        private void ConfigureRateLimit(IServiceCollection services)
+        {
+            // needed for loading options from appsettings.json
+            services.AddOptions();
+
+            // needed to store rate limit counters and ip rules
+            services.AddMemoryCache();
+
+            //load general configuration from appsettings.json
+            services.Configure<IpRateLimitOptions>(Configuration.GetSection("IpRateLimiting"));
+
+            //load ip rules from appsettings.json
+            services.Configure<IpRateLimitPolicies>(Configuration.GetSection("IpRateLimitPolicies"));
+
+            // inject counter and rules stores
+            services.AddInMemoryRateLimiting();
+
+            // configuration (resolvers, counter key builders)
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -84,7 +110,10 @@ namespace DeUrgenta.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
             app.ConfigureI18n();
+
+            app.UseIpRateLimiting();
 
             app.UseProblemDetails();
             app.UseConfigureSwagger();
@@ -94,7 +123,8 @@ namespace DeUrgenta.Api
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints => {
+            app.UseEndpoints(endpoints =>
+            {
                 endpoints.MapAppHealthChecks();
 
                 endpoints.MapControllers();
@@ -105,21 +135,18 @@ namespace DeUrgenta.Api
         }
 
         private static Assembly[] GetAssemblies() => new[]
-            {
-                Assembly.GetAssembly(typeof(Startup)),
+        {
+            Assembly.GetAssembly(typeof(Startup)),
 
-                // Application parts
-                typeof(BackpackController).GetTypeInfo().Assembly,
-                typeof(CertificationController).GetTypeInfo().Assembly,
-                typeof(AdminBlogController).GetTypeInfo().Assembly,
-                typeof(GroupController).GetTypeInfo().Assembly,
-                typeof(UserController).GetTypeInfo().Assembly,
-                typeof(EventController).GetTypeInfo().Assembly,
-                typeof(InviteController).GetTypeInfo().Assembly,
+            // Application parts
+            typeof(BackpackController).GetTypeInfo().Assembly, typeof(CertificationController).GetTypeInfo().Assembly,
+            typeof(AdminBlogController).GetTypeInfo().Assembly, typeof(GroupController).GetTypeInfo().Assembly,
+            typeof(UserController).GetTypeInfo().Assembly, typeof(EventController).GetTypeInfo().Assembly,
+            typeof(InviteController).GetTypeInfo().Assembly,
 
-                // Common
+            // Common
 
-                typeof(ApplicationErrorResponseExample).GetTypeInfo().Assembly
-            };
+            typeof(ApplicationErrorResponseExample).GetTypeInfo().Assembly
+        };
     }
 }
