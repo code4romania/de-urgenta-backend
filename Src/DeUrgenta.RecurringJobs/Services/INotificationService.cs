@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using DeUrgenta.Domain.RecurringJobs.Entities;
 
 namespace DeUrgenta.RecurringJobs.Services
 {
     public interface INotificationService
     {
-        Task SendNotificationAsync(Guid notificationId);
+        Task<NotificationStatus> SendNotificationAsync(Guid notificationId);
     }
 }

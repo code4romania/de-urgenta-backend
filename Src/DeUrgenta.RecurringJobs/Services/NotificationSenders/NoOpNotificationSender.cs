@@ -13,11 +13,11 @@ namespace DeUrgenta.RecurringJobs.Services.NotificationSenders
             _logger = logger;
         }
 
-        public Task SendNotificationAsync(Guid notificationId)
+        public Task<bool> SendNotificationAsync(Guid notificationId)
         {
             _logger.LogInformation($"Sent notification Id '{notificationId}' to user.");
 
-            return Task.CompletedTask;
+            return Task.FromResult(true);
         }
     }
 }

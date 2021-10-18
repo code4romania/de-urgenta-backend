@@ -5,6 +5,6 @@ namespace DeUrgenta.RecurringJobs.Services.NotificationSenders
 {
     public interface INotificationSender
     {
-        Task SendNotificationAsync(Guid notificationId);
+        Task<bool> SendNotificationAsync(Guid notificationId);
     }
 }
