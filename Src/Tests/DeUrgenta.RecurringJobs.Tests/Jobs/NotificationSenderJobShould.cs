@@ -4,10 +4,12 @@ using System.Threading.Tasks;
 using DeUrgenta.Domain.RecurringJobs;
 using DeUrgenta.Domain.RecurringJobs.Entities;
 using DeUrgenta.RecurringJobs.Jobs;
+using DeUrgenta.RecurringJobs.Jobs.Config;
 using DeUrgenta.RecurringJobs.Services;
 using DeUrgenta.RecurringJobs.Tests.Builders;
 using DeUrgenta.Tests.Helpers;
 using FluentAssertions;
+using Microsoft.Extensions.Options;
 using NSubstitute;
 using Xunit;
 
@@ -17,9 +19,16 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
     public class NotificationSenderJobShould
     {
         private readonly JobsContext _jobsContext;
+        private readonly IOptions<NotificationSenderJobConfig> _jobConfig;
+
         public NotificationSenderJobShould(JobsDatabaseFixture fixture)
         {
             _jobsContext = fixture.JobsContext;
+            _jobConfig = Substitute.For<IOptions<NotificationSenderJobConfig>>();
+            _jobConfig.Value.Returns(new NotificationSenderJobConfig
+            {
+                BatchSize = 10
+            });
         }
 
         [Fact]
@@ -34,7 +43,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             await _jobsContext.SaveChangesAsync();
 
             var notificationService = Substitute.For<INotificationService>();
-            var sut = new NotificationSenderJob(notificationService, _jobsContext);
+            var sut = new NotificationSenderJob(notificationService, _jobsContext, _jobConfig);
 
             //Act
             await sut.RunAsync();
@@ -55,7 +64,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             await _jobsContext.SaveChangesAsync();
 
             var notificationService = Substitute.For<INotificationService>();
-            var sut = new NotificationSenderJob(notificationService, _jobsContext);
+            var sut = new NotificationSenderJob(notificationService, _jobsContext, _jobConfig);
 
             //Act
             await sut.RunAsync();
@@ -79,7 +88,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             await _jobsContext.SaveChangesAsync();
 
             var notificationService = Substitute.For<INotificationService>();
-            var sut = new NotificationSenderJob(notificationService, _jobsContext);
+            var sut = new NotificationSenderJob(notificationService, _jobsContext, _jobConfig);
 
             //Act
             await sut.RunAsync();
@@ -108,7 +117,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             await _jobsContext.SaveChangesAsync();
 
             var notificationService = Substitute.For<INotificationService>();
-            var sut = new NotificationSenderJob(notificationService, _jobsContext);
+            var sut = new NotificationSenderJob(notificationService, _jobsContext, _jobConfig);
 
             //Act
             await sut.RunAsync();
@@ -132,7 +141,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             var notificationService = Substitute.For<INotificationService>();
             notificationService.SendNotificationAsync(notification.Id).Returns(Task.FromResult(NotificationStatus.PartlySent));
 
-            var sut = new NotificationSenderJob(notificationService, _jobsContext);
+            var sut = new NotificationSenderJob(notificationService, _jobsContext, _jobConfig);
 
             //Act
             await sut.RunAsync();
