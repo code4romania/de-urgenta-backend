@@ -27,7 +27,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             _jobConfig = Substitute.For<IOptions<NotificationSenderJobConfig>>();
             _jobConfig.Value.Returns(new NotificationSenderJobConfig
             {
-                BatchSize = 10
+                BatchSize = 20
             });
         }
 
