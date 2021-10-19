@@ -26,7 +26,7 @@ namespace DeUrgenta.Group.Api.Tests.QueriesHandlers
         public GetMyGroupsHandlerShould(DatabaseFixture fixture)
         {
             _dbContext = fixture.Context;
-            var options = new GroupsConfig {UsersLimit = 35};
+            var options = new GroupsConfig {MaxUsers = 35};
             _groupsConfig = Microsoft.Extensions.Options.Options.Create(options);
         }
 

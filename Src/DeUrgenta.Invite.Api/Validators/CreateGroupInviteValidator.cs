@@ -35,7 +35,7 @@ namespace DeUrgenta.Invite.Api.Validators
                 return ValidationResult.GenericValidationError;
             }
 
-            if (group.GroupMembers.Count == _config.UsersLimit)
+            if (group.GroupMembers.Count == _config.MaxUsers)
             {
                 return ValidationResult.GenericValidationError;
             }
