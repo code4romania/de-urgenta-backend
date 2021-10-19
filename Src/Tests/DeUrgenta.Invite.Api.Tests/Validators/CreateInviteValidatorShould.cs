@@ -28,7 +28,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
         {
             _context = fixture.Context;
 
-            _config.Add("Groups:UsersLimit", "2");
+            _config.Add("Groups:MaxUsers", "2");
 
             IConfiguration configuration =  new ConfigurationBuilder()
                     .AddInMemoryCollection(_config)
