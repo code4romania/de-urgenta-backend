@@ -3,17 +3,22 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using DeUrgenta.Common.Models.Dtos;
+using DeUrgenta.Common.Swagger;
 using DeUrgenta.Emailing.Service.Models;
 using DeUrgenta.User.Api.Models.DTOs.Requests;
-using DeUrgenta.User.Api.Models.DTOs.Responses;
 using DeUrgenta.User.Api.Notifications;
 using DeUrgenta.User.Api.Queries;
 using DeUrgenta.User.Api.Services;
+using DeUrgenta.User.Api.Swagger.User;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
+using Swashbuckle.AspNetCore.Annotations;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace DeUrgenta.User.Api.Controller
 {
@@ -41,6 +46,18 @@ namespace DeUrgenta.User.Api.Controller
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Tries to create a new user account
+        /// </summary>
+        /// <returns></returns>
+        [SwaggerResponse(StatusCodes.Status200OK, "User account creation confirmation message")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Internal server error", typeof(ProblemDetails))]
+        [SwaggerResponse(StatusCodes.Status409Conflict, "Email already used", typeof(ActionResponse))]
+        [SwaggerResponse(StatusCodes.Status429TooManyRequests, "Too many requests", typeof(ActionResponse))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AuthRegisterExample))]
+        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ConflictErrorResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status429TooManyRequests, typeof(TooManyRequestsResponseExample))]
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> RegisterAsync([FromBody] UserRegistrationDto user)
@@ -52,7 +69,11 @@ namespace DeUrgenta.User.Api.Controller
                 //TODO: add I18n
                 //TODO: consider returning a 200 with a more complex object as indicated here
                 //https://stackoverflow.com/a/53144807/2780791
-                return Conflict("Adresa de e-mail este deja utilizată");
+                return Conflict(new ActionResponse
+                {
+                    Success = false, 
+                    Errors = new List<string> { "Adresa de e-mail este deja utilizată" }
+                });
             }
 
             var newUser = new IdentityUser { Email = user.Email, UserName = user.Email };
