@@ -14,13 +14,13 @@ namespace DeUrgenta.Emailing.Service.Senders
             _emailBuilder = emailBuilder;
         }
 
-        public abstract Task SendAsync(Email email, CancellationToken cancellationToken = default);
+        public abstract Task<bool> SendAsync(Email email, CancellationToken cancellationToken = default);
 
-        public async Task SendAsync(EmailRequestModel emailRequest, CancellationToken cancellationToken = default)
+        public async Task<bool> SendAsync(EmailRequestModel emailRequest, CancellationToken cancellationToken = default)
         {
             var email = await _emailBuilder.BuildEmail(emailRequest);
 
-            await SendAsync(email, cancellationToken);
+            return await SendAsync(email, cancellationToken);
         }
     }
 }

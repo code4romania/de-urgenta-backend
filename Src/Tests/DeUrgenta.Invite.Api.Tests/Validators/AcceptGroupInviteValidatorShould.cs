@@ -24,7 +24,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             _context = fixture.Context;
             var options = new GroupsConfig
             {
-                UsersLimit = 2,
+                MaxUsers = 2,
                 MaxJoinedGroupsPerUser = 2
             };
             _groupsConfig = Microsoft.Extensions.Options.Options.Create(options);

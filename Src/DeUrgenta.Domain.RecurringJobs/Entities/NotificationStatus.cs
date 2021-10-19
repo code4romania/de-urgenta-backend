@@ -5,6 +5,7 @@
         NotSent,
         InProgress,
         Sent,
-        ErrorSending
+        ErrorSending,
+        PartlySent
     }
 }

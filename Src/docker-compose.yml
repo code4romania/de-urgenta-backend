@@ -21,6 +21,7 @@
         ConnectionStrings__DbConnectionString: ${DB_CONNECTION_STRING}
         ConnectionStrings__IdentityDbConnectionString: ${DB_CONNECTION_STRING}
         ConnectionStrings__JobsConnectionString: ${DB_CONNECTION_STRING}
+        ConnectionStrings__I18nDbConnectionString: ${DB_CONNECTION_STRING}
     api:
       container_name: deurgenta_api
       depends_on:
@@ -33,6 +34,7 @@
         ASPNETCORE_URLS: ${ASPNETCORE_URLS}
         ConnectionStrings__DbConnectionString: ${DB_CONNECTION_STRING}
         ConnectionStrings__IdentityDbConnectionString: ${DB_CONNECTION_STRING}
+        ConnectionStrings__I18nDbConnectionString: ${DB_CONNECTION_STRING}
         HealthChecksUI__HealthChecks__0__Uri: ${HEALTHCHECKSUI__HEALTHCHECKS__0__URI}
         SendGrid__ApiKey: ${EMAIL_SENDGRID_APIKEY}
       ports:

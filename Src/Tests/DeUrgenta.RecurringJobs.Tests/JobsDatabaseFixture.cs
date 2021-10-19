@@ -4,10 +4,11 @@ using DeUrgenta.Tests.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Respawn;
+using Xunit;
 
 namespace DeUrgenta.RecurringJobs.Tests
 {
-    public class JobsDatabaseFixture : DatabaseFixture
+    public class JobsDatabaseFixture : DatabaseFixture, IAsyncLifetime
     {
         private readonly JobsTestConfig _testConfig;
         private readonly Checkpoint _emptyJobsDatabaseCheckpoint;
@@ -34,7 +35,7 @@ namespace DeUrgenta.RecurringJobs.Tests
             JobsContext.Database.Migrate();
         }
 
-        public new async Task InitializeAsync()
+        public async Task InitializeAsync()
         {
             await base.InitializeAsync();
 
@@ -47,7 +48,7 @@ namespace DeUrgenta.RecurringJobs.Tests
             await _emptyJobsDatabaseCheckpoint.Reset(conn);
         }
 
-        public new async Task DisposeAsync()
+        public async Task DisposeAsync()
         {
             await base.DisposeAsync();
 

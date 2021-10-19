@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using DeUrgenta.Domain.Api;
-using DeUrgenta.Emailing.Service.Models;
 using DeUrgenta.Emailing.Service.Senders;
 using DeUrgenta.Domain.RecurringJobs;
-using DeUrgenta.Domain.RecurringJobs.Entities;
 using DeUrgenta.RecurringJobs.Services.NotificationSenders.EmailBuilders;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,7 +20,7 @@ namespace DeUrgenta.RecurringJobs.Services.NotificationSenders
             _factory = factory;
         }
 
-        public async Task SendNotificationAsync(Guid notificationId)
+        public async Task<bool> SendNotificationAsync(Guid notificationId)
         {
             var notification = await _jobsContext.Notifications
                 .Include(n => n.CertificationDetails)
@@ -32,13 +29,13 @@ namespace DeUrgenta.RecurringJobs.Services.NotificationSenders
 
             if (notification == null)
             {
-                return;
+                return false;
             }
 
             var emailRequestBuilder = _factory.GetBuilderInstance(notification.Type);
 
             var email = await emailRequestBuilder.CreateEmailRequest(notification);
-            await _emailSender.SendAsync(email);
+            return await _emailSender.SendAsync(email);
         }
     }
 }

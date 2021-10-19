@@ -5,7 +5,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace DeUrgenta.Api.Extensions.OperationFilter
 {
-    public class AddRequiredHeaderParameterOperationFilter : IOperationFilter
+    public class AcceptLanguageHeaderParameterOperationFilter : IOperationFilter
     {
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {

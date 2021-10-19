@@ -1,10 +1,15 @@
-﻿using DeUrgenta.Emailing.Service.Builders;
+﻿using System;
+using System.Net;
+using DeUrgenta.Emailing.Service.Builders;
 using DeUrgenta.Emailing.Service.Config;
+using DeUrgenta.Emailing.Service.Constants;
 using DeUrgenta.Emailing.Service.Senders;
 using DeUrgenta.Infra.Extensions;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Polly;
+using Polly.Registry;
 
 namespace DeUrgenta.Emailing.Service
 {
@@ -32,6 +37,35 @@ namespace DeUrgenta.Emailing.Service
                     services.AddSingleton<IEmailSender, SmtpSender>();
                     break;
             }
+
+            var registry = CreatePolicyRegistry();
+            services.AddPolicyRegistry(registry);
+        }
+
+        private static PolicyRegistry CreatePolicyRegistry()
+        {
+            var retryCount = 3;
+
+            var sendGridRetryPolicy = Policy.HandleResult<HttpStatusCode>(c =>
+                {
+                    var statusCode = (int)c;
+                    return (statusCode >= 500 && statusCode <= 599) || statusCode == 429;
+                })
+                .WaitAndRetryAsync(retryCount, retryAttempt => 
+                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+
+            var smtpRetryPolicy = Policy<bool>
+                .Handle<MailKit.CommandException>()
+                .Or<MailKit.ProtocolException>()
+                .WaitAndRetryAsync(retryCount, retryAttempt => 
+                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+
+            var registry = new PolicyRegistry
+            {
+                { PolicyNameConstants.SmtpPolicyName, smtpRetryPolicy },
+                { PolicyNameConstants.SendGridPolicyName, sendGridRetryPolicy }
+            };
+            return registry;
         }
 
         public static IHealthChecksBuilder AddEmailingService(this IHealthChecksBuilder builder, IConfiguration configuration)
