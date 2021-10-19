@@ -4,8 +4,8 @@ namespace DeUrgenta.Group.Api.Options
     {
         public const string SectionName = "Groups";
 
-        public int MaxJoinedGroupsPerUser { get; set; }
         public int MaxCreatedGroupsPerUser { get; set; }
         public int UsersLimit { get; set; }
+        public int MaxSafeLocations { get; set; }
     }
 }
