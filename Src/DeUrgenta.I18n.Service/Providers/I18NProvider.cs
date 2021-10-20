@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Domain.I18n;
+using DeUrgenta.Domain.I18n.Entities;
 using DeUrgenta.I18n.Service.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,6 +50,18 @@ namespace DeUrgenta.I18n.Service.Providers
                 : new StringResourceModel { Id = resource.Id, Value = resource.Value, Key = resource.Key };
         }
 
+        public async Task<ImmutableList<string>> GetAvailableContentKeys(string culture)
+        {
+
+            var language = await GetLanguageByCulture(culture);
+
+            var resources = await _context.StringResources.Where(x => x.LanguageId == language.Id)
+            .Select(r => r.Key)
+            .ToListAsync();
+
+            return resources.ToImmutableList();
+        }
+
         public async Task<string> Localize(string resourceKey, params object[] args)
         {
             var currentCulture = Thread.CurrentThread.CurrentUICulture.Name;
@@ -68,6 +81,35 @@ namespace DeUrgenta.I18n.Service.Providers
             }
 
             return resourceKey;
+        }
+
+        public async Task<StringResourceModel> AddOrUpdateContentValue(string culture, string resourceKey, string resourceValue)
+        {
+            var lang = _context.Languages.Where(lang => lang.Culture == culture)
+            .Include(l => l.StringResources).FirstOrDefault();
+
+            if (lang == null)
+            {
+                return new StringResourceModel {  Key = resourceKey, Value = resourceValue };;
+            }
+
+            var langRes = lang.StringResources.Where(sr => sr.Key == resourceKey).FirstOrDefault();
+
+            if (langRes != null)
+            {
+                langRes.Value = resourceValue;
+                _context.Entry(langRes).State = EntityState.Modified;
+            }
+            else
+            {
+                langRes = new StringResource { Id= new Guid(), Key = resourceKey, Value = resourceValue };
+                lang.StringResources.Add(langRes);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return new StringResourceModel { Id = langRes.Id, Key = langRes.Key, Value = langRes.Value };
+
         }
     }
 }

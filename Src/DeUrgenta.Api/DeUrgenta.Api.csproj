@@ -45,6 +45,7 @@
 	  <ProjectReference Include="..\DeUrgenta.Infra\DeUrgenta.Infra.csproj" />
 	  <ProjectReference Include="..\DeUrgenta.Invite.Api\DeUrgenta.Invite.Api.csproj" />
 	  <ProjectReference Include="..\DeUrgenta.User.Api\DeUrgenta.User.Api.csproj" />
+	  <ProjectReference Include="..\DeUrgenta.Content.Api\DeUrgenta.Content.Api.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

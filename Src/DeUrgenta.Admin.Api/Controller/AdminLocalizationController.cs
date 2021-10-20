@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using DeUrgenta.Admin.Api.Models;
 using DeUrgenta.I18n.Service.Providers;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,12 +8,12 @@ namespace DeUrgenta.Admin.Api.Controller
     [ApiController]
     [Produces("application/json")]
     [Consumes("application/json")]
-    [Route("test-localization")]
-    public class LocalizationController : ControllerBase
+    [Route("admin/content")]
+    public class AdminLocalizationController : ControllerBase
     {
         private readonly IamI18nProvider _i18NProvider;
 
-        public LocalizationController(IamI18nProvider i18NProvider)
+        public AdminLocalizationController(IamI18nProvider i18NProvider)
         {
             _i18NProvider = i18NProvider;
         }
@@ -22,6 +23,15 @@ namespace DeUrgenta.Admin.Api.Controller
         {
             var text = await _i18NProvider.Localize(key);
             return Ok(new { key, text });
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddOrUpdateContent(AddOrUpdateContentModel contentModel)
+        {
+            var updatedContent = await _i18NProvider.AddOrUpdateContentValue(contentModel.Culture,
+            contentModel.Key, contentModel.Value);
+            return Ok(updatedContent);
         }
     }
 }
