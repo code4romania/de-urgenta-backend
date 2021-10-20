@@ -116,18 +116,21 @@ namespace DeUrgenta.Api
         }
 
         private static Assembly[] GetAssemblies() => new[]
-        {
-            Assembly.GetAssembly(typeof(Startup)),
+            {
+                Assembly.GetAssembly(typeof(Startup)),
 
-            // Application parts
-            typeof(BackpackController).GetTypeInfo().Assembly, typeof(CertificationController).GetTypeInfo().Assembly,
-            typeof(AdminBlogController).GetTypeInfo().Assembly, typeof(GroupController).GetTypeInfo().Assembly,
-            typeof(UserController).GetTypeInfo().Assembly, typeof(EventController).GetTypeInfo().Assembly,
-            typeof(InviteController).GetTypeInfo().Assembly,
+                // Application parts
+                typeof(BackpackController).GetTypeInfo().Assembly,
+                typeof(CertificationController).GetTypeInfo().Assembly,
+                typeof(AdminBlogController).GetTypeInfo().Assembly,
+                typeof(GroupController).GetTypeInfo().Assembly,
+                typeof(UserController).GetTypeInfo().Assembly,
+                typeof(EventController).GetTypeInfo().Assembly,
+                typeof(InviteController).GetTypeInfo().Assembly,
 
-            // Common
+                // Common
 
-            typeof(ApplicationErrorResponseExample).GetTypeInfo().Assembly
-        };
+                typeof(ApplicationErrorResponseExample).GetTypeInfo().Assembly
+            };
     }
 }

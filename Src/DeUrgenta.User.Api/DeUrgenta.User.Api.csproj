@@ -27,8 +27,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Models\DTOs\Responses\" />
-	  <Folder Include="NotificationHandlers\" />
+    <Folder Include="NotificationHandlers\" />
 	</ItemGroup>
 
 </Project>
