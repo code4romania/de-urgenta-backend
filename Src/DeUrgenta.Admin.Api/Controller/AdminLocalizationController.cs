@@ -31,6 +31,9 @@ namespace DeUrgenta.Admin.Api.Controller
         {
             var updatedContent = await _i18NProvider.AddOrUpdateContentValue(contentModel.Culture,
             contentModel.Key, contentModel.Value);
+
+            if(updatedContent== null) return BadRequest("Specified culture does not exist");
+
             return Ok(updatedContent);
         }
     }
