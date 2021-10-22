@@ -23,13 +23,18 @@ namespace DeUrgenta.Backpack.Api.Validators
                 return ValidationResult.GenericValidationError;
             }
 
-            var isOwner = await _context
+            var backpackToUser = await _context
                 .BackpacksToUsers
-                .AnyAsync(btu => btu.User.Id == user.Id && btu.Backpack.Id == request.BackpackId && btu.IsOwner);
+                .FirstOrDefaultAsync(btu => btu.User.Id == user.Id && btu.Backpack.Id == request.BackpackId);
 
-            if (!isOwner)
+            if (backpackToUser == null)
             {
                 return ValidationResult.GenericValidationError;
+            }
+
+            if (!backpackToUser.IsOwner)
+            {
+                return new DetailedValidationError("You are not a backpack owner", "Only backpack owners can update backpacks.");
             }
 
             return ValidationResult.Ok;

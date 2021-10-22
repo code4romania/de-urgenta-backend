@@ -36,13 +36,13 @@ namespace DeUrgenta.Group.Api.Validators
             var isGroupAdmin = group.Admin.Id == user.Id;
             if (!isGroupAdmin)
             {
-                return ValidationResult.GenericValidationError;
+                return new DetailedValidationError("Cannot add safe locations", "Only group admins can add safe locations.");
             }
 
             var groupHasMaxSafeLocations = group.GroupSafeLocations.Count >= _config.MaxSafeLocations;
             if (groupHasMaxSafeLocations)
             {
-                return ValidationResult.GenericValidationError;
+                return new DetailedValidationError("Cannot add more safe locations", "You have reached maximum number of safe locations per group.");
             }
 
             return ValidationResult.Ok;

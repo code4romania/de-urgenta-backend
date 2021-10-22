@@ -34,19 +34,20 @@ namespace DeUrgenta.Invite.Api.Validators
 
             if (noOfGroupsUserIsAMemberOf >= _config.MaxJoinedGroupsPerUser)
             {
-                return ValidationResult.GenericValidationError;
+                return new DetailedValidationError("Cannot accept invite", "Current maximum number of groups user is part of is reached.");
             }
 
             var noOfGroupMembers = await _context.UsersToGroups
                 .CountAsync(u => u.GroupId == request.GroupId);
+            
             if (noOfGroupMembers >= _config.MaxUsers)
             {
-                return ValidationResult.GenericValidationError;
+                return new DetailedValidationError("Cannot accept invite", "Current maximum number of group members is reached.");
             }
 
             var userIsAlreadyAMember = await _context.UsersToGroups
-                .AnyAsync(u => u.UserId == user.Id
-                               && u.GroupId == request.GroupId);
+                .AnyAsync(u => u.UserId == user.Id && u.GroupId == request.GroupId);
+
             if (userIsAlreadyAMember)
             {
                 return ValidationResult.GenericValidationError;

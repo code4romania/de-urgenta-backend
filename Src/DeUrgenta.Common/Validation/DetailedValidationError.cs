@@ -12,5 +12,11 @@ namespace DeUrgenta.Common.Validation
         public DetailedValidationError(Dictionary<string, string> messages) : base(false, messages.ToImmutableDictionary())
         {
         }
+
+        public DetailedValidationError(string title, string message) : base(false, new Dictionary<string, string> { { title, message } }.ToImmutableDictionary())
+        {
+        }
+
+
     }
 }

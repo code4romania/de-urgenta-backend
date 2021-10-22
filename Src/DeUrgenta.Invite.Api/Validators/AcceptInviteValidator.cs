@@ -29,9 +29,10 @@ namespace DeUrgenta.Invite.Api.Validators
             {
                 return ValidationResult.GenericValidationError;
             }
+
             if (invite.InviteStatus == InviteStatus.Accepted)
             {
-                return ValidationResult.GenericValidationError;
+                return new DetailedValidationError("Cannot accept invite", "Invite was already accepted.");
             }
 
             return ValidationResult.Ok;

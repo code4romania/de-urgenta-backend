@@ -24,13 +24,19 @@ namespace DeUrgenta.Group.Api.Validators
                 return ValidationResult.GenericValidationError;
             }
 
-            var group = await _context
-                .Groups
-                .FirstOrDefaultAsync(g => g.Id == request.GroupId && g.Admin.Id == user.Id);
-
-            if (group == null)
+            var groupExists = await _context.Groups.AnyAsync(g => g.Id == request.GroupId);
+            if (!groupExists)
             {
                 return ValidationResult.GenericValidationError;
+            }
+
+            var isGroupAdmin = await _context
+                .Groups
+                .AnyAsync(g => g.Id == request.GroupId && g.Admin.Id == user.Id);
+
+            if (!isGroupAdmin)
+            {
+                return new DetailedValidationError("Cannot delete group", "Only group admin can update group.");
             }
 
             return ValidationResult.Ok;

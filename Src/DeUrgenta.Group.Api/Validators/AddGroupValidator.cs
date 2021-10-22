@@ -29,7 +29,7 @@ namespace DeUrgenta.Group.Api.Validators
 
             if (user.GroupsAdministered.Count >= _groupsConfig.MaxCreatedGroupsPerUser)
             {
-                return ValidationResult.GenericValidationError;
+                return new DetailedValidationError("Cannot create more groups", "You have reached maximum number of groups per user.");
             }
 
             return ValidationResult.Ok;

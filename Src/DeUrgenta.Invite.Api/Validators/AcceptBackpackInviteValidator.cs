@@ -30,17 +30,17 @@ namespace DeUrgenta.Invite.Api.Validators
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub);
 
             var userIsAlreadyAContributor = await _context.BackpacksToUsers
-                .AnyAsync(u => u.UserId == user.Id
-                                    && u.BackpackId == request.BackpackId);
+                .AnyAsync(u => u.UserId == user.Id && u.BackpackId == request.BackpackId);
+
             if (userIsAlreadyAContributor)
             {
-                return ValidationResult.GenericValidationError;
+                return new DetailedValidationError("Cannot accept invite", "User is already a backpack contributor.");
             }
 
             var existingContributors = await _context.BackpacksToUsers.CountAsync(b => b.BackpackId == request.BackpackId);
             if (existingContributors >= _config.MaxContributors)
             {
-                return ValidationResult.GenericValidationError;
+                return new DetailedValidationError("Cannot accept invite", "Current maximum number of contributors is reached.");
             }
 
             return ValidationResult.Ok;

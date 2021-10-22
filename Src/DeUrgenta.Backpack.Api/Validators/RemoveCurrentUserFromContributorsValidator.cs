@@ -29,7 +29,7 @@ namespace DeUrgenta.Backpack.Api.Validators
 
             if (isOwner)
             {
-                return ValidationResult.GenericValidationError;
+                return new DetailedValidationError("You cannot leave a backpack while you are an owner.", "You cannot remove yourself from contributors if you are owner.");
             }
 
             var isPartOfGroup = await _context
