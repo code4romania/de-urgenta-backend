@@ -9,6 +9,8 @@ using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
 using FluentAssertions;
 using Xunit;
+using NSubstitute;
+using DeUrgenta.I18n.Service.Providers;
 
 namespace DeUrgenta.Certifications.Api.Tests.Validators
 {
@@ -29,7 +31,12 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
         public async Task Invalidate_request_when_no_user_found_by_sub(string sub)
         {
             // Arrange
-            var sut = new DeleteCertificationValidator(_dbContext);
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
+            var sut = new DeleteCertificationValidator(_dbContext, i18nProvider);
 
             // Act
             var isValid = await sut.IsValidAsync(new DeleteCertification(sub, Guid.NewGuid()));
@@ -42,7 +49,12 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
         public async Task Invalidate_request_when_certification_not_found()
         {
             // Arrange
-            var sut = new DeleteCertificationValidator(_dbContext);
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
+            var sut = new DeleteCertificationValidator(_dbContext, i18nProvider);
             var userSub = Guid.NewGuid().ToString();
 
             var user = new UserBuilder().WithSub(userSub).Build();
@@ -61,7 +73,12 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
         public async Task Invalidate_request_when_user_is_not_owner()
         {
             // Arrange
-            var sut = new DeleteCertificationValidator(_dbContext);
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
+            var sut = new DeleteCertificationValidator(_dbContext, i18nProvider);
 
             var certificationId = Guid.NewGuid();
             var ownerId = Guid.NewGuid();
@@ -93,7 +110,12 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
         public async Task Validate_request_when_user_is_owner()
         {
             // Arrange
-            var sut = new DeleteCertificationValidator(_dbContext);
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
+            var sut = new DeleteCertificationValidator(_dbContext, i18nProvider);
 
             var certificationId = Guid.NewGuid();
             var ownerId = Guid.NewGuid();

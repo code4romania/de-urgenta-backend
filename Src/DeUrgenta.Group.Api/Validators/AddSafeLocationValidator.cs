@@ -3,6 +3,7 @@ using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Options;
+using DeUrgenta.I18n.Service.Providers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -11,11 +12,13 @@ namespace DeUrgenta.Group.Api.Validators
     public class AddSafeLocationValidator : IValidateRequest<AddSafeLocation>
     {
         private readonly DeUrgentaContext _context;
+        private readonly IamI18nProvider _i18nProvider;
         private readonly GroupsConfig _config;
 
-        public AddSafeLocationValidator(DeUrgentaContext context, IOptions<GroupsConfig> config)
+        public AddSafeLocationValidator(DeUrgentaContext context, IamI18nProvider i18nProvider, IOptions<GroupsConfig> config)
         {
             _context = context;
+            _i18nProvider = i18nProvider;
             _config = config.Value;
         }
 

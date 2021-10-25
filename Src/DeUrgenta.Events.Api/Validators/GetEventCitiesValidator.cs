@@ -3,16 +3,19 @@ using DeUrgenta.Events.Api.Queries;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using Microsoft.EntityFrameworkCore;
+using DeUrgenta.I18n.Service.Providers;
 
 namespace DeUrgenta.Events.Api.Validators
 {
     public class GetEventCitiesValidator : IValidateRequest<GetEventCities>
     {
         private readonly DeUrgentaContext _context;
+        private readonly IamI18nProvider _i18nProvider;
 
-        public GetEventCitiesValidator(DeUrgentaContext context)
+        public GetEventCitiesValidator(DeUrgentaContext context, IamI18nProvider i18nProvider)
         {
             _context = context;
+            _i18nProvider = i18nProvider;
         }
 
         public async Task<ValidationResult> IsValidAsync(GetEventCities request)

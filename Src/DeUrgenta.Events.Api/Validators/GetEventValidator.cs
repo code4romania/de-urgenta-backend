@@ -2,6 +2,7 @@
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Events.Api.Queries;
+using DeUrgenta.I18n.Service.Providers;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Events.Api.Validators
@@ -9,10 +10,12 @@ namespace DeUrgenta.Events.Api.Validators
     public class GetEventValidator : IValidateRequest<GetEvent>
     {
         private readonly DeUrgentaContext _context;
+        private readonly IamI18nProvider _i18nProvider;
 
-        public GetEventValidator(DeUrgentaContext context)
+        public GetEventValidator(DeUrgentaContext context, IamI18nProvider i18nProvider)
         {
             _context = context;
+            _i18nProvider = i18nProvider;
         }
 
         public async Task<ValidationResult> IsValidAsync(GetEvent request)

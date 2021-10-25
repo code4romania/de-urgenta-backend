@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
+using DeUrgenta.I18n.Service.Providers;
 using DeUrgenta.Invite.Api.Commands;
 using DeUrgenta.Invite.Api.Options;
 using Microsoft.EntityFrameworkCore;
@@ -11,11 +12,13 @@ namespace DeUrgenta.Invite.Api.Validators
     public class CreateGroupInviteValidator : ICreateInviteValidator
     {
         private readonly DeUrgentaContext _context;
+        private readonly IamI18nProvider _i18nProvider;
         private readonly GroupsConfig _config;
 
-        public CreateGroupInviteValidator(DeUrgentaContext context, IOptions<GroupsConfig> config)
+        public CreateGroupInviteValidator(DeUrgentaContext context, IamI18nProvider i18nProvider, IOptions<GroupsConfig> config)
         {
             _context = context;
+            _i18nProvider = i18nProvider;
             _config = config.Value;
         }
 

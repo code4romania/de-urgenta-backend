@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
+using DeUrgenta.I18n.Service.Providers;
 using DeUrgenta.Invite.Api.Commands;
 using DeUrgenta.Invite.Api.Options;
 using DeUrgenta.Invite.Api.Validators;
@@ -9,6 +10,7 @@ using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
+using NSubstitute;
 using Xunit;
 
 namespace DeUrgenta.Invite.Api.Tests.Validators
@@ -34,17 +36,22 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
         public async Task Invalidate_request_if_group_does_not_exist()
         {
             //Arrange
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
             var sub = Guid.NewGuid().ToString();
             var groupId = Guid.NewGuid();
 
             var user = new UserBuilder().WithSub(sub).Build();
             await _context.Users.AddAsync(user);
-            
+
             await _context.SaveChangesAsync();
 
             AcceptGroupInvite request = new(sub, groupId);
 
-            var sut = new AcceptGroupInviteValidator(_context, _groupsConfig);
+            var sut = new AcceptGroupInviteValidator(_context, i18nProvider, _groupsConfig);
 
             //Act
             var isValid = await sut.IsValidAsync(request);
@@ -57,6 +64,11 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
         public async Task Invalidate_request_if_user_is_already_a_member_of_too_many_groups()
         {
             //Arrange
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
             var sub = Guid.NewGuid().ToString();
             var groupId = Guid.NewGuid();
 
@@ -75,7 +87,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             AcceptGroupInvite request = new(sub, groupId);
 
-            var sut = new AcceptGroupInviteValidator(_context, _groupsConfig);
+            var sut = new AcceptGroupInviteValidator(_context, i18nProvider, _groupsConfig);
 
             //Act
             var isValid = await sut.IsValidAsync(request);
@@ -89,6 +101,11 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
         public async Task Invalidate_request_if_group_already_has_too_many_members()
         {
             //Arrange
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
             var sub = Guid.NewGuid().ToString();
             var groupId = Guid.NewGuid();
 
@@ -107,7 +124,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             AcceptGroupInvite request = new(sub, groupId);
 
-            var sut = new AcceptGroupInviteValidator(_context, _groupsConfig);
+            var sut = new AcceptGroupInviteValidator(_context, i18nProvider, _groupsConfig);
 
             //Act
             var isValid = await sut.IsValidAsync(request);
@@ -120,6 +137,11 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
         public async Task Invalidate_request_if_user_already_a_group_member()
         {
             //Arrange
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
             var sub = Guid.NewGuid().ToString();
             var groupId = Guid.NewGuid();
 
@@ -131,12 +153,12 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             var userToGroups = new UserToGroupBuilder().WithGroup(group).WithUser(user).Build();
             await _context.UsersToGroups.AddAsync(userToGroups);
-            
+
             await _context.SaveChangesAsync();
 
             AcceptGroupInvite request = new(sub, groupId);
 
-            var sut = new AcceptGroupInviteValidator(_context, _groupsConfig);
+            var sut = new AcceptGroupInviteValidator(_context, i18nProvider, _groupsConfig);
 
             //Act
             var isValid = await sut.IsValidAsync(request);
@@ -149,6 +171,11 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
         public async Task Validate_request_if_accept_group_invite_request_is_valid()
         {
             //Arrange
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
             var sub = Guid.NewGuid().ToString();
             var groupId = Guid.NewGuid();
 
@@ -162,7 +189,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             AcceptGroupInvite request = new(sub, groupId);
 
-            var sut = new AcceptGroupInviteValidator(_context, _groupsConfig);
+            var sut = new AcceptGroupInviteValidator(_context, i18nProvider, _groupsConfig);
 
             //Act
             var isValid = await sut.IsValidAsync(request);

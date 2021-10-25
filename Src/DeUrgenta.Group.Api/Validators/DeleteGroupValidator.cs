@@ -9,10 +9,12 @@ namespace DeUrgenta.Group.Api.Validators
     public class DeleteGroupValidator : IValidateRequest<DeleteGroup>
     {
         private readonly DeUrgentaContext _context;
+        private readonly IamI18nProvider _i18nProvider;
 
-        public DeleteGroupValidator(DeUrgentaContext context)
+        public DeleteGroupValidator(DeUrgentaContext context, IamI18nProvider i18nProvider)
         {
             _context = context;
+            _i18nProvider = i18nProvider;
         }
 
         public async Task<ValidationResult> IsValidAsync(DeleteGroup request)

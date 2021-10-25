@@ -2,6 +2,7 @@
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
+using DeUrgenta.I18n.Service.Providers;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Backpack.Api.Validators
@@ -9,10 +10,12 @@ namespace DeUrgenta.Backpack.Api.Validators
     public class DeleteBackpackValidator : IValidateRequest<DeleteBackpack>
     {
         private readonly DeUrgentaContext _context;
+        private readonly IamI18nProvider _i18nProvider;
 
-        public DeleteBackpackValidator(DeUrgentaContext context)
+        public DeleteBackpackValidator(DeUrgentaContext context, IamI18nProvider i18nProvider)
         {
             _context = context;
+            _i18nProvider = i18nProvider;
         }
 
         public async Task<ValidationResult> IsValidAsync(DeleteBackpack request)

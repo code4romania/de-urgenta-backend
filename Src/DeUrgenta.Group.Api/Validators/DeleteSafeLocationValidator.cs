@@ -2,6 +2,7 @@
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Group.Api.Commands;
+using DeUrgenta.I18n.Service.Providers;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Group.Api.Validators
@@ -9,10 +10,12 @@ namespace DeUrgenta.Group.Api.Validators
     public class DeleteSafeLocationValidator : IValidateRequest<DeleteSafeLocation>
     {
         private readonly DeUrgentaContext _context;
+        private readonly IamI18nProvider _i18nProvider;
 
-        public DeleteSafeLocationValidator(DeUrgentaContext context)
+        public DeleteSafeLocationValidator(DeUrgentaContext context, IamI18nProvider i18nProvider)
         {
             _context = context;
+            _i18nProvider = i18nProvider;
         }
 
         public async Task<ValidationResult> IsValidAsync(DeleteSafeLocation request)

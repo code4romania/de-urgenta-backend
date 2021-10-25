@@ -5,9 +5,11 @@ using DeUrgenta.Backpack.Api.Validators;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Domain.Api.Entities;
+using DeUrgenta.I18n.Service.Providers;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
 using FluentAssertions;
+using NSubstitute;
 using Xunit;
 
 namespace DeUrgenta.Backpack.Api.Tests.Validators
@@ -29,7 +31,12 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_request_when_no_user_found_by_sub(string sub)
         {
             // Arrange
-            var sut = new RemoveCurrentUserFromContributorsValidator(_dbContext);
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
+            var sut = new RemoveCurrentUserFromContributorsValidator(_dbContext, i18nProvider);
 
             // Act
             var isValid = await sut.IsValidAsync(new RemoveCurrentUserFromContributors(sub, Guid.NewGuid()));
@@ -42,7 +49,12 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_when_no_backpack_found()
         {
             // Arrange
-            var sut = new RemoveCurrentUserFromContributorsValidator(_dbContext);
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
+            var sut = new RemoveCurrentUserFromContributorsValidator(_dbContext, i18nProvider);
 
             var userSub = Guid.NewGuid().ToString();
 
@@ -62,7 +74,12 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_when_user_not_contributor_to_backpack()
         {
             // Arrange
-            var sut = new RemoveCurrentUserFromContributorsValidator(_dbContext);
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
+            var sut = new RemoveCurrentUserFromContributorsValidator(_dbContext, i18nProvider);
             var userSub = Guid.NewGuid().ToString();
 
             var user = new UserBuilder().WithSub(userSub).Build();
@@ -89,7 +106,12 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_when_is_owner_of_backpack()
         {
             // Arrange
-            var sut = new RemoveCurrentUserFromContributorsValidator(_dbContext);
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
+            var sut = new RemoveCurrentUserFromContributorsValidator(_dbContext, i18nProvider);
             var userSub = Guid.NewGuid().ToString();
 
             var user = new UserBuilder().WithSub(userSub).Build();
@@ -115,7 +137,12 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Validate_when_is_contributor()
         {
             // Arrange
-            var sut = new RemoveCurrentUserFromContributorsValidator(_dbContext);
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
+            var sut = new RemoveCurrentUserFromContributorsValidator(_dbContext, i18nProvider);
             var userSub = Guid.NewGuid().ToString();
             var ownerSub = Guid.NewGuid().ToString();
 

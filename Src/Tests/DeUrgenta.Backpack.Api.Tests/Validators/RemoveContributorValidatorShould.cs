@@ -9,6 +9,8 @@ using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
 using FluentAssertions;
 using Xunit;
+using DeUrgenta.I18n.Service.Providers;
+using NSubstitute;
 
 namespace DeUrgenta.Backpack.Api.Tests.Validators
 {
@@ -29,7 +31,12 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_request_when_no_user_found_by_sub(string sub)
         {
             // Arrange
-            var sut = new RemoveContributorValidator(_dbContext);
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
+            var sut = new RemoveContributorValidator(_dbContext,i18nProvider);
 
             // Act
             var isValid = await sut.IsValidAsync(new RemoveContributor(sub, Guid.NewGuid(), Guid.NewGuid()));
@@ -43,7 +50,12 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_when_user_removes_itself()
         {
             // Arrange
-            var sut = new RemoveContributorValidator(_dbContext);
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
+            var sut = new RemoveContributorValidator(_dbContext, i18nProvider);
 
             var userSub = Guid.NewGuid().ToString();
 
@@ -72,7 +84,12 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_when_target_user_does_not_exists()
         {
             // Arrange
-            var sut = new RemoveContributorValidator(_dbContext);
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
+            var sut = new RemoveContributorValidator(_dbContext, i18nProvider);
 
             var userSub = Guid.NewGuid().ToString();
             var owner = new UserBuilder().WithSub(userSub).Build();
@@ -99,7 +116,12 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_when_backpack_does_not_exist()
         {
             // Arrange
-            var sut = new RemoveContributorValidator(_dbContext);
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
+            var sut = new RemoveContributorValidator(_dbContext,i18nProvider);
 
             var userSub = Guid.NewGuid().ToString();
             var contributorSub = Guid.NewGuid().ToString();
@@ -123,7 +145,12 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_when_user_is_not_owner_of_backpack()
         {
             // Arrange
-            var sut = new RemoveContributorValidator(_dbContext);
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
+            var sut = new RemoveContributorValidator(_dbContext, i18nProvider);
 
             var userSub = Guid.NewGuid().ToString();
             var contributorSub = Guid.NewGuid().ToString();
@@ -157,7 +184,12 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Validate_when_user_is_owner_of_backpack_and_removes_a_member()
         {
             // Arrange
-            var sut = new RemoveContributorValidator(_dbContext);
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
+            var sut = new RemoveContributorValidator(_dbContext, i18nProvider);
 
             var userSub = Guid.NewGuid().ToString();
             var backpackContributorSub = Guid.NewGuid().ToString();

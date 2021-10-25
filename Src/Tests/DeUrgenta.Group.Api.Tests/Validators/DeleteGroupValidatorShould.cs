@@ -4,9 +4,11 @@ using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Validators;
+using DeUrgenta.I18n.Service.Providers;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
 using FluentAssertions;
+using NSubstitute;
 using Xunit;
 
 namespace DeUrgenta.Group.Api.Tests.Validators
@@ -28,7 +30,12 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Invalidate_request_when_no_user_found_by_sub(string sub)
         {
             // Arrange
-            var sut = new DeleteGroupValidator(_dbContext);
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
+            var sut = new DeleteGroupValidator(_dbContext, i18nProvider);
 
             // Act
             var isValid = await sut.IsValidAsync(new DeleteGroup(sub, Guid.NewGuid()));
@@ -46,7 +53,12 @@ namespace DeUrgenta.Group.Api.Tests.Validators
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
-            var sut = new DeleteGroupValidator(_dbContext);
+
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+            var sut = new DeleteGroupValidator(_dbContext, i18nProvider);
 
             // Act
             var isValid = await sut.IsValidAsync(new DeleteGroup(userSub, Guid.NewGuid()));
@@ -72,7 +84,12 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.Groups.AddAsync(group);
             await _dbContext.SaveChangesAsync();
 
-            var sut = new DeleteGroupValidator(_dbContext);
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
+            var sut = new DeleteGroupValidator(_dbContext, i18nProvider);
 
             // Act
             var isValid = await sut.IsValidAsync(new DeleteGroup(userSub, group.Id));
@@ -85,7 +102,12 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Validate_when_user_is_admin_of_requested_group()
         {
             // Arrange
-            var sut = new DeleteGroupValidator(_dbContext);
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
+            var sut = new DeleteGroupValidator(_dbContext, i18nProvider);
 
             var userSub = Guid.NewGuid().ToString();
             var user = new UserBuilder().WithSub(userSub).Build();

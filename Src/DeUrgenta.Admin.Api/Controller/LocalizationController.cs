@@ -10,17 +10,17 @@ namespace DeUrgenta.Admin.Api.Controller
     [Route("test-localization")]
     public class LocalizationController : ControllerBase
     {
-        private readonly IamI18nProvider _i18NProvider;
+        private readonly IamI18nProvider _i18nProvider;
 
-        public LocalizationController(IamI18nProvider i18NProvider)
+        public LocalizationController(IamI18nProvider i18nProvider)
         {
-            _i18NProvider = i18NProvider;
+            _i18nProvider = i18nProvider;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetString(string key)
         {
-            var text = await _i18NProvider.Localize(key);
+            var text = await _i18nProvider.Localize(key);
             return Ok(new { key, text });
         }
     }

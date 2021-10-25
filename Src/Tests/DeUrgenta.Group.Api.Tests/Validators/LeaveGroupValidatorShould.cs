@@ -8,6 +8,7 @@ using DeUrgenta.Group.Api.Validators;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
 using FluentAssertions;
+using NSubstitute;
 using Xunit;
 
 namespace DeUrgenta.Group.Api.Tests.Validators
@@ -29,7 +30,12 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Invalidate_request_when_no_user_found_by_sub(string sub)
         {
             // Arrange
-            var sut = new LeaveGroupValidator(_dbContext);
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
+            var sut = new LeaveGroupValidator(_dbContext, i18nProvider);
 
             // Act
             var isValid = await sut.IsValidAsync(new LeaveGroup(sub, Guid.NewGuid()));
@@ -42,7 +48,12 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Invalidate_when_no_group_found()
         {
             // Arrange
-            var sut = new LeaveGroupValidator(_dbContext);
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
+            var sut = new LeaveGroupValidator(_dbContext, i18nProvider);
 
             var userSub = Guid.NewGuid().ToString();
             var user = new UserBuilder().WithSub(userSub).Build();
@@ -61,7 +72,12 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Invalidate_when_user_not_part_of_group()
         {
             // Arrange
-            var sut = new LeaveGroupValidator(_dbContext);
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
+            var sut = new LeaveGroupValidator(_dbContext, i18nProvider);
             var userSub = Guid.NewGuid().ToString();
 
             var user = new UserBuilder().WithSub(userSub).Build();
@@ -85,14 +101,19 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Invalidate_when_is_admin_of_group()
         {
             // Arrange
-            var sut = new LeaveGroupValidator(_dbContext);
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
+            var sut = new LeaveGroupValidator(_dbContext, i18nProvider);
             var userSub = Guid.NewGuid().ToString();
 
             var user = new UserBuilder().WithSub(userSub).Build();
 
             var group = new GroupBuilder().WithAdmin(user).Build();
 
-            var userToGroups = new UserToGroup {Group = group, User = user};
+            var userToGroups = new UserToGroup { Group = group, User = user };
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Groups.AddAsync(group);
@@ -110,7 +131,12 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Validate_when_is_part_of_requested_group()
         {
             // Arrange
-            var sut = new LeaveGroupValidator(_dbContext);
+            var i18nProvider = Substitute.For<IamI18nProvider>();
+            i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
+            var sut = new LeaveGroupValidator(_dbContext, i18nProvider);
             var userSub = Guid.NewGuid().ToString();
             var adminSub = Guid.NewGuid().ToString();
 
@@ -119,7 +145,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
 
             var group = new GroupBuilder().WithAdmin(admin).Build();
 
-            var userToGroups = new UserToGroup {Group = group, User = user};
+            var userToGroups = new UserToGroup { Group = group, User = user };
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Groups.AddAsync(group);
@@ -132,5 +158,6 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             // Assert
             isValid.Should().BeOfType<ValidationPassed>();
         }
+
     }
 }

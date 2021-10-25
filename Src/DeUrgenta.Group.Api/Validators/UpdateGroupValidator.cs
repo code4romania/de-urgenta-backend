@@ -2,6 +2,7 @@
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Group.Api.Commands;
+using DeUrgenta.I18n.Service.Providers;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Group.Api.Validators
@@ -10,7 +11,7 @@ namespace DeUrgenta.Group.Api.Validators
     {
         private readonly DeUrgentaContext _context;
 
-        public UpdateGroupValidator(DeUrgentaContext context)
+        public UpdateGroupValidator(DeUrgentaContext context, IamI18nProvider i18nProvider)
         {
             _context = context;
         }
