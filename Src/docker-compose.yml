@@ -9,9 +9,7 @@
         POSTGRES_USER: ${POSTGRES_USER}
         POSTGRES_DB: ${POSTGRES_DB}
       ports:
-        - 5432:5432        
-      depends_on: 
-        - "migrations"
+        - 5432:5432
         
     migrations:
       build: 
@@ -22,6 +20,8 @@
         ConnectionStrings__IdentityDbConnectionString: ${DB_CONNECTION_STRING}
         ConnectionStrings__JobsConnectionString: ${DB_CONNECTION_STRING}
         ConnectionStrings__I18nDbConnectionString: ${DB_CONNECTION_STRING}
+      depends_on:
+        - "postgres"
     api:
       container_name: deurgenta_api
       depends_on:
