@@ -5,6 +5,7 @@ using DeUrgenta.Domain.Api;
 using DeUrgenta.Domain.Api.Entities;
 using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Validators;
+using DeUrgenta.I18n.Service.Providers;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
 using FluentAssertions;
