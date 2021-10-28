@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace DeUrgenta.User.Api.Models.DTOs.Responses
+namespace DeUrgenta.Common.Models.Dtos
 {
     public class ActionResponse
     {
