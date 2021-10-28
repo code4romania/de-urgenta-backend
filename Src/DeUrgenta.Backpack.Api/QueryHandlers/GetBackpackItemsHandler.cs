@@ -39,7 +39,8 @@ namespace DeUrgenta.Backpack.Api.QueryHandlers
                     Amount = item.Amount,
                     Name = item.Name,
                     CategoryType = item.BackpackCategory,
-                    ExpirationDate = item.ExpirationDate
+                    ExpirationDate = item.ExpirationDate,
+                    Version = item.Version
                 })
                 .ToListAsync(cancellationToken);
 

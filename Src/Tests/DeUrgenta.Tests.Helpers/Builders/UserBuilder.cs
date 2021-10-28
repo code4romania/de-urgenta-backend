@@ -5,21 +5,21 @@ namespace DeUrgenta.Tests.Helpers.Builders
 {
     public class UserBuilder
     {
-        private Guid _userId = Guid.NewGuid();
+        private Guid _id = Guid.NewGuid();
         private string _sub = Guid.NewGuid().ToString();
 
         public User Build() => new()
         {
-            Id = _userId,
+            Id = _id,
             FirstName = TestDataProviders.RandomString(),
             LastName = TestDataProviders.RandomString(),
             Sub = _sub,
-            Email = $"{_userId}@example.com"
+            Email = $"{_id}@example.com"
         };
 
-        public UserBuilder WithId(Guid userId)
+        public UserBuilder WithId(Guid id)
         {
-            _userId = userId;
+            _id = id;
             return this;
         }
 

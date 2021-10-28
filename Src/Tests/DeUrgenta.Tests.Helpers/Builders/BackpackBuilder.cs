@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using DeUrgenta.Domain.Api.Entities;
 
 namespace DeUrgenta.Tests.Helpers.Builders
@@ -6,16 +6,16 @@ namespace DeUrgenta.Tests.Helpers.Builders
     public class BackpackBuilder
     {
         private Guid _id = Guid.NewGuid();
-
+        
         public Backpack Build() => new()
         {
-            Name = TestDataProviders.RandomString(),
-            Id = _id
+            Id = _id,
+            Name = TestDataProviders.RandomString()
         };
 
-        public BackpackBuilder WithId(Guid backpackId)
+        public BackpackBuilder WithId(Guid id)
         {
-            _id = backpackId;
+            _id = id;
             return this;
         }
     }
