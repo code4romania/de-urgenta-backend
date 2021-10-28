@@ -39,7 +39,7 @@ namespace DeUrgenta.Invite.Api.Validators
 
             var noOfGroupMembers = await _context.UsersToGroups
                 .CountAsync(u => u.GroupId == request.GroupId);
-            if (noOfGroupMembers >= _config.UsersLimit)
+            if (noOfGroupMembers >= _config.MaxUsers)
             {
                 return ValidationResult.GenericValidationError;
             }
