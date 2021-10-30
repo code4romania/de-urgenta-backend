@@ -8,8 +8,5 @@ namespace DeUrgenta.Admin.Api.Models
         
         public string Value { get; set; }
         
-        
-        
-        
     }
 }

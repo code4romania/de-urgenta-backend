@@ -28,6 +28,7 @@ using DeUrgenta.Events.Api.Controller;
 using DeUrgenta.I18n.Service;
 using DeUrgenta.Invite.Api;
 using DeUrgenta.Invite.Api.Controllers;
+using DeUrgenta.Content.Api.Controller;
 
 
 namespace DeUrgenta.Api
@@ -128,7 +129,8 @@ namespace DeUrgenta.Api
                 typeof(UserController).GetTypeInfo().Assembly,
                 typeof(EventController).GetTypeInfo().Assembly,
                 typeof(InviteController).GetTypeInfo().Assembly,
-
+                typeof(ContentController).GetTypeInfo().Assembly,
+                
                 // Common
 
                 typeof(ApplicationErrorResponseExample).GetTypeInfo().Assembly

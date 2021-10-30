@@ -88,10 +88,8 @@ namespace DeUrgenta.I18n.Service.Providers
             var lang = _context.Languages.Where(lang => lang.Culture == culture)
             .Include(l => l.StringResources).FirstOrDefault();
 
-            if (lang == null)
-            {
-                return new StringResourceModel {  Key = resourceKey, Value = resourceValue };;
-            }
+            if (lang == null) return null;
+            
 
             var langRes = lang.StringResources.Where(sr => sr.Key == resourceKey).FirstOrDefault();
 
