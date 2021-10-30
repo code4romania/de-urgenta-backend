@@ -22,9 +22,11 @@ namespace DeUrgenta.Admin.Api
             services.AddTransient<IValidateRequest<DeleteBlogPost>, DeleteBlogPostValidator>();
             services.AddTransient<IValidateRequest<UpdateBlogPost>, UpdateBlogPostValidator>();
             services.AddTransient<IValidateRequest<GetBlogPosts>, GetBlogPostsValidator>();
+            services.AddTransient<IValidateRequest<AddOrUpdateContent>, AddOrUpdateContentValidator>();
 
             services.AddTransient<IValidator<BlogPostRequest>, BlogPostRequestValidator>();
             services.AddTransient<IValidator<EventRequest>, EventRequestValidator>();
+            services.AddTransient<IValidator<AddOrUpdateContentModel>, AddOrUpdateContentModelValidator>();
 
             return services;
         }

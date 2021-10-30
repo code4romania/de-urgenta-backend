@@ -1,9 +1,12 @@
 ﻿using System.Threading.Tasks;
+using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Admin.Api.Models;
 using DeUrgenta.Admin.Api.Swagger.AdminLocalization;
+using DeUrgenta.Common.Extensions;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.I18n.Service.Models;
 using DeUrgenta.I18n.Service.Providers;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,17 +22,17 @@ namespace DeUrgenta.Admin.Api.Controller
     [Route("admin/content")]
     public class AdminLocalizationController : ControllerBase
     {
-        private readonly IAmContentProvider _contentProvider;
         private readonly IamI18nProvider _i18nProvider;
+        private readonly IMediator _mediator;
 
-        public AdminLocalizationController(IAmContentProvider contentProvider, IamI18nProvider i18NProvider)
+        public AdminLocalizationController(IamI18nProvider i18NProvider, IMediator mediator)
         {
-            _contentProvider = contentProvider;
             _i18nProvider = i18NProvider;
+            _mediator = mediator;
         }
 
         /// <summary>
-        /// Get available content for specifc key
+        /// Get available content for specific key
         /// </summary>
         [SwaggerResponse(StatusCodes.Status200OK, "Available Content for key", typeof(StringResourceModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
@@ -53,21 +56,16 @@ namespace DeUrgenta.Admin.Api.Controller
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerResponseExample(StatusCodes.Status200OK,
-        typeof(AddOrUpdateContentResponseExample))]
-        [SwaggerRequestExample(typeof(AddOrUpdateContentModel),
-        typeof(AddOrUpdateContentRequestExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateContentResponseExample))]
+        [SwaggerRequestExample(typeof(AddOrUpdateContentModel), typeof(AddOrUpdateContentRequestExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         [HttpPost]
-        public async Task<ActionResult<StringResourceModel>> AddOrUpdateContent(AddOrUpdateContentModel contentModel)
+        public async Task<ActionResult> AddOrUpdateContent(AddOrUpdateContentModel model)
         {
-            var updatedContent = await _contentProvider.AddOrUpdateContentValue(contentModel.Culture,
-            contentModel.Key, contentModel.Value);
+            var result = await _mediator.Send(new AddOrUpdateContent(model.Culture, model.Key, model.Value));
 
-            if (updatedContent == null) return BadRequest("Specified culture does not exist");
-
-            return Ok(updatedContent);
+            return result.ToActionResult();
         }
     }
 }

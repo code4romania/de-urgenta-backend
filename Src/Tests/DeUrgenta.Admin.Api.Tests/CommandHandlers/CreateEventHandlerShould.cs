@@ -13,11 +13,10 @@ using Xunit;
 namespace DeUrgenta.Admin.Api.Tests.CommandHandlers
 {
     [Collection(TestsConstants.DbCollectionName)]
-    public class CreateBlogPostShould
+    public class CreateEventHandlerShould
     {
         private readonly DeUrgentaContext _dbContext;
-
-        public CreateBlogPostShould(DatabaseFixture fixture)
+        public CreateEventHandlerShould(DatabaseFixture fixture)
         {
             _dbContext = fixture.Context;
         }
@@ -36,7 +35,9 @@ namespace DeUrgenta.Admin.Api.Tests.CommandHandlers
             // Act
             var result = await sut.Handle(new CreateBlogPost(new BlogPostRequest
             {
-                Author = "Test", Title = "Test", ContentBody = "<h1>Test</h1>"
+                Author = "Test",
+                Title = "Test",
+                ContentBody = "<h1>Test</h1>"
             }), CancellationToken.None);
 
             // Assert

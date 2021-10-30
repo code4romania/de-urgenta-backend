@@ -186,7 +186,7 @@ namespace DeUrgenta.Domain.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<string>("City")
+                    b.Property<string>("Locality")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -219,7 +219,7 @@ namespace DeUrgenta.Domain.Migrations
                     b.HasKey("Id")
                         .HasName("PK_Event");
 
-                    b.HasIndex("City")
+                    b.HasIndex("Locality")
                         .HasDatabaseName("IX_Event_City");
 
                     b.HasIndex("EventTypeId")

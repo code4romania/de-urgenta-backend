@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using DeUrgenta.Admin.Api.Commands;
-using DeUrgenta.Admin.Api.Models;
 using DeUrgenta.Admin.Api.Validators;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
@@ -15,15 +14,14 @@ using Xunit;
 namespace DeUrgenta.Admin.Api.Tests.Validators
 {
     [Collection(TestsConstants.DbCollectionName)]
-    public class UpdateBlogPostValidatorShould
+    public class DeleteEventValidatorShould
     {
         private readonly DeUrgentaContext _dbContext;
         private readonly IamI18nProvider _i18nProvider;
 
-        public UpdateBlogPostValidatorShould(DatabaseFixture fixture)
+        public DeleteEventValidatorShould(DatabaseFixture fixture)
         {
             _dbContext = fixture.Context;
-
             _i18nProvider = Substitute.For<IamI18nProvider>();
             _i18nProvider
                 .Localize(Arg.Any<string>(), Arg.Any<object[]>())
@@ -31,63 +29,65 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
         }
 
         [Fact]
-        public async Task Invalidate_request_when_blog_post_does_not_exists()
+        public async Task Invalidate_request_when_event_does_not_exists()
         {
             // Arrange
-            var sut = new UpdateBlogPostValidator(_dbContext, _i18nProvider);
+            var sut = new DeleteEventValidator(_dbContext, _i18nProvider);
 
-            await _dbContext.AddAsync(new BlogPost
+            await _dbContext.Events.AddAsync(new Event()
             {
                 Author = "Test",
                 Title = "Test",
                 ContentBody = "Test",
-                PublishedOn = DateTime.UtcNow
+                PublishedOn = DateTime.UtcNow,
+                Address = "A address",
+                Locality = "A city",
+                EventTypeId = 1,
+                IsArchived = false,
+                OccursOn = DateTime.Today.AddDays(30),
+                OrganizedBy = "tests"
             });
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var blogPostId = Guid.NewGuid();
-            var result = await sut.IsValidAsync(new UpdateBlogPost(blogPostId, new BlogPostRequest
-            {
-                Author = "Test",
-                Title = "Test",
-                ContentBody = "Test"
-            }));
+            var eventId = Guid.NewGuid();
+            var result = await sut.IsValidAsync(new DeleteEvent(eventId));
 
             // Assert
             result.Should().BeOfType<DetailedValidationError>();
 
-            await _i18nProvider.Received(1).Localize(Arg.Is("blogpost-not-exist"));
-            await _i18nProvider.Received(1).Localize(Arg.Is("blogpost-not-exist-message"), Arg.Is(blogPostId));
+            await _i18nProvider.Received(1).Localize(Arg.Is("event-not-exist"));
+            await _i18nProvider.Received(1).Localize(Arg.Is("event-not-exist-message"), Arg.Is(eventId));
         }
 
         [Fact]
-        public async Task Validate_request_when_blog_post_exists()
+        public async Task Validate_request_when_event_exists()
         {
             // Arrange
-            var sut = new UpdateBlogPostValidator(_dbContext, _i18nProvider);
+            var sut = new DeleteEventValidator(_dbContext, _i18nProvider);
 
-            var blogPost = new BlogPost
+            var @event = new Event
             {
                 Author = "Test",
                 Title = "Test",
                 ContentBody = "Test",
-                PublishedOn = DateTime.UtcNow
+                PublishedOn = DateTime.UtcNow,
+                Address = "A address",
+                Locality = "A city",
+                EventTypeId = 1,
+                IsArchived = false,
+                OccursOn = DateTime.Today.AddDays(30),
+                OrganizedBy = "tests"
             };
-            await _dbContext.AddAsync(blogPost);
+
+            await _dbContext.Events.AddAsync(@event);
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new UpdateBlogPost(blogPost.Id, new BlogPostRequest
-            {
-                Author = "Test",
-                Title = "Test",
-                ContentBody = "Test"
-            }));
+            var result = await sut.IsValidAsync(new DeleteEvent(@event.Id));
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();
         }
-
     }
 }

@@ -15,7 +15,7 @@ namespace DeUrgenta.Admin.Api.Swagger.Events
               Title = "Curs relativ prim ajutor",
               OccursOn = DateTime.Today.AddDays(30),
               OrganizedBy = "Crucea rosie",
-              City = "Suceava",
+              Locality = "Suceava",
               EventTypeId = 1,
               Address = "some address",
               IsArchived = false

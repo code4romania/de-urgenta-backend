@@ -13,11 +13,11 @@ using Xunit;
 namespace DeUrgenta.Admin.Api.Tests.QueryHandlers
 {
     [Collection(TestsConstants.DbCollectionName)]
-    public class GetBlogPostsShould
+    public class GetEventsHandlerShould
     {
         private readonly DeUrgentaContext _dbContext;
 
-        public GetBlogPostsShould(DatabaseFixture fixture)
+        public GetEventsHandlerShould(DatabaseFixture fixture)
         {
             _dbContext = fixture.Context;
         }
@@ -26,15 +26,15 @@ namespace DeUrgenta.Admin.Api.Tests.QueryHandlers
         public async Task Return_failed_result_when_validation_fails()
         {
             // Arrange
-            var validator = Substitute.For<IValidateRequest<GetBlogPosts>>();
+            var validator = Substitute.For<IValidateRequest<GetEvents>>();
             validator
-                .IsValidAsync(Arg.Any<GetBlogPosts>())
+                .IsValidAsync(Arg.Any<GetEvents>())
                 .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
-            var sut = new GetBlogPostsHandler(validator, _dbContext);
+            var sut = new GetEventsHandler(validator, _dbContext);
 
             // Act
-            var result = await sut.Handle(new GetBlogPosts(new PaginationQueryModel { PageNumber = 1, PageSize = 1 }), CancellationToken.None);
+            var result = await sut.Handle(new GetEvents(new PaginationQueryModel { PageNumber = 1, PageSize = 1 }), CancellationToken.None);
 
             // Assert
             result.IsFailure.Should().BeTrue();

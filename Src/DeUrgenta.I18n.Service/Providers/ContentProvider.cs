@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using DeUrgenta.Domain.I18n;
@@ -23,7 +22,6 @@ namespace DeUrgenta.I18n.Service.Providers
 
         public async Task<ImmutableList<string>> GetAvailableContentKeys(string culture)
         {
-
             var language = await _languageProvider.GetLanguageByCulture(culture);
 
             var resources = await _context.StringResources.Where(x => x.LanguageId == language.Id)
@@ -35,13 +33,10 @@ namespace DeUrgenta.I18n.Service.Providers
 
         public async Task<StringResourceModel> AddOrUpdateContentValue(string culture, string resourceKey, string resourceValue)
         {
-            var lang = _context.Languages.Where(lang => lang.Culture == culture)
-                .Include(l => l.StringResources).FirstOrDefault();
+            var language = await _languageProvider.GetLanguageByCulture(culture);
 
-            if (lang == null) return null;
-
-
-            var langRes = lang.StringResources.FirstOrDefault(sr => sr.Key == resourceKey);
+            var langRes = await _context.StringResources
+                .FirstOrDefaultAsync(str => str.Language.Culture == culture && str.Key == resourceKey);
 
             if (langRes != null)
             {
@@ -50,14 +45,18 @@ namespace DeUrgenta.I18n.Service.Providers
             }
             else
             {
-                langRes = new StringResource { Id = new Guid(), Key = resourceKey, Value = resourceValue };
-                lang.StringResources.Add(langRes);
+                langRes = new StringResource
+                {
+                    Key = resourceKey,
+                    Value = resourceValue,
+                    LanguageId = language.Id
+
+                };
             }
 
             await _context.SaveChangesAsync();
 
             return new StringResourceModel { Id = langRes.Id, Key = langRes.Key, Value = langRes.Value };
-
         }
     }
 }

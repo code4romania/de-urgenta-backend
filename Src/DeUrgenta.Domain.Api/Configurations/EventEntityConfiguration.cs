@@ -48,11 +48,11 @@ namespace DeUrgenta.Domain.Api.Configurations
                 .IsRequired();
 
             builder
-                .Property(e => e.City)
+                .Property(e => e.Locality)
                 .IsRequired();
 
             builder
-                .HasIndex(e => e.City)
+                .HasIndex(e => e.Locality)
                 .HasDatabaseName("IX_Event_City");
 
             builder

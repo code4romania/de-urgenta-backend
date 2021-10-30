@@ -10,9 +10,25 @@ namespace DeUrgenta.Domain.I18n.Migrations
             migrationBuilder.AddTranslation(I18nDefaults.RoRoCultureId, "event-type-not-exist", "[Ro] Event type does not exist");
             migrationBuilder.AddTranslation(I18nDefaults.HuHuCultureId, "event-type-not-exist", "[Hu] Event type does not exist");
 
-            migrationBuilder.AddTranslation(I18nDefaults.EnUsCultureId, "event-type-not-exist-message", "Requested event type id {0} does not exist");
-            migrationBuilder.AddTranslation(I18nDefaults.RoRoCultureId, "event-type-not-exist-message", "[Ro] Requested event type id {0} does not exist");
-            migrationBuilder.AddTranslation(I18nDefaults.HuHuCultureId, "event-type-not-exist-message", "[Hu] Requested event type id {0} does not exist");
+            migrationBuilder.AddTranslation(I18nDefaults.EnUsCultureId, "event-not-exist", "Event does not exist");
+            migrationBuilder.AddTranslation(I18nDefaults.RoRoCultureId, "event-not-exist", "[Ro] Event does not exist");
+            migrationBuilder.AddTranslation(I18nDefaults.HuHuCultureId, "event-not-exist", "[Hu] Event does not exist");
+
+            migrationBuilder.AddTranslation(I18nDefaults.EnUsCultureId, "blogpost-not-exist", "Blog post does not exist");
+            migrationBuilder.AddTranslation(I18nDefaults.RoRoCultureId, "blogpost-not-exist", "[Ro] Blog post does not exist");
+            migrationBuilder.AddTranslation(I18nDefaults.HuHuCultureId, "blogpost-not-exist", "[Hu] Blog post does not exist");
+
+            migrationBuilder.AddTranslation(I18nDefaults.EnUsCultureId, "event-type-not-exist-message", "Requested event type with id {0} does not exist");
+            migrationBuilder.AddTranslation(I18nDefaults.RoRoCultureId, "event-type-not-exist-message", "[Ro] Requested event type with id {0} does not exist");
+            migrationBuilder.AddTranslation(I18nDefaults.HuHuCultureId, "event-type-not-exist-message", "[Hu] Requested event type with id {0} does not exist");
+
+            migrationBuilder.AddTranslation(I18nDefaults.EnUsCultureId, "event-not-exist-message", "Requested event with id {0} does not exist");
+            migrationBuilder.AddTranslation(I18nDefaults.RoRoCultureId, "event-not-exist-message", "[Ro] Requested event with id {0} does not exist");
+            migrationBuilder.AddTranslation(I18nDefaults.HuHuCultureId, "event-not-exist-message", "[Hu] Requested event with id {0} does not exist");
+
+            migrationBuilder.AddTranslation(I18nDefaults.EnUsCultureId, "blogpost-not-exist-message", "Requested blogpost with id {0} does not exist");
+            migrationBuilder.AddTranslation(I18nDefaults.RoRoCultureId, "blogpost-not-exist-message", "[Ro] Requested blogpost with id {0} does not exist");
+            migrationBuilder.AddTranslation(I18nDefaults.HuHuCultureId, "blogpost-not-exist-message", "[Hu] Requested blogpost with id {0} does not exist");
 
             migrationBuilder.AddTranslation(I18nDefaults.EnUsCultureId, "not-backpack-owner", "You are not a backpack owner");
             migrationBuilder.AddTranslation(I18nDefaults.RoRoCultureId, "not-backpack-owner", "[Ro] You are not a backpack owner");
@@ -153,6 +169,14 @@ namespace DeUrgenta.Domain.I18n.Migrations
             migrationBuilder.AddTranslation(I18nDefaults.EnUsCultureId, "already-a-group-member-message", "User is already a group memeber.");
             migrationBuilder.AddTranslation(I18nDefaults.RoRoCultureId, "already-a-group-member-message", "[Ro] User is already a group memeber.");
             migrationBuilder.AddTranslation(I18nDefaults.HuHuCultureId, "already-a-group-member-message", "[Hu] User is already a group memeber.");
+
+            migrationBuilder.AddTranslation(I18nDefaults.EnUsCultureId, "language-culture-not-exist", "Language not found");
+            migrationBuilder.AddTranslation(I18nDefaults.RoRoCultureId, "language-culture-not-exist", "[Ro] Language not found");
+            migrationBuilder.AddTranslation(I18nDefaults.HuHuCultureId, "language-culture-not-exist", "[Hu] Language not found");
+
+            migrationBuilder.AddTranslation(I18nDefaults.EnUsCultureId, "language-culture-not-exist-message", "Requested {0} culture was not found.");
+            migrationBuilder.AddTranslation(I18nDefaults.RoRoCultureId, "language-culture-not-exist-message", "[Ro] Requested {0} culture was not found.");
+            migrationBuilder.AddTranslation(I18nDefaults.HuHuCultureId, "language-culture-not-exist-message", "[Hu] Requested {0} culture was not found.");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -308,6 +332,14 @@ namespace DeUrgenta.Domain.I18n.Migrations
             migrationBuilder.RemoveTranslation(I18nDefaults.EnUsCultureId, "already-a-group-member-message");
             migrationBuilder.RemoveTranslation(I18nDefaults.RoRoCultureId, "already-a-group-member-message");
             migrationBuilder.RemoveTranslation(I18nDefaults.HuHuCultureId, "already-a-group-member-message");
+
+            migrationBuilder.RemoveTranslation(I18nDefaults.EnUsCultureId, "language-culture-not-exist");
+            migrationBuilder.RemoveTranslation(I18nDefaults.RoRoCultureId, "language-culture-not-exist");
+            migrationBuilder.RemoveTranslation(I18nDefaults.HuHuCultureId, "language-culture-not-exist");
+
+            migrationBuilder.RemoveTranslation(I18nDefaults.EnUsCultureId, "language-culture-not-exist-message");
+            migrationBuilder.RemoveTranslation(I18nDefaults.RoRoCultureId, "language-culture-not-exist-message");
+            migrationBuilder.RemoveTranslation(I18nDefaults.HuHuCultureId, "[Hu] Requested {0} culture was not found.");
         }
     }
 }

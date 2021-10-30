@@ -15,7 +15,7 @@ namespace DeUrgenta.Tests.Helpers.Builders
             ContentBody = TestDataProviders.RandomString(),
             Author = TestDataProviders.RandomString(),
             Address = TestDataProviders.RandomString(),
-            City = TestDataProviders.RandomString(),
+            Locality = TestDataProviders.RandomString(),
             EventTypeId = _eventTypeId,
             OccursOn = _date
         };
