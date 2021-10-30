@@ -4,7 +4,7 @@ using DeUrgenta.Domain.Api.Entities;
 using DeUrgenta.Infra.Models;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace DeUrgenta.User.Api.Swagger
+namespace DeUrgenta.User.Api.Swagger.User
 {
     public class GetUserLocationTypesResponseExample : IExamplesProvider<IImmutableList<IndexedItemModel>>
     {

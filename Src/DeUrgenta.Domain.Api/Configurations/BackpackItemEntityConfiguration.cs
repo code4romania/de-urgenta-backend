@@ -37,6 +37,11 @@ namespace DeUrgenta.Domain.Api.Configurations
                 .WithMany(x => x.BackpackItems)
                 .HasForeignKey(x => x.BackpackId)
                 .HasConstraintName("FK_BackpackItem_Backpack");
+
+            builder
+                .Property(e => e.Version)
+                .IsRequired()
+                .HasDefaultValue(0);
         }
     }
 }

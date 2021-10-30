@@ -6,5 +6,7 @@ namespace DeUrgenta.Backpack.Api.Models
     {
         public Guid Id { get; init; }
         public string Name { get; init; }
+        public int NumberOfContributors { get; set; }
+        public int MaxNumberOfContributors { get; set; }
     }
 }

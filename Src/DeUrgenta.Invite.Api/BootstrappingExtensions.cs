@@ -28,6 +28,7 @@ namespace DeUrgenta.Invite.Api
             services.AddScoped<ICreateInviteValidator, CreateBackpackInviteValidator>(s => s.GetService<CreateBackpackInviteValidator>());
             
             services.Configure<GroupsConfig>(configuration.GetSection(GroupsConfig.SectionName));
+            services.Configure<BackpacksConfig>(configuration.GetSection(BackpacksConfig.SectionName));
 
             return services;
         }
