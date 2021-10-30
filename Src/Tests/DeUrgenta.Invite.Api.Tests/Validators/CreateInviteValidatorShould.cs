@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
+using DeUrgenta.I18n.Service.Providers;
 using DeUrgenta.Invite.Api.Commands;
 using DeUrgenta.Invite.Api.Models;
 using DeUrgenta.Invite.Api.Validators;
@@ -11,6 +12,7 @@ using DeUrgenta.Tests.Helpers.Builders;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NSubstitute;
 using Xunit;
 using InviteType = DeUrgenta.Invite.Api.Models.InviteType;
 
@@ -21,6 +23,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
     {
         private readonly DeUrgentaContext _context;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IamI18nProvider _i18nProvider;
 
         private Dictionary<string, string> _config = new();
 
@@ -29,13 +32,18 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             _context = fixture.Context;
 
             _config.Add("Groups:MaxUsers", "2");
-
-            IConfiguration configuration =  new ConfigurationBuilder()
+            _i18nProvider = Substitute.For<IamI18nProvider>();
+            _i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs(Task.FromResult("a localized string"));
+            
+            IConfiguration configuration = new ConfigurationBuilder()
                     .AddInMemoryCollection(_config)
                     .Build();
 
             _serviceProvider = new ServiceCollection()
                     .AddSingleton(_ => _context)
+                    .AddSingleton(_ => _i18nProvider)
                     .AddInviteApiServices(configuration)
                     .BuildServiceProvider();
         }
@@ -70,7 +78,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             var user = new UserBuilder().WithSub(userSub).Build();
             await _context.Users.AddAsync(user);
-            
+
             await _context.SaveChangesAsync();
 
             var inviteRequest = new InviteRequest
@@ -87,6 +95,8 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             //Assert
             isValid.Should().BeOfType<GenericValidationError>();
+
+
         }
 
         [Fact]
@@ -156,7 +166,10 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            isValid.Should().BeOfType<DetailedValidationError>();
+
+            await _i18nProvider.Received(1).Localize(Arg.Is("cannot-create-invite"));
+            await _i18nProvider.Received(1).Localize(Arg.Is("max-group-members-reached"));
         }
 
         [Fact]

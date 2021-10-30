@@ -19,11 +19,13 @@ namespace DeUrgenta.Admin.Api.Controller
     [Route("admin/content")]
     public class AdminLocalizationController : ControllerBase
     {
-        private readonly IamI18nProvider _i18NProvider;
+        private readonly IAmContentProvider _contentProvider;
+        private readonly IamI18nProvider _i18nProvider;
 
-        public AdminLocalizationController(IamI18nProvider i18NProvider)
+        public AdminLocalizationController(IAmContentProvider contentProvider, IamI18nProvider i18NProvider)
         {
-            _i18NProvider = i18NProvider;
+            _contentProvider = contentProvider;
+            _i18nProvider = i18NProvider;
         }
 
         /// <summary>
@@ -40,7 +42,7 @@ namespace DeUrgenta.Admin.Api.Controller
         [HttpGet]
         public async Task<IActionResult> GetString(string key)
         {
-            var text = await _i18NProvider.Localize(key);
+            var text = await _i18nProvider.Localize(key);
             return Ok(new StringResourceModel { Key = key, Value = text });
         }
 
@@ -60,7 +62,7 @@ namespace DeUrgenta.Admin.Api.Controller
         [HttpPost]
         public async Task<ActionResult<StringResourceModel>> AddOrUpdateContent(AddOrUpdateContentModel contentModel)
         {
-            var updatedContent = await _i18NProvider.AddOrUpdateContentValue(contentModel.Culture,
+            var updatedContent = await _contentProvider.AddOrUpdateContentValue(contentModel.Culture,
             contentModel.Key, contentModel.Value);
 
             if (updatedContent == null) return BadRequest("Specified culture does not exist");

@@ -41,7 +41,7 @@ namespace DeUrgenta.Invite.Api.Validators
 
             if (group.GroupMembers.Count == _config.MaxUsers)
             {
-                return new DetailedValidationError("Cannot create invite", "Current maximum number of group members is reached.");
+                return new DetailedValidationError(await _i18nProvider.Localize("cannot-create-invite"), await _i18nProvider.Localize("max-group-members-reached"));
             }
 
             return ValidationResult.Ok;

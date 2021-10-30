@@ -30,7 +30,7 @@ namespace DeUrgenta.Certifications.Api.Validators
 
             if (!certificationExist)
             {
-                return new DetailedValidationError("Certification does not exists", $"Requested certification could not be found.");
+                return new DetailedValidationError(await _i18nProvider.Localize("certification-not-exist"), await _i18nProvider.Localize("certification-not-exist-message"));
             }
 
             return ValidationResult.Ok;

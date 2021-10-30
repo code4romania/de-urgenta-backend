@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DeUrgenta.Domain.I18n.Migrations
 {
     [DbContext(typeof(I18nDbContext))]
-    [Migration("20211013191741_InitialSetupOfI18n")]
-    partial class InitialSetupOfI18n
+    [Migration("20211030092930_DefaultTranslations")]
+    partial class DefaultTranslations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,7 +23,7 @@ namespace DeUrgenta.Domain.I18n.Migrations
                 .HasAnnotation("ProductVersion", "5.0.4")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-            modelBuilder.Entity("DeUrgenta.I18n.Service.Domain.Entities.Language", b =>
+            modelBuilder.Entity("DeUrgenta.Domain.I18n.Entities.Language", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -68,7 +68,7 @@ namespace DeUrgenta.Domain.I18n.Migrations
                         });
                 });
 
-            modelBuilder.Entity("DeUrgenta.I18n.Service.Domain.Entities.StringResource", b =>
+            modelBuilder.Entity("DeUrgenta.Domain.I18n.Entities.StringResource", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -95,9 +95,9 @@ namespace DeUrgenta.Domain.I18n.Migrations
                     b.ToTable("StringResources");
                 });
 
-            modelBuilder.Entity("DeUrgenta.I18n.Service.Domain.Entities.StringResource", b =>
+            modelBuilder.Entity("DeUrgenta.Domain.I18n.Entities.StringResource", b =>
                 {
-                    b.HasOne("DeUrgenta.I18n.Service.Domain.Entities.Language", "Language")
+                    b.HasOne("DeUrgenta.Domain.I18n.Entities.Language", "Language")
                         .WithMany("StringResources")
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -106,7 +106,7 @@ namespace DeUrgenta.Domain.I18n.Migrations
                     b.Navigation("Language");
                 });
 
-            modelBuilder.Entity("DeUrgenta.I18n.Service.Domain.Entities.Language", b =>
+            modelBuilder.Entity("DeUrgenta.Domain.I18n.Entities.Language", b =>
                 {
                     b.Navigation("StringResources");
                 });

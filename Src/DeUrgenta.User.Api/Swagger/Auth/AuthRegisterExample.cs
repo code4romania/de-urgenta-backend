@@ -1,8 +1,7 @@
-using DeUrgenta.User.Api.Models;
 using DeUrgenta.User.Api.Models.DTOs.Requests;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace DeUrgenta.User.Api.Swagger.User
+namespace DeUrgenta.User.Api.Swagger.Auth
 {
     public class AuthRegisterExample : IExamplesProvider<UserRegistrationDto>
     {

@@ -32,7 +32,7 @@ namespace DeUrgenta.Backpack.Api.Validators
 
             if (isOwner)
             {
-                return new DetailedValidationError("You cannot leave a backpack while you are an owner.", "You cannot remove yourself from contributors if you are owner.");
+                return new DetailedValidationError(await _i18nProvider.Localize("backpack-owner-leave"), await _i18nProvider.Localize("backpack-owner-leave-message"));
             }
 
             var isPartOfGroup = await _context

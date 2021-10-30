@@ -22,7 +22,11 @@ namespace DeUrgenta.Admin.Api.Validators
         {
             var eventTypeExists = await _context.EventTypes.AnyAsync(x => x.Id == request.Event.EventTypeId);
 
-            return eventTypeExists ? ValidationResult.Ok : new DetailedValidationError("Event type does not exist", $"Requested event type id {request.Event.EventTypeId} does not exist");
+            return eventTypeExists
+                ? ValidationResult.Ok
+                : new DetailedValidationError(
+                    await _i18nProvider.Localize("event-type-not-exist"),
+                    await _i18nProvider.Localize("event-type-not-exist-message", request.Event.EventTypeId));
         }
     }
 }

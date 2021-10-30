@@ -21,9 +21,15 @@ namespace DeUrgenta.Group.Api.Tests.Validators
     {
         private readonly DeUrgentaContext _dbContext;
         private readonly IOptions<GroupsConfig> _groupsConfig;
+        private readonly IamI18nProvider _i18nProvider;
 
         public AddGroupValidatorShould(DatabaseFixture fixture)
         {
+            _i18nProvider = Substitute.For<IamI18nProvider>();
+            _i18nProvider
+                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
+
             _dbContext = fixture.Context;
             var options = new GroupsConfig { MaxCreatedGroupsPerUser = 5 };
             _groupsConfig = Microsoft.Extensions.Options.Options.Create(options);
@@ -36,12 +42,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Invalidate_request_when_no_user_found_by_sub(string sub)
         {
             // Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
-            var sut = new AddGroupValidator(_dbContext, i18nProvider, _groupsConfig);
+            var sut = new AddGroupValidator(_dbContext, _i18nProvider, _groupsConfig);
 
             // Act
             var isValid = await sut.IsValidAsync(new AddGroup(sub, new GroupRequest()));
@@ -54,12 +55,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Validate_when_user_was_found_by_sub()
         {
             // Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
-            var sut = new AddGroupValidator(_dbContext, i18nProvider, _groupsConfig);
+            var sut = new AddGroupValidator(_dbContext, _i18nProvider, _groupsConfig);
 
             var userSub = Guid.NewGuid().ToString();
             var user = new UserBuilder().WithSub(userSub).Build();
@@ -78,12 +74,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Invalidate_when_user_exceeds_group_creation_limit()
         {
             // Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
-            var sut = new AddGroupValidator(_dbContext, i18nProvider, _groupsConfig);
+            var sut = new AddGroupValidator(_dbContext, _i18nProvider, _groupsConfig);
 
             // Seed user
             var userSub = Guid.NewGuid().ToString();
@@ -102,7 +93,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var result = await sut.IsValidAsync(new AddGroup(user.Sub, new GroupRequest { Name = "TestGroup" }));
 
             // Assert
-            result.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<DetailedValidationError>();
+
+            await _i18nProvider.Received(1).Localize(Arg.Is("cannot-create-groups"));
+            await _i18nProvider.Received(1).Localize(Arg.Is("cannot-create-groups-max-message"));
         }
     }
 }

@@ -18,10 +18,14 @@ namespace DeUrgenta.Group.Api.Tests.Validators
     public class DeleteSafeLocationValidatorShould
     {
         private readonly DeUrgentaContext _dbContext;
+        private readonly IamI18nProvider _i18nProvider;
 
         public DeleteSafeLocationValidatorShould(DatabaseFixture fixture)
         {
             _dbContext = fixture.Context;
+            _i18nProvider = Substitute.For<IamI18nProvider>();
+            _i18nProvider.Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
         }
 
         [Theory]
@@ -31,12 +35,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Invalidate_request_when_no_user_found_by_sub(string sub)
         {
             // Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
-            var sut = new DeleteSafeLocationValidator(_dbContext, i18nProvider);
+            var sut = new DeleteSafeLocationValidator(_dbContext, _i18nProvider);
 
             // Act
             var isValid = await sut.IsValidAsync(new DeleteSafeLocation(sub, Guid.NewGuid()));
@@ -49,11 +48,6 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Invalidate_request_when_no_safe_location_found()
         {
             // Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
             var userSub = Guid.NewGuid().ToString();
             var user = new UserBuilder().WithSub(userSub).Build();
 
@@ -61,7 +55,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
 
             await _dbContext.SaveChangesAsync();
 
-            var sut = new DeleteSafeLocationValidator(_dbContext, i18nProvider);
+            var sut = new DeleteSafeLocationValidator(_dbContext, _i18nProvider);
 
             // Act
             var isValid = await sut.IsValidAsync(new DeleteSafeLocation(userSub, Guid.NewGuid()));
@@ -74,17 +68,12 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Invalidate_request_when_group_does_not_exists()
         {
             // Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
             var userSub = Guid.NewGuid().ToString();
             var user = new UserBuilder().WithSub(userSub).Build();
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
-            var sut = new DeleteSafeLocationValidator(_dbContext, i18nProvider);
+            var sut = new DeleteSafeLocationValidator(_dbContext, _i18nProvider);
 
             // Act
             var isValid = await sut.IsValidAsync(new DeleteSafeLocation(userSub, Guid.NewGuid()));
@@ -97,11 +86,6 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Invalidate_request_when_user_is_not_admin_of_group()
         {
             // Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
             var userSub = Guid.NewGuid().ToString();
             var adminSub = Guid.NewGuid().ToString();
 
@@ -118,25 +102,23 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.GroupsSafeLocations.AddAsync(groupSafeLocation);
             await _dbContext.SaveChangesAsync();
 
-            var sut = new DeleteSafeLocationValidator(_dbContext, i18nProvider);
+            var sut = new DeleteSafeLocationValidator(_dbContext, _i18nProvider);
 
             // Act
             var isValid = await sut.IsValidAsync(new DeleteSafeLocation(userSub, groupSafeLocation.Id));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            isValid.Should().BeOfType<DetailedValidationError>();
+
+            await _i18nProvider.Received(1).Localize(Arg.Is("cannot-delete-safe-location"));
+            await _i18nProvider.Received(1).Localize(Arg.Is("only-group-admin-can-delete-safe-location-message"));
         }
 
         [Fact]
         public async Task Validate_when_user_is_admin_of_requested_group()
         {
             // Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
-            var sut = new DeleteSafeLocationValidator(_dbContext, i18nProvider);
+            var sut = new DeleteSafeLocationValidator(_dbContext, _i18nProvider);
 
             var userSub = Guid.NewGuid().ToString();
             var user = new UserBuilder().WithSub(userSub).Build();

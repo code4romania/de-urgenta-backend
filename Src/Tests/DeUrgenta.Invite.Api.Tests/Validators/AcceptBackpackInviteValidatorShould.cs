@@ -20,6 +20,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
     {
         private readonly DeUrgentaContext _context;
         private readonly IOptions<BackpacksConfig> _backpacksConfig;
+        private readonly IamI18nProvider _i18nProvider;
 
         public AcceptBackpackInviteValidatorShould(DatabaseFixture fixture)
         {
@@ -29,17 +30,16 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
                 MaxContributors = 2
             };
             _backpacksConfig = Microsoft.Extensions.Options.Options.Create(options);
+
+            _i18nProvider = Substitute.For<IamI18nProvider>();
+            _i18nProvider.Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
         }
 
         [Fact]
         public async Task Invalidate_request_if_backpack_does_not_exist()
         {
             //Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
             var sub = Guid.NewGuid().ToString();
             var backpackId = Guid.NewGuid();
 
@@ -50,7 +50,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             AcceptBackpackInvite request = new(sub, backpackId);
 
-            var sut = new AcceptBackpackInviteValidator(_context, i18nProvider, _backpacksConfig);
+            var sut = new AcceptBackpackInviteValidator(_context, _i18nProvider, _backpacksConfig);
 
             //Act
             var isValid = await sut.IsValidAsync(request);
@@ -63,11 +63,6 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
         public async Task Invalidate_request_if_user_already_a_backpack_contributor()
         {
             //Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
             var sub = Guid.NewGuid().ToString();
             var backpackId = Guid.NewGuid();
 
@@ -84,24 +79,22 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             AcceptBackpackInvite request = new(sub, backpackId);
 
-            var sut = new AcceptBackpackInviteValidator(_context, i18nProvider, _backpacksConfig);
+            var sut = new AcceptBackpackInviteValidator(_context, _i18nProvider, _backpacksConfig);
 
             //Act
             var isValid = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            isValid.Should().BeOfType<DetailedValidationError>();
+
+            await _i18nProvider.Received(1).Localize(Arg.Is("cannot-accept-invite"));
+            await _i18nProvider.Received(1).Localize(Arg.Is("already-backpack-contributor"));
         }
 
         [Fact]
         public async Task Invalidate_request_if_backpack_already_has_too_many_contributors()
         {
             //Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
             var sub = Guid.NewGuid().ToString();
             var backpackId = Guid.NewGuid();
 
@@ -120,24 +113,22 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             AcceptBackpackInvite request = new(sub, backpackId);
 
-            var sut = new AcceptBackpackInviteValidator(_context, i18nProvider, _backpacksConfig);
+            var sut = new AcceptBackpackInviteValidator(_context, _i18nProvider, _backpacksConfig);
 
             //Act
             var isValid = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            isValid.Should().BeOfType<DetailedValidationError>();
+
+            await _i18nProvider.Received(1).Localize(Arg.Is("cannot-accept-invite"));
+            await _i18nProvider.Received(1).Localize(Arg.Is("max-backpack-contributors-reached"));
         }
 
         [Fact]
         public async Task Validate_request_if_accept_backpack_invite_request_is_valid()
         {
             //Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
             var sub = Guid.NewGuid().ToString();
             var backpackId = Guid.NewGuid();
 
@@ -151,7 +142,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             AcceptBackpackInvite request = new(sub, backpackId);
 
-            var sut = new AcceptBackpackInviteValidator(_context, i18nProvider, _backpacksConfig);
+            var sut = new AcceptBackpackInviteValidator(_context, _i18nProvider, _backpacksConfig);
 
             //Act
             var isValid = await sut.IsValidAsync(request);

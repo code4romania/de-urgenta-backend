@@ -10,7 +10,7 @@ using DeUrgenta.User.Api.Models.DTOs.Requests;
 using DeUrgenta.User.Api.Notifications;
 using DeUrgenta.User.Api.Queries;
 using DeUrgenta.User.Api.Services;
-using DeUrgenta.User.Api.Swagger.User;
+using DeUrgenta.User.Api.Swagger.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
-using System.Threading.Tasks;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace DeUrgenta.Content.Api.Swagger.Content

@@ -30,7 +30,7 @@ namespace DeUrgenta.Group.Api.Validators
 
             if (user.Id == request.UserId)
             {
-                return new DetailedValidationError("Cannot remove user", "You cannot remove yourself from group.");
+                return new DetailedValidationError(await _i18nProvider.Localize("cannot-remove-user"), await _i18nProvider.Localize("cannot-remove-yourself-message"));
             }
 
             var isPartOfTheGroup = await _context.UsersToGroups.AnyAsync(utg => utg.UserId == user.Id && utg.GroupId == request.GroupId);
@@ -42,7 +42,7 @@ namespace DeUrgenta.Group.Api.Validators
             var isAdmin = await _context.Groups.AnyAsync(g => g.Admin.Id == user.Id);
             if (!isAdmin)
             {
-                return new DetailedValidationError("Cannot remove user", "Only group admins can remove users from group.");
+                return new DetailedValidationError(await _i18nProvider.Localize("cannot-remove-user"), await _i18nProvider.Localize("only-group-admin-can-remove-users-message"));
             }
 
             bool requestedUserIsInGroup = await _context

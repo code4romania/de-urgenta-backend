@@ -20,9 +20,13 @@ namespace DeUrgenta.Content.Api.Controller
     public class ContentController : ControllerBase
     {
         private readonly IamI18nProvider _i18NProvider;
-        public ContentController(IamI18nProvider i18NProvider)
+        private readonly IAmContentProvider _contentProvider;
+        private readonly IAmLanguageProvider _languageProvider;
+        public ContentController(IamI18nProvider i18NProvider, IAmContentProvider contentProvider, IAmLanguageProvider languageProvider)
         {
             _i18NProvider = i18NProvider;
+            _contentProvider = contentProvider;
+            _languageProvider = languageProvider;
         }
         /// <summary>
         /// Get available content for specifc key
@@ -60,7 +64,7 @@ namespace DeUrgenta.Content.Api.Controller
 
             if (!hasLanguageHeader) return BadRequest();
 
-            var languageKeys = await _i18NProvider.GetAvailableContentKeys(langVal.ToString());
+            var languageKeys = await _contentProvider.GetAvailableContentKeys(langVal.ToString());
 
             return Ok(languageKeys);
         }
@@ -79,7 +83,7 @@ namespace DeUrgenta.Content.Api.Controller
         [HttpGet("languages")]
         public async Task<ActionResult<IImmutableList<LanguageModel>>> GetAvailableLanguages()
         {
-            var languages = await _i18NProvider.GetLanguages();
+            var languages = await _languageProvider.GetLanguages();
             return Ok(languages);
         }
     }

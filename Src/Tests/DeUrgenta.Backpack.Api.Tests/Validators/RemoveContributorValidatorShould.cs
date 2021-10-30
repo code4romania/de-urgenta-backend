@@ -18,10 +18,14 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
     public class RemoveContributorValidatorShould
     {
         private readonly DeUrgentaContext _dbContext;
+        private readonly IamI18nProvider _i18nProvider;
 
         public RemoveContributorValidatorShould(DatabaseFixture fixture)
         {
             _dbContext = fixture.Context;
+            _i18nProvider = Substitute.For<IamI18nProvider>();
+            _i18nProvider.Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
         }
 
         [Theory]
@@ -31,12 +35,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_request_when_no_user_found_by_sub(string sub)
         {
             // Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
-            var sut = new RemoveContributorValidator(_dbContext,i18nProvider);
+            var sut = new RemoveContributorValidator(_dbContext, _i18nProvider);
 
             // Act
             var isValid = await sut.IsValidAsync(new RemoveContributor(sub, Guid.NewGuid(), Guid.NewGuid()));
@@ -50,12 +49,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_when_user_removes_itself()
         {
             // Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
-            var sut = new RemoveContributorValidator(_dbContext, i18nProvider);
+            var sut = new RemoveContributorValidator(_dbContext, _i18nProvider);
 
             var userSub = Guid.NewGuid().ToString();
 
@@ -84,12 +78,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_when_target_user_does_not_exists()
         {
             // Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
-            var sut = new RemoveContributorValidator(_dbContext, i18nProvider);
+            var sut = new RemoveContributorValidator(_dbContext, _i18nProvider);
 
             var userSub = Guid.NewGuid().ToString();
             var owner = new UserBuilder().WithSub(userSub).Build();
@@ -116,12 +105,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_when_backpack_does_not_exist()
         {
             // Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
-            var sut = new RemoveContributorValidator(_dbContext,i18nProvider);
+            var sut = new RemoveContributorValidator(_dbContext, _i18nProvider);
 
             var userSub = Guid.NewGuid().ToString();
             var contributorSub = Guid.NewGuid().ToString();
@@ -145,12 +129,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_when_user_is_not_owner_of_backpack()
         {
             // Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
-            var sut = new RemoveContributorValidator(_dbContext, i18nProvider);
+            var sut = new RemoveContributorValidator(_dbContext, _i18nProvider);
 
             var userSub = Guid.NewGuid().ToString();
             var contributorSub = Guid.NewGuid().ToString();
@@ -177,19 +156,16 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var isValid = await sut.IsValidAsync(new RemoveContributor(contributorSub, backpack.Id, owner.Id));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            isValid.Should().BeOfType<DetailedValidationError>();
+            await _i18nProvider.Received(1).Localize(Arg.Is("not-backpack-owner"));
+            await _i18nProvider.Received(1).Localize(Arg.Is("not-backpack-owner-delete-contributor-message"));
         }
 
         [Fact]
         public async Task Validate_when_user_is_owner_of_backpack_and_removes_a_member()
         {
             // Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
-            var sut = new RemoveContributorValidator(_dbContext, i18nProvider);
+            var sut = new RemoveContributorValidator(_dbContext, _i18nProvider);
 
             var userSub = Guid.NewGuid().ToString();
             var backpackContributorSub = Guid.NewGuid().ToString();

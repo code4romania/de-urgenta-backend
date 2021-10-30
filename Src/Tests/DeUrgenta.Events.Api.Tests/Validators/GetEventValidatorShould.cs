@@ -15,10 +15,14 @@ namespace DeUrgenta.Events.Api.Tests.Validators
     public class GetEventValidatorShould
     {
         private readonly DeUrgentaContext _dbContext;
+        private readonly IamI18nProvider _i18nProvider;
 
         public GetEventValidatorShould(DatabaseFixture fixture)
         {
             _dbContext = fixture.Context;
+            _i18nProvider = Substitute.For<IamI18nProvider>();
+            _i18nProvider.Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
         }
 
         [Theory]
@@ -27,18 +31,15 @@ namespace DeUrgenta.Events.Api.Tests.Validators
         public async Task ShouldInvalidateWhenInvalidEventTypeId(int? eventTypeId)
         {
             // Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
-            var sut = new GetEventValidator(_dbContext, i18nProvider);
+            var sut = new GetEventValidator(_dbContext, _i18nProvider);
 
             // Act
             var isValid = await sut.IsValidAsync(new GetEvent(new Models.EventModelRequest { EventTypeId = eventTypeId }));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            isValid.Should().BeOfType<DetailedValidationError>();
+            await _i18nProvider.Received(1).Localize(Arg.Is("event-type-not-exist"));
+            await _i18nProvider.Received(1).Localize(Arg.Is("event-type-not-exist-message"), Arg.Is(eventTypeId));
         }
 
         [Theory]
@@ -46,12 +47,7 @@ namespace DeUrgenta.Events.Api.Tests.Validators
         public async Task ShouldValidateWhenValidEventTypeId(int? eventTypeId)
         {
             // Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
-            var sut = new GetEventValidator(_dbContext, i18nProvider);
+            var sut = new GetEventValidator(_dbContext, _i18nProvider);
 
             // Act
             var isValid = await sut.IsValidAsync(new GetEvent(new Models.EventModelRequest { EventTypeId = eventTypeId }));

@@ -6,7 +6,7 @@ namespace DeUrgenta.Tests.Helpers.Builders
     public class BackpackItemBuilder
     {
         private Guid _id = Guid.NewGuid();
-        private DateTime? _expirationDate = null;
+        private DateTime? _expirationDate;
         private Backpack _backpack = new BackpackBuilder().Build();
         private BackpackCategoryType _category = BackpackCategoryType.FirstAid;
         private ulong _version;

@@ -36,7 +36,7 @@ namespace DeUrgenta.Backpack.Api.Validators
 
             if (!isOwner)
             {
-                return new DetailedValidationError("You are not a backpack owner", "Only backpack owners can delete backpacks.");
+                return new DetailedValidationError(await _i18nProvider.Localize("not-backpack-owner"), await _i18nProvider.Localize("not-backpack-owner-delete-message"));
             }
 
             return ValidationResult.Ok;

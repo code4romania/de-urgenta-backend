@@ -38,7 +38,7 @@ namespace DeUrgenta.Group.Api.Validators
 
             if (!isGroupAdmin)
             {
-                return new DetailedValidationError("Cannot update safe location", "Only group admin can update safe location.");
+                return new DetailedValidationError(await _i18nProvider.Localize("cannot-update-safe-location"), await _i18nProvider.Localize("only-admin-cab-update-safe-location"));
             }
 
             return ValidationResult.Ok;

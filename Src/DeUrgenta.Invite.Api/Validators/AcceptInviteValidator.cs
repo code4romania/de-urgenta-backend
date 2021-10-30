@@ -35,7 +35,7 @@ namespace DeUrgenta.Invite.Api.Validators
 
             if (invite.InviteStatus == InviteStatus.Accepted)
             {
-                return new DetailedValidationError("Cannot accept invite", "Invite was already accepted.");
+                return new DetailedValidationError(await _i18nProvider.Localize("cannot-accept-invite"), await _i18nProvider.Localize("invite-already-accepted"));
             }
 
             return ValidationResult.Ok;

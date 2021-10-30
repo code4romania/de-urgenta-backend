@@ -37,13 +37,13 @@ namespace DeUrgenta.Invite.Api.Validators
 
             if (userIsAlreadyAContributor)
             {
-                return new DetailedValidationError("Cannot accept invite", "User is already a backpack contributor.");
+                return new DetailedValidationError(await _i18nProvider.Localize("cannot-accept-invite"), await _i18nProvider.Localize("already-backpack-contributor"));
             }
 
             var existingContributors = await _context.BackpacksToUsers.CountAsync(b => b.BackpackId == request.BackpackId);
             if (existingContributors >= _config.MaxContributors)
             {
-                return new DetailedValidationError("Cannot accept invite", "Current maximum number of contributors is reached.");
+                return new DetailedValidationError(await _i18nProvider.Localize("cannot-accept-invite"), await _i18nProvider.Localize("max-backpack-contributors-reached"));
             }
 
             return ValidationResult.Ok;

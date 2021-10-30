@@ -39,14 +39,11 @@ namespace DeUrgenta.Backpack.Api.Validators
                 return ValidationResult.GenericValidationError;
             }
 
-
-
-
             var isOwner = await _context.BackpacksToUsers.AnyAsync(btu => btu.User.Id == user.Id && btu.Backpack.Id == request.BackpackId && btu.IsOwner);
 
             if (!isOwner)
             {
-                return new DetailedValidationError("You are not a backpack owner", "Only backpack owners can remove backpack contributors.");
+                return new DetailedValidationError(await _i18nProvider.Localize("not-backpack-owner"), await _i18nProvider.Localize("not-backpack-owner-delete-contributor-message"));
             }
 
             bool requestedUserIsContributor = await _context

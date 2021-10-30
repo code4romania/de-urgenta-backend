@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\DeUrgenta.Domain.Api\DeUrgenta.Domain.Api.csproj" />
+    <ProjectReference Include="..\..\DeUrgenta.I18n.Service\DeUrgenta.I18n.Service.csproj" />
   </ItemGroup>
 
   <ItemGroup>

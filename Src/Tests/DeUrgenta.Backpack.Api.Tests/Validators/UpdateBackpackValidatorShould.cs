@@ -19,10 +19,14 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
     public class UpdateBackpackValidatorShould
     {
         private readonly DeUrgentaContext _dbContext;
+        private readonly IamI18nProvider _i18nProvider;
 
         public UpdateBackpackValidatorShould(DatabaseFixture fixture)
         {
             _dbContext = fixture.Context;
+            _i18nProvider = Substitute.For<IamI18nProvider>();
+            _i18nProvider.Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
         }
 
         [Theory]
@@ -32,12 +36,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_request_when_no_user_found_by_sub(string sub)
         {
             // Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
-            var sut = new UpdateBackpackValidator(_dbContext, i18nProvider);
+            var sut = new UpdateBackpackValidator(_dbContext, _i18nProvider);
 
             // Act
             var isValid = await sut.IsValidAsync(new UpdateBackpack(sub, Guid.NewGuid(), new BackpackModelRequest()));
@@ -50,12 +49,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_request_when_no_backpack_found()
         {
             // Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
-            var sut = new UpdateBackpackValidator(_dbContext, i18nProvider);
+            var sut = new UpdateBackpackValidator(_dbContext, _i18nProvider);
             var userSub = Guid.NewGuid().ToString();
 
             var user = new UserBuilder().WithSub(userSub).Build();
@@ -74,12 +68,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_request_when_user_is_not_owner()
         {
             // Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
-            var sut = new UpdateBackpackValidator(_dbContext, i18nProvider);
+            var sut = new UpdateBackpackValidator(_dbContext, _i18nProvider);
 
             var userSub = Guid.NewGuid().ToString();
             var backpackContributorSub = Guid.NewGuid().ToString();
@@ -112,12 +101,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Validate_when_user_is_owner_of_backpack()
         {
             // Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
-            var sut = new UpdateBackpackValidator(_dbContext, i18nProvider);
+            var sut = new UpdateBackpackValidator(_dbContext, _i18nProvider);
 
             var userSub = Guid.NewGuid().ToString();
 

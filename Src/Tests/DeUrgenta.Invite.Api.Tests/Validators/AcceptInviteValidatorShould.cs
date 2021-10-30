@@ -18,27 +18,26 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
     public class AcceptInviteValidatorShould
     {
         private readonly DeUrgentaContext _context;
+        private readonly IamI18nProvider _i18nProvider;
 
         public AcceptInviteValidatorShould(DatabaseFixture fixture)
         {
             _context = fixture.Context;
 
+            _i18nProvider = Substitute.For<IamI18nProvider>();
+            _i18nProvider.Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
         }
 
         [Fact]
         public async Task Invalidate_request_if_users_does_not_exist()
         {
             //Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
             var sub = Guid.NewGuid().ToString();
             var inviteId = Guid.NewGuid();
             AcceptInvite request = new(sub, inviteId);
 
-            var sut = new AcceptInviteValidator(_context, i18nProvider);
+            var sut = new AcceptInviteValidator(_context, _i18nProvider);
 
             //Act
             var isValid = await sut.IsValidAsync(request);
@@ -51,11 +50,6 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
         public async Task Invalidate_request_if_invite_does_not_exist()
         {
             //Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
             var sub = Guid.NewGuid().ToString();
             var inviteId = Guid.NewGuid();
 
@@ -65,7 +59,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             AcceptInvite request = new(sub, inviteId);
 
-            var sut = new AcceptInviteValidator(_context, i18nProvider);
+            var sut = new AcceptInviteValidator(_context, _i18nProvider);
 
             //Act
             var isValid = await sut.IsValidAsync(request);
@@ -78,11 +72,6 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
         public async Task Invalidate_request_if_invite_is_already_accepted()
         {
             //Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
             var sub = Guid.NewGuid().ToString();
             var inviteId = Guid.NewGuid();
 
@@ -96,24 +85,22 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             AcceptInvite request = new(sub, inviteId);
 
-            var sut = new AcceptInviteValidator(_context, i18nProvider);
+            var sut = new AcceptInviteValidator(_context, _i18nProvider);
 
             //Act
             var isValid = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            isValid.Should().BeOfType<DetailedValidationError>();
+
+            await _i18nProvider.Received(1).Localize(Arg.Is("cannot-accept-invite"));
+            await _i18nProvider.Received(1).Localize(Arg.Is("invite-already-accepted"));
         }
 
         [Fact]
         public async Task Validate_request_if_request_is_valid()
         {
             //Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
             var sub = Guid.NewGuid().ToString();
             var inviteId = Guid.NewGuid();
 
@@ -127,7 +114,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             AcceptInvite request = new(sub, inviteId);
 
-            var sut = new AcceptInviteValidator(_context, i18nProvider);
+            var sut = new AcceptInviteValidator(_context, _i18nProvider);
 
             //Act
             var isValid = await sut.IsValidAsync(request);

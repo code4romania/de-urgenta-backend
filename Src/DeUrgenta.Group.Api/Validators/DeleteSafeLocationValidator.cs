@@ -37,7 +37,7 @@ namespace DeUrgenta.Group.Api.Validators
 
             if (!isGroupAdmin)
             {
-                return new DetailedValidationError("Cannot delete safe locations", "Only group admins can delete safe locations.");
+                return new DetailedValidationError(await _i18nProvider.Localize("cannot-delete-safe-location"), await _i18nProvider.Localize("only-group-admin-can-delete-safe-location-message"));
             }
 
             return ValidationResult.Ok;

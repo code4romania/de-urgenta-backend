@@ -19,10 +19,14 @@ namespace DeUrgenta.Group.Api.Tests.Validators
     public class UpdateGroupValidatorShould
     {
         private readonly DeUrgentaContext _dbContext;
+        private readonly IamI18nProvider _i18nProvider;
 
         public UpdateGroupValidatorShould(DatabaseFixture fixture)
         {
-            _dbContext = fixture.Context;
+            _dbContext = fixture.Context; 
+            _i18nProvider = Substitute.For<IamI18nProvider>();
+            _i18nProvider.Localize(Arg.Any<string>(), Arg.Any<object[]>())
+                .ReturnsForAnyArgs("some message");
         }
 
         [Theory]
@@ -32,12 +36,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Invalidate_request_when_no_user_found_by_sub(string sub)
         {
             // Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
-            var sut = new UpdateGroupValidator(_dbContext, i18nProvider);
+            var sut = new UpdateGroupValidator(_dbContext, _i18nProvider);
 
             // Act
             var isValid = await sut.IsValidAsync(new UpdateGroup(sub, Guid.NewGuid(), new GroupRequest()));
@@ -50,12 +49,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Invalidate_request_when_no_group_found()
         {
             // Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
-            var sut = new UpdateGroupValidator(_dbContext, i18nProvider);
+            var sut = new UpdateGroupValidator(_dbContext, _i18nProvider);
             var userSub = Guid.NewGuid().ToString();
 
             var user = new UserBuilder().WithSub(userSub).Build();
@@ -74,12 +68,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Invalidate_request_when_user_is_not_admin()
         {
             // Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
-            var sut = new UpdateGroupValidator(_dbContext, i18nProvider);
+            var sut = new UpdateGroupValidator(_dbContext, _i18nProvider);
 
             var userSub = Guid.NewGuid().ToString();
             var groupUserSub = Guid.NewGuid().ToString();
@@ -109,12 +98,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Validate_when_user_is_admin_of_group()
         {
             // Arrange
-            var i18nProvider = Substitute.For<IamI18nProvider>();
-            i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
-            var sut = new UpdateGroupValidator(_dbContext, i18nProvider);
+            var sut = new UpdateGroupValidator(_dbContext, _i18nProvider);
 
             var userSub = Guid.NewGuid().ToString();
 

@@ -37,7 +37,7 @@ namespace DeUrgenta.Group.Api.Validators
 
             if (!isGroupAdmin)
             {
-                return new DetailedValidationError("Cannot delete group", "Only group admin can delete group.");
+                return new DetailedValidationError(await _i18nProvider.Localize("cannot-delete-group"), await _i18nProvider.Localize("only-group-admin-can-delete-group-message"));
             }
 
             return ValidationResult.Ok;
