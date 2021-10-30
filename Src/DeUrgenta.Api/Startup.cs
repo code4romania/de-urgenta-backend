@@ -30,7 +30,6 @@ using DeUrgenta.Invite.Api;
 using DeUrgenta.Invite.Api.Controllers;
 using DeUrgenta.Content.Api.Controller;
 
-
 namespace DeUrgenta.Api
 {
     public class Startup
