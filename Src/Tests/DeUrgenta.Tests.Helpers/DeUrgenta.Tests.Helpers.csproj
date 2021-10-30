@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\DeUrgenta.Domain.Api\DeUrgenta.Domain.Api.csproj" />
-    <ProjectReference Include="..\..\DeUrgenta.I18n.Service\DeUrgenta.I18n.Service.csproj" />
   </ItemGroup>
 
   <ItemGroup>
