@@ -50,7 +50,8 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
                 Amount = backpackItem.Amount,
                 CategoryType = backpackItem.BackpackCategory,
                 ExpirationDate = backpackItem.ExpirationDate,
-                BackpackId = request.BackpackId
+                BackpackId = request.BackpackId,
+                Version = 0
             };
         }
     }

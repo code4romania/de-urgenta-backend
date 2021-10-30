@@ -1,4 +1,5 @@
 using System.Reflection;
+using AspNetCoreRateLimit;
 using DeUrgenta.Admin.Api.Controller;
 using DeUrgenta.Backpack.Api.Controllers;
 using DeUrgenta.Certifications.Api.Controller;
@@ -27,6 +28,7 @@ using DeUrgenta.Events.Api.Controller;
 using DeUrgenta.I18n.Service;
 using DeUrgenta.Invite.Api;
 using DeUrgenta.Invite.Api.Controllers;
+using DeUrgenta.Content.Api.Controller;
 
 namespace DeUrgenta.Api
 {
@@ -45,6 +47,8 @@ namespace DeUrgenta.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddRateLimit(Configuration);
+
             services.SetupI18nService(Configuration);
             services.AddBearerAuth(Configuration);
             services.AddControllers().AddFluentValidation();
@@ -75,7 +79,11 @@ namespace DeUrgenta.Api
             services.SetupStorageService(Configuration);
 
             services.SetupHealthChecks(Configuration);
+
+
         }
+
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
@@ -84,7 +92,10 @@ namespace DeUrgenta.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
             app.ConfigureI18n();
+
+            app.UseIpRateLimiting();
 
             app.UseProblemDetails();
             app.UseConfigureSwagger();
@@ -94,7 +105,8 @@ namespace DeUrgenta.Api
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints => {
+            app.UseEndpoints(endpoints =>
+            {
                 endpoints.MapAppHealthChecks();
 
                 endpoints.MapControllers();
@@ -116,7 +128,8 @@ namespace DeUrgenta.Api
                 typeof(UserController).GetTypeInfo().Assembly,
                 typeof(EventController).GetTypeInfo().Assembly,
                 typeof(InviteController).GetTypeInfo().Assembly,
-
+                typeof(ContentController).GetTypeInfo().Assembly,
+                
                 // Common
 
                 typeof(ApplicationErrorResponseExample).GetTypeInfo().Assembly

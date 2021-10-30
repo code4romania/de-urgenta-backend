@@ -29,8 +29,8 @@ namespace DeUrgenta.Domains.Migrator
             Console.WriteLine("Registering contexts.");
             services.AddDatabase<DeUrgentaContext>(configuration.GetConnectionString("DbConnectionString"));
             services.AddDatabase<UserDbContext>(configuration.GetConnectionString("IdentityDbConnectionString"));
-            services.AddDatabase<JobsContext>(configuration.GetConnectionString("I18nDbConnectionString"));
-            services.AddDatabase<I18nDbContext>(configuration.GetConnectionString("JobsConnectionString"));
+            services.AddDatabase<JobsContext>(configuration.GetConnectionString("JobsConnectionString"));
+            services.AddDatabase<I18nDbContext>(configuration.GetConnectionString("I18nDbConnectionString"));
             Console.WriteLine("Done: Registering contexts.");
 
             var serviceProvider = services.BuildServiceProvider();
