@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using DeUrgenta.Admin.Api.Models;
 using DeUrgenta.Admin.Api.Swagger.AdminLocalization;
+using DeUrgenta.Common.Auth;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.I18n.Service.Models;
 using DeUrgenta.I18n.Service.Providers;
@@ -12,7 +13,7 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace DeUrgenta.Admin.Api.Controller
 {
-    [Authorize]
+    [Authorize(Policy = ApiPolicies.AdminOnly)]
     [ApiController]
     [Produces("application/json")]
     [Consumes("application/json")]
@@ -27,7 +28,7 @@ namespace DeUrgenta.Admin.Api.Controller
         }
 
         /// <summary>
-        /// Get available content for specifc key
+        /// Get available content for specific key
         /// </summary>
         [SwaggerResponse(StatusCodes.Status200OK, "Available Content for key", typeof(StringResourceModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]

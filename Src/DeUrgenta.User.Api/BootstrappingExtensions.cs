@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using DeUrgenta.Common.Auth;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Identity;
 using DeUrgenta.Infra.Extensions;
@@ -45,7 +46,8 @@ namespace DeUrgenta.User.Api
                 ValidateAudience = false,
                 ValidateLifetime = true,
                 RequireExpirationTime = false,
-                ClockSkew = TimeSpan.Zero
+                ClockSkew = TimeSpan.Zero,
+                RoleClaimType = ApiUserRoles.ClaimName
             };
 
             services.AddSingleton(tokenValidationParams);
@@ -62,6 +64,11 @@ namespace DeUrgenta.User.Api
                 jwt.TokenValidationParameters = tokenValidationParams;
             });
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(ApiPolicies.AdminOnly, policy => policy.RequireRole(ApiUserRoles.Admin));
+            });
+
             services.Configure<IdentityOptions>(options => options.Password = passwordOptions);
 
             services.AddTransient<IJwtService, JwtService>();
@@ -70,6 +77,7 @@ namespace DeUrgenta.User.Api
 
             services
                 .AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<UserDbContext>();
 
             services.AddTransient<IApplicationUserManager, ApplicationUserManager>();
@@ -79,7 +87,7 @@ namespace DeUrgenta.User.Api
         public static IServiceCollection AddUserApiServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<GroupsConfig>(configuration.GetSection(GroupsConfig.SectionName));
-            
+
             services.AddTransient<IValidateRequest<GetUser>, GetUserValidator>();
             services.AddTransient<IValidateRequest<UpdateUser>, UpdateUserValidator>();
             services.AddTransient<IValidateRequest<GetUserLocations>, GetUserLocationsValidator>();

@@ -12,4 +12,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DeUrgenta.Common\DeUrgenta.Common.csproj" />
+  </ItemGroup>
+
 </Project>
