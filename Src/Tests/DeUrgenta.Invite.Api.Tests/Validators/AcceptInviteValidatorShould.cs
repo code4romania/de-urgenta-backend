@@ -1,15 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Domain.Api.Entities;
-using DeUrgenta.I18n.Service.Providers;
 using DeUrgenta.Invite.Api.Commands;
 using DeUrgenta.Invite.Api.Validators;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
 using FluentAssertions;
-using NSubstitute;
 using Xunit;
 
 namespace DeUrgenta.Invite.Api.Tests.Validators
@@ -18,15 +17,10 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
     public class AcceptInviteValidatorShould
     {
         private readonly DeUrgentaContext _context;
-        private readonly IamI18nProvider _i18nProvider;
 
         public AcceptInviteValidatorShould(DatabaseFixture fixture)
         {
             _context = fixture.Context;
-
-            _i18nProvider = Substitute.For<IamI18nProvider>();
-            _i18nProvider.Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
         }
 
         [Fact]
@@ -37,7 +31,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             var inviteId = Guid.NewGuid();
             AcceptInvite request = new(sub, inviteId);
 
-            var sut = new AcceptInviteValidator(_context, _i18nProvider);
+            var sut = new AcceptInviteValidator(_context);
 
             //Act
             var isValid = await sut.IsValidAsync(request);
@@ -59,7 +53,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             AcceptInvite request = new(sub, inviteId);
 
-            var sut = new AcceptInviteValidator(_context, _i18nProvider);
+            var sut = new AcceptInviteValidator(_context);
 
             //Act
             var isValid = await sut.IsValidAsync(request);
@@ -85,16 +79,17 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             AcceptInvite request = new(sub, inviteId);
 
-            var sut = new AcceptInviteValidator(_context, _i18nProvider);
+            var sut = new AcceptInviteValidator(_context);
 
             //Act
             var isValid = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeOfType<DetailedValidationError>();
-
-            await _i18nProvider.Received(1).Localize(Arg.Is("cannot-accept-invite"));
-            await _i18nProvider.Received(1).Localize(Arg.Is("invite-already-accepted"));
+            isValid.Should().BeOfType<LocalizableValidationError>();
+            isValid.Messages.Should().BeEquivalentTo(new Dictionary<string, string>
+            {
+                { "cannot-accept-invite", "invite-already-accepted" }
+            });
         }
 
         [Fact]
@@ -114,7 +109,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             AcceptInvite request = new(sub, inviteId);
 
-            var sut = new AcceptInviteValidator(_context, _i18nProvider);
+            var sut = new AcceptInviteValidator(_context);
 
             //Act
             var isValid = await sut.IsValidAsync(request);

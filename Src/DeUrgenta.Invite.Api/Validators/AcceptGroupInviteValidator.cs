@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
-using DeUrgenta.I18n.Service.Providers;
 using DeUrgenta.Invite.Api.Commands;
 using DeUrgenta.Invite.Api.Options;
 using Microsoft.EntityFrameworkCore;
@@ -12,13 +11,11 @@ namespace DeUrgenta.Invite.Api.Validators
     public class AcceptGroupInviteValidator : IValidateRequest<AcceptGroupInvite>
     {
         private readonly DeUrgentaContext _context;
-        private readonly IamI18nProvider _i18nProvider;
         private readonly GroupsConfig _config;
 
-        public AcceptGroupInviteValidator(DeUrgentaContext context, IamI18nProvider i18nProvider, IOptions<GroupsConfig> config)
+        public AcceptGroupInviteValidator(DeUrgentaContext context, IOptions<GroupsConfig> config)
         {
             _context = context;
-            _i18nProvider = i18nProvider;
             _config = config.Value;
         }
 
@@ -37,7 +34,7 @@ namespace DeUrgenta.Invite.Api.Validators
 
             if (noOfGroupsUserIsAMemberOf >= _config.MaxJoinedGroupsPerUser)
             {
-                return new DetailedValidationError(await _i18nProvider.Localize("cannot-accept-invite"), await _i18nProvider.Localize("max-group-per-user-reached"));
+                return new LocalizableValidationError("cannot-accept-invite", "max-group-per-user-reached");
             }
 
             var noOfGroupMembers = await _context.UsersToGroups
@@ -45,7 +42,7 @@ namespace DeUrgenta.Invite.Api.Validators
 
             if (noOfGroupMembers >= _config.MaxUsers)
             {
-                return new DetailedValidationError(await _i18nProvider.Localize("cannot-accept-invite"), await _i18nProvider.Localize("max-group-members-reached"));
+                return new LocalizableValidationError("cannot-accept-invite", "max-group-members-reached");
             }
 
             var userIsAlreadyAMember = await _context.UsersToGroups
@@ -53,7 +50,7 @@ namespace DeUrgenta.Invite.Api.Validators
 
             if (userIsAlreadyAMember)
             {
-                return new DetailedValidationError(await _i18nProvider.Localize("cannot-accept-invite"), await _i18nProvider.Localize("already-a-group-member-message"));
+                return new LocalizableValidationError("cannot-accept-invite", "already-a-group-member-message");
             }
 
             return ValidationResult.Ok;

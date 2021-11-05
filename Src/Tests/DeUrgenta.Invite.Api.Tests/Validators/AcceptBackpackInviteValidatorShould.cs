@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
-using DeUrgenta.I18n.Service.Providers;
 using DeUrgenta.Invite.Api.Commands;
 using DeUrgenta.Invite.Api.Options;
 using DeUrgenta.Invite.Api.Validators;
@@ -10,7 +10,6 @@ using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
-using NSubstitute;
 using Xunit;
 
 namespace DeUrgenta.Invite.Api.Tests.Validators
@@ -20,7 +19,6 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
     {
         private readonly DeUrgentaContext _context;
         private readonly IOptions<BackpacksConfig> _backpacksConfig;
-        private readonly IamI18nProvider _i18nProvider;
 
         public AcceptBackpackInviteValidatorShould(DatabaseFixture fixture)
         {
@@ -30,10 +28,6 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
                 MaxContributors = 2
             };
             _backpacksConfig = Microsoft.Extensions.Options.Options.Create(options);
-
-            _i18nProvider = Substitute.For<IamI18nProvider>();
-            _i18nProvider.Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
         }
 
         [Fact]
@@ -50,7 +44,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             AcceptBackpackInvite request = new(sub, backpackId);
 
-            var sut = new AcceptBackpackInviteValidator(_context, _i18nProvider, _backpacksConfig);
+            var sut = new AcceptBackpackInviteValidator(_context, _backpacksConfig);
 
             //Act
             var isValid = await sut.IsValidAsync(request);
@@ -79,16 +73,17 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             AcceptBackpackInvite request = new(sub, backpackId);
 
-            var sut = new AcceptBackpackInviteValidator(_context, _i18nProvider, _backpacksConfig);
+            var sut = new AcceptBackpackInviteValidator(_context, _backpacksConfig);
 
             //Act
             var isValid = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeOfType<DetailedValidationError>();
-
-            await _i18nProvider.Received(1).Localize(Arg.Is("cannot-accept-invite"));
-            await _i18nProvider.Received(1).Localize(Arg.Is("already-backpack-contributor"));
+            isValid.Should().BeOfType<LocalizableValidationError>();
+            isValid.Messages.Should().BeEquivalentTo(new Dictionary<string, string>
+            {
+                { "cannot-accept-invite", "already-backpack-contributor" }
+            });
         }
 
         [Fact]
@@ -113,16 +108,17 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             AcceptBackpackInvite request = new(sub, backpackId);
 
-            var sut = new AcceptBackpackInviteValidator(_context, _i18nProvider, _backpacksConfig);
+            var sut = new AcceptBackpackInviteValidator(_context, _backpacksConfig);
 
             //Act
             var isValid = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeOfType<DetailedValidationError>();
-
-            await _i18nProvider.Received(1).Localize(Arg.Is("cannot-accept-invite"));
-            await _i18nProvider.Received(1).Localize(Arg.Is("max-backpack-contributors-reached"));
+            isValid.Should().BeOfType<LocalizableValidationError>();
+            isValid.Messages.Should().BeEquivalentTo(new Dictionary<string, string>
+            {
+                { "cannot-accept-invite", "max-backpack-contributors-reached" }
+            });
         }
 
         [Fact]
@@ -142,7 +138,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             AcceptBackpackInvite request = new(sub, backpackId);
 
-            var sut = new AcceptBackpackInviteValidator(_context, _i18nProvider, _backpacksConfig);
+            var sut = new AcceptBackpackInviteValidator(_context, _backpacksConfig);
 
             //Act
             var isValid = await sut.IsValidAsync(request);

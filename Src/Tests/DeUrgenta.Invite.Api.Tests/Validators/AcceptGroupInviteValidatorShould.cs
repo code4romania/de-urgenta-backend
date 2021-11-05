@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
-using DeUrgenta.I18n.Service.Providers;
 using DeUrgenta.Invite.Api.Commands;
 using DeUrgenta.Invite.Api.Options;
 using DeUrgenta.Invite.Api.Validators;
@@ -20,7 +20,6 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
     {
         private readonly DeUrgentaContext _context;
         private readonly IOptions<GroupsConfig> _groupsConfig;
-        private readonly IamI18nProvider _i18nProvider;
         
         public AcceptGroupInviteValidatorShould(DatabaseFixture fixture)
         {
@@ -31,10 +30,6 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
                 MaxJoinedGroupsPerUser = 2
             };
             _groupsConfig = Microsoft.Extensions.Options.Options.Create(options);
-
-            _i18nProvider = Substitute.For<IamI18nProvider>();
-            _i18nProvider.Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
         }
 
         [Fact]
@@ -51,7 +46,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             AcceptGroupInvite request = new(sub, groupId);
 
-            var sut = new AcceptGroupInviteValidator(_context, _i18nProvider, _groupsConfig);
+            var sut = new AcceptGroupInviteValidator(_context, _groupsConfig);
 
             //Act
             var isValid = await sut.IsValidAsync(request);
@@ -82,17 +77,17 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             AcceptGroupInvite request = new(sub, groupId);
 
-            var sut = new AcceptGroupInviteValidator(_context, _i18nProvider, _groupsConfig);
+            var sut = new AcceptGroupInviteValidator(_context, _groupsConfig);
 
             //Act
             var isValid = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeOfType<DetailedValidationError>();
-
-            await _i18nProvider.Received(1).Localize(Arg.Is("cannot-accept-invite"));
-            await _i18nProvider.Received(1).Localize(Arg.Is("max-group-per-user-reached"));
-
+            isValid.Should().BeOfType<LocalizableValidationError>();
+            isValid.Messages.Should().BeEquivalentTo(new Dictionary<string, string>
+            {
+                { "cannot-accept-invite", "max-group-per-user-reached" }
+            });
         }
 
         [Fact]
@@ -117,16 +112,17 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             AcceptGroupInvite request = new(sub, groupId);
 
-            var sut = new AcceptGroupInviteValidator(_context, _i18nProvider, _groupsConfig);
+            var sut = new AcceptGroupInviteValidator(_context, _groupsConfig);
 
             //Act
             var isValid = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeOfType<DetailedValidationError>();
-
-            await _i18nProvider.Received(1).Localize(Arg.Is("cannot-accept-invite"));
-            await _i18nProvider.Received(1).Localize(Arg.Is("max-group-members-reached"));
+            isValid.Should().BeOfType<LocalizableValidationError>();
+            isValid.Messages.Should().BeEquivalentTo(new Dictionary<string, string>
+            {
+                { "cannot-accept-invite", "max-group-members-reached" }
+            });
         }
 
         [Fact]
@@ -149,16 +145,17 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             AcceptGroupInvite request = new(sub, groupId);
 
-            var sut = new AcceptGroupInviteValidator(_context, _i18nProvider, _groupsConfig);
+            var sut = new AcceptGroupInviteValidator(_context, _groupsConfig);
 
             //Act
             var isValid = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeOfType<DetailedValidationError>();
-
-            await _i18nProvider.Received(1).Localize(Arg.Is("cannot-accept-invite"));
-            await _i18nProvider.Received(1).Localize(Arg.Is("already-a-group-member-message"));
+            isValid.Should().BeOfType<LocalizableValidationError>();
+            isValid.Messages.Should().BeEquivalentTo(new Dictionary<string, string>
+            {
+                { "cannot-accept-invite", "already-a-group-member-message"}
+            });
         }
 
         [Fact]
@@ -178,7 +175,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             AcceptGroupInvite request = new(sub, groupId);
 
-            var sut = new AcceptGroupInviteValidator(_context, _i18nProvider, _groupsConfig);
+            var sut = new AcceptGroupInviteValidator(_context, _groupsConfig);
 
             //Act
             var isValid = await sut.IsValidAsync(request);
