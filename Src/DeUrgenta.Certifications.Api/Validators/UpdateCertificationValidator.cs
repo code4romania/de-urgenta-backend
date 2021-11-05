@@ -2,7 +2,6 @@
 using DeUrgenta.Certifications.Api.Commands;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
-using DeUrgenta.I18n.Service.Providers;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Certifications.Api.Validators
@@ -10,12 +9,10 @@ namespace DeUrgenta.Certifications.Api.Validators
     public class UpdateCertificationValidator : IValidateRequest<UpdateCertification>
     {
         private readonly DeUrgentaContext _context;
-        private readonly IamI18nProvider _i18nProvider;
 
-        public UpdateCertificationValidator(DeUrgentaContext context, IamI18nProvider i18nProvider)
+        public UpdateCertificationValidator(DeUrgentaContext context)
         {
             _context = context;
-            _i18nProvider = i18nProvider;
         }
         public async Task<ValidationResult> IsValidAsync(UpdateCertification request)
         {
@@ -29,7 +26,7 @@ namespace DeUrgenta.Certifications.Api.Validators
 
             if (!certificationExists)
             {
-                return new DetailedValidationError(await _i18nProvider.Localize("certification-not-exist"), await _i18nProvider.Localize("certification-not-exist-message"));
+                return new LocalizableValidationError("certification-not-exist","certification-not-exist-message");
             }
 
             return ValidationResult.Ok;

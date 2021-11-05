@@ -16,4 +16,9 @@
 
 	</ItemGroup>
 
+
+	<ItemGroup>
+	  <ProjectReference Include="..\DeUrgenta.I18n.Service\DeUrgenta.I18n.Service.csproj" />
+	</ItemGroup>
+
 </Project>
