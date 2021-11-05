@@ -2,7 +2,6 @@
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
-using DeUrgenta.I18n.Service.Providers;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Backpack.Api.Validators
@@ -10,12 +9,10 @@ namespace DeUrgenta.Backpack.Api.Validators
     public class DeleteBackpackValidator : IValidateRequest<DeleteBackpack>
     {
         private readonly DeUrgentaContext _context;
-        private readonly IamI18nProvider _i18nProvider;
 
-        public DeleteBackpackValidator(DeUrgentaContext context, IamI18nProvider i18nProvider)
+        public DeleteBackpackValidator(DeUrgentaContext context)
         {
             _context = context;
-            _i18nProvider = i18nProvider;
         }
 
         public async Task<ValidationResult> IsValidAsync(DeleteBackpack request)
@@ -36,7 +33,7 @@ namespace DeUrgenta.Backpack.Api.Validators
 
             if (!isOwner)
             {
-                return new DetailedValidationError(await _i18nProvider.Localize("not-backpack-owner"), await _i18nProvider.Localize("not-backpack-owner-delete-message"));
+                return new LocalizableValidationError("not-backpack-owner", "not-backpack-owner-delete-message");
             }
 
             return ValidationResult.Ok;

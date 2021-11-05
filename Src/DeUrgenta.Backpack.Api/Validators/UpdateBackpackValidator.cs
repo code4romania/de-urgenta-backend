@@ -2,7 +2,6 @@
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
-using DeUrgenta.I18n.Service.Providers;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Backpack.Api.Validators
@@ -10,12 +9,10 @@ namespace DeUrgenta.Backpack.Api.Validators
     public class UpdateBackpackValidator : IValidateRequest<UpdateBackpack>
     {
         private readonly DeUrgentaContext _context;
-        private readonly IamI18nProvider _i18nProvider;
 
-        public UpdateBackpackValidator(DeUrgentaContext context, IamI18nProvider i18nProvider)
+        public UpdateBackpackValidator(DeUrgentaContext context)
         {
             _context = context;
-            _i18nProvider = i18nProvider;
         }
 
         public async Task<ValidationResult> IsValidAsync(UpdateBackpack request)
@@ -37,7 +34,7 @@ namespace DeUrgenta.Backpack.Api.Validators
 
             if (!backpackToUser.IsOwner)
             {
-                return new DetailedValidationError(await _i18nProvider.Localize("not-backpack-owner"), await _i18nProvider.Localize("only-backpack-owner-can-update-message"));
+                return new LocalizableValidationError("not-backpack-owner", "only-backpack-owner-can-update-message");
             }
 
             return ValidationResult.Ok;

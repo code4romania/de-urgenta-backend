@@ -2,7 +2,6 @@
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
-using DeUrgenta.I18n.Service.Providers;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Backpack.Api.Validators
@@ -10,12 +9,10 @@ namespace DeUrgenta.Backpack.Api.Validators
     public class RemoveCurrentUserFromContributorsValidator : IValidateRequest<RemoveCurrentUserFromContributors>
     {
         private readonly DeUrgentaContext _context;
-        private readonly IamI18nProvider _i18nProvider;
 
-        public RemoveCurrentUserFromContributorsValidator(DeUrgentaContext context, IamI18nProvider i18nProvider)
+        public RemoveCurrentUserFromContributorsValidator(DeUrgentaContext context)
         {
             _context = context;
-            _i18nProvider = i18nProvider;
         }
 
         public async Task<ValidationResult> IsValidAsync(RemoveCurrentUserFromContributors request)
@@ -32,7 +29,7 @@ namespace DeUrgenta.Backpack.Api.Validators
 
             if (isOwner)
             {
-                return new DetailedValidationError(await _i18nProvider.Localize("backpack-owner-leave"), await _i18nProvider.Localize("backpack-owner-leave-message"));
+                return new LocalizableValidationError("backpack-owner-leave", "backpack-owner-leave-message");
             }
 
             var isPartOfGroup = await _context

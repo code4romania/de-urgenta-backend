@@ -36,7 +36,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_request_when_no_user_found_by_sub(string sub)
         {
             // Arrange
-            var sut = new UpdateBackpackValidator(_dbContext, _i18nProvider);
+            var sut = new UpdateBackpackValidator(_dbContext);
 
             // Act
             var isValid = await sut.IsValidAsync(new UpdateBackpack(sub, Guid.NewGuid(), new BackpackModelRequest()));
@@ -49,7 +49,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_request_when_no_backpack_found()
         {
             // Arrange
-            var sut = new UpdateBackpackValidator(_dbContext, _i18nProvider);
+            var sut = new UpdateBackpackValidator(_dbContext);
             var userSub = Guid.NewGuid().ToString();
 
             var user = new UserBuilder().WithSub(userSub).Build();
@@ -68,7 +68,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_request_when_user_is_not_owner()
         {
             // Arrange
-            var sut = new UpdateBackpackValidator(_dbContext, _i18nProvider);
+            var sut = new UpdateBackpackValidator(_dbContext);
 
             var userSub = Guid.NewGuid().ToString();
             var backpackContributorSub = Guid.NewGuid().ToString();
@@ -101,7 +101,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Validate_when_user_is_owner_of_backpack()
         {
             // Arrange
-            var sut = new UpdateBackpackValidator(_dbContext, _i18nProvider);
+            var sut = new UpdateBackpackValidator(_dbContext);
 
             var userSub = Guid.NewGuid().ToString();
 

@@ -2,7 +2,6 @@
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
-using DeUrgenta.I18n.Service.Providers;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Backpack.Api.Validators
@@ -10,12 +9,10 @@ namespace DeUrgenta.Backpack.Api.Validators
     public class RemoveContributorValidator : IValidateRequest<RemoveContributor>
     {
         private readonly DeUrgentaContext _context;
-        private readonly IamI18nProvider _i18nProvider;
 
-        public RemoveContributorValidator(DeUrgentaContext context, IamI18nProvider i18nProvider)
+        public RemoveContributorValidator(DeUrgentaContext context)
         {
             _context = context;
-            _i18nProvider = i18nProvider;
         }
 
         public async Task<ValidationResult> IsValidAsync(RemoveContributor request)
@@ -43,7 +40,7 @@ namespace DeUrgenta.Backpack.Api.Validators
 
             if (!isOwner)
             {
-                return new DetailedValidationError(await _i18nProvider.Localize("not-backpack-owner"), await _i18nProvider.Localize("not-backpack-owner-delete-contributor-message"));
+                return new LocalizableValidationError("not-backpack-owner", "not-backpack-owner-delete-contributor-message");
             }
 
             bool requestedUserIsContributor = await _context
