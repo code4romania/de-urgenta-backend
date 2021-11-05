@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using DeUrgenta.Common.Auth;
 using DeUrgenta.User.Api.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -18,7 +20,7 @@ namespace DeUrgenta.User.Api.Services
             _jwtConfig = jwtConfigOptions.Value;
         }
 
-        public string GenerateJwtToken(IdentityUser user)
+        public string GenerateJwtToken(IdentityUser user, IList<string> roles)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
 
@@ -26,13 +28,7 @@ namespace DeUrgenta.User.Api.Services
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim("Id", user.Id),
-                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                }),
+                Subject = new ClaimsIdentity(GetUserClaims(user, roles)),
                 Expires = DateTime.UtcNow.AddSeconds(_jwtConfig.TokenExpirationInSeconds),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
@@ -41,6 +37,29 @@ namespace DeUrgenta.User.Api.Services
             var jwtToken = jwtTokenHandler.WriteToken(token);
 
             return jwtToken;
+        }
+
+        private static Claim[] GetUserClaims(IdentityUser user, IList<string> roles)
+        {
+            var claimsBuilder = new List<Claim>
+            {
+                new ("Id", user.Id),
+                new (JwtRegisteredClaimNames.Email, user.Email),
+                new (JwtRegisteredClaimNames.Sub, user.Id),
+                new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
+            if (roles == null || roles.Count == 0)
+            {
+                roles = new[] { ApiUserRoles.User };
+            }
+
+            foreach (string userRole in roles)
+            {
+                claimsBuilder.Add(new Claim(ApiUserRoles.ClaimName, userRole));
+            }
+
+            return claimsBuilder.ToArray();
         }
     }
 }
