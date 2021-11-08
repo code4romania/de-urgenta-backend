@@ -11,6 +11,7 @@ COPY ["DeUrgenta.Domain.Api/DeUrgenta.Domain.Api.csproj", "DeUrgenta.Domain.Api/
 COPY ["DeUrgenta.Domain.I18n/DeUrgenta.Domain.I18n.csproj", "DeUrgenta.Domain.I18n/"]
 COPY ["DeUrgenta.Domain.RecurringJobs/DeUrgenta.Domain.RecurringJobs.csproj", "DeUrgenta.Domain.RecurringJobs/"]
 COPY ["DeUrgenta.Infra/DeUrgenta.Infra.csproj", "DeUrgenta.Infra/"]
+COPY ["DeUrgenta.Common/DeUrgenta.Common.csproj", "DeUrgenta.Common/"]
 
 RUN dotnet restore "DeUrgenta.Domains.Migrator/DeUrgenta.Domains.Migrator.csproj"
 
@@ -21,6 +22,7 @@ COPY ["DeUrgenta.Domain.Identity", "DeUrgenta.Domain.Identity/"]
 COPY ["DeUrgenta.Domain.I18n", "DeUrgenta.Domain.I18n/"]
 COPY ["DeUrgenta.Domain.RecurringJobs", "DeUrgenta.Domain.RecurringJobs/"]
 COPY ["DeUrgenta.Infra", "DeUrgenta.Infra/"]
+COPY ["DeUrgenta.Common", "DeUrgenta.Common/"]
 
 WORKDIR "/src/DeUrgenta.Domains.Migrator"
 RUN dotnet build "DeUrgenta.Domains.Migrator.csproj" -c Release -o /app/build

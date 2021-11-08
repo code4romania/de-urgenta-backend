@@ -1,5 +1,4 @@
-﻿using DeUrgenta.Common;
-using DeUrgenta.Common.Auth;
+﻿using DeUrgenta.Common.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
