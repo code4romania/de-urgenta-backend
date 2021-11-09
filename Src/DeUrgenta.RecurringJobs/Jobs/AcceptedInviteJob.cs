@@ -10,12 +10,12 @@ using Microsoft.Extensions.Options;
 
 namespace DeUrgenta.RecurringJobs.Jobs
 {
-    public class ExpiredInviteJob : IExpiredInviteJob
+    public class AcceptedInviteJob : IAcceptedInviteJob
     {
         private readonly DeUrgentaContext _context;
-        private readonly ExpiredInviteJobConfig _config;
+        private AcceptedInviteJobConfig _config;
 
-        public ExpiredInviteJob(DeUrgentaContext context, IOptions<ExpiredInviteJobConfig> config)
+        public AcceptedInviteJob(DeUrgentaContext context, IOptions<AcceptedInviteJobConfig> config)
         {
             _context = context;
             _config = config.Value;
@@ -23,12 +23,12 @@ namespace DeUrgenta.RecurringJobs.Jobs
 
         public async Task RunAsync()
         {
-            var expiredInvites = await _context.Invites
-               .Where(invite => (DateTime.Today - invite.SentOn).Days >= _config.DaysBeforeExpirationDate
-                                && invite.InviteStatus == InviteStatus.Sent)
-               .ToListAsync();
+            var oldAcceptedInvites = await _context.Invites.Where(invite =>
+                    (DateTime.Today - invite.SentOn).Days >= _config.DaysBeforeExpirationDate
+                    && invite.InviteStatus == InviteStatus.Accepted)
+                .ToListAsync();
 
-            _context.Invites.RemoveRange(expiredInvites);
+            _context.RemoveRange(oldAcceptedInvites);
 
             await _context.SaveChangesAsync();
         }

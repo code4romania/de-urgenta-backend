@@ -84,7 +84,17 @@ namespace DeUrgenta.RecurringJobs
                     );
             }
 
-
+            var acceptedInviteJobConfig = configuration.GetSection("RecurringJobsConfig:AcceptedInviteJobConfig")
+                .Get<AcceptedInviteJobConfig>();
+            if (acceptedInviteJobConfig.IsEnabled)
+            {
+                RecurringJob.AddOrUpdate<IAcceptedInviteJob>(
+                    nameof(AcceptedInviteJob),
+                    job => job.RunAsync(),
+                    expiredInviteJobConfig.CronExpression,
+                    TimeZoneInfo.Utc
+                );
+            }
         }
     }
 }
