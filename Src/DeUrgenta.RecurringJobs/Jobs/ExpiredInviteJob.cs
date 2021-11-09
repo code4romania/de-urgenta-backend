@@ -25,9 +25,8 @@ namespace DeUrgenta.RecurringJobs.Jobs
         public async Task RunAsync()
         {
             var expiredInvites = await _context.Invites
-               .Where(invite => (DateTime.Today - invite.SentOn).Days >= _config.DaysBeforeExpirationDate &&
-               invite.InviteStatus == InviteStatus.Sent
-               )
+               .Where(invite => (DateTime.Today - invite.SentOn).Days >= _config.DaysBeforeExpirationDate
+                                && invite.InviteStatus == InviteStatus.Sent)
                .ToListAsync();
 
             _context.Invites.RemoveRange(expiredInvites);
