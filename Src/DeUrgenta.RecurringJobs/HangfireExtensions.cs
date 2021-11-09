@@ -74,6 +74,9 @@ namespace DeUrgenta.RecurringJobs
 
             services.Configure<ExpiredInviteJobConfig>(configuration.GetSection("RecurringJobsConfig:ExpiredInviteJobConfig"));
             services.AddScoped<IExpiredInviteJob, ExpiredInviteJob>();
+
+            services.Configure<AcceptedInviteJobConfig>(configuration.GetSection("RecurringJobsConfig:AcceptedInviteJobConfig"));
+            services.AddScoped<IAcceptedInviteJob, AcceptedInviteJob>();
         }
 
         public static void UseAuthenticatedHangfireDashboard(this IApplicationBuilder app, IConfiguration configuration)

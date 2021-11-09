@@ -9,13 +9,14 @@ namespace DeUrgenta.Tests.Helpers.Builders
         private readonly Guid _destinationId = Guid.NewGuid();
         private InviteStatus _status = InviteStatus.Sent;
         private readonly InviteType _type = InviteType.Backpack;
+        private DateTime _sentOn = DateTime.Today;
 
         public Invite Build() => new()
         {
             Id = _id,
             DestinationId = _destinationId,
             InviteStatus = _status,
-            SentOn = DateTime.Today,
+            SentOn = _sentOn,
             Type = _type
         };
 
@@ -28,6 +29,12 @@ namespace DeUrgenta.Tests.Helpers.Builders
         public InviteBuilder WithId(Guid inviteId)
         {
             _id = inviteId;
+            return this;
+        }
+
+        public InviteBuilder WithSentOn(DateTime sentOn)
+        {
+            _sentOn = sentOn;
             return this;
         }
     }
