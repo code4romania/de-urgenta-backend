@@ -40,6 +40,7 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
             return new BackpackItemModel
             {
                 Id = backpackItem.Id,
+                BackpackId = backpackItem.BackpackId,
                 Name = backpackItem.Name,
                 Amount = backpackItem.Amount,
                 CategoryType = backpackItem.BackpackCategory,
