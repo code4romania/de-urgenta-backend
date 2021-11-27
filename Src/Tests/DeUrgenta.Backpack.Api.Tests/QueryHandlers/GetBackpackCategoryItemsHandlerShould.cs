@@ -35,7 +35,7 @@ namespace DeUrgenta.Backpack.Api.Tests.QueryHandlers
             var sut = new GetBackpackCategoryItemsHandler(validator, _dbContext);
 
             // Act
-            var result = await sut.Handle(new GetBackpackCategoryItems("a-sub", Guid.NewGuid(), BackpackCategoryType.FirstAid), CancellationToken.None);
+            var result = await sut.Handle(new GetBackpackCategoryItems("a-sub", Guid.NewGuid(), BackpackItemCategoryType.FirstAid), CancellationToken.None);
              
             // Assert
             result.IsFailure.Should().BeTrue();

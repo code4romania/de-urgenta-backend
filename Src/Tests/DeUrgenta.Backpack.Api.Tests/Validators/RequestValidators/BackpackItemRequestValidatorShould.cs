@@ -120,14 +120,14 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators.RequestValidators
         {
             var backpackItemRequest = new BackpackItemRequest
             {
-                CategoryType = 0
+                Category = 0
             };
 
             //Act
             var result = _sut.TestValidate(backpackItemRequest);
 
             //Assert
-            result.ShouldHaveValidationErrorFor(c => c.CategoryType)
+            result.ShouldHaveValidationErrorFor(c => c.Category)
                 .WithErrorMessage("'Category Type' has a range of values which does not include '0'.");
         }
 
@@ -139,7 +139,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators.RequestValidators
                 Name = "abcd",
                 Amount = 1,
                 ExpirationDate = DateTime.Today.AddDays(1),
-                CategoryType = BackpackCategoryType.FirstAid
+                Category = BackpackItemCategoryType.FirstAid
             };
 
             //Act

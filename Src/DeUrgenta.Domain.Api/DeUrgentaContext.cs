@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Domain.Api
 {
-    public class DeUrgentaContext : DbContext
+    public class DeUrgentaContext : DbContext, IDatabaseContext
     {
         public DeUrgentaContext(DbContextOptions<DeUrgentaContext> options) : base(options)
         {
@@ -49,5 +49,12 @@ namespace DeUrgenta.Domain.Api
             modelBuilder.ApplyConfiguration(new EventTypeEntityConfiguration());
             modelBuilder.ApplyConfiguration(new InviteEntityConfiguration());
         }
+
+        public string SchemaName => "public";
+    }
+
+    public interface IDatabaseContext
+    {
+        string SchemaName { get; }
     }
 }

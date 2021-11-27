@@ -12,13 +12,13 @@ namespace DeUrgenta.Backpack.Api.Queries
     {
         public string UserSub { get; }
         public Guid BackpackId { get; }
-        public BackpackCategoryType CategoryId { get; }
+        public BackpackItemCategoryType Category { get; }
 
-        public GetBackpackCategoryItems(string userSub, Guid backpackId, BackpackCategoryType categoryId)
+        public GetBackpackCategoryItems(string userSub, Guid backpackId, BackpackItemCategoryType itemCategoryId)
         {
             UserSub = userSub;
             BackpackId = backpackId;
-            CategoryId = categoryId;
+            Category = itemCategoryId;
         }
 
     }
