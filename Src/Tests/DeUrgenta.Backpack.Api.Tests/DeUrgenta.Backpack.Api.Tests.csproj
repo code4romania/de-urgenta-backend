@@ -6,6 +6,10 @@
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
 		<PackageReference Include="NSubstitute" Version="4.2.2" />

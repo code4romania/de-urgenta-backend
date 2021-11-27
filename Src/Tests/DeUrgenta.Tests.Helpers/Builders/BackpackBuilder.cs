@@ -7,11 +7,12 @@ namespace DeUrgenta.Tests.Helpers.Builders
     {
         private Guid _id = Guid.NewGuid();
         
-        public Backpack Build() => new()
-        {
-            Id = _id,
-            Name = TestDataProviders.RandomString()
-        };
+        public Backpack Build() =>
+            new()
+            {
+                Id = _id,
+                Name = TestDataProviders.RandomString()
+            };
 
         public BackpackBuilder WithId(Guid id)
         {

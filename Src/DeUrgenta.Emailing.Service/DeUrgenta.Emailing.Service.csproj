@@ -4,6 +4,10 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+	<PropertyGroup>
+		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+	</PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.Network" Version="5.0.4" />
     <PackageReference Include="AspNetCore.HealthChecks.SendGrid" Version="5.0.1" />
