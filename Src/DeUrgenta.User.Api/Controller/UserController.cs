@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
-using DeUrgenta.Common.Extensions;
+using DeUrgenta.Common.Mappers;
 using DeUrgenta.Common.Models;
 using DeUrgenta.Common.Models.Dtos;
 using DeUrgenta.Common.Swagger;
@@ -30,11 +30,14 @@ namespace DeUrgenta.User.Api.Controller
     public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IResultMapper _mapper;
+
         private readonly UserManager<IdentityUser> _userManager;
 
-        public UserController(IMediator mediator, UserManager<IdentityUser> userManager)
+        public UserController(IMediator mediator, UserManager<IdentityUser> userManager, IResultMapper mapper)
         {
             _userManager = userManager;
+            _mapper = mapper;
             _mediator = mediator;
         }
 
@@ -52,7 +55,7 @@ namespace DeUrgenta.User.Api.Controller
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var result = await _mediator.Send(new GetUser(sub));
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -72,7 +75,7 @@ namespace DeUrgenta.User.Api.Controller
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var result = await _mediator.Send(new UpdateUser(sub, user));
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
 
@@ -145,7 +148,7 @@ namespace DeUrgenta.User.Api.Controller
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var result = await _mediator.Send(new GetUserLocations(sub));
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -167,7 +170,7 @@ namespace DeUrgenta.User.Api.Controller
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var result = await _mediator.Send(new AddLocation(sub, location));
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -189,7 +192,7 @@ namespace DeUrgenta.User.Api.Controller
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var result = await _mediator.Send(new UpdateLocation(sub, locationId, location));
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -210,7 +213,7 @@ namespace DeUrgenta.User.Api.Controller
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var result = await _mediator.Send(new DeleteLocation(sub, locationId));
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
     }
 }

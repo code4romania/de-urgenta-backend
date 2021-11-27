@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DeUrgenta.Common.Extensions
 {
-    public static class ActionResultExtensions
+    internal static class ActionResultExtensions
     {
-        public static ActionResult ToActionResult<T>(this Result<T, ValidationResult> result)
+        public static ActionResult<T> ToActionResult<T>(this Result<T, ValidationResult> result)
         {
             if (result.IsSuccess)
             {
@@ -21,9 +21,14 @@ namespace DeUrgenta.Common.Extensions
                 return new OkObjectResult(result.Value);
             }
 
+            return MapErrorResult(result);
+        }
+
+        private static ActionResult MapErrorResult<T>(Result<T, ValidationResult> result)
+        {
             switch (result.Error)
             {
-                case GenericValidationError _:
+                case GenericValidationError:
                     return new BadRequestResult();
 
                 case DetailedValidationError error:
@@ -39,7 +44,17 @@ namespace DeUrgenta.Common.Extensions
             }
         }
 
-        public static ValidationProblemDetails ToValidationProblemDetails(this DetailedValidationError validationResult)
+        public static ActionResult ToActionResult(this Result<Unit, ValidationResult> result)
+        {
+            if (result.IsSuccess)
+            {
+                return new NoContentResult();
+            }
+
+            return MapErrorResult(result);
+        }
+
+        private static ValidationProblemDetails ToValidationProblemDetails(this DetailedValidationError validationResult)
         {
             var problemDetails = new ValidationProblemDetails
             {
@@ -49,11 +64,10 @@ namespace DeUrgenta.Common.Extensions
 
             foreach (var message in validationResult.Messages)
             {
-                problemDetails.Errors.Add(message.Key, new []{message.Value});
+                problemDetails.Errors.Add(message.Key, new[] { message.Value });
             }
 
             return problemDetails;
         }
-
     }
 }

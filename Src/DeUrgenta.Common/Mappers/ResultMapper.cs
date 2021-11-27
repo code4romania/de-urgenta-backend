@@ -4,6 +4,7 @@ using CSharpFunctionalExtensions;
 using DeUrgenta.Common.Extensions;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.I18n.Service.Providers;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DeUrgenta.Common.Mappers
@@ -17,7 +18,14 @@ namespace DeUrgenta.Common.Mappers
             _i18nProvider = i18NProvider;
         }
 
-        public async Task<ActionResult> MapToActionResult<T>(Result<T, ValidationResult> result)
+        public async Task<ActionResult<T>> MapToActionResult<T>(Result<T, ValidationResult> result)
+        {
+           result = await TranslateResult(result);
+
+            return result.ToActionResult();
+        }
+
+        private async Task<Result<T, ValidationResult>> TranslateResult<T>(Result<T, ValidationResult> result)
         {
             if (result.IsFailure && result.Error is LocalizableValidationError error)
             {
@@ -32,9 +40,15 @@ namespace DeUrgenta.Common.Mappers
                 }
 
                 return Result
-                    .Failure<T, ValidationResult>(new DetailedValidationError(translatedErrorMessages))
-                    .ToActionResult();
+                    .Failure<T, ValidationResult>(new DetailedValidationError(translatedErrorMessages));
             }
+
+            return result;
+        }
+
+        public async Task<ActionResult> MapToActionResult(Result<Unit, ValidationResult> result)
+        {
+            result = await TranslateResult(result);
 
             return result.ToActionResult();
         }

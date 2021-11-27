@@ -6,7 +6,7 @@ using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Backpack.Api.Models;
 using DeUrgenta.Backpack.Api.Queries;
 using DeUrgenta.Backpack.Api.Swagger.BackpackItem;
-using DeUrgenta.Common.Extensions;
+using DeUrgenta.Common.Mappers;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.Domain.Api.Entities;
 using MediatR;
@@ -26,10 +26,12 @@ namespace DeUrgenta.Backpack.Api.Controllers
     public class BackpackItemController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IResultMapper _mapper;
 
-        public BackpackItemController(IMediator mediator)
+        public BackpackItemController(IMediator mediator, IResultMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -48,7 +50,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var query = new GetBackpackItems(sub, backpackId);
             var result = await _mediator.Send(query);
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -67,7 +69,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var query = new GetBackpackCategoryItems(sub, backpackId, categoryId);
             var result = await _mediator.Send(query);
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -90,7 +92,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var command = new AddBackpackItem(sub, backpackId, backpackItem);
             var result = await _mediator.Send(command);
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -114,7 +116,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var command = new UpdateBackpackItem(sub, itemId, backpackItem);
             var result = await _mediator.Send(command);
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -136,7 +138,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var command = new DeleteBackpackItem(sub, itemId);
             var result = await _mediator.Send(command);
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
     }
 }

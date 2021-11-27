@@ -2,7 +2,7 @@
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Admin.Api.Models;
 using DeUrgenta.Admin.Api.Swagger.AdminLocalization;
-using DeUrgenta.Common.Extensions;
+using DeUrgenta.Common.Mappers;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.I18n.Service.Models;
 using DeUrgenta.I18n.Service.Providers;
@@ -24,11 +24,13 @@ namespace DeUrgenta.Admin.Api.Controller
     {
         private readonly IamI18nProvider _i18nProvider;
         private readonly IMediator _mediator;
+        private readonly IResultMapper _mapper;
 
-        public AdminLocalizationController(IamI18nProvider i18NProvider, IMediator mediator)
+        public AdminLocalizationController(IamI18nProvider i18NProvider, IMediator mediator, IResultMapper mapper)
         {
             _i18nProvider = i18NProvider;
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -61,11 +63,11 @@ namespace DeUrgenta.Admin.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         [HttpPost]
-        public async Task<ActionResult> AddOrUpdateContent(AddOrUpdateContentModel model)
+        public async Task<ActionResult<StringResourceModel>> AddOrUpdateContent(AddOrUpdateContentModel model)
         {
             var result = await _mediator.Send(new AddOrUpdateContent(model.Culture, model.Key, model.Value));
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
     }
 }
