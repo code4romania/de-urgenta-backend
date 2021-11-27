@@ -10,18 +10,22 @@ namespace DeUrgenta.Content.Api.Swagger.Content
     {
         public IImmutableList<LanguageModel> GetExamples()
         {
-            return new List<LanguageModel>{
-                new LanguageModel{
+            return new List<LanguageModel>
+            {
+                new()
+                {
                     Id = new Guid(),
                     Name = "English",
                     Culture = "en-US"
                 },
-                new LanguageModel{
+                new()
+                {
                     Id = new Guid(),
                     Name = "Romanian",
                     Culture = "ro-RO"
                 },
-                new LanguageModel{
+                new()
+                {
                     Id = new Guid(),
                     Name = "Hungarian",
                     Culture = "hu-HU"
