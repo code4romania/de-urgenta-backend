@@ -3,6 +3,7 @@ using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Admin.Api.Models;
 using DeUrgenta.Admin.Api.Swagger.AdminLocalization;
 using DeUrgenta.Common.Mappers;
+using DeUrgenta.Common.Auth;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.I18n.Service.Models;
 using DeUrgenta.I18n.Service.Providers;
@@ -15,7 +16,7 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace DeUrgenta.Admin.Api.Controller
 {
-    [Authorize]
+    [Authorize(Policy = ApiPolicies.AdminOnly)]
     [ApiController]
     [Produces("application/json")]
     [Consumes("application/json")]

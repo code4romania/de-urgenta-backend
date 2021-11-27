@@ -3,8 +3,11 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using DeUrgenta.Common;
+using DeUrgenta.Common.Auth;
 using DeUrgenta.Common.Models.Dtos;
 using DeUrgenta.Common.Swagger;
+using DeUrgenta.Domain.Identity;
 using DeUrgenta.Emailing.Service.Models;
 using DeUrgenta.User.Api.Models.DTOs.Requests;
 using DeUrgenta.User.Api.Notifications;
@@ -71,7 +74,7 @@ namespace DeUrgenta.User.Api.Controller
                 //https://stackoverflow.com/a/53144807/2780791
                 return Conflict(new ActionResponse
                 {
-                    Success = false, 
+                    Success = false,
                     Errors = new List<string> { "Adresa de e-mail este deja utilizată" }
                 });
             }
@@ -81,6 +84,8 @@ namespace DeUrgenta.User.Api.Controller
 
             if (identityResult.Succeeded)
             {
+                await _userManager.AddToRoleAsync(newUser, ApiUserRoles.User);
+
                 await _applicationUserManager.CreateApplicationUserAsync(user, newUser.Id);
                 string callbackUrl = await GetCallbackUrlAsync(newUser);
 
@@ -179,7 +184,7 @@ namespace DeUrgenta.User.Api.Controller
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest user)
         {
-            var badRegistrationResponse = new ActionResponse
+            var badLoginRequest = new ActionResponse
             {
                 Errors = new List<string> {
                     "Invalid login request"
@@ -191,17 +196,19 @@ namespace DeUrgenta.User.Api.Controller
 
             if (existingUser == null)
             {
-                return BadRequest(badRegistrationResponse);
+                return BadRequest(badLoginRequest);
             }
 
             var isCorrect = await _userManager.CheckPasswordAsync(existingUser, user.Password);
 
             if (!isCorrect)
             {
-                return BadRequest(badRegistrationResponse);
+                return BadRequest(badLoginRequest);
             }
 
-            var jwtToken = _jwtService.GenerateJwtToken(existingUser);
+            var userRoles = await _userManager.GetRolesAsync(existingUser);
+
+            var jwtToken = _jwtService.GenerateJwtToken(existingUser, userRoles);
             var userDetails = await _mediator.Send(new GetUser(existingUser.Id));
 
             if (userDetails.IsFailure)
@@ -244,7 +251,7 @@ namespace DeUrgenta.User.Api.Controller
 
             var user = await _userManager.FindByIdAsync(userResetPassword.UserId);
             var resToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(userResetPassword.ResetToken));
-            var res = await _userManager.ResetPasswordAsync(user,resToken, userResetPassword.NewPassword);
+            var res = await _userManager.ResetPasswordAsync(user, resToken, userResetPassword.NewPassword);
 
 
 

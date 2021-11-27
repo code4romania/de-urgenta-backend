@@ -71,6 +71,30 @@ namespace DeUrgenta.RecurringJobs
                     TimeZoneInfo.Utc
                 );
             }
+
+            var expiredInviteJobConfig = configuration.GetSection("RecurringJobsConfig:ExpiredInviteJobConfig")
+                .Get<ExpiredInviteJobConfig>();
+            if (expiredInviteJobConfig.IsEnabled)
+            {
+                RecurringJob.AddOrUpdate<IExpiredInviteJob>(
+                    nameof(ExpiredInviteJob),
+                    job => job.RunAsync(),
+                    expiredInviteJobConfig.CronExpression,
+                    TimeZoneInfo.Utc
+                    );
+            }
+
+            var acceptedInviteJobConfig = configuration.GetSection("RecurringJobsConfig:AcceptedInviteJobConfig")
+                .Get<AcceptedInviteJobConfig>();
+            if (acceptedInviteJobConfig.IsEnabled)
+            {
+                RecurringJob.AddOrUpdate<IAcceptedInviteJob>(
+                    nameof(AcceptedInviteJob),
+                    job => job.RunAsync(),
+                    expiredInviteJobConfig.CronExpression,
+                    TimeZoneInfo.Utc
+                );
+            }
         }
     }
 }
