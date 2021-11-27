@@ -32,10 +32,10 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             var sut = new CreateCertificationValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new CreateCertification(sub, new CertificationRequest()));
+            var result = await sut.IsValidAsync(new CreateCertification(sub, new CertificationRequest()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -51,10 +51,10 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new CreateCertification(userSub, new CertificationRequest()));
+            var result = await sut.IsValidAsync(new CreateCertification(userSub, new CertificationRequest()));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

@@ -1,12 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Events.Api.Queries;
 using DeUrgenta.Events.Api.Validators;
-using DeUrgenta.I18n.Service.Providers;
+using DeUrgenta.I18n.Service.Models;
 using DeUrgenta.Tests.Helpers;
 using FluentAssertions;
-using NSubstitute;
 using Xunit;
 
 namespace DeUrgenta.Events.Api.Tests.Validators
@@ -15,15 +15,10 @@ namespace DeUrgenta.Events.Api.Tests.Validators
     public class GetEventCitiesValidatorShould
     {
         private readonly DeUrgentaContext _dbContext;
-        private readonly IamI18nProvider _i18nProvider;
 
         public GetEventCitiesValidatorShould(DatabaseFixture fixture)
         {
             _dbContext = fixture.Context;
-
-            _i18nProvider = Substitute.For<IamI18nProvider>();
-            _i18nProvider.Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
         }
 
         [Theory]
@@ -32,15 +27,20 @@ namespace DeUrgenta.Events.Api.Tests.Validators
         public async Task ShouldInvalidateWhenInvalidEventTypeId(int? eventTypeId)
         {
             // Arrange
-            var sut = new GetEventCitiesValidator(_dbContext, _i18nProvider);
+            var sut = new GetEventCitiesValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new GetEventCities(eventTypeId));
+            var result = await sut.IsValidAsync(new GetEventCities(eventTypeId));
 
             // Assert
-            isValid.Should().BeOfType<DetailedValidationError>();
-            await _i18nProvider.Received(1).Localize(Arg.Is("event-type-not-exist"));
-            await _i18nProvider.Received(1).Localize(Arg.Is("event-type-not-exist-message"), Arg.Is(eventTypeId));
+            result
+                .Should()
+                .BeOfType<LocalizableValidationError>()
+                .Which
+                .Messages.Should().BeEquivalentTo(new Dictionary<LocalizableString, LocalizableString>
+                {
+                    { "event-type-not-exist",new LocalizableString("event-type-not-exist-message", eventTypeId) }
+                });
         }
 
         [Theory]
@@ -50,13 +50,13 @@ namespace DeUrgenta.Events.Api.Tests.Validators
         public async Task ShouldValidateWhenValidEventTypeId(int? eventTypeId)
         {
             // Arrange
-            var sut = new GetEventCitiesValidator(_dbContext, _i18nProvider);
+            var sut = new GetEventCitiesValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new GetEventCities(eventTypeId));
+            var result = await sut.IsValidAsync(new GetEventCities(eventTypeId));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

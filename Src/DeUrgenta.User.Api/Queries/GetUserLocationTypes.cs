@@ -1,5 +1,5 @@
 ﻿using System.Collections.Immutable;
-using DeUrgenta.Infra.Models;
+using DeUrgenta.Common.Models;
 using MediatR;
 
 namespace DeUrgenta.User.Api.Queries

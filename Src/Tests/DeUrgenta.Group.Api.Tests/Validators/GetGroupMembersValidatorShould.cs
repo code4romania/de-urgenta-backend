@@ -32,10 +32,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetGroupMembersValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new GetGroupMembers(sub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new GetGroupMembers(sub, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -50,10 +50,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetGroupMembersValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new GetGroupMembers(userSub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new GetGroupMembers(userSub, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -73,10 +73,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetGroupMembersValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new GetGroupMembers(userSub, group.Id));
+            var result = await sut.IsValidAsync(new GetGroupMembers(userSub, group.Id));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -102,10 +102,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetGroupMembersValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new GetGroupMembers(userSub, group.Id));
+            var result = await sut.IsValidAsync(new GetGroupMembers(userSub, group.Id));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
 
         [Fact]
@@ -128,10 +128,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetGroupMembersValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new GetGroupMembers(userSub, group.Id));
+            var result = await sut.IsValidAsync(new GetGroupMembers(userSub, group.Id));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

@@ -3,7 +3,6 @@ using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Options;
-using DeUrgenta.I18n.Service.Providers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -12,13 +11,11 @@ namespace DeUrgenta.Group.Api.Validators
     public class AddSafeLocationValidator : IValidateRequest<AddSafeLocation>
     {
         private readonly DeUrgentaContext _context;
-        private readonly IamI18nProvider _i18nProvider;
         private readonly GroupsConfig _config;
 
-        public AddSafeLocationValidator(DeUrgentaContext context, IamI18nProvider i18nProvider, IOptions<GroupsConfig> config)
+        public AddSafeLocationValidator(DeUrgentaContext context, IOptions<GroupsConfig> config)
         {
             _context = context;
-            _i18nProvider = i18nProvider;
             _config = config.Value;
         }
 
@@ -39,13 +36,13 @@ namespace DeUrgenta.Group.Api.Validators
             var isGroupAdmin = group.Admin.Id == user.Id;
             if (!isGroupAdmin)
             {
-                return new DetailedValidationError(await _i18nProvider.Localize("cannot-add-safe-location"), await _i18nProvider.Localize("only-group-admin-can-add-locations-message"));
+                return new LocalizableValidationError("cannot-add-safe-location","only-group-admin-can-add-locations-message");
             }
 
             var groupHasMaxSafeLocations = group.GroupSafeLocations.Count >= _config.MaxSafeLocations;
             if (groupHasMaxSafeLocations)
             {
-                return new DetailedValidationError(await _i18nProvider.Localize("group-safe-location-limit"), await _i18nProvider.Localize("group-safe-location-limit-message"));
+                return new LocalizableValidationError("group-safe-location-limit","group-safe-location-limit-message");
             }
 
             return ValidationResult.Ok;

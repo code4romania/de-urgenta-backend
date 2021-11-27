@@ -2,7 +2,6 @@
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Group.Api.Commands;
-using DeUrgenta.I18n.Service.Providers;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Group.Api.Validators
@@ -10,12 +9,10 @@ namespace DeUrgenta.Group.Api.Validators
     public class RemoveFromGroupValidator : IValidateRequest<RemoveFromGroup>
     {
         private readonly DeUrgentaContext _context;
-        private readonly IamI18nProvider _i18nProvider;
 
-        public RemoveFromGroupValidator(DeUrgentaContext context, IamI18nProvider i18nProvider)
+        public RemoveFromGroupValidator(DeUrgentaContext context)
         {
             _context = context;
-            _i18nProvider = i18nProvider;
         }
 
         public async Task<ValidationResult> IsValidAsync(RemoveFromGroup request)
@@ -30,7 +27,7 @@ namespace DeUrgenta.Group.Api.Validators
 
             if (user.Id == request.UserId)
             {
-                return new DetailedValidationError(await _i18nProvider.Localize("cannot-remove-user"), await _i18nProvider.Localize("cannot-remove-yourself-message"));
+                return new LocalizableValidationError("cannot-remove-user","cannot-remove-yourself-message");
             }
 
             var isPartOfTheGroup = await _context.UsersToGroups.AnyAsync(utg => utg.UserId == user.Id && utg.GroupId == request.GroupId);
@@ -42,7 +39,7 @@ namespace DeUrgenta.Group.Api.Validators
             var isAdmin = await _context.Groups.AnyAsync(g => g.Admin.Id == user.Id);
             if (!isAdmin)
             {
-                return new DetailedValidationError(await _i18nProvider.Localize("cannot-remove-user"), await _i18nProvider.Localize("only-group-admin-can-remove-users-message"));
+                return new LocalizableValidationError("cannot-remove-user","only-group-admin-can-remove-users-message");
             }
 
             bool requestedUserIsInGroup = await _context

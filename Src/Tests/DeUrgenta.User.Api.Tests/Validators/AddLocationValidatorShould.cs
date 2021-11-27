@@ -32,10 +32,10 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var sut = new AddLocationValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new AddLocation(sub, new UserLocationRequest()));
+            var result = await sut.IsValidAsync(new AddLocation(sub, new UserLocationRequest()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -51,10 +51,10 @@ namespace DeUrgenta.User.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new AddLocation(userSub, new UserLocationRequest()));
+            var result = await sut.IsValidAsync(new AddLocation(userSub, new UserLocationRequest()));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

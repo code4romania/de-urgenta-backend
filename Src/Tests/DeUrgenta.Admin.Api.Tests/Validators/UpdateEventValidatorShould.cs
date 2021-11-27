@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Admin.Api.Models;
@@ -6,10 +7,9 @@ using DeUrgenta.Admin.Api.Validators;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Domain.Api.Entities;
-using DeUrgenta.I18n.Service.Providers;
+using DeUrgenta.I18n.Service.Models;
 using DeUrgenta.Tests.Helpers;
 using FluentAssertions;
-using NSubstitute;
 using Xunit;
 
 namespace DeUrgenta.Admin.Api.Tests.Validators
@@ -18,21 +18,17 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
     public class UpdateEventValidatorShould
     {
         private readonly DeUrgentaContext _dbContext;
-        private readonly IamI18nProvider _i18nProvider;
 
         public UpdateEventValidatorShould(DatabaseFixture fixture)
         {
             _dbContext = fixture.Context;
-            _i18nProvider = Substitute.For<IamI18nProvider>();
-            _i18nProvider.Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
         }
 
         [Fact]
         public async Task Invalidate_request_when_event_does_not_exists()
         {
             // Arrange
-            var sut = new UpdateEventValidator(_dbContext, _i18nProvider);
+            var sut = new UpdateEventValidator(_dbContext);
 
             await _dbContext.Events.AddAsync(new Event()
             {
@@ -54,9 +50,15 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
             var result = await sut.IsValidAsync(new UpdateEvent(eventId, new EventRequest()));
 
             // Assert
-            result.Should().BeOfType<DetailedValidationError>();
-            await _i18nProvider.Received(1).Localize(Arg.Is("event-not-exist"));
-            await _i18nProvider.Received(1).Localize(Arg.Is("event-not-exist-message"), Arg.Is(eventId));
+            result
+                .Should()
+                .BeOfType<LocalizableValidationError>()
+                .Which.Messages
+                .Should()
+                .BeEquivalentTo(new Dictionary<LocalizableString, LocalizableString>
+                {
+                    { "event-not-exist",new LocalizableString("event-not-exist-message", eventId) }
+                });
         }
 
 
@@ -66,7 +68,7 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
         public async Task Invalidate_request_when_invalid_event_type(int eventTypeId)
         {
             // Arrange
-            var sut = new UpdateEventValidator(_dbContext, _i18nProvider);
+            var sut = new UpdateEventValidator(_dbContext);
 
             var @event = new Event
             {
@@ -100,16 +102,22 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
             }));
 
             // Assert
-            result.Should().BeOfType<DetailedValidationError>();
-            await _i18nProvider.Received(1).Localize(Arg.Is("event-type-not-exist"));
-            await _i18nProvider.Received(1).Localize(Arg.Is("event-type-not-exist-message"), Arg.Is(eventTypeId));
+            result
+                .Should()
+                .BeOfType<LocalizableValidationError>()
+                .Which.Messages
+                .Should()
+                .BeEquivalentTo(new Dictionary<LocalizableString, LocalizableString>
+                {
+                    { "event-type-not-exist",new LocalizableString("event-type-not-exist-message", eventTypeId) }
+                });
         }
 
         [Fact]
         public async Task Validate_request_when_event_exists()
         {
             // Arrange
-            var sut = new UpdateEventValidator(_dbContext, _i18nProvider);
+            var sut = new UpdateEventValidator(_dbContext);
 
             var @event = new Event
             {

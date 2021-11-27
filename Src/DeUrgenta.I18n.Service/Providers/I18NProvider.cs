@@ -17,7 +17,7 @@ namespace DeUrgenta.I18n.Service.Providers
             _context = context;
             _languageProvider = languageProvider;
         }
-        
+
         public async Task<StringResourceModel> GetStringResource(string resourceKey, Guid languageId)
         {
             var resource = await _context
@@ -29,7 +29,7 @@ namespace DeUrgenta.I18n.Service.Providers
                 ? null
                 : new StringResourceModel { Id = resource.Id, Value = resource.Value, Key = resource.Key };
         }
-        
+
         public async Task<string> Localize(string resourceKey, params object[] args)
         {
             var currentCulture = Thread.CurrentThread.CurrentUICulture.Name;
@@ -49,6 +49,11 @@ namespace DeUrgenta.I18n.Service.Providers
             }
 
             return resourceKey;
+        }
+
+        public async Task<string> Localize(LocalizableString resource)
+        {
+            return await Localize(resource.Key, resource.Params);
         }
     }
 }

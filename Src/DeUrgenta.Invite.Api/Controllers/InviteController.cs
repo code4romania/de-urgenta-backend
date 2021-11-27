@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using DeUrgenta.Common;
+using DeUrgenta.Common.Mappers;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.Invite.Api.Commands;
 using DeUrgenta.Invite.Api.Models;

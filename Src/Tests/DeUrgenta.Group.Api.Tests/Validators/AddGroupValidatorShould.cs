@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
@@ -6,12 +7,11 @@ using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Models;
 using DeUrgenta.Group.Api.Options;
 using DeUrgenta.Group.Api.Validators;
-using DeUrgenta.I18n.Service.Providers;
+using DeUrgenta.I18n.Service.Models;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
-using NSubstitute;
 using Xunit;
 
 namespace DeUrgenta.Group.Api.Tests.Validators
@@ -21,15 +21,9 @@ namespace DeUrgenta.Group.Api.Tests.Validators
     {
         private readonly DeUrgentaContext _dbContext;
         private readonly IOptions<GroupsConfig> _groupsConfig;
-        private readonly IamI18nProvider _i18nProvider;
 
         public AddGroupValidatorShould(DatabaseFixture fixture)
         {
-            _i18nProvider = Substitute.For<IamI18nProvider>();
-            _i18nProvider
-                .Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-
             _dbContext = fixture.Context;
             var options = new GroupsConfig { MaxCreatedGroupsPerUser = 5 };
             _groupsConfig = Microsoft.Extensions.Options.Options.Create(options);
@@ -42,20 +36,20 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Invalidate_request_when_no_user_found_by_sub(string sub)
         {
             // Arrange
-            var sut = new AddGroupValidator(_dbContext, _i18nProvider, _groupsConfig);
+            var sut = new AddGroupValidator(_dbContext, _groupsConfig);
 
             // Act
-            var isValid = await sut.IsValidAsync(new AddGroup(sub, new GroupRequest()));
+            var result = await sut.IsValidAsync(new AddGroup(sub, new GroupRequest()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
         public async Task Validate_when_user_was_found_by_sub()
         {
             // Arrange
-            var sut = new AddGroupValidator(_dbContext, _i18nProvider, _groupsConfig);
+            var sut = new AddGroupValidator(_dbContext, _groupsConfig);
 
             var userSub = Guid.NewGuid().ToString();
             var user = new UserBuilder().WithSub(userSub).Build();
@@ -64,17 +58,17 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new AddGroup(userSub, new GroupRequest()));
+            var result = await sut.IsValidAsync(new AddGroup(userSub, new GroupRequest()));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
 
         [Fact]
         public async Task Invalidate_when_user_exceeds_group_creation_limit()
         {
             // Arrange
-            var sut = new AddGroupValidator(_dbContext, _i18nProvider, _groupsConfig);
+            var sut = new AddGroupValidator(_dbContext, _groupsConfig);
 
             // Seed user
             var userSub = Guid.NewGuid().ToString();
@@ -93,10 +87,15 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var result = await sut.IsValidAsync(new AddGroup(user.Sub, new GroupRequest { Name = "TestGroup" }));
 
             // Assert
-            result.Should().BeOfType<DetailedValidationError>();
-
-            await _i18nProvider.Received(1).Localize(Arg.Is("cannot-create-groups"));
-            await _i18nProvider.Received(1).Localize(Arg.Is("cannot-create-groups-max-message"));
+            result
+                .Should()
+                .BeOfType<LocalizableValidationError>()
+                .Which.Messages
+                .Should()
+                .BeEquivalentTo(new Dictionary<LocalizableString, LocalizableString>
+                {
+                    { "cannot-create-groups", "cannot-create-groups-max-message" }
+                });
         }
     }
 }

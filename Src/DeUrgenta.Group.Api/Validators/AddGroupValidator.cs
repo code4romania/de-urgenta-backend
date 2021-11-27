@@ -3,7 +3,6 @@ using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Options;
-using DeUrgenta.I18n.Service.Providers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -12,13 +11,11 @@ namespace DeUrgenta.Group.Api.Validators
     public class AddGroupValidator : IValidateRequest<AddGroup>
     {
         private readonly DeUrgentaContext _context;
-        private readonly IamI18nProvider _i18nProvider;
         private readonly GroupsConfig _groupsConfig;
 
-        public AddGroupValidator(DeUrgentaContext context, IamI18nProvider i18nProvider, IOptions<GroupsConfig> groupsConfig)
+        public AddGroupValidator(DeUrgentaContext context, IOptions<GroupsConfig> groupsConfig)
         {
             _context = context;
-            _i18nProvider = i18nProvider;
             _groupsConfig = groupsConfig.Value;
         }
 
@@ -32,7 +29,7 @@ namespace DeUrgenta.Group.Api.Validators
 
             if (user.GroupsAdministered.Count >= _groupsConfig.MaxCreatedGroupsPerUser)
             {
-                return new DetailedValidationError(await _i18nProvider.Localize("cannot-create-groups"), await _i18nProvider.Localize("cannot-create-groups-max-message"));
+                return new LocalizableValidationError("cannot-create-groups","cannot-create-groups-max-message");
             }
 
             return ValidationResult.Ok;

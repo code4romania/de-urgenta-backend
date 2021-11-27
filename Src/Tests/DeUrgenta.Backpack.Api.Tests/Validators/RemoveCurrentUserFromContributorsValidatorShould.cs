@@ -6,6 +6,7 @@ using DeUrgenta.Backpack.Api.Validators;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Domain.Api.Entities;
+using DeUrgenta.I18n.Service.Models;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
 using FluentAssertions;
@@ -33,10 +34,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new RemoveCurrentUserFromContributorsValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new RemoveCurrentUserFromContributors(sub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new RemoveCurrentUserFromContributors(sub, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -53,10 +54,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new RemoveCurrentUserFromContributors(userSub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new RemoveCurrentUserFromContributors(userSub, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -79,10 +80,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new RemoveCurrentUserFromContributors(userSub, backpack.Id));
+            var result = await sut.IsValidAsync(new RemoveCurrentUserFromContributors(userSub, backpack.Id));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
 
@@ -106,14 +107,18 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new RemoveCurrentUserFromContributors(userSub, backpack.Id));
+            var result = await sut.IsValidAsync(new RemoveCurrentUserFromContributors(userSub, backpack.Id));
 
             // Assert
-            isValid.Should().BeOfType<LocalizableValidationError>();
-            isValid.Messages.Should().BeEquivalentTo(new Dictionary<string, string>
-            {
-                { "backpack-owner-leave", "backpack-owner-leave-message" }
-            });
+            result
+                .Should()
+                .BeOfType<LocalizableValidationError>()
+                .Which.Messages
+                .Should()
+                .BeEquivalentTo(new Dictionary<LocalizableString, LocalizableString>
+                {
+                    { "backpack-owner-leave", "backpack-owner-leave-message" }
+                });
         }
 
         [Fact]
@@ -140,10 +145,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new RemoveCurrentUserFromContributors(userSub, backpack.Id));
+            var result = await sut.IsValidAsync(new RemoveCurrentUserFromContributors(userSub, backpack.Id));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

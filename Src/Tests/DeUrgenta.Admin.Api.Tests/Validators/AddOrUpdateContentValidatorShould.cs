@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Threading.Tasks;
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Admin.Api.Validators;
@@ -13,15 +15,6 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
 {
     public class AddOrUpdateContentValidatorShould
     {
-        private readonly IamI18nProvider _i18nProvider;
-
-        public AddOrUpdateContentValidatorShould()
-        {
-            _i18nProvider = Substitute.For<IamI18nProvider>();
-            _i18nProvider.Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
-        }
-
         [Fact]
         public async Task Invalidate_request_when_not_existing_language_culture()
         {
@@ -32,15 +25,23 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
                 .GetLanguageByCulture(Arg.Any<string>())
                 .ReturnsForAnyArgs(Task.FromResult<LanguageModel>(null));
 
-            var sut = new AddOrUpdateContentValidator(languageProvider, _i18nProvider);
+            var sut = new AddOrUpdateContentValidator(languageProvider);
 
             // Act
-            var result = await sut.IsValidAsync(new AddOrUpdateContent("culture", "key", "value"));
+            var requestCulture = "culture";
+
+            var result = await sut.IsValidAsync(new AddOrUpdateContent(requestCulture, "key", "value"));
 
             // Assert
-            result.Should().BeOfType<DetailedValidationError>();
-            await _i18nProvider.Received(1).Localize(Arg.Is("language-culture-not-exist"));
-            await _i18nProvider.Received(1).Localize(Arg.Is("language-culture-not-exist-message"), Arg.Is("culture"));
+            result
+                .Should()
+                .BeOfType<LocalizableValidationError>()
+                .Which.Messages
+                .Should()
+                .BeEquivalentTo(new Dictionary<LocalizableString, LocalizableString>
+                {
+                    { "language-culture-not-exist", new LocalizableString("language-culture-not-exist-message", requestCulture) }
+                });
         }
 
         [Fact]
@@ -58,7 +59,7 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
                     Name = "en us"
                 }));
 
-            var sut = new AddOrUpdateContentValidator(languageProvider, _i18nProvider);
+            var sut = new AddOrUpdateContentValidator(languageProvider);
 
             // Act
             var result = await sut.IsValidAsync(new AddOrUpdateContent("culture", "key", "value"));
@@ -66,6 +67,5 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
             // Assert
             result.Should().BeOfType<ValidationPassed>();
         }
-
     }
 }

@@ -6,6 +6,7 @@ using DeUrgenta.Backpack.Api.Validators;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Domain.Api.Entities;
+using DeUrgenta.I18n.Service.Models;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
 using FluentAssertions;
@@ -33,10 +34,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new DeleteBackpackValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new DeleteBackpack(sub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new DeleteBackpack(sub, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -51,10 +52,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new DeleteBackpackValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new DeleteBackpack(userSub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new DeleteBackpack(userSub, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -82,14 +83,18 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new DeleteBackpackValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new DeleteBackpack(userSub, backpack.Id));
+            var result = await sut.IsValidAsync(new DeleteBackpack(userSub, backpack.Id));
 
             // Assert
-            isValid.Should().BeOfType<LocalizableValidationError>();
-            isValid.Messages.Should().BeEquivalentTo(new Dictionary<string, string>
-            {
-                { "not-backpack-owner", "not-backpack-owner-delete-message" }
-            });
+            result
+                .Should()
+                .BeOfType<LocalizableValidationError>()
+                .Which.Messages
+                .Should()
+                .BeEquivalentTo(new Dictionary<LocalizableString, LocalizableString>
+                {
+                    { "not-backpack-owner", "not-backpack-owner-delete-message" }
+                });
         }
 
         [Fact]
@@ -111,10 +116,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new DeleteBackpack(userSub, backpack.Id));
+            var result = await sut.IsValidAsync(new DeleteBackpack(userSub, backpack.Id));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

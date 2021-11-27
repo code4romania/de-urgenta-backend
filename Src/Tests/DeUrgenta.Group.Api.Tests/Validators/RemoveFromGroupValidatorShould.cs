@@ -1,15 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Domain.Api.Entities;
 using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Validators;
-using DeUrgenta.I18n.Service.Providers;
+using DeUrgenta.I18n.Service.Models;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
 using FluentAssertions;
-using NSubstitute;
 using Xunit;
 
 namespace DeUrgenta.Group.Api.Tests.Validators
@@ -18,14 +18,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
     public class RemoveFromGroupValidatorShould
     {
         private readonly DeUrgentaContext _dbContext;
-        private readonly IamI18nProvider _i18nProvider;
 
         public RemoveFromGroupValidatorShould(DatabaseFixture fixture)
         {
             _dbContext = fixture.Context;
-            _i18nProvider = Substitute.For<IamI18nProvider>();
-            _i18nProvider.Localize(Arg.Any<string>(), Arg.Any<object[]>())
-                .ReturnsForAnyArgs("some message");
         }
 
         [Theory]
@@ -35,20 +31,20 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public async Task Invalidate_request_when_no_user_found_by_sub(string sub)
         {
             // Arrange
-            var sut = new RemoveFromGroupValidator(_dbContext, _i18nProvider);
+            var sut = new RemoveFromGroupValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new RemoveFromGroup(sub, Guid.NewGuid(), Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new RemoveFromGroup(sub, Guid.NewGuid(), Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
         public async Task Invalidate_when_user_removes_itself()
         {
             // Arrange
-            var sut = new RemoveFromGroupValidator(_dbContext, _i18nProvider);
+            var sut = new RemoveFromGroupValidator(_dbContext);
 
             var userSub = Guid.NewGuid().ToString();
 
@@ -63,20 +59,25 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new RemoveFromGroup(userSub, group.Id, admin.Id));
+            var result = await sut.IsValidAsync(new RemoveFromGroup(userSub, group.Id, admin.Id));
 
             // Assert
-            isValid.Should().BeOfType<DetailedValidationError>();
-
-            await _i18nProvider.Received(1).Localize(Arg.Is("cannot-remove-user"));
-            await _i18nProvider.Received(1).Localize(Arg.Is("cannot-remove-yourself-message"));
+            result
+                .Should()
+                .BeOfType<LocalizableValidationError>()
+                .Which.Messages
+                .Should()
+                .BeEquivalentTo(new Dictionary<LocalizableString, LocalizableString>
+                {
+                    { "cannot-remove-user","cannot-remove-yourself-message" }
+                });
         }
 
         [Fact]
         public async Task Invalidate_when_target_user_does_not_exists()
         {
             // Arrange
-            var sut = new RemoveFromGroupValidator(_dbContext, _i18nProvider);
+            var sut = new RemoveFromGroupValidator(_dbContext);
 
             var userSub = Guid.NewGuid().ToString();
 
@@ -91,17 +92,17 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new RemoveFromGroup(userSub, group.Id, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new RemoveFromGroup(userSub, group.Id, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
         public async Task Invalidate_when_group_does_not_exist()
         {
             // Arrange
-            var sut = new RemoveFromGroupValidator(_dbContext, _i18nProvider);
+            var sut = new RemoveFromGroupValidator(_dbContext);
 
             var userSub = Guid.NewGuid().ToString();
             var groupUserSub = Guid.NewGuid().ToString();
@@ -115,17 +116,17 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new RemoveFromGroup(userSub, Guid.NewGuid(), groupUser.Id));
+            var result = await sut.IsValidAsync(new RemoveFromGroup(userSub, Guid.NewGuid(), groupUser.Id));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
         public async Task Invalidate_when_user_is_not_admin_of_group()
         {
             // Arrange
-            var sut = new RemoveFromGroupValidator(_dbContext, _i18nProvider);
+            var sut = new RemoveFromGroupValidator(_dbContext);
 
             var userSub = Guid.NewGuid().ToString();
             var groupUserSub = Guid.NewGuid().ToString();
@@ -147,20 +148,25 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new RemoveFromGroup(groupUserSub, group.Id, nonGroupUser.Id));
+            var result = await sut.IsValidAsync(new RemoveFromGroup(groupUserSub, group.Id, nonGroupUser.Id));
 
             // Assert
-            isValid.Should().BeOfType<DetailedValidationError>();
-
-            await _i18nProvider.Received(1).Localize(Arg.Is("cannot-remove-user"));
-            await _i18nProvider.Received(1).Localize(Arg.Is("only-group-admin-can-remove-users-message"));
+            result
+                .Should()
+                .BeOfType<LocalizableValidationError>()
+                .Which.Messages
+                .Should()
+                .BeEquivalentTo(new Dictionary<LocalizableString, LocalizableString>
+                {
+                    { "cannot-remove-user","only-group-admin-can-remove-users-message" }
+                });
         }
 
         [Fact]
         public async Task Validate_when_user_is_admin_of_a_group_and_removes_a_member()
         {
             // Arrange
-            var sut = new RemoveFromGroupValidator(_dbContext, _i18nProvider);
+            var sut = new RemoveFromGroupValidator(_dbContext);
 
             var userSub = Guid.NewGuid().ToString();
             var groupUserSub = Guid.NewGuid().ToString();
@@ -179,10 +185,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new RemoveFromGroup(userSub, group.Id, groupUser.Id));
+            var result = await sut.IsValidAsync(new RemoveFromGroup(userSub, group.Id, groupUser.Id));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

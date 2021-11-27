@@ -9,5 +9,6 @@ namespace DeUrgenta.I18n.Service.Providers
         Task<StringResourceModel> GetStringResource(string resourceKey, Guid languageId);
 
         Task<string> Localize(string resourceKey, params object[] args);
+        Task<string> Localize(LocalizableString resource);
     }
 }

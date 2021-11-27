@@ -21,7 +21,7 @@ using Microsoft.Extensions.DependencyInjection;
 using DeUrgenta.Certifications.Api;
 using FluentValidation.AspNetCore;
 using DeUrgenta.Admin.Api;
-using DeUrgenta.Common;
+using DeUrgenta.Common.Mappers;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Emailing.Service;
 using DeUrgenta.Events.Api;

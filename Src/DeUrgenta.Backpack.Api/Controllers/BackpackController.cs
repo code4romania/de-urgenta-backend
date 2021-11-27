@@ -13,7 +13,7 @@ using Swashbuckle.AspNetCore.Filters;
 using System.Linq;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Backpack.Api.Queries;
-using DeUrgenta.Common;
+using DeUrgenta.Common.Mappers;
 
 namespace DeUrgenta.Backpack.Api.Controllers
 {

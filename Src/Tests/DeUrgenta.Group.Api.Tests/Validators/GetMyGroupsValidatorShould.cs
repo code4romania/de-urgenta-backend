@@ -31,10 +31,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetMyGroupsValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new GetMyGroups(sub));
+            var result = await sut.IsValidAsync(new GetMyGroups(sub));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -50,10 +50,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new GetMyGroups(userSub));
+            var result = await sut.IsValidAsync(new GetMyGroups(userSub));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

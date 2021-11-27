@@ -3,7 +3,7 @@ using CSharpFunctionalExtensions;
 using DeUrgenta.Common.Validation;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DeUrgenta.Common
+namespace DeUrgenta.Common.Mappers
 {
     public interface IResultMapper
     {

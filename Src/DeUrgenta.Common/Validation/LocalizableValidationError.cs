@@ -1,20 +1,27 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using DeUrgenta.I18n.Service.Models;
 
 namespace DeUrgenta.Common.Validation
 {
     public record LocalizableValidationError : ValidationResult
     {
-        public LocalizableValidationError(ImmutableDictionary<string, string> messages) : base(false, messages)
+        public ImmutableDictionary<LocalizableString, LocalizableString> Messages { get; }
+
+        public LocalizableValidationError(ImmutableDictionary<LocalizableString, LocalizableString> messages) : base(false)
         {
+            Messages = messages ?? ImmutableDictionary<LocalizableString, LocalizableString>.Empty;
         }
 
-        public LocalizableValidationError(Dictionary<string, string> messages) : base(false, messages.ToImmutableDictionary())
+        public LocalizableValidationError(Dictionary<LocalizableString, LocalizableString> messages) : base(false)
         {
+
+            Messages = messages?.ToImmutableDictionary() ?? ImmutableDictionary<LocalizableString, LocalizableString>.Empty;
         }
 
-        public LocalizableValidationError(string title, string message) : base(false, new Dictionary<string, string> { { title, message } }.ToImmutableDictionary())
+        public LocalizableValidationError(LocalizableString title, LocalizableString message) : base(false)
         {
+            Messages = new Dictionary<LocalizableString, LocalizableString> { { title, message } }.ToImmutableDictionary();
         }
     }
 }

@@ -32,10 +32,10 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var sut = new DeleteLocationValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new DeleteLocation(sub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new DeleteLocation(sub, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -51,10 +51,10 @@ namespace DeUrgenta.User.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new DeleteLocation(userSub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new DeleteLocation(userSub, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -82,10 +82,10 @@ namespace DeUrgenta.User.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new DeleteLocation(userSub, userLocation.Id));
+            var result = await sut.IsValidAsync(new DeleteLocation(userSub, userLocation.Id));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

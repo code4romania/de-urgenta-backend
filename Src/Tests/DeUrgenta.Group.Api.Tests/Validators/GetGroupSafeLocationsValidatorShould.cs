@@ -32,10 +32,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetGroupSafeLocationsValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new GetGroupSafeLocations(sub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new GetGroupSafeLocations(sub, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -51,10 +51,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetGroupSafeLocationsValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new GetGroupSafeLocations(userSub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new GetGroupSafeLocations(userSub, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -80,10 +80,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetGroupSafeLocationsValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new GetGroupSafeLocations(userSub, group.Id));
+            var result = await sut.IsValidAsync(new GetGroupSafeLocations(userSub, group.Id));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -106,10 +106,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetGroupSafeLocationsValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new GetGroupSafeLocations(userSub, group.Id));
+            var result = await sut.IsValidAsync(new GetGroupSafeLocations(userSub, group.Id));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
 
         [Fact]
@@ -137,10 +137,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetGroupSafeLocationsValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new GetGroupSafeLocations(userSub, group.Id));
+            var result = await sut.IsValidAsync(new GetGroupSafeLocations(userSub, group.Id));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

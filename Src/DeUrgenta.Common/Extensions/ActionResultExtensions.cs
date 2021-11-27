@@ -39,7 +39,7 @@ namespace DeUrgenta.Common.Extensions
             }
         }
 
-        private static ValidationProblemDetails ToValidationProblemDetails(this DetailedValidationError validationResult)
+        public static ValidationProblemDetails ToValidationProblemDetails(this DetailedValidationError validationResult)
         {
             var problemDetails = new ValidationProblemDetails
             {

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using DeUrgenta.Common.Swagger;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
-using DeUrgenta.Common;
+using DeUrgenta.Common.Mappers;
 
 namespace DeUrgenta.Certifications.Api.Controller
 {

@@ -2,7 +2,6 @@
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Group.Api.Commands;
-using DeUrgenta.I18n.Service.Providers;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Group.Api.Validators
@@ -10,12 +9,10 @@ namespace DeUrgenta.Group.Api.Validators
     public class UpdateSafeLocationValidator : IValidateRequest<UpdateSafeLocation>
     {
         private readonly DeUrgentaContext _context;
-        private readonly IamI18nProvider _i18nProvider;
 
-        public UpdateSafeLocationValidator(DeUrgentaContext context, IamI18nProvider i18nProvider)
+        public UpdateSafeLocationValidator(DeUrgentaContext context)
         {
             _context = context;
-            _i18nProvider = i18nProvider;
         }
 
         public async Task<ValidationResult> IsValidAsync(UpdateSafeLocation request)
@@ -38,7 +35,7 @@ namespace DeUrgenta.Group.Api.Validators
 
             if (!isGroupAdmin)
             {
-                return new DetailedValidationError(await _i18nProvider.Localize("cannot-update-safe-location"), await _i18nProvider.Localize("only-admin-cab-update-safe-location"));
+                return new LocalizableValidationError("cannot-update-safe-location", "only-admin-cab-update-safe-location");
             }
 
             return ValidationResult.Ok;

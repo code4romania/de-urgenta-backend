@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Common.Extensions;
@@ -7,7 +6,7 @@ using DeUrgenta.Common.Validation;
 using DeUrgenta.I18n.Service.Providers;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DeUrgenta.Common
+namespace DeUrgenta.Common.Mappers
 {
     public class ResultMapper : IResultMapper
     {
@@ -20,11 +19,11 @@ namespace DeUrgenta.Common
 
         public async Task<ActionResult> MapToActionResult<T>(Result<T, ValidationResult> result)
         {
-            if (result.IsFailure && result.Error is LocalizableValidationError)
+            if (result.IsFailure && result.Error is LocalizableValidationError error)
             {
                 var translatedErrorMessages = new Dictionary<string, string>();
 
-                foreach (var errorMessage in result.Error.Messages)
+                foreach (var errorMessage in error.Messages)
                 {
                     var translatedKey = await _i18nProvider.Localize(errorMessage.Key);
                     var translatedValue = await _i18nProvider.Localize(errorMessage.Value);
@@ -32,7 +31,9 @@ namespace DeUrgenta.Common
                     translatedErrorMessages.Add(translatedKey, translatedValue);
                 }
 
-                result.Error.Messages = translatedErrorMessages.ToImmutableDictionary();
+                return Result
+                    .Failure<T, ValidationResult>(new DetailedValidationError(translatedErrorMessages))
+                    .ToActionResult();
             }
 
             return result.ToActionResult();
