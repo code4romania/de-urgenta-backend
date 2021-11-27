@@ -46,7 +46,7 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            Guid eventId = Guid.NewGuid();
+            var eventId = Guid.NewGuid();
             var result = await sut.IsValidAsync(new UpdateEvent(eventId, new EventRequest()));
 
             // Assert

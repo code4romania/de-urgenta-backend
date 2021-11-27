@@ -11,7 +11,7 @@ namespace DeUrgenta.Backpack.Api.Swagger.BackpackItem
     {
         public IImmutableList<BackpackItemModel> GetExamples()
         {
-            Guid backpackId = Guid.NewGuid();
+            var backpackId = Guid.NewGuid();
 
             return new List<BackpackItemModel>
             {

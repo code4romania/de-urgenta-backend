@@ -5,7 +5,6 @@ using DeUrgenta.Admin.Api.Models;
 using DeUrgenta.Admin.Api.Queries;
 using DeUrgenta.Admin.Api.Swagger.Blog;
 using DeUrgenta.Common.Auth;
-using DeUrgenta.Common.Extensions;
 using DeUrgenta.Common.Mappers;
 using DeUrgenta.Common.Models.Pagination;
 using DeUrgenta.Common.Swagger;

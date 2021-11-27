@@ -3,11 +3,9 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using DeUrgenta.Common;
 using DeUrgenta.Common.Auth;
 using DeUrgenta.Common.Models.Dtos;
 using DeUrgenta.Common.Swagger;
-using DeUrgenta.Domain.Identity;
 using DeUrgenta.Emailing.Service.Models;
 using DeUrgenta.User.Api.Models.DTOs.Requests;
 using DeUrgenta.User.Api.Notifications;
@@ -87,7 +85,7 @@ namespace DeUrgenta.User.Api.Controller
                 await _userManager.AddToRoleAsync(newUser, ApiUserRoles.User);
 
                 await _applicationUserManager.CreateApplicationUserAsync(user, newUser.Id);
-                string callbackUrl = await GetCallbackUrlAsync(newUser);
+                var callbackUrl = await GetCallbackUrlAsync(newUser);
 
                 await SendRegistrationEmail(newUser.UserName, user.Email, callbackUrl);
                 return Ok("Email was sent");
@@ -147,7 +145,7 @@ namespace DeUrgenta.User.Api.Controller
 
                 if (!hasConfirmedEmail)
                 {
-                    string callbackUrl = await GetCallbackUrlAsync(user);
+                    var callbackUrl = await GetCallbackUrlAsync(user);
 
                     await SendRegistrationEmail(user.UserName, user.Email, callbackUrl);
                 }
@@ -236,7 +234,7 @@ namespace DeUrgenta.User.Api.Controller
             {
                 return NoContent();
             }
-            var resetUrl = await this.GetResetPasswordCallbakUrlAsync(user);
+            var resetUrl = await GetResetPasswordCallbakUrlAsync(user);
 
             await SendResetPasswordEmail(user.UserName, user.Email, resetUrl);
 

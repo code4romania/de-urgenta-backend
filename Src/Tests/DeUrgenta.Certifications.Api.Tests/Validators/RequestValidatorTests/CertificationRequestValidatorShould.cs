@@ -171,7 +171,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators.RequestValidatorTests
         public void Invalidate_request_when_photo_id_larger_than_5_megabytes()
         {
             // Arrange
-            int fileLength = int.MaxValue;
+            var fileLength = int.MaxValue;
             var formFile = new FormFile(new MemoryStream(), 0, fileLength, "", TestDataProviders.RandomString())
             {
                 Headers = new HeaderDictionary()
