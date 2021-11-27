@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
@@ -6,6 +7,7 @@ using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Models;
 using DeUrgenta.Group.Api.Options;
 using DeUrgenta.Group.Api.Validators;
+using DeUrgenta.I18n.Service.Models;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
 using FluentAssertions;
@@ -23,7 +25,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
         public AddGroupValidatorShould(DatabaseFixture fixture)
         {
             _dbContext = fixture.Context;
-            var options = new GroupsConfig {MaxCreatedGroupsPerUser = 5};
+            var options = new GroupsConfig { MaxCreatedGroupsPerUser = 5 };
             _groupsConfig = Microsoft.Extensions.Options.Options.Create(options);
         }
 
@@ -37,18 +39,18 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new AddGroupValidator(_dbContext, _groupsConfig);
 
             // Act
-            var isValid = await sut.IsValidAsync(new AddGroup(sub, new GroupRequest()));
+            var result = await sut.IsValidAsync(new AddGroup(sub, new GroupRequest()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
         public async Task Validate_when_user_was_found_by_sub()
         {
+            // Arrange
             var sut = new AddGroupValidator(_dbContext, _groupsConfig);
 
-            // Arrange
             var userSub = Guid.NewGuid().ToString();
             var user = new UserBuilder().WithSub(userSub).Build();
 
@@ -56,10 +58,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new AddGroup(userSub, new GroupRequest()));
+            var result = await sut.IsValidAsync(new AddGroup(userSub, new GroupRequest()));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
 
         [Fact]
@@ -82,10 +84,18 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new AddGroup(user.Sub, new GroupRequest {Name = "TestGroup"}));
+            var result = await sut.IsValidAsync(new AddGroup(user.Sub, new GroupRequest { Name = "TestGroup" }));
 
             // Assert
-            result.Should().BeOfType<GenericValidationError>();
+            result
+                .Should()
+                .BeOfType<LocalizableValidationError>()
+                .Which.Messages
+                .Should()
+                .BeEquivalentTo(new Dictionary<LocalizableString, LocalizableString>
+                {
+                    { "cannot-create-groups", "cannot-create-groups-max-message" }
+                });
         }
     }
 }

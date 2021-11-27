@@ -23,11 +23,17 @@ namespace DeUrgenta.Backpack.Api.Validators
                 return ValidationResult.GenericValidationError;
             }
 
+            var backpackExists = await _context.Backpacks.AnyAsync(b => b.Id == request.BackpackId);
+            if (!backpackExists)
+            {
+                return ValidationResult.GenericValidationError;
+            }
+
             var isOwner = await _context.BackpacksToUsers.AnyAsync(btu => btu.User.Id == user.Id && btu.Backpack.Id == request.BackpackId && btu.IsOwner);
 
             if (!isOwner)
             {
-                return ValidationResult.GenericValidationError;
+                return new LocalizableValidationError("not-backpack-owner", "not-backpack-owner-delete-message");
             }
 
             return ValidationResult.Ok;

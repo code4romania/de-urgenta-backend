@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
+using DeUrgenta.I18n.Service.Models;
 using DeUrgenta.Invite.Api.Commands;
 using DeUrgenta.Invite.Api.Models;
 using DeUrgenta.Invite.Api.Validators;
@@ -29,8 +30,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             _context = fixture.Context;
 
             _config.Add("Groups:MaxUsers", "2");
-
-            IConfiguration configuration =  new ConfigurationBuilder()
+            IConfiguration configuration = new ConfigurationBuilder()
                     .AddInMemoryCollection(_config)
                     .Build();
 
@@ -55,10 +55,10 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             var sut = new CreateInviteValidator(_context, new InviteValidatorFactory(_serviceProvider));
 
             //Act
-            var isValid = await sut.IsValidAsync(request);
+            var result = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             var user = new UserBuilder().WithSub(userSub).Build();
             await _context.Users.AddAsync(user);
-            
+
             await _context.SaveChangesAsync();
 
             var inviteRequest = new InviteRequest
@@ -83,10 +83,12 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             var sut = new CreateInviteValidator(_context, new InviteValidatorFactory(_serviceProvider));
 
             //Act
-            var isValid = await sut.IsValidAsync(request);
+            var result = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
+
+
         }
 
         [Fact]
@@ -117,10 +119,10 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             var sut = new CreateInviteValidator(_context, new InviteValidatorFactory(_serviceProvider));
 
             //Act
-            var isValid = await sut.IsValidAsync(request);
+            var result = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -153,10 +155,18 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             var sut = new CreateInviteValidator(_context, new InviteValidatorFactory(_serviceProvider));
 
             //Act
-            var isValid = await sut.IsValidAsync(request);
+            var result = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result
+                .Should()
+                .BeOfType<LocalizableValidationError>()
+                .Which.Messages
+                .Should()
+                .BeEquivalentTo(new Dictionary<LocalizableString, LocalizableString>
+                {
+                    { "cannot-create-invite", "max-group-members-reached" }
+                });
         }
 
         [Fact]
@@ -191,10 +201,10 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             var sut = new CreateInviteValidator(_context, new InviteValidatorFactory(_serviceProvider));
 
             //Act
-            var isValid = await sut.IsValidAsync(request);
+            var result = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
 
         [Fact]
@@ -219,10 +229,10 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             var sut = new CreateInviteValidator(_context, new InviteValidatorFactory(_serviceProvider));
 
             //Act
-            var isValid = await sut.IsValidAsync(request);
+            var result = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -254,10 +264,10 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             var sut = new CreateInviteValidator(_context, new InviteValidatorFactory(_serviceProvider));
 
             //Act
-            var isValid = await sut.IsValidAsync(request);
+            var result = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -289,10 +299,10 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             var sut = new CreateInviteValidator(_context, new InviteValidatorFactory(_serviceProvider));
 
             //Act
-            var isValid = await sut.IsValidAsync(request);
+            var result = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

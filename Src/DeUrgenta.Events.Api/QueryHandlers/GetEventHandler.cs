@@ -34,7 +34,7 @@ namespace DeUrgenta.Events.Api.QueryHandlers
 
             var events = await _context.Events
                                             .Where(x => request.Filter.EventTypeId == null || x.EventType.Id == request.Filter.EventTypeId.Value)
-                                            .Where(x => string.IsNullOrWhiteSpace(request.Filter.City) || x.City.StartsWith(request.Filter.City))
+                                            .Where(x => string.IsNullOrWhiteSpace(request.Filter.City) || x.Locality.StartsWith(request.Filter.City))
                                             .Where(x => x.OccursOn > DateTime.Today)
                                             .Include(x=>x.EventType)
                                              .Select(x => new EventResponseModel
@@ -48,7 +48,7 @@ namespace DeUrgenta.Events.Api.QueryHandlers
                                                  OrganizedBy = x.OrganizedBy,
                                                  PublishedOn = x.PublishedOn,
                                                  Title = x.Title,
-                                                 City = x.City,
+                                                 City = x.Locality,
                                                  EventType = x.EventType.Name,
                                                  IsArchived = x.IsArchived
                                              })

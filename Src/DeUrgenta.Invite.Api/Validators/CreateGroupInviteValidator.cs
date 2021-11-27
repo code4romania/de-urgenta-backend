@@ -30,6 +30,7 @@ namespace DeUrgenta.Invite.Api.Validators
             var userIsGroupMember = await _context.UsersToGroups
                 .AnyAsync(u => u.UserId == request.UserId
                                      && u.GroupId == request.DestinationId);
+
             if (!userIsGroupMember)
             {
                 return ValidationResult.GenericValidationError;
@@ -37,7 +38,7 @@ namespace DeUrgenta.Invite.Api.Validators
 
             if (group.GroupMembers.Count == _config.MaxUsers)
             {
-                return ValidationResult.GenericValidationError;
+                return new LocalizableValidationError("cannot-create-invite", "max-group-members-reached");
             }
 
             return ValidationResult.Ok;

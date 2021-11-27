@@ -15,7 +15,7 @@ namespace DeUrgenta.Admin.Api.Validators.RequestValidators
             RuleFor(c => c.Author).NotEmpty().MinimumLength(3).MaximumLength(100);
 
             RuleFor(c => c.Address).NotEmpty();
-            RuleFor(c => c.City).NotEmpty();
+            RuleFor(c => c.Locality).NotEmpty();
         }
     }
 }

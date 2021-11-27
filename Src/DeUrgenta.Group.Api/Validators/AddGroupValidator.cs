@@ -29,7 +29,7 @@ namespace DeUrgenta.Group.Api.Validators
 
             if (user.GroupsAdministered.Count >= _groupsConfig.MaxCreatedGroupsPerUser)
             {
-                return ValidationResult.GenericValidationError;
+                return new LocalizableValidationError("cannot-create-groups","cannot-create-groups-max-message");
             }
 
             return ValidationResult.Ok;

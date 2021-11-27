@@ -2,6 +2,7 @@
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
+using DeUrgenta.I18n.Service.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Admin.Api.Validators
@@ -18,7 +19,9 @@ namespace DeUrgenta.Admin.Api.Validators
         {
             var blog = await _context.Blogs.FirstOrDefaultAsync(x => x.Id == request.BlogPostId);
 
-            return blog is not null ? ValidationResult.Ok : ValidationResult.GenericValidationError;
+            return blog is not null 
+                ? ValidationResult.Ok 
+                : new LocalizableValidationError("blogpost-not-exist",new LocalizableString("blogpost-not-exist-message", request.BlogPostId));
         }
     }
 }

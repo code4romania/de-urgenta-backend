@@ -23,11 +23,11 @@ namespace DeUrgenta.Certifications.Api.Validators
                 return ValidationResult.GenericValidationError;
             }
 
-            var isOwner = await _context.Certifications.AnyAsync(c => c.UserId == user.Id && c.Id == request.CertificationId);
+            var certificationExist = await _context.Certifications.AnyAsync(c => c.UserId == user.Id && c.Id == request.CertificationId);
 
-            if (!isOwner)
+            if (!certificationExist)
             {
-                return ValidationResult.GenericValidationError;
+                return new LocalizableValidationError("certification-not-exist", "certification-not-exist-message");
             }
 
             return ValidationResult.Ok;

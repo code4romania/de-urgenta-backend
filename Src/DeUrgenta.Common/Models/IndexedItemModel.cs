@@ -1,4 +1,4 @@
-﻿namespace DeUrgenta.Infra.Models
+﻿namespace DeUrgenta.Common.Models
 {
     public sealed record IndexedItemModel
     {

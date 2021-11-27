@@ -2,6 +2,7 @@
 using DeUrgenta.Events.Api.Queries;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
+using DeUrgenta.I18n.Service.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Events.Api.Validators
@@ -19,9 +20,8 @@ namespace DeUrgenta.Events.Api.Validators
         {
             if (!await _context.EventTypes.AnyAsync(x => x.Id == request.EventTypeId))
             {
-                return ValidationResult.GenericValidationError;
+                return new LocalizableValidationError("event-type-not-exist",new LocalizableString("event-type-not-exist-message", request.EventTypeId));
             }
-
 
             return ValidationResult.Ok;
         }

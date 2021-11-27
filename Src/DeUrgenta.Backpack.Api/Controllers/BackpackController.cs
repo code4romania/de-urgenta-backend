@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-
 using System.Collections.Immutable;
 using DeUrgenta.Backpack.Api.Models;
 using DeUrgenta.Backpack.Api.Swagger.Backpack;
@@ -14,7 +13,7 @@ using Swashbuckle.AspNetCore.Filters;
 using System.Linq;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Backpack.Api.Queries;
-using DeUrgenta.Common.Extensions;
+using DeUrgenta.Common.Mappers;
 
 namespace DeUrgenta.Backpack.Api.Controllers
 {
@@ -26,10 +25,12 @@ namespace DeUrgenta.Backpack.Api.Controllers
     public class BackpackController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IResultMapper _mapper;
 
-        public BackpackController(IMediator mediator)
+        public BackpackController(IMediator mediator, IResultMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -48,7 +49,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var query = new GetBackpacks(sub);
             var result = await _mediator.Send(query);
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -67,7 +68,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var query = new GetMyBackpacks(sub);
             var result = await _mediator.Send(query);
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -91,7 +92,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var command = new CreateBackpack(sub, backpack);
             var result = await _mediator.Send(command);
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -115,7 +116,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var command = new UpdateBackpack(sub, backpackId, backpack);
             var result = await _mediator.Send(command);
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -138,7 +139,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var command = new GetBackpackContributors(sub, backpackId);
             var result = await _mediator.Send(command);
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -161,7 +162,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var command = new RemoveContributor(sub, backpackId, userId);
             var result = await _mediator.Send(command);
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -183,7 +184,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var command = new RemoveCurrentUserFromContributors(sub, backpackId);
             var result = await _mediator.Send(command);
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -206,7 +207,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var command = new DeleteBackpack(sub, backpackId);
             var result = await _mediator.Send(command);
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
     }
 }

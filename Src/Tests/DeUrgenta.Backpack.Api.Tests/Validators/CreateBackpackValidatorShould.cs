@@ -32,10 +32,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new CreateBackpackValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new CreateBackpack(sub, new BackpackModelRequest()));
+            var result = await sut.IsValidAsync(new CreateBackpack(sub, new BackpackModelRequest()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -52,10 +52,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new CreateBackpack(userSub, new BackpackModelRequest()));
+            var result = await sut.IsValidAsync(new CreateBackpack(userSub, new BackpackModelRequest()));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using DeUrgenta.Common.Swagger;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
-using DeUrgenta.Common.Extensions;
+using DeUrgenta.Common.Mappers;
 
 namespace DeUrgenta.Certifications.Api.Controller
 {
@@ -25,10 +25,12 @@ namespace DeUrgenta.Certifications.Api.Controller
     public class CertificationController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IResultMapper _mapper;
 
-        public CertificationController(IMediator mediator)
+        public CertificationController(IMediator mediator, IResultMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -48,7 +50,7 @@ namespace DeUrgenta.Certifications.Api.Controller
             var query = new GetCertifications(sub);
             var result = await _mediator.Send(query);
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -72,7 +74,7 @@ namespace DeUrgenta.Certifications.Api.Controller
             var command = new CreateCertification(sub, certification);
             var result = await _mediator.Send(command);
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -97,7 +99,7 @@ namespace DeUrgenta.Certifications.Api.Controller
             var command = new UpdateCertification(sub, certificationId, certification);
             var result = await _mediator.Send(command);
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -119,7 +121,7 @@ namespace DeUrgenta.Certifications.Api.Controller
             var command = new DeleteCertification(sub, certificationId);
             var result = await _mediator.Send(command);
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
     }
 }

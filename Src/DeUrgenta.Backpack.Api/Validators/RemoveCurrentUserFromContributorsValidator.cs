@@ -29,7 +29,7 @@ namespace DeUrgenta.Backpack.Api.Validators
 
             if (isOwner)
             {
-                return ValidationResult.GenericValidationError;
+                return new LocalizableValidationError("backpack-owner-leave", "backpack-owner-leave-message");
             }
 
             var isPartOfGroup = await _context

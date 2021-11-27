@@ -24,11 +24,17 @@ namespace DeUrgenta.Group.Api.Validators
                 return ValidationResult.GenericValidationError;
             }
 
+            var isPartOfTheGroup = await _context.UsersToGroups.AnyAsync(utg => utg.UserId == user.Id && utg.GroupId == request.GroupId);
+            if (!isPartOfTheGroup)
+            {
+                return ValidationResult.GenericValidationError;
+            }
+
             var isGroupAdmin = await _context.Groups.AnyAsync(g => g.Admin.Id == user.Id && g.Id == request.GroupId);
 
             if (!isGroupAdmin)
             {
-                return ValidationResult.GenericValidationError;
+                return new LocalizableValidationError("cannot-delete-group", "only-group-admin-can-delete-group-message");
             }
 
             return ValidationResult.Ok;

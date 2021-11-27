@@ -10,7 +10,7 @@ namespace DeUrgenta.Invite.Api.Validators
 {
     public class AcceptGroupInviteValidator : IValidateRequest<AcceptGroupInvite>
     {
-        private DeUrgentaContext _context;
+        private readonly DeUrgentaContext _context;
         private readonly GroupsConfig _config;
 
         public AcceptGroupInviteValidator(DeUrgentaContext context, IOptions<GroupsConfig> config)
@@ -34,22 +34,23 @@ namespace DeUrgenta.Invite.Api.Validators
 
             if (noOfGroupsUserIsAMemberOf >= _config.MaxJoinedGroupsPerUser)
             {
-                return ValidationResult.GenericValidationError;
+                return new LocalizableValidationError("cannot-accept-invite", "max-group-per-user-reached");
             }
 
             var noOfGroupMembers = await _context.UsersToGroups
                 .CountAsync(u => u.GroupId == request.GroupId);
+
             if (noOfGroupMembers >= _config.MaxUsers)
             {
-                return ValidationResult.GenericValidationError;
+                return new LocalizableValidationError("cannot-accept-invite", "max-group-members-reached");
             }
 
             var userIsAlreadyAMember = await _context.UsersToGroups
-                .AnyAsync(u => u.UserId == user.Id
-                               && u.GroupId == request.GroupId);
+                .AnyAsync(u => u.UserId == user.Id && u.GroupId == request.GroupId);
+
             if (userIsAlreadyAMember)
             {
-                return ValidationResult.GenericValidationError;
+                return new LocalizableValidationError("cannot-accept-invite", "already-a-group-member-message");
             }
 
             return ValidationResult.Ok;

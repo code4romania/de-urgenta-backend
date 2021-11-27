@@ -1,10 +1,13 @@
 ﻿using System.Threading.Tasks;
+using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Admin.Api.Models;
 using DeUrgenta.Admin.Api.Swagger.AdminLocalization;
+using DeUrgenta.Common.Mappers;
 using DeUrgenta.Common.Auth;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.I18n.Service.Models;
 using DeUrgenta.I18n.Service.Providers;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,11 +23,15 @@ namespace DeUrgenta.Admin.Api.Controller
     [Route("admin/content")]
     public class AdminLocalizationController : ControllerBase
     {
-        private readonly IamI18nProvider _i18NProvider;
+        private readonly IamI18nProvider _i18nProvider;
+        private readonly IMediator _mediator;
+        private readonly IResultMapper _mapper;
 
-        public AdminLocalizationController(IamI18nProvider i18NProvider)
+        public AdminLocalizationController(IamI18nProvider i18NProvider, IMediator mediator, IResultMapper mapper)
         {
-            _i18NProvider = i18NProvider;
+            _i18nProvider = i18NProvider;
+            _mediator = mediator;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -41,7 +48,7 @@ namespace DeUrgenta.Admin.Api.Controller
         [HttpGet]
         public async Task<IActionResult> GetString(string key)
         {
-            var text = await _i18NProvider.Localize(key);
+            var text = await _i18nProvider.Localize(key);
             return Ok(new StringResourceModel { Key = key, Value = text });
         }
 
@@ -52,21 +59,16 @@ namespace DeUrgenta.Admin.Api.Controller
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerResponseExample(StatusCodes.Status200OK,
-        typeof(AddOrUpdateContentResponseExample))]
-        [SwaggerRequestExample(typeof(AddOrUpdateContentModel),
-        typeof(AddOrUpdateContentRequestExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateContentResponseExample))]
+        [SwaggerRequestExample(typeof(AddOrUpdateContentModel), typeof(AddOrUpdateContentRequestExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         [HttpPost]
-        public async Task<ActionResult<StringResourceModel>> AddOrUpdateContent(AddOrUpdateContentModel contentModel)
+        public async Task<ActionResult<StringResourceModel>> AddOrUpdateContent(AddOrUpdateContentModel model)
         {
-            var updatedContent = await _i18NProvider.AddOrUpdateContentValue(contentModel.Culture,
-            contentModel.Key, contentModel.Value);
+            var result = await _mediator.Send(new AddOrUpdateContent(model.Culture, model.Key, model.Value));
 
-            if (updatedContent == null) return BadRequest("Specified culture does not exist");
-
-            return Ok(updatedContent);
+            return await _mapper.MapToActionResult(result);
         }
     }
 }

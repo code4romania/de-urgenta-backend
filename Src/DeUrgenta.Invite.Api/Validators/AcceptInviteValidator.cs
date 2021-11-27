@@ -29,9 +29,10 @@ namespace DeUrgenta.Invite.Api.Validators
             {
                 return ValidationResult.GenericValidationError;
             }
+
             if (invite.InviteStatus == InviteStatus.Accepted)
             {
-                return ValidationResult.GenericValidationError;
+                return new LocalizableValidationError("cannot-accept-invite", "invite-already-accepted");
             }
 
             return ValidationResult.Ok;

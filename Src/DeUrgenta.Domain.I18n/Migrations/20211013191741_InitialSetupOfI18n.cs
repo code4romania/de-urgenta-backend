@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace DeUrgenta.I18n.Service.Migrations
+namespace DeUrgenta.Domain.I18n.Migrations
 {
     public partial class InitialSetupOfI18n : Migration
     {

@@ -27,7 +27,7 @@ namespace DeUrgenta.Group.Api.Validators
             var isAdmin = await _context.Groups.AnyAsync(g => g.Admin.Id == user.Id && g.Id == request.GroupId);
             if (isAdmin)
             {
-                return ValidationResult.GenericValidationError;
+                return new LocalizableValidationError("cannot-leave-group","cannot-leave-administered-group-message");
             }
 
             var isPartOfGroup = await _context.UsersToGroups

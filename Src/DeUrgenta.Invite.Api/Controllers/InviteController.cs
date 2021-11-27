@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using DeUrgenta.Common.Extensions;
+using DeUrgenta.Common.Mappers;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.Invite.Api.Commands;
 using DeUrgenta.Invite.Api.Models;
@@ -23,10 +23,12 @@ namespace DeUrgenta.Invite.Api.Controllers
     public class InviteController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IResultMapper _mapper;
 
-        public InviteController(IMediator mediator)
+        public InviteController(IMediator mediator, IResultMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -47,7 +49,7 @@ namespace DeUrgenta.Invite.Api.Controllers
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var result = await _mediator.Send(new CreateInvite(sub, request));
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -69,7 +71,7 @@ namespace DeUrgenta.Invite.Api.Controllers
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var result = await _mediator.Send(new AcceptInvite(sub, inviteId));
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
     }
 }

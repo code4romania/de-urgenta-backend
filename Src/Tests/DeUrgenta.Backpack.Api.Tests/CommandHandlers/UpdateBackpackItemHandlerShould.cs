@@ -13,7 +13,6 @@ using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
 using NSubstitute;
 using FluentAssertions;
-using Microsoft.Extensions.Options;
 using Xunit;
 
 namespace DeUrgenta.Backpack.Api.Tests.CommandHandlers
@@ -105,7 +104,7 @@ namespace DeUrgenta.Backpack.Api.Tests.CommandHandlers
 
             // Act
             var result =
-                await sut.Handle(new UpdateBackpackItem("a-sub", Guid.NewGuid(), new Models.BackpackItemRequest()),
+                await sut.Handle(new UpdateBackpackItem("a-sub", Guid.NewGuid(), new BackpackItemRequest()),
                     CancellationToken.None);
 
             // Assert

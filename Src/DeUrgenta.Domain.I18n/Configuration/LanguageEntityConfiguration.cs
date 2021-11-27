@@ -1,5 +1,4 @@
-﻿using System;
-using DeUrgenta.Domain.I18n.Entities;
+﻿using DeUrgenta.Domain.I18n.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -30,24 +29,22 @@ namespace DeUrgenta.Domain.I18n.Configuration
                 .HasIndex(x => x.Culture)
                 .IsUnique();
 
-
-            
             builder.HasData(
                new Language
                {
-                   Id = Guid.Parse("a2f64834-36d3-4a94-84f2-33aac1a61ae7"),
+                   Id = I18nDefaults.EnUsCultureId,
                    Name = "English",
                    Culture = "en-US"
                },
                new Language
                {
-                   Id = Guid.Parse("d0cb5c04-cb67-48c5-9252-6f6361a30a27"),
+                   Id = I18nDefaults.RoRoCultureId,
                    Name = "Romanian",
                    Culture = "ro-RO"
                },
                new Language
                {
-                   Id = Guid.Parse("5959e6ce-8745-40bc-9806-ca3cd6731c6d"),
+                   Id = I18nDefaults.HuHuCultureId,
                    Name = "Hungarian",
                    Culture = "hu-HU"
                }

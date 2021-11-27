@@ -6,6 +6,7 @@ using DeUrgenta.Admin.Api.Queries;
 using DeUrgenta.Admin.Api.Swagger.Blog;
 using DeUrgenta.Common.Auth;
 using DeUrgenta.Common.Extensions;
+using DeUrgenta.Common.Mappers;
 using DeUrgenta.Common.Models.Pagination;
 using DeUrgenta.Common.Swagger;
 using MediatR;
@@ -25,10 +26,12 @@ namespace DeUrgenta.Admin.Api.Controller
     public class AdminBlogController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IResultMapper _mapper;
 
-        public AdminBlogController(IMediator mediator)
+        public AdminBlogController(IMediator mediator, IResultMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -46,7 +49,7 @@ namespace DeUrgenta.Admin.Api.Controller
             var query = new GetBlogPosts(pagination);
             var result = await _mediator.Send(query);
             
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -66,7 +69,7 @@ namespace DeUrgenta.Admin.Api.Controller
             var command = new CreateBlogPost(blogPost);
             var result = await _mediator.Send(command);
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -87,7 +90,7 @@ namespace DeUrgenta.Admin.Api.Controller
             var command = new UpdateBlogPost(blogPostId, blogPost);
             var result = await _mediator.Send(command);
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -105,7 +108,7 @@ namespace DeUrgenta.Admin.Api.Controller
             var command = new DeleteBlogPost(blogPostId);
             var result = await _mediator.Send(command);
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
     }
 }

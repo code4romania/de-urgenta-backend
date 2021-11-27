@@ -28,7 +28,7 @@ namespace DeUrgenta.Backpack.Api.Validators
             }
 
             var backpack = await _context.Backpacks.FirstOrDefaultAsync(b => b.Id == backpackItem.BackpackId);
-            
+
             var isContributor = await _context.BackpacksToUsers.AnyAsync(btu => btu.User.Id == user.Id && btu.Backpack.Id == backpack.Id);
             if (!isContributor)
             {

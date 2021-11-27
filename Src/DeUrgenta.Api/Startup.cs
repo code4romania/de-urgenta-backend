@@ -21,6 +21,7 @@ using Microsoft.Extensions.DependencyInjection;
 using DeUrgenta.Certifications.Api;
 using FluentValidation.AspNetCore;
 using DeUrgenta.Admin.Api;
+using DeUrgenta.Common.Mappers;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Emailing.Service;
 using DeUrgenta.Events.Api;
@@ -50,6 +51,8 @@ namespace DeUrgenta.Api
             services.AddRateLimit(Configuration);
 
             services.SetupI18nService(Configuration);
+            services.AddTransient<IResultMapper, ResultMapper>();
+
             services.AddBearerAuth(Configuration);
             services.AddControllers().AddFluentValidation();
             services.AddDatabase<DeUrgentaContext>(Configuration.GetConnectionString("DbConnectionString"));
@@ -79,8 +82,6 @@ namespace DeUrgenta.Api
             services.SetupStorageService(Configuration);
 
             services.SetupHealthChecks(Configuration);
-
-
         }
 
 

@@ -36,13 +36,13 @@ namespace DeUrgenta.Group.Api.Validators
             var isGroupAdmin = group.Admin.Id == user.Id;
             if (!isGroupAdmin)
             {
-                return ValidationResult.GenericValidationError;
+                return new LocalizableValidationError("cannot-add-safe-location","only-group-admin-can-add-locations-message");
             }
 
             var groupHasMaxSafeLocations = group.GroupSafeLocations.Count >= _config.MaxSafeLocations;
             if (groupHasMaxSafeLocations)
             {
-                return ValidationResult.GenericValidationError;
+                return new LocalizableValidationError("group-safe-location-limit","group-safe-location-limit-message");
             }
 
             return ValidationResult.Ok;

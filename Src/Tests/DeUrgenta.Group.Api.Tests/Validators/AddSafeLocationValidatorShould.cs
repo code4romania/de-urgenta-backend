@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
@@ -6,6 +7,7 @@ using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Models;
 using DeUrgenta.Group.Api.Options;
 using DeUrgenta.Group.Api.Validators;
+using DeUrgenta.I18n.Service.Models;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
 using FluentAssertions;
@@ -38,10 +40,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new AddSafeLocationValidator(_dbContext, _config);
 
             // Act
-            var isValid = await sut.IsValidAsync(new AddSafeLocation(sub, Guid.NewGuid(), new SafeLocationRequest()));
+            var result = await sut.IsValidAsync(new AddSafeLocation(sub, Guid.NewGuid(), new SafeLocationRequest()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -56,11 +58,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new AddSafeLocationValidator(_dbContext, _config);
 
             // Act
-            var isValid =
-                await sut.IsValidAsync(new AddSafeLocation(userSub, Guid.NewGuid(), new SafeLocationRequest()));
+            var result = await sut.IsValidAsync(new AddSafeLocation(userSub, Guid.NewGuid(), new SafeLocationRequest()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -83,11 +84,19 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new AddSafeLocationValidator(_dbContext, _config);
 
             // Act
-            var isValid =
+            var result =
                 await sut.IsValidAsync(new AddSafeLocation(userSub, group.Id, new SafeLocationRequest()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result
+                .Should()
+                .BeOfType<LocalizableValidationError>()
+                .Which.Messages
+                .Should()
+                .BeEquivalentTo(new Dictionary<LocalizableString, LocalizableString>
+                {
+                    { "cannot-add-safe-location","only-group-admin-can-add-locations-message" }
+                });
         }
 
         [Fact]
@@ -111,10 +120,18 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new AddSafeLocation(userSub, group.Id, new SafeLocationRequest()));
+            var result = await sut.IsValidAsync(new AddSafeLocation(userSub, group.Id, new SafeLocationRequest()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result
+                .Should()
+                .BeOfType<LocalizableValidationError>()
+                .Which.Messages
+                .Should()
+                .BeEquivalentTo(new Dictionary<LocalizableString, LocalizableString>
+                {
+                    { "group-safe-location-limit","group-safe-location-limit-message"}
+                });
         }
 
         [Fact]
@@ -132,10 +149,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new AddSafeLocation(userSub, group.Id, new SafeLocationRequest()));
+            var result = await sut.IsValidAsync(new AddSafeLocation(userSub, group.Id, new SafeLocationRequest()));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

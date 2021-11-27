@@ -23,12 +23,18 @@ namespace DeUrgenta.Group.Api.Validators
                 return ValidationResult.GenericValidationError;
             }
 
+            var safeLocationExists = await _context.GroupsSafeLocations.AnyAsync(gsl => gsl.Id == request.SafeLocationId);
+            if (!safeLocationExists)
+            {
+                return ValidationResult.GenericValidationError;
+            }
+
             var isGroupAdmin = await _context.GroupsSafeLocations
                 .AnyAsync(gsl => gsl.Group.Admin.Id == user.Id && gsl.Id == request.SafeLocationId);
 
             if (!isGroupAdmin)
             {
-                return ValidationResult.GenericValidationError;
+                return new LocalizableValidationError("cannot-delete-safe-location","only-group-admin-can-delete-safe-location-message");
             }
 
             return ValidationResult.Ok;

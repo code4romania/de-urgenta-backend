@@ -11,6 +11,11 @@ namespace DeUrgenta.Api.Extensions.OperationFilter
     {
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
+            if (context?.MethodInfo?.DeclaringType == null)
+            {
+                return;
+            }
+
             var attributes = context.MethodInfo.DeclaringType.GetCustomAttributes(true)
                 .Union(context.MethodInfo.GetCustomAttributes(true))
                 .ToList();
@@ -35,10 +40,10 @@ namespace DeUrgenta.Api.Extensions.OperationFilter
 
                 operation.Security = new List<OpenApiSecurityRequirement>
                 {
-                    new OpenApiSecurityRequirement
+                    new ()
                     {
                         {
-                            new OpenApiSecurityScheme
+                            new()
                             {
                                 Reference = new OpenApiReference
                                 {

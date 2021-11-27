@@ -35,7 +35,7 @@ namespace DeUrgenta.Events.Api.QueryHandlers
 
             var events = await _context.Events
                                 .Where(x => (request.EventTypeId == null || x.EventTypeId == request.EventTypeId.Value) && x.OccursOn > DateTime.Today)
-                                .Select(x => x.City)
+                                .Select(x => x.Locality)
                                 .Distinct()
                                 .Select(x => new EventCityModel { Name = x })
                                 .OrderBy(x => x.Name)

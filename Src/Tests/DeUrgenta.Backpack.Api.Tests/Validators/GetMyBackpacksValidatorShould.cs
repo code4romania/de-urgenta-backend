@@ -31,10 +31,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new GetMyBackpacksValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new GetMyBackpacks(sub));
+            var result = await sut.IsValidAsync(new GetMyBackpacks(sub));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -50,10 +50,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new GetMyBackpacks(userSub));
+            var result = await sut.IsValidAsync(new GetMyBackpacks(userSub));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

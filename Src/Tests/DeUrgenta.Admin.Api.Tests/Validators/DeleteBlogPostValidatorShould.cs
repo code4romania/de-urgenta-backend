@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Admin.Api.Validators;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Domain.Api.Entities;
+using DeUrgenta.I18n.Service.Models;
 using DeUrgenta.Tests.Helpers;
 using FluentAssertions;
 using Xunit;
@@ -26,18 +28,30 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
         {
             // Arrange
             var sut = new DeleteBlogPostValidator(_dbContext);
-            
+
             await _dbContext.AddAsync(new BlogPost
             {
-                Author = "Test", Title = "Test", ContentBody = "Test", PublishedOn = DateTime.UtcNow
+                Author = "Test",
+                Title = "Test",
+                ContentBody = "Test",
+                PublishedOn = DateTime.UtcNow
             });
             await _dbContext.SaveChangesAsync();
-            
+
             // Act
-            var result = await sut.IsValidAsync(new DeleteBlogPost(Guid.NewGuid()));
-            
+            var blogPostId = Guid.NewGuid();
+            var result = await sut.IsValidAsync(new DeleteBlogPost(blogPostId));
+
             // Assert
-            result.Should().BeOfType<GenericValidationError>();
+            result
+                .Should()
+                .BeOfType<LocalizableValidationError>()
+                .Which.Messages
+                .Should()
+                .BeEquivalentTo(new Dictionary<LocalizableString, LocalizableString>
+                {
+                    { "blogpost-not-exist",new LocalizableString("blogpost-not-exist-message", blogPostId) }
+                });
         }
 
         [Fact]
@@ -48,7 +62,10 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
 
             var blogPost = new BlogPost
             {
-                Author = "Test", Title = "Test", ContentBody = "Test", PublishedOn = DateTime.UtcNow
+                Author = "Test",
+                Title = "Test",
+                ContentBody = "Test",
+                PublishedOn = DateTime.UtcNow
             };
             await _dbContext.AddAsync(blogPost);
             await _dbContext.SaveChangesAsync();

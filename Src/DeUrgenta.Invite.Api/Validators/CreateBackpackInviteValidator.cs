@@ -8,7 +8,7 @@ namespace DeUrgenta.Invite.Api.Validators
 {
     public class CreateBackpackInviteValidator : ICreateInviteValidator
     {
-        private DeUrgentaContext _context;
+        private readonly DeUrgentaContext _context;
 
         public CreateBackpackInviteValidator(DeUrgentaContext context)
         {
@@ -24,8 +24,7 @@ namespace DeUrgenta.Invite.Api.Validators
             }
 
             var userHasAccessToBackpack = await _context.BackpacksToUsers
-                .AnyAsync(u => u.UserId == request.UserId
-                                    && u.BackpackId == request.DestinationId);
+                .AnyAsync(u => u.UserId == request.UserId && u.BackpackId == request.DestinationId);
 
             if (!userHasAccessToBackpack)
             {

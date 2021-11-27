@@ -21,7 +21,7 @@ namespace DeUrgenta.Admin.Api.Tests.QueryHandlers
         {
             _dbContext = fixture.Context;
         }
-        
+
         [Fact]
         public async Task Return_failed_result_when_validation_fails()
         {
@@ -34,7 +34,7 @@ namespace DeUrgenta.Admin.Api.Tests.QueryHandlers
             var sut = new GetBlogPostsHandler(validator, _dbContext);
 
             // Act
-            var result = await sut.Handle(new GetBlogPosts(new PaginationQueryModel{PageNumber = 1, PageSize = 1}), CancellationToken.None);
+            var result = await sut.Handle(new GetBlogPosts(new PaginationQueryModel { PageNumber = 1, PageSize = 1 }), CancellationToken.None);
 
             // Assert
             result.IsFailure.Should().BeTrue();

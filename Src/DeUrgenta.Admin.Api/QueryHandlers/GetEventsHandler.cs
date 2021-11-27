@@ -44,7 +44,7 @@ namespace DeUrgenta.Admin.Api.QueryHandlers
                     OccursOn = x.OccursOn,
                     OrganizedBy = x.OrganizedBy,
                     PublishedOn = x.PublishedOn,
-                    City = x.City,
+                    City = x.Locality,
                     EventType = x.EventType.Name,
                     IsArchived = x.IsArchived
                 })

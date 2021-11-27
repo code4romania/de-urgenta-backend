@@ -52,15 +52,15 @@ jobs:
         dotnet DeUrgenta.Domains.Migrator.dll
       env:
         # Connection strings
-        ConnectionStrings__DbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass; 
-        ConnectionStrings__IdentityDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass; 
-        ConnectionStrings__I18nDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;
-        ConnectionStrings__JobsConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;
+        ConnectionStrings__DbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;Include Error Detail=true; 
+        ConnectionStrings__IdentityDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;Include Error Detail=true;
+        ConnectionStrings__I18nDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;Include Error Detail=true;
+        ConnectionStrings__JobsConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;Include Error Detail=true;
         
     - name: Run unit & integration tests
       run: dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover DeUrgenta.RecurringJobs.sln
       env:
         # Connection string
-        ConnectionStrings__TestingDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass; 
-        ConnectionStrings__JobsTestingDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass; 
+        ConnectionStrings__TestingDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;Include Error Detail=true; 
+        ConnectionStrings__JobsTestingDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;Include Error Detail=true; 
 

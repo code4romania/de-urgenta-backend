@@ -2,8 +2,8 @@
 using System.Collections.Immutable;
 using System.Threading;
 using System.Threading.Tasks;
+using DeUrgenta.Common.Models;
 using DeUrgenta.Domain.Api.Entities;
-using DeUrgenta.Infra.Models;
 using DeUrgenta.User.Api.Queries;
 using MediatR;
 

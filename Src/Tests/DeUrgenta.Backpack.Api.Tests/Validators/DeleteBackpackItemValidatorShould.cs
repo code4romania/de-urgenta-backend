@@ -32,10 +32,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new DeleteBackpackItemValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new DeleteBackpackItem(sub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new DeleteBackpackItem(sub, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -73,10 +73,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new DeleteBackpackItem(nonContributor.Sub, backpackItemId));
+            var result = await sut.IsValidAsync(new DeleteBackpackItem(nonContributor.Sub, backpackItemId));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -102,10 +102,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new DeleteBackpackItem(contributorSub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new DeleteBackpackItem(contributorSub, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -139,10 +139,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new DeleteBackpackItem(contributorSub, backpackItemId));
+            var result = await sut.IsValidAsync(new DeleteBackpackItem(contributorSub, backpackItemId));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

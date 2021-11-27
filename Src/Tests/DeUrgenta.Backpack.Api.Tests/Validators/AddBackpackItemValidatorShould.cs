@@ -32,10 +32,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new AddBackpackItemValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new AddBackpackItem(sub, Guid.NewGuid(), new BackpackItemRequest()));
+            var result = await sut.IsValidAsync(new AddBackpackItem(sub, Guid.NewGuid(), new BackpackItemRequest()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -64,10 +64,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new AddBackpackItem(nonContributor.Sub, backpackId, new BackpackItemRequest()));
+            var result = await sut.IsValidAsync(new AddBackpackItem(nonContributor.Sub, backpackId, new BackpackItemRequest()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
 
@@ -96,10 +96,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var command = new AddBackpackItem(contributorSub, backpackId, new BackpackItemRequest());
 
             // Act
-            var isValid = await sut.IsValidAsync(command);
+            var result = await sut.IsValidAsync(command);
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

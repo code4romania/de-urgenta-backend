@@ -15,6 +15,8 @@ namespace DeUrgenta.I18n.Service
             services.AddDatabase<I18nDbContext>(configuration.GetConnectionString("I18nDbConnectionString"));
             services.AddLocalization();
 
+            services.AddScoped<IAmLanguageProvider, LanguageProvider>();
+            services.AddScoped<IAmContentProvider, ContentProvider>();
             services.AddScoped<IamI18nProvider, I18NProvider>();
         }
 
@@ -23,7 +25,7 @@ namespace DeUrgenta.I18n.Service
             var serviceProvider = builder.ApplicationServices;
 
             using var scope = serviceProvider.CreateScope();
-            var languageProvider = scope.ServiceProvider.GetRequiredService<IamI18nProvider>();
+            var languageProvider = scope.ServiceProvider.GetRequiredService<IAmLanguageProvider>();
             var languages = languageProvider.GetLanguages();
 
             var supportedCultures = languages

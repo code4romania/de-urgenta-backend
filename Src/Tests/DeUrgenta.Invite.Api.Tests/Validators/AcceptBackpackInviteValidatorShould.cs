@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
+using DeUrgenta.I18n.Service.Models;
 using DeUrgenta.Invite.Api.Commands;
 using DeUrgenta.Invite.Api.Options;
 using DeUrgenta.Invite.Api.Validators;
@@ -46,10 +48,10 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             var sut = new AcceptBackpackInviteValidator(_context, _backpacksConfig);
 
             //Act
-            var isValid = await sut.IsValidAsync(request);
+            var result = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -67,7 +69,7 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
 
             var backpackToUser = new BackpackToUserBuilder().WithBackpack(backpack).WithUser(user).Build();
             await _context.BackpacksToUsers.AddAsync(backpackToUser);
-            
+
             await _context.SaveChangesAsync();
 
             AcceptBackpackInvite request = new(sub, backpackId);
@@ -75,10 +77,18 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             var sut = new AcceptBackpackInviteValidator(_context, _backpacksConfig);
 
             //Act
-            var isValid = await sut.IsValidAsync(request);
+            var result = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result
+                .Should()
+                .BeOfType<LocalizableValidationError>()
+                .Which.Messages
+                .Should()
+                .BeEquivalentTo(new Dictionary<LocalizableString, LocalizableString>
+                {
+                    { "cannot-accept-invite", "already-backpack-contributor" }
+                });
         }
 
         [Fact]
@@ -106,10 +116,18 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             var sut = new AcceptBackpackInviteValidator(_context, _backpacksConfig);
 
             //Act
-            var isValid = await sut.IsValidAsync(request);
+            var result = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result
+                .Should()
+                .BeOfType<LocalizableValidationError>()
+                .Which.Messages
+                .Should()
+                .BeEquivalentTo(new Dictionary<LocalizableString, LocalizableString>
+                {
+                    { "cannot-accept-invite", "max-backpack-contributors-reached" }
+                });
         }
 
         [Fact]
@@ -132,10 +150,10 @@ namespace DeUrgenta.Invite.Api.Tests.Validators
             var sut = new AcceptBackpackInviteValidator(_context, _backpacksConfig);
 
             //Act
-            var isValid = await sut.IsValidAsync(request);
+            var result = await sut.IsValidAsync(request);
 
             //Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

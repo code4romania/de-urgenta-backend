@@ -32,10 +32,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new GetBackpackContributorsValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new GetBackpackContributors(sub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new GetBackpackContributors(sub, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
 
@@ -51,10 +51,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new GetBackpackContributorsValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new GetBackpackContributors(userSub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new GetBackpackContributors(userSub, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -80,10 +80,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new GetBackpackContributorsValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new GetBackpackContributors(userSub, backpack.Id));
+            var result = await sut.IsValidAsync(new GetBackpackContributors(userSub, backpack.Id));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -109,10 +109,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new GetBackpackContributorsValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new GetBackpackContributors(userSub, backpack.Id));
+            var result = await sut.IsValidAsync(new GetBackpackContributors(userSub, backpack.Id));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
 
         [Fact]
@@ -133,10 +133,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new GetBackpackContributorsValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new GetBackpackContributors(userSub, backpack.Id));
+            var result = await sut.IsValidAsync(new GetBackpackContributors(userSub, backpack.Id));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

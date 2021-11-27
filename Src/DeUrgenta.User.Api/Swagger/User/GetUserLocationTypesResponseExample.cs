@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using DeUrgenta.Common.Models;
 using DeUrgenta.Domain.Api.Entities;
-using DeUrgenta.Infra.Models;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace DeUrgenta.User.Api.Swagger.User

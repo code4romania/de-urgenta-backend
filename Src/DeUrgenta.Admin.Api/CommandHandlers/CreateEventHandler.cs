@@ -36,7 +36,7 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
             {
                 Title = request.Event.Title,
                 Author = request.Event.Author,
-                City = request.Event.City,
+                Locality = request.Event.Locality,
                 ContentBody = request.Event.ContentBody,
                 EventType = eventType,
                 OccursOn = request.Event.OccursOn,
@@ -55,7 +55,7 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
                 Title = @event.Title,
                 Address = @event.Address,
                 Author = @event.Author,
-                City = @event.City,
+                City = @event.Locality,
                 IsArchived = @event.IsArchived,
                 ContentBody = @event.ContentBody,
                 EventType = eventType.Name,

@@ -6,6 +6,7 @@ using DeUrgenta.Admin.Api.Queries;
 using DeUrgenta.Admin.Api.Swagger.Events;
 using DeUrgenta.Common.Auth;
 using DeUrgenta.Common.Extensions;
+using DeUrgenta.Common.Mappers;
 using DeUrgenta.Common.Models.Events;
 using DeUrgenta.Common.Models.Pagination;
 using DeUrgenta.Common.Swagger;
@@ -26,10 +27,12 @@ namespace DeUrgenta.Admin.Api.Controller
     public class AdminEventsController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IResultMapper _mapper;
 
-        public AdminEventsController(IMediator mediator)
+        public AdminEventsController(IMediator mediator, IResultMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -47,7 +50,7 @@ namespace DeUrgenta.Admin.Api.Controller
             var query = new GetEvents(pagination);
             var result = await _mediator.Send(query);
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -68,7 +71,7 @@ namespace DeUrgenta.Admin.Api.Controller
             var command = new CreateEvent(eventModel);
             var result = await _mediator.Send(command);
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -90,7 +93,7 @@ namespace DeUrgenta.Admin.Api.Controller
             var command = new UpdateEvent(eventId, eventModel);
             var result = await _mediator.Send(command);
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -110,7 +113,7 @@ namespace DeUrgenta.Admin.Api.Controller
             var command = new DeleteEvent(eventId);
             var result = await _mediator.Send(command);
 
-            return result.ToActionResult();
+            return await _mapper.MapToActionResult(result);
         }
     }
 }

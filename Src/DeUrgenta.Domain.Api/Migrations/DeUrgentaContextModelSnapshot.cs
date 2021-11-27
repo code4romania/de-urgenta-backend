@@ -184,10 +184,6 @@ namespace DeUrgenta.Domain.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("ContentBody")
                         .IsRequired()
                         .HasColumnType("text");
@@ -197,6 +193,10 @@ namespace DeUrgenta.Domain.Migrations
 
                     b.Property<bool>("IsArchived")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("Locality")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("OccursOn")
                         .HasColumnType("timestamp without time zone");
@@ -217,11 +217,11 @@ namespace DeUrgenta.Domain.Migrations
                     b.HasKey("Id")
                         .HasName("PK_Event");
 
-                    b.HasIndex("City")
-                        .HasDatabaseName("IX_Event_City");
-
                     b.HasIndex("EventTypeId")
                         .IsUnique();
+
+                    b.HasIndex("Locality")
+                        .HasDatabaseName("IX_Event_City");
 
                     b.ToTable("Events");
                 });

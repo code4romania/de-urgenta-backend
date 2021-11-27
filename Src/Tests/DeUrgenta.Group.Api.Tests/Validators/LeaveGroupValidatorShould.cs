@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Domain.Api.Entities;
 using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Validators;
+using DeUrgenta.I18n.Service.Models;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.Tests.Helpers.Builders;
 using FluentAssertions;
@@ -32,10 +34,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new LeaveGroupValidator(_dbContext);
 
             // Act
-            var isValid = await sut.IsValidAsync(new LeaveGroup(sub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new LeaveGroup(sub, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -51,10 +53,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new LeaveGroup(userSub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new LeaveGroup(userSub, Guid.NewGuid()));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -64,9 +66,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new LeaveGroupValidator(_dbContext);
             var userSub = Guid.NewGuid().ToString();
 
+            var adminUser = new UserBuilder().Build();
             var user = new UserBuilder().WithSub(userSub).Build();
 
-            var group = new GroupBuilder().WithAdmin(user).Build();
+            var group = new GroupBuilder().WithAdmin(adminUser).Build();
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Groups.AddAsync(group);
@@ -74,10 +77,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new LeaveGroup(userSub, group.Id));
+            var result = await sut.IsValidAsync(new LeaveGroup(userSub, group.Id));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
 
@@ -92,7 +95,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
 
             var group = new GroupBuilder().WithAdmin(user).Build();
 
-            var userToGroups = new UserToGroup {Group = group, User = user};
+            var userToGroups = new UserToGroup { Group = group, User = user };
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Groups.AddAsync(group);
@@ -100,10 +103,18 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new LeaveGroup(userSub, group.Id));
+            var result = await sut.IsValidAsync(new LeaveGroup(userSub, group.Id));
 
             // Assert
-            isValid.Should().BeOfType<GenericValidationError>();
+            result
+                .Should()
+                .BeOfType<LocalizableValidationError>()
+                .Which.Messages
+                .Should()
+                .BeEquivalentTo(new Dictionary<LocalizableString, LocalizableString>
+                {
+                    { "cannot-leave-group","cannot-leave-administered-group-message" }
+                });
         }
 
         [Fact]
@@ -119,7 +130,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
 
             var group = new GroupBuilder().WithAdmin(admin).Build();
 
-            var userToGroups = new UserToGroup {Group = group, User = user};
+            var userToGroups = new UserToGroup { Group = group, User = user };
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Groups.AddAsync(group);
@@ -127,10 +138,11 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var isValid = await sut.IsValidAsync(new LeaveGroup(userSub, group.Id));
+            var result = await sut.IsValidAsync(new LeaveGroup(userSub, group.Id));
 
             // Assert
-            isValid.Should().BeOfType<ValidationPassed>();
+            result.Should().BeOfType<ValidationPassed>();
         }
+
     }
 }
