@@ -128,7 +128,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators.RequestValidators
 
             //Assert
             result.ShouldHaveValidationErrorFor(c => c.Category)
-                .WithErrorMessage("'Category Type' has a range of values which does not include '0'.");
+                .WithErrorMessage("'Category' has a range of values which does not include '0'.");
         }
 
         [Fact]

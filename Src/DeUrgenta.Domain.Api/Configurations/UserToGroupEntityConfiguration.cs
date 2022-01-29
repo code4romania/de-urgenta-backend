@@ -27,7 +27,7 @@ namespace DeUrgenta.Domain.Api.Configurations
 
             builder
                 .HasOne(d => d.User)
-                .WithMany(p => p.GroupsMember)
+                .WithMany()
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_UserToGroup_User");

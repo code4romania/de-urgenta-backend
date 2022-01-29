@@ -2,7 +2,6 @@
 using System.Globalization;
 using DeUrgenta.Domain.Api.Entities;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Routing;
 
 namespace DeUrgenta.Backpack.Api.Constraints
