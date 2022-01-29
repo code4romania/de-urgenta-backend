@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
-using DeUrgenta.Domain;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Common.Validation;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Group.Api.Queries;
 using DeUrgenta.Group.Api.Validators;
 using DeUrgenta.Tests.Helpers;
-using Shouldly;
+using DeUrgenta.Tests.Helpers.Builders;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Group.Api.Tests.Validators
@@ -30,10 +31,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetAdministeredGroupsValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetAdministeredGroups(sub));
+            var result = await sut.IsValidAsync(new GetAdministeredGroups(sub));
 
             // Assert
-            isValid.ShouldBeFalse();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -42,21 +43,17 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             // Arrange
             var sut = new GetAdministeredGroupsValidator(_dbContext);
 
-            string userSub = Guid.NewGuid().ToString();
-            await _dbContext.Users.AddAsync(new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            });
+            var userSub = Guid.NewGuid().ToString();
+            var user = new UserBuilder().WithSub(userSub).Build();
 
+            await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetAdministeredGroups(userSub));
+            var result = await sut.IsValidAsync(new GetAdministeredGroups(userSub));
 
             // Assert
-            isValid.ShouldBeTrue();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

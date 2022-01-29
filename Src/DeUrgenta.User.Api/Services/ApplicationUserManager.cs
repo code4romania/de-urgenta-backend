@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using DeUrgenta.Domain;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Domain.Api;
+using DeUrgenta.Domain.Api.Entities;
 using DeUrgenta.User.Api.Models.DTOs.Requests;
 
 namespace DeUrgenta.User.Api.Services
@@ -16,11 +16,12 @@ namespace DeUrgenta.User.Api.Services
 
         public async Task CreateApplicationUserAsync(UserRegistrationDto user, string userSub)
         {
-            var newUser = new DeUrgenta.Domain.Entities.User
+            var newUser = new DeUrgenta.Domain.Api.Entities.User
             {
                 FirstName =  user.FirstName,
                 LastName = user.LastName,
-                Sub = userSub,
+                Email = user.Email,
+                Sub = userSub
             };
 
             var userBackpack = new Backpack

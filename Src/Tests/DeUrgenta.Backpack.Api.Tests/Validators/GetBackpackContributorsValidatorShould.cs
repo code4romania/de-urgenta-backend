@@ -2,10 +2,12 @@
 using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Queries;
 using DeUrgenta.Backpack.Api.Validators;
-using DeUrgenta.Domain;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Common.Validation;
+using DeUrgenta.Domain.Api;
+using DeUrgenta.Domain.Api.Entities;
 using DeUrgenta.Tests.Helpers;
-using Shouldly;
+using DeUrgenta.Tests.Helpers.Builders;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Backpack.Api.Tests.Validators
@@ -30,10 +32,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new GetBackpackContributorsValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetBackpackContributors(sub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new GetBackpackContributors(sub, Guid.NewGuid()));
 
             // Assert
-            isValid.ShouldBeFalse();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
 
@@ -41,47 +43,31 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         public async Task Invalidate_when_backpack_does_not_exist()
         {
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
-            var user = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
+            var userSub = Guid.NewGuid().ToString();
+            var user = new UserBuilder().WithSub(userSub).Build();
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
             var sut = new GetBackpackContributorsValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetBackpackContributors(userSub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new GetBackpackContributors(userSub, Guid.NewGuid()));
 
             // Assert
-            isValid.ShouldBeFalse();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
         public async Task Invalidate_when_user_not_contributor_of_requested_backpack()
         {
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
-            string ownerSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
+            var ownerSub = Guid.NewGuid().ToString();
 
-            var user = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
+            var user = new UserBuilder().WithSub(userSub).Build();
+            var owner = new UserBuilder().WithSub(ownerSub).Build();
 
-            var owner = new User
-            {
-                FirstName = "Owner",
-                LastName = "User",
-                Sub = ownerSub
-            };
-
-            var backpack = new Domain.Entities.Backpack
+            var backpack = new Domain.Api.Entities.Backpack
             {
                 Name = "A backpack"
             };
@@ -94,34 +80,23 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new GetBackpackContributorsValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetBackpackContributors(userSub, backpack.Id));
+            var result = await sut.IsValidAsync(new GetBackpackContributors(userSub, backpack.Id));
 
             // Assert
-            isValid.ShouldBeFalse();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
         public async Task Validate_when_user_is_contributor_of_requested_backpack()
         {
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
-            string ownerSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
+            var ownerSub = Guid.NewGuid().ToString();
 
-            var user = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
+            var user = new UserBuilder().WithSub(userSub).Build();
+            var owner = new UserBuilder().WithSub(ownerSub).Build();
 
-            var owner = new User
-            {
-                FirstName = "Owner",
-                LastName = "User",
-                Sub = ownerSub
-            };
-
-            var backpack = new Domain.Entities.Backpack { Name = "A backpack" };
+            var backpack = new Domain.Api.Entities.Backpack { Name = "A backpack" };
 
             await _dbContext.Users.AddAsync(user);
 
@@ -134,25 +109,20 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new GetBackpackContributorsValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetBackpackContributors(userSub, backpack.Id));
+            var result = await sut.IsValidAsync(new GetBackpackContributors(userSub, backpack.Id));
 
             // Assert
-            isValid.ShouldBeTrue();
+            result.Should().BeOfType<ValidationPassed>();
         }
 
         [Fact]
         public async Task Validate_when_user_is_owner_of_backpack()
         {
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
-            var user = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
+            var userSub = Guid.NewGuid().ToString();
+            var user = new UserBuilder().WithSub(userSub).Build();
 
-            var backpack = new Domain.Entities.Backpack { Name = "A backpack" };
+            var backpack = new Domain.Api.Entities.Backpack { Name = "A backpack" };
             
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Backpacks.AddAsync(backpack);
@@ -163,10 +133,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new GetBackpackContributorsValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetBackpackContributors(userSub, backpack.Id));
+            var result = await sut.IsValidAsync(new GetBackpackContributors(userSub, backpack.Id));
 
             // Assert
-            isValid.ShouldBeTrue();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

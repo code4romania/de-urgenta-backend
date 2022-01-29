@@ -2,14 +2,14 @@
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Group.Api.Commands;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Group.Api.CommandHandlers
 {
-    public class DeleteGroupHandler : IRequestHandler<DeleteGroup, Result>
+    public class DeleteGroupHandler : IRequestHandler<DeleteGroup, Result<Unit, ValidationResult>>
     {
         private readonly IValidateRequest<DeleteGroup> _validator;
         private readonly DeUrgentaContext _context;
@@ -20,12 +20,12 @@ namespace DeUrgenta.Group.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result> Handle(DeleteGroup request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, ValidationResult>> Handle(DeleteGroup request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure("Validation failed");
+                return validationResult;
             }
 
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
@@ -37,7 +37,7 @@ namespace DeUrgenta.Group.Api.CommandHandlers
             _context.Groups.Remove(group);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Result.Success();
+            return Unit.Value;
         }
     }
 }

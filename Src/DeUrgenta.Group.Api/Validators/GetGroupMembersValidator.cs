@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Group.Api.Queries;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,13 +15,13 @@ namespace DeUrgenta.Group.Api.Validators
             _context = context;
         }
 
-        public async Task<bool> IsValidAsync(GetGroupMembers request)
+        public async Task<ValidationResult> IsValidAsync(GetGroupMembers request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
 
             if (user == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             var isPartOfGroup = await _context
@@ -30,10 +30,10 @@ namespace DeUrgenta.Group.Api.Validators
 
             if (!isPartOfGroup)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
-            return true;
+            return ValidationResult.Ok;
         }
     }
 }

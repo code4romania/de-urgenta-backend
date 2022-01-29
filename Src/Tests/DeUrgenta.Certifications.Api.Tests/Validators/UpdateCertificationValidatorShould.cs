@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DeUrgenta.Certifications.Api.Commands;
 using DeUrgenta.Certifications.Api.Models;
 using DeUrgenta.Certifications.Api.Validators;
-using DeUrgenta.Domain;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Common.Validation;
+using DeUrgenta.Domain.Api;
+using DeUrgenta.Domain.Api.Entities;
+using DeUrgenta.I18n.Service.Models;
 using DeUrgenta.Tests.Helpers;
-using Shouldly;
+using DeUrgenta.Tests.Helpers.Builders;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Certifications.Api.Tests.Validators
@@ -30,10 +34,10 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             var sut = new UpdateCertificationValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new UpdateCertification(sub, Guid.NewGuid(), new CertificationRequest()));
+            var result = await sut.IsValidAsync(new UpdateCertification(sub, Guid.NewGuid(), new CertificationRequest()));
 
             // Assert
-            isValid.ShouldBeFalse();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -41,23 +45,26 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
         {
             // Arrange
             var sut = new UpdateCertificationValidator(_dbContext);
-            string userSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
 
-            var user = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
+            var user = new UserBuilder().WithSub(userSub).Build();
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new UpdateCertification(userSub, Guid.NewGuid(), new CertificationRequest()));
+            var result = await sut.IsValidAsync(new UpdateCertification(userSub, Guid.NewGuid(), new CertificationRequest()));
 
             // Assert
-            isValid.ShouldBeFalse();
+            result
+                .Should()
+                .BeOfType<LocalizableValidationError>()
+                .Which.Messages
+                .Should()
+                .BeEquivalentTo(new Dictionary<LocalizableString, LocalizableString>
+                {
+                    { "certification-not-exist","certification-not-exist-message" }
+                });
         }
 
         [Fact]
@@ -71,13 +78,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             var ownerSub = Guid.NewGuid().ToString();
             var userSub = Guid.NewGuid().ToString();
 
-            var owner = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = ownerSub,
-                Id = ownerId
-            };
+            var owner = new UserBuilder().WithId(ownerId).WithSub(ownerSub).Build();
 
             var certification = new Certification
             {
@@ -92,10 +93,10 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new UpdateCertification(userSub, certificationId, new CertificationRequest()));
+            var result = await sut.IsValidAsync(new UpdateCertification(userSub, certificationId, new CertificationRequest()));
 
             // Assert
-            isValid.ShouldBeFalse();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -108,13 +109,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             var ownerId = Guid.NewGuid();
             var ownerSub = Guid.NewGuid().ToString();
 
-            var owner = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = ownerSub,
-                Id = ownerId
-            };
+            var owner = new UserBuilder().WithId(ownerId).WithSub(ownerSub).Build();
 
             var certification = new Certification
             {
@@ -129,10 +124,10 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new UpdateCertification(ownerSub, certificationId, new CertificationRequest()));
+            var result = await sut.IsValidAsync(new UpdateCertification(ownerSub, certificationId, new CertificationRequest()));
 
             // Assert
-            isValid.ShouldBeTrue();
+            result.Should().BeOfType<ValidationPassed>();
         }
 
     }

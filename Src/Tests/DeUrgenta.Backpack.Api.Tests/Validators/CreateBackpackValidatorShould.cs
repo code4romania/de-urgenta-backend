@@ -3,10 +3,11 @@ using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Backpack.Api.Models;
 using DeUrgenta.Backpack.Api.Validators;
-using DeUrgenta.Domain;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Common.Validation;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Tests.Helpers;
-using Shouldly;
+using DeUrgenta.Tests.Helpers.Builders;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Backpack.Api.Tests.Validators
@@ -31,10 +32,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new CreateBackpackValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new CreateBackpack(sub, new BackpackModelRequest()));
+            var result = await sut.IsValidAsync(new CreateBackpack(sub, new BackpackModelRequest()));
 
             // Assert
-            isValid.ShouldBeFalse();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -43,21 +44,18 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new CreateBackpackValidator(_dbContext);
 
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
-            await _dbContext.Users.AddAsync(new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            });
+            var userSub = Guid.NewGuid().ToString();
+            var user = new UserBuilder().WithSub(userSub).Build();
+            
+            await _dbContext.Users.AddAsync(user);
 
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new CreateBackpack(userSub, new BackpackModelRequest()));
+            var result = await sut.IsValidAsync(new CreateBackpack(userSub, new BackpackModelRequest()));
 
             // Assert
-            isValid.ShouldBeTrue();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

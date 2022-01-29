@@ -3,13 +3,13 @@ using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Certifications.Api.Commands;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Certifications.Api.CommandHandlers
 {
-    public class DeleteCertificationHandler : IRequestHandler<DeleteCertification, Result>
+    public class DeleteCertificationHandler : IRequestHandler<DeleteCertification, Result<Unit, ValidationResult>>
     {
         private readonly IValidateRequest<DeleteCertification> _validator;
         private readonly DeUrgentaContext _context;
@@ -19,19 +19,19 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
             _validator = validator;
             _context = context;
         }
-        public async Task<Result> Handle(DeleteCertification request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, ValidationResult>> Handle(DeleteCertification request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure("Validation failed");
+                return validationResult;
             }
 
             var certification = await _context.Certifications.FirstAsync(c => c.Id == request.CertificationId, cancellationToken);
             _context.Certifications.Remove(certification);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Result.Success();
+            return Unit.Value;
         }
 
     }

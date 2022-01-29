@@ -1,0 +1,66 @@
+name: .NET Recurring Jobs
+
+on:
+  push:
+    branches: [ develop, main ]
+  pull_request:
+    branches: [ develop, main ]
+    
+defaults:
+  run: 
+    working-directory: ./Src
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+       
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: git-ci-pass
+          POSTGRES_USER: git-ci
+          POSTGRES_DB: postgres
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore DeUrgenta.RecurringJobs.sln
+    - name: Build
+      run: dotnet build --no-restore /p:ContinuousIntegrationBuild=true DeUrgenta.RecurringJobs.sln
+    - name: Build Migrator
+      run: dotnet build /p:ContinuousIntegrationBuild=true DeUrgenta.Domains.Migrator.sln
+    - name: Apply migrations for test db
+      run: |
+        cd ./DeUrgenta.Domains.Migrator/bin/Debug/net5.0
+        dotnet DeUrgenta.Domains.Migrator.dll
+      env:
+        # Connection strings
+        ConnectionStrings__DbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;Include Error Detail=true; 
+        ConnectionStrings__IdentityDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;Include Error Detail=true;
+        ConnectionStrings__I18nDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;Include Error Detail=true;
+        ConnectionStrings__JobsConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;Include Error Detail=true;
+        
+    - name: Run unit & integration tests
+      run: dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover DeUrgenta.RecurringJobs.sln
+      env:
+        # Connection string
+        ConnectionStrings__TestingDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;Include Error Detail=true; 
+        ConnectionStrings__JobsTestingDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;Include Error Detail=true; 
+

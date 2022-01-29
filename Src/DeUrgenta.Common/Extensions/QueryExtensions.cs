@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Models.Pagination;
@@ -26,7 +27,7 @@ namespace DeUrgenta.Common.Extensions
                 };
             }
 
-            var pageCount = (double)resultRowCount / pageSize.Value;
+            var pageCount = Math.Ceiling((double)resultRowCount / pageSize.Value);
 
             var skip = (page.Value - 1) * pageSize.Value;
             var pagedResult = await query.Skip(skip).Take(pageSize.Value).ToListAsync();

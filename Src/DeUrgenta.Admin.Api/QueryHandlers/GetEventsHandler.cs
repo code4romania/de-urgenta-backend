@@ -7,13 +7,13 @@ using DeUrgenta.Common.Extensions;
 using DeUrgenta.Common.Models.Events;
 using DeUrgenta.Common.Models.Pagination;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Admin.Api.QueryHandlers
 {
-    public class GetEventsHandler : IRequestHandler<GetEvents, Result<PagedResult<EventResponseModel>>>
+    public class GetEventsHandler : IRequestHandler<GetEvents, Result<PagedResult<EventResponseModel>, ValidationResult>>
     {
         private readonly IValidateRequest<GetEvents> _validator;
         private readonly DeUrgentaContext _context;
@@ -24,12 +24,12 @@ namespace DeUrgenta.Admin.Api.QueryHandlers
             _context = context;
         }
 
-        public async Task<Result<PagedResult<EventResponseModel>>> Handle(GetEvents request, CancellationToken cancellationToken)
+        public async Task<Result<PagedResult<EventResponseModel>, ValidationResult>> Handle(GetEvents request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<PagedResult<EventResponseModel>>("Validation failed");
+                return validationResult;
             }
 
             var pagedEvents = await _context.Events
@@ -44,7 +44,7 @@ namespace DeUrgenta.Admin.Api.QueryHandlers
                     OccursOn = x.OccursOn,
                     OrganizedBy = x.OrganizedBy,
                     PublishedOn = x.PublishedOn,
-                    City = x.City,
+                    City = x.Locality,
                     EventType = x.EventType.Name,
                     IsArchived = x.IsArchived
                 })

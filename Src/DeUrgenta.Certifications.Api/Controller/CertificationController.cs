@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using DeUrgenta.Common.Swagger;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
+using DeUrgenta.Common.Mappers;
 
 namespace DeUrgenta.Certifications.Api.Controller
 {
@@ -24,10 +25,12 @@ namespace DeUrgenta.Certifications.Api.Controller
     public class CertificationController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IResultMapper _mapper;
 
-        public CertificationController(IMediator mediator)
+        public CertificationController(IMediator mediator, IResultMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -46,12 +49,8 @@ namespace DeUrgenta.Certifications.Api.Controller
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             var query = new GetCertifications(sub);
             var result = await _mediator.Send(query);
-            
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-            return Ok(result.Value);
+
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -75,12 +74,7 @@ namespace DeUrgenta.Certifications.Api.Controller
             var command = new CreateCertification(sub, certification);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -105,12 +99,7 @@ namespace DeUrgenta.Certifications.Api.Controller
             var command = new UpdateCertification(sub, certificationId, certification);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -125,19 +114,14 @@ namespace DeUrgenta.Certifications.Api.Controller
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> DeleteCertificationAsync([FromRoute] Guid certificationId)
+        public async Task<IActionResult> DeleteCertificationAsync([FromRoute] Guid certificationId)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
 
             var command = new DeleteCertification(sub, certificationId);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
+            return await _mapper.MapToActionResult(result);
         }
     }
 }

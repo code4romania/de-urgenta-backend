@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Models;
 using MediatR;
@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Group.Api.CommandHandlers
 {
-    public class UpdateSafeLocationHandler : IRequestHandler<UpdateSafeLocation, Result<SafeLocationResponseModel>>
+    public class UpdateSafeLocationHandler : IRequestHandler<UpdateSafeLocation, Result<SafeLocationResponseModel, ValidationResult>>
     {
         private readonly IValidateRequest<UpdateSafeLocation> _validator;
         private readonly DeUrgentaContext _context;
@@ -20,12 +20,12 @@ namespace DeUrgenta.Group.Api.CommandHandlers
             _validator = validator;
             _context = context;
         }
-        public async Task<Result<SafeLocationResponseModel>> Handle(UpdateSafeLocation request, CancellationToken cancellationToken)
+        public async Task<Result<SafeLocationResponseModel, ValidationResult>> Handle(UpdateSafeLocation request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<SafeLocationResponseModel>("Validation failed");
+                return validationResult;
             }
 
             var safeLocation = await _context

@@ -1,7 +1,8 @@
 ﻿using System.Threading.Tasks;
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
+using DeUrgenta.I18n.Service.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Admin.Api.Validators
@@ -15,16 +16,16 @@ namespace DeUrgenta.Admin.Api.Validators
             _context = context;
         }
 
-        public async Task<bool> IsValidAsync(DeleteEvent request)
+        public async Task<ValidationResult> IsValidAsync(DeleteEvent request)
         {
             var @event = await _context.Events.FirstOrDefaultAsync(x => x.Id == request.EventId);
-            
+
             if (@event == null)
             {
-                return false;
+                return new LocalizableValidationError("event-not-exist", new LocalizableString("event-not-exist-message", request.EventId));
             }
 
-            return true;
+            return ValidationResult.Ok;
         }
     }
 }

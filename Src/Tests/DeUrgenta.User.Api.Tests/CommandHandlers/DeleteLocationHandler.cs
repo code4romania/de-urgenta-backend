@@ -2,12 +2,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.User.Api.CommandHandlers;
 using DeUrgenta.User.Api.Commands;
 using NSubstitute;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.User.Api.Tests.CommandHandlers
@@ -26,18 +26,18 @@ namespace DeUrgenta.User.Api.Tests.CommandHandlers
         public async Task Return_failed_result_when_validation_fails()
         {
             // Arrange
-            var validator = Substitute.For<IValidateRequest<AcceptGroupInvite>>();
+            var validator = Substitute.For<IValidateRequest<DeleteLocation>>();
             validator
-                .IsValidAsync(Arg.Any<AcceptGroupInvite>())
-                .Returns(Task.FromResult(false));
+                .IsValidAsync(Arg.Any<DeleteLocation>())
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
-            var sut = new AcceptGroupInviteHandler(validator, _dbContext);
+            var sut = new DeleteLocationHandler(validator, _dbContext);
 
             // Act
-            var result = await sut.Handle(new AcceptGroupInvite("a-sub", Guid.NewGuid()), CancellationToken.None);
+            var result = await sut.Handle(new DeleteLocation("a-sub", Guid.NewGuid()), CancellationToken.None);
 
             // Assert
-            result.IsFailure.ShouldBeTrue();
+            result.IsFailure.Should().BeTrue();
         }
     }
 }

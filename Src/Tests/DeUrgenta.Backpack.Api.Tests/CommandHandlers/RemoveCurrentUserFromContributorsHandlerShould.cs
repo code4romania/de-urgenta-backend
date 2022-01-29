@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.CommandHandlers;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Tests.Helpers;
 using NSubstitute;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Backpack.Api.Tests.CommandHandlers
@@ -29,7 +29,7 @@ namespace DeUrgenta.Backpack.Api.Tests.CommandHandlers
             var validator = Substitute.For<IValidateRequest<RemoveCurrentUserFromContributors>>();
             validator
                 .IsValidAsync(Arg.Any<RemoveCurrentUserFromContributors>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new RemoveCurrentUserFromContributorsHandler(validator, _dbContext);
 
@@ -37,7 +37,7 @@ namespace DeUrgenta.Backpack.Api.Tests.CommandHandlers
             var result = await sut.Handle(new RemoveCurrentUserFromContributors("a-sub", Guid.NewGuid()), CancellationToken.None);
 
             // Assert
-            result.IsFailure.ShouldBeTrue();
+            result.IsFailure.Should().BeTrue();
         }
     }
 }

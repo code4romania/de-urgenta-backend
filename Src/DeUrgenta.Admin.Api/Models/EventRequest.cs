@@ -14,7 +14,7 @@ namespace DeUrgenta.Admin.Api.Models
 
         public string Author { get; init; }
 
-        public string City { get; init; }
+        public string Locality { get; init; }
 
         public int EventTypeId { get; init; }
 

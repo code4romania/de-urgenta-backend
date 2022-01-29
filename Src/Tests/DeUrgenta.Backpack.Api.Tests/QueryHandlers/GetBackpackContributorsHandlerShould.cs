@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Queries;
 using DeUrgenta.Backpack.Api.QueryHandlers;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Tests.Helpers;
 using NSubstitute;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Backpack.Api.Tests.QueryHandlers
@@ -29,7 +29,7 @@ namespace DeUrgenta.Backpack.Api.Tests.QueryHandlers
             var validator = Substitute.For<IValidateRequest<GetBackpackContributors>>();
             validator
                 .IsValidAsync(Arg.Any<GetBackpackContributors>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new GetBackpackContributorsHandler(validator, _dbContext);
 
@@ -37,7 +37,7 @@ namespace DeUrgenta.Backpack.Api.Tests.QueryHandlers
             var result = await sut.Handle(new GetBackpackContributors("a-sub", Guid.NewGuid()), CancellationToken.None);
 
             // Assert
-            result.IsFailure.ShouldBeTrue();
+            result.IsFailure.Should().BeTrue();
         }
     }
 }

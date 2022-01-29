@@ -8,9 +8,9 @@ using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
+using DeUrgenta.Common.Mappers;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.Common.Models.Events;
-using DeUrgenta.Common.Models.Pagination;
 
 namespace DeUrgenta.Events.Api.Controller
 {
@@ -21,10 +21,12 @@ namespace DeUrgenta.Events.Api.Controller
     public class EventController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IResultMapper _mapper;
 
-        public EventController(IMediator mediator)
+        public EventController(IMediator mediator, IResultMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -43,12 +45,8 @@ namespace DeUrgenta.Events.Api.Controller
         {
             var query = new GetEventTypes();
             var result = await _mediator.Send(query);
-            
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-            return Ok(result.Value);
+
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -68,11 +66,7 @@ namespace DeUrgenta.Events.Api.Controller
             var query = new GetEventCities(eventTypeId);
             var result = await _mediator.Send(query);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-            return Ok(result.Value);
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -87,17 +81,12 @@ namespace DeUrgenta.Events.Api.Controller
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetEventResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<PagedResult<EventResponseModel>>> GetEventsAsync([FromQuery]EventModelRequest filter)
+        public async Task<ActionResult<IImmutableList<EventResponseModel>>> GetEventsAsync([FromQuery]EventModelRequest filter)
         {
             var command = new GetEvent(filter);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return await _mapper.MapToActionResult(result);
         }
     }
 }

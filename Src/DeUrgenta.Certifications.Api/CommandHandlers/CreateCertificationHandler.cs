@@ -6,14 +6,14 @@ using DeUrgenta.Certifications.Api.Commands;
 using DeUrgenta.Certifications.Api.Models;
 using DeUrgenta.Certifications.Api.Storage;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Domain.Api;
+using DeUrgenta.Domain.Api.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Certifications.Api.CommandHandlers
 {
-    public class CreateCertificationHandler : IRequestHandler<CreateCertification, Result<CertificationModel>>
+    public class CreateCertificationHandler : IRequestHandler<CreateCertification, Result<CertificationModel, ValidationResult>>
     {
         private readonly IValidateRequest<CreateCertification> _validator;
         private readonly DeUrgentaContext _context;
@@ -26,12 +26,12 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
             _storage = storage;
         }
 
-        public async Task<Result<CertificationModel>> Handle(CreateCertification request, CancellationToken cancellationToken)
+        public async Task<Result<CertificationModel, ValidationResult>> Handle(CreateCertification request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<CertificationModel>("Validation failed");
+                return validationResult;
             }
 
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
@@ -46,10 +46,14 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
             await _context.Certifications.AddAsync(certification, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            var photoUrl = await _storage.SaveAttachmentAsync(certification.Id,
-                user.Sub,
-                request.Photo.OpenReadStream(),
-                Path.GetExtension(request.Photo.FileName));
+            string photoUrl = null;
+            if (request.Photo != null)
+            {
+                photoUrl = await _storage.SaveAttachmentAsync(certification.Id,
+                    user.Sub,
+                    request.Photo.OpenReadStream(),
+                    Path.GetExtension(request.Photo.FileName));
+            }
 
             return new CertificationModel
             {

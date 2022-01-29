@@ -4,13 +4,13 @@ using CSharpFunctionalExtensions;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Backpack.Api.Models;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Backpack.Api.CommandHandlers
 {
-    public class UpdateBackpackItemHandler : IRequestHandler<UpdateBackpackItem, Result<BackpackItemModel>>
+    public class UpdateBackpackItemHandler : IRequestHandler<UpdateBackpackItem, Result<BackpackItemModel, ValidationResult>>
     {
         private readonly IValidateRequest<UpdateBackpackItem> _validator;
         private readonly DeUrgentaContext _context;
@@ -21,28 +21,32 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result<BackpackItemModel>> Handle(UpdateBackpackItem request, CancellationToken cancellationToken)
+        public async Task<Result<BackpackItemModel, ValidationResult>> Handle(UpdateBackpackItem request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<BackpackItemModel>("Validation failed");
+                return validationResult;
             }
             var backpackItem = await _context.BackpackItems.FirstAsync(x => x.Id == request.ItemId, cancellationToken);
             backpackItem.Name = request.BackpackItem.Name;
             backpackItem.BackpackCategory = request.BackpackItem.CategoryType;
             backpackItem.Amount = request.BackpackItem.Amount;
             backpackItem.ExpirationDate = request.BackpackItem.ExpirationDate;
+            backpackItem.Version += 1;
 
             await _context.SaveChangesAsync(cancellationToken);
 
             return new BackpackItemModel
             {
                 Id = backpackItem.Id,
+                BackpackId = backpackItem.BackpackId,
+                Name = backpackItem.Name,
                 Amount = backpackItem.Amount,
                 Name = backpackItem.Name,
                 CategoryType = backpackItem.BackpackCategory,
-                ExpirationDate = backpackItem.ExpirationDate
+                ExpirationDate = backpackItem.ExpirationDate,
+                Version = backpackItem.Version
             };
         }
     }

@@ -2,13 +2,14 @@
 using DeUrgenta.Certifications.Api.Models;
 using MediatR;
 using System;
+using DeUrgenta.Common.Validation;
 using Microsoft.AspNetCore.Http;
 
 namespace DeUrgenta.Certifications.Api.Commands
 {
-    public class CreateCertification : IRequest<Result<CertificationModel>>
+    public class CreateCertification : IRequest<Result<CertificationModel, ValidationResult>>
     {
-        public string UserSub{ get; }
+        public string UserSub { get; }
         public string Name { get; }
         public DateTime ExpirationDate { get; }
         public string IssuingAuthority { get; }

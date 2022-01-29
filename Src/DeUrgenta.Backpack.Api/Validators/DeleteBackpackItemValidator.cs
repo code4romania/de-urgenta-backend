@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Backpack.Api.Validators
@@ -13,18 +13,18 @@ namespace DeUrgenta.Backpack.Api.Validators
         {
             _context = context;
         }
-        public async Task<bool> IsValidAsync(DeleteBackpackItem request)
+        public async Task<ValidationResult> IsValidAsync(DeleteBackpackItem request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
             if (user == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             var backpackItem = await _context.BackpackItems.FirstOrDefaultAsync(x => x.Id == request.ItemId);
             if (backpackItem == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
             var backpack = await _context.Backpacks.FirstOrDefaultAsync(b => b.Id == backpackItem.BackpackId);
@@ -32,10 +32,10 @@ namespace DeUrgenta.Backpack.Api.Validators
             var isContributor = await _context.BackpacksToUsers.AnyAsync(btu => btu.User.Id == user.Id && btu.Backpack.Id == backpack.Id);
             if (!isContributor)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
-            return true;
+            return ValidationResult.Ok;
         }
     }
 }

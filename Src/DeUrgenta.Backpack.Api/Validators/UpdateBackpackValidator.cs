@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Backpack.Api.Validators
@@ -15,24 +15,29 @@ namespace DeUrgenta.Backpack.Api.Validators
             _context = context;
         }
 
-        public async Task<bool> IsValidAsync(UpdateBackpack request)
+        public async Task<ValidationResult> IsValidAsync(UpdateBackpack request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
             if (user == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
-            var isOwner = await _context
+            var backpackToUser = await _context
                 .BackpacksToUsers
-                .AnyAsync(btu => btu.User.Id == user.Id && btu.Backpack.Id == request.BackpackId && btu.IsOwner);
+                .FirstOrDefaultAsync(btu => btu.User.Id == user.Id && btu.Backpack.Id == request.BackpackId);
 
-            if (!isOwner)
+            if (backpackToUser == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
-            return true;
+            if (!backpackToUser.IsOwner)
+            {
+                return new LocalizableValidationError("not-backpack-owner", "only-backpack-owner-can-update-message");
+            }
+
+            return ValidationResult.Ok;
         }
     }
 }

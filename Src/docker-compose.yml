@@ -10,11 +10,23 @@
         POSTGRES_DB: ${POSTGRES_DB}
       ports:
         - 5432:5432
-
+        
+    migrations:
+      build: 
+        context: .
+        dockerfile: DeUrgenta.Domains.Migrator.Dockerfile
+      environment:
+        ConnectionStrings__DbConnectionString: ${DB_CONNECTION_STRING}
+        ConnectionStrings__IdentityDbConnectionString: ${DB_CONNECTION_STRING}
+        ConnectionStrings__JobsConnectionString: ${DB_CONNECTION_STRING}
+        ConnectionStrings__I18nDbConnectionString: ${DB_CONNECTION_STRING}
+      depends_on:
+        - "postgres"
     api:
       container_name: deurgenta_api
       depends_on:
         - "postgres"
+        - "migrations"
       build:
         context: .
         dockerfile: Dockerfile
@@ -22,7 +34,9 @@
         ASPNETCORE_URLS: ${ASPNETCORE_URLS}
         ConnectionStrings__DbConnectionString: ${DB_CONNECTION_STRING}
         ConnectionStrings__IdentityDbConnectionString: ${DB_CONNECTION_STRING}
-        SendGrid__ApiKey: ${SENDGRID_API_KEY}
+        ConnectionStrings__I18nDbConnectionString: ${DB_CONNECTION_STRING}
+        HealthChecksUI__HealthChecks__0__Uri: ${HEALTHCHECKSUI__HEALTHCHECKS__0__URI}
+        SendGrid__ApiKey: ${EMAIL_SENDGRID_APIKEY}
       ports:
         - 5040:80
       restart: unless-stopped
@@ -31,14 +45,17 @@
       container_name: deurgenta_recurring_jobs
       depends_on:
         - "postgres"
+        - "migrations"
       build:
         context: .
         dockerfile: DeUrgenta.RecurringJobs.Dockerfile
       environment:
         ASPNETCORE_URLS: ${ASPNETCORE_URLS}
         ConnectionStrings__DbConnectionString: ${DB_CONNECTION_STRING}
+        ConnectionStrings__JobsConnectionString: ${DB_CONNECTION_STRING}
         Hangfire__Dashboard__Username: ${HANGFIRE_USERNAME}
         Hangfire__Dashboard__Password: ${HANGFIRE_PASSWORD}
+        HealthChecksUI__HealthChecks__0__Uri: ${HEALTHCHECKSUI__HEALTHCHECKS__0__URI}
       ports:
         - 5041:80
       restart: unless-stopped

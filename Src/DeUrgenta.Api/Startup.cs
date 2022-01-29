@@ -1,11 +1,11 @@
 using System.Reflection;
+using AspNetCoreRateLimit;
 using DeUrgenta.Admin.Api.Controller;
 using DeUrgenta.Backpack.Api.Controllers;
 using DeUrgenta.Certifications.Api.Controller;
 using DeUrgenta.Api.Extensions;
 using DeUrgenta.Backpack.Api;
 using DeUrgenta.Common.Swagger;
-using DeUrgenta.Domain;
 using DeUrgenta.Group.Api;
 using DeUrgenta.Group.Api.Controllers;
 using Hellang.Middleware.ProblemDetails;
@@ -21,8 +21,15 @@ using Microsoft.Extensions.DependencyInjection;
 using DeUrgenta.Certifications.Api;
 using FluentValidation.AspNetCore;
 using DeUrgenta.Admin.Api;
+using DeUrgenta.Common.Mappers;
+using DeUrgenta.Domain.Api;
+using DeUrgenta.Emailing.Service;
 using DeUrgenta.Events.Api;
 using DeUrgenta.Events.Api.Controller;
+using DeUrgenta.I18n.Service;
+using DeUrgenta.Invite.Api;
+using DeUrgenta.Invite.Api.Controllers;
+using DeUrgenta.Content.Api.Controller;
 
 namespace DeUrgenta.Api
 {
@@ -41,17 +48,23 @@ namespace DeUrgenta.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddRateLimit(Configuration);
+
+            services.SetupI18nService(Configuration);
+            services.AddTransient<IResultMapper, ResultMapper>();
+
             services.AddBearerAuth(Configuration);
             services.AddControllers().AddFluentValidation();
             services.AddDatabase<DeUrgentaContext>(Configuration.GetConnectionString("DbConnectionString"));
             services.AddExceptionHandling(WebHostEnvironment);
 
-            services.AddUserApiServices();
+            services.AddUserApiServices(Configuration);
             services.AddBackpackApiServices();
-            services.AddGroupApiServices();
+            services.AddGroupApiServices(Configuration);
             services.AddCertificationsApiServices();
             services.AddEventsApiServices();
             services.AddAdminApiServices();
+            services.AddInviteApiServices(Configuration);
 
             var applicationAssemblies = GetAssemblies();
 
@@ -64,9 +77,14 @@ namespace DeUrgenta.Api
                     .AllowAnyMethod()
                     .AllowAnyHeader();
             }));
+
             services.SetupEmailService(Configuration);
             services.SetupStorageService(Configuration);
+
+            services.SetupHealthChecks(Configuration);
         }
+
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
@@ -76,6 +94,10 @@ namespace DeUrgenta.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.ConfigureI18n();
+
+            app.UseIpRateLimiting();
+
             app.UseProblemDetails();
             app.UseConfigureSwagger();
 
@@ -84,10 +106,14 @@ namespace DeUrgenta.Api
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapAppHealthChecks();
+
+                endpoints.MapControllers();
+            });
 
             app.SetupStaticFiles(Configuration, WebHostEnvironment);
-
             app.UseCors(CorsPolicyName);
         }
 
@@ -102,7 +128,9 @@ namespace DeUrgenta.Api
                 typeof(GroupController).GetTypeInfo().Assembly,
                 typeof(UserController).GetTypeInfo().Assembly,
                 typeof(EventController).GetTypeInfo().Assembly,
-
+                typeof(InviteController).GetTypeInfo().Assembly,
+                typeof(ContentController).GetTypeInfo().Assembly,
+                
                 // Common
 
                 typeof(ApplicationErrorResponseExample).GetTypeInfo().Assembly

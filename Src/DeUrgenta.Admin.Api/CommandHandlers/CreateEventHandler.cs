@@ -5,13 +5,14 @@ using CSharpFunctionalExtensions;
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Common.Models.Events;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
+using DeUrgenta.Domain.Api.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Admin.Api.CommandHandlers
 {
-    public class CreateEventHandler : IRequestHandler<CreateEvent, Result<EventResponseModel>>
+    public class CreateEventHandler : IRequestHandler<CreateEvent, Result<EventResponseModel, ValidationResult>>
     {
         private readonly IValidateRequest<CreateEvent> _validator;
         private readonly DeUrgentaContext _context;
@@ -22,20 +23,20 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result<EventResponseModel>> Handle(CreateEvent request, CancellationToken cancellationToken)
+        public async Task<Result<EventResponseModel, ValidationResult>> Handle(CreateEvent request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<EventResponseModel>("Validation failed");
+                return validationResult;
             }
             var eventType = await _context.EventTypes.FirstAsync(et => et.Id == request.Event.EventTypeId, cancellationToken);
 
-            var @event = new Domain.Entities.Event
+            var @event = new Event
             {
                 Title = request.Event.Title,
                 Author = request.Event.Author,
-                City = request.Event.City,
+                Locality = request.Event.Locality,
                 ContentBody = request.Event.ContentBody,
                 EventType = eventType,
                 OccursOn = request.Event.OccursOn,
@@ -54,7 +55,7 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
                 Title = @event.Title,
                 Address = @event.Address,
                 Author = @event.Author,
-                City = @event.City,
+                City = @event.Locality,
                 IsArchived = @event.IsArchived,
                 ContentBody = @event.ContentBody,
                 EventType = eventType.Name,

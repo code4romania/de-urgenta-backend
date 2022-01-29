@@ -7,6 +7,7 @@
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<NoWarn>$(NoWarn);1591</NoWarn>
 		<UserSecretsId>7f5aac43-b876-4147-9f5b-5a8cff439332</UserSecretsId>
+		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -19,7 +20,8 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\DeUrgenta.Common\DeUrgenta.Common.csproj" />
-		<ProjectReference Include="..\DeUrgenta.Domain\DeUrgenta.Domain.csproj" />
+		<ProjectReference Include="..\DeUrgenta.Domain.Api\DeUrgenta.Domain.Api.csproj" />
+		<ProjectReference Include="..\DeUrgenta.I18n.Service\DeUrgenta.I18n.Service.csproj" />
 	</ItemGroup>
 
 </Project>

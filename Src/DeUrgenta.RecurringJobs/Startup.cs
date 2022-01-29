@@ -1,12 +1,15 @@
-using DeUrgenta.Domain;
+using DeUrgenta.Emailing.Service;
 using DeUrgenta.Infra.Extensions;
+using DeUrgenta.RecurringJobs.Domain;
 using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using DeUrgenta.Domain.Api;
+using Microsoft.EntityFrameworkCore;
+using DeUrgenta.Domain.RecurringJobs;
 
 namespace DeUrgenta.RecurringJobs
 {
@@ -23,7 +26,13 @@ namespace DeUrgenta.RecurringJobs
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDatabase<DeUrgentaContext>(Configuration.GetConnectionString("DbConnectionString"));
+            services.AddDatabase<JobsContext>(Configuration.GetConnectionString("JobsConnectionString"));
             services.AddHangfireServices();
+
+            services.AddRecurringJobs(Configuration);
+            services.SetupEmailService(Configuration);
+
+            services.SetupHealthChecks(Configuration);
 
             services.AddControllers();
         }
@@ -32,7 +41,7 @@ namespace DeUrgenta.RecurringJobs
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DeUrgentaContext dbContext)
         {
             dbContext.Database.Migrate();
-            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -42,11 +51,13 @@ namespace DeUrgenta.RecurringJobs
             app.UseRouting();
             app.UseAuthorization();
 
-
             app.UseAuthenticatedHangfireDashboard(Configuration);
+            app.ScheduleJobs(Configuration);
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapAppHealthChecks();
+
                 endpoints.MapControllers();
                 endpoints.MapHangfireDashboard();
             });

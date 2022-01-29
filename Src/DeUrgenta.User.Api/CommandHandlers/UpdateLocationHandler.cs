@@ -2,15 +2,14 @@
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.User.Api.Commands;
-using DeUrgenta.User.Api.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.User.Api.CommandHandlers
 {
-    public class UpdateLocationHandler : IRequestHandler<UpdateLocation, Result>
+    public class UpdateLocationHandler : IRequestHandler<UpdateLocation, Result<Unit, ValidationResult>>
     {
         private readonly IValidateRequest<UpdateLocation> _validator;
         private readonly DeUrgentaContext _context;
@@ -21,12 +20,12 @@ namespace DeUrgenta.User.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result> Handle(UpdateLocation request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, ValidationResult>> Handle(UpdateLocation request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<UserLocationModel>("Validation failed");
+                return validationResult;
             }
 
             var location = await _context.UserLocations.FirstAsync(l => l.Id == request.LocationId, cancellationToken);
@@ -36,7 +35,7 @@ namespace DeUrgenta.User.Api.CommandHandlers
             location.Type = request.Location.Type;
 
             await _context.SaveChangesAsync(cancellationToken);
-            return Result.Success();
+            return Unit.Value;
         }
     }
 }

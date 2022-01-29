@@ -6,6 +6,10 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+	<PropertyGroup>
+		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+	</PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
 	<PackageReference Include="coverlet.msbuild" Version="3.1.0">
@@ -14,7 +18,7 @@
 	</PackageReference>
 	<PackageReference Include="JUnitTestLogger" Version="1.1.0" />
     <PackageReference Include="NSubstitute" Version="4.2.2" />
-    <PackageReference Include="Shouldly" Version="4.0.3" />
+    <PackageReference Include="FluentAssertions" Version="6.1.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

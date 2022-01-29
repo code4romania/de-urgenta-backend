@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
-using DeUrgenta.Domain;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Common.Validation;
+using DeUrgenta.Domain.Api;
+using DeUrgenta.Domain.Api.Entities;
 using DeUrgenta.Group.Api.Queries;
 using DeUrgenta.Group.Api.Validators;
 using DeUrgenta.Tests.Helpers;
-using Shouldly;
+using DeUrgenta.Tests.Helpers.Builders;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Group.Api.Tests.Validators
@@ -30,55 +32,39 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetGroupMembersValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetGroupMembers(sub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new GetGroupMembers(sub, Guid.NewGuid()));
 
             // Assert
-            isValid.ShouldBeFalse();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
         public async Task Invalidate_when_group_does_not_exists()
         {
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
-            var user = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
+            var userSub = Guid.NewGuid().ToString();
+            var user = new UserBuilder().WithSub(userSub).Build();
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
             var sut = new GetGroupMembersValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetGroupMembers(userSub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new GetGroupMembers(userSub, Guid.NewGuid()));
 
             // Assert
-            isValid.ShouldBeFalse();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
         public async Task Invalidate_when_user_not_part_of_group()
         {
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
-            var user = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
+            var userSub = Guid.NewGuid().ToString();
+            var user = new UserBuilder().WithSub(userSub).Build();
+            var adminUser = new UserBuilder().Build();
 
-            var adminUser = new User
-            {
-                FirstName = "Admin",
-                LastName = "User",
-                Sub = "admin sub"
-            };
-
-            var group = new Domain.Entities.Group { Admin = adminUser, Name = "A group" };
+            var group = new GroupBuilder().WithAdmin(adminUser).Build();
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Groups.AddAsync(group);
@@ -87,36 +73,25 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetGroupMembersValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetGroupMembers(userSub, group.Id));
+            var result = await sut.IsValidAsync(new GetGroupMembers(userSub, group.Id));
 
             // Assert
-            isValid.ShouldBeFalse();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
         public async Task Validate_when_user_is_part_of_group()
         {
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
-            string adminSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
+            var adminSub = Guid.NewGuid().ToString();
 
-            var user = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
+            var user = new UserBuilder().WithSub(userSub).Build();
+            var adminUser = new UserBuilder().WithSub(adminSub).Build();
 
-            var adminUser = new User
-            {
-                FirstName = "Admin",
-                LastName = "User",
-                Sub = adminSub
-            };
-
-            var group = new Domain.Entities.Group { Admin = adminUser, Name = "A group" };
-
-            var userToGroup = new UserToGroup { User = user, Group = group};
+            var group = new GroupBuilder().WithAdmin(adminUser).Build();
+            
+            var userToGroup = new UserToGroup {User = user, Group = group};
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Groups.AddAsync(group);
@@ -127,27 +102,22 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetGroupMembersValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetGroupMembers(userSub, group.Id));
+            var result = await sut.IsValidAsync(new GetGroupMembers(userSub, group.Id));
 
             // Assert
-            isValid.ShouldBeTrue();
+            result.Should().BeOfType<ValidationPassed>();
         }
 
         [Fact]
         public async Task Validate_when_user_is_admin_of_group()
         {
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
-            var user = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
-            
-            var group = new Domain.Entities.Group { Admin = user, Name = "A group" };
+            var userSub = Guid.NewGuid().ToString();
+            var user = new UserBuilder().WithSub(userSub).Build();
 
-            var userToGroup = new UserToGroup { User = user, Group = group };
+            var group = new GroupBuilder().WithAdmin(user).Build();
+
+            var userToGroup = new UserToGroup {User = user, Group = group};
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Groups.AddAsync(group);
@@ -158,10 +128,10 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetGroupMembersValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetGroupMembers(userSub, group.Id));
+            var result = await sut.IsValidAsync(new GetGroupMembers(userSub, group.Id));
 
             // Assert
-            isValid.ShouldBeTrue();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

@@ -3,10 +3,12 @@ using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Backpack.Api.Models;
 using DeUrgenta.Backpack.Api.Validators;
-using DeUrgenta.Domain;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Common.Validation;
+using DeUrgenta.Domain.Api;
+using DeUrgenta.Domain.Api.Entities;
 using DeUrgenta.Tests.Helpers;
-using Shouldly;
+using DeUrgenta.Tests.Helpers.Builders;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Backpack.Api.Tests.Validators
@@ -31,10 +33,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new UpdateBackpackValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new UpdateBackpack(sub, Guid.NewGuid(), new BackpackModelRequest()));
+            var result = await sut.IsValidAsync(new UpdateBackpack(sub, Guid.NewGuid(), new BackpackModelRequest()));
 
             // Assert
-            isValid.ShouldBeFalse();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -42,23 +44,18 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
         {
             // Arrange
             var sut = new UpdateBackpackValidator(_dbContext);
-            string userSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
 
-            var user = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
+            var user = new UserBuilder().WithSub(userSub).Build();
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new UpdateBackpack(userSub, Guid.NewGuid(), new BackpackModelRequest()));
+            var result = await sut.IsValidAsync(new UpdateBackpack(userSub, Guid.NewGuid(), new BackpackModelRequest()));
 
             // Assert
-            isValid.ShouldBeFalse();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -67,24 +64,13 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             // Arrange
             var sut = new UpdateBackpackValidator(_dbContext);
 
-            string userSub = Guid.NewGuid().ToString();
-            string backpackContributorSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
+            var backpackContributorSub = Guid.NewGuid().ToString();
 
-            var owner = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
+            var owner = new UserBuilder().WithSub(userSub).Build();
+            var backpackContributor = new UserBuilder().WithSub(backpackContributorSub).Build();
 
-            var backpackContributor = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = backpackContributorSub
-            };
-
-            var backpack = new Domain.Entities.Backpack
+            var backpack = new Domain.Api.Entities.Backpack
             {
                 Name = "my backpack"
             };
@@ -99,10 +85,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new UpdateBackpack(backpackContributorSub, Guid.NewGuid(), new BackpackModelRequest()));
+            var result = await sut.IsValidAsync(new UpdateBackpack(backpackContributorSub, Guid.NewGuid(), new BackpackModelRequest()));
 
             // Assert
-            isValid.ShouldBeFalse();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -111,16 +97,11 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             // Arrange
             var sut = new UpdateBackpackValidator(_dbContext);
 
-            string userSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
 
-            var owner = new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
+            var owner = new UserBuilder().WithSub(userSub).Build();
 
-            var backpack = new Domain.Entities.Backpack
+            var backpack = new Domain.Api.Entities.Backpack
             {
                 Name = "my backpack"
             };
@@ -133,10 +114,10 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new UpdateBackpack(userSub, backpack.Id, new BackpackModelRequest()));
+            var result = await sut.IsValidAsync(new UpdateBackpack(userSub, backpack.Id, new BackpackModelRequest()));
 
             // Assert
-            isValid.ShouldBeTrue();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

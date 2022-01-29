@@ -2,7 +2,6 @@
 using DeUrgenta.Events.Api.Models;
 using DeUrgenta.Events.Api.Queries;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Immutable;
@@ -10,10 +9,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System;
+using DeUrgenta.Domain.Api;
 
 namespace DeUrgenta.Events.Api.QueryHandlers
 {
-    public class GetEventCitiesHandler : IRequestHandler<GetEventCities, Result<IImmutableList<EventCityModel>>>
+    public class GetEventCitiesHandler : IRequestHandler<GetEventCities, Result<IImmutableList<EventCityModel>, ValidationResult>>
     {
         private readonly IValidateRequest<GetEventCities> _validator;
         private readonly DeUrgentaContext _context;
@@ -24,17 +24,18 @@ namespace DeUrgenta.Events.Api.QueryHandlers
             _context = context;
         }
 
-        public async Task<Result<IImmutableList<EventCityModel>>> Handle(GetEventCities request, CancellationToken cancellationToken)
+        public async Task<Result<IImmutableList<EventCityModel>, ValidationResult>> Handle(GetEventCities request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<IImmutableList<EventCityModel>>("Validation failed");
+                return validationResult;
             }
 
             var events = await _context.Events
                                 .Where(x => (request.EventTypeId == null || x.EventTypeId == request.EventTypeId.Value) && x.OccursOn > DateTime.Today)
-                                .Select(x => x.City)
+                                .Select(x => x.Locality)
                                 .Distinct()
                                 .Select(x => new EventCityModel { Name = x })
                                 .OrderBy(x => x.Name)

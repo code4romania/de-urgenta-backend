@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using DeUrgenta.Api.Extensions.OperationFilter;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -45,6 +46,8 @@ namespace DeUrgenta.Api.Extensions
                 });
 
                 c.OperationFilter<AuthorizeCheckOperationFilter>();
+                c.OperationFilter<AcceptLanguageHeaderParameterOperationFilter>();
+
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",

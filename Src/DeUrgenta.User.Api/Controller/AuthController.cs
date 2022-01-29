@@ -3,14 +3,17 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using CSharpFunctionalExtensions;
-using DeUrgenta.User.Api.Models;
+using DeUrgenta.Common;
+using DeUrgenta.Common.Auth;
+using DeUrgenta.Common.Models.Dtos;
+using DeUrgenta.Common.Swagger;
+using DeUrgenta.Domain.Identity;
+using DeUrgenta.Emailing.Service.Models;
 using DeUrgenta.User.Api.Models.DTOs.Requests;
-using DeUrgenta.User.Api.Models.DTOs.Responses;
 using DeUrgenta.User.Api.Notifications;
 using DeUrgenta.User.Api.Queries;
 using DeUrgenta.User.Api.Services;
-using DeUrgenta.User.Api.Services.Emailing;
+using DeUrgenta.User.Api.Swagger.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -18,6 +21,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using Swashbuckle.AspNetCore.Annotations;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace DeUrgenta.User.Api.Controller
 {
@@ -30,8 +34,6 @@ namespace DeUrgenta.User.Api.Controller
         private readonly IJwtService _jwtService;
         private readonly IMediator _mediator;
         private readonly IConfiguration _configuration;
-        private readonly string _senderEmail;
-        private readonly string _senderName;
 
         public AuthManagementController(
             UserManager<IdentityUser> userManager,
@@ -45,10 +47,20 @@ namespace DeUrgenta.User.Api.Controller
             _jwtService = jwtService;
             _mediator = mediator;
             _configuration = configuration;
-            _senderEmail = _configuration.GetValue<string>("AdminFromEmail");
-            _senderName = _configuration.GetValue<string>("AdminFromName");
         }
 
+        /// <summary>
+        /// Tries to create a new user account
+        /// </summary>
+        /// <returns></returns>
+        [SwaggerResponse(StatusCodes.Status200OK, "User account creation confirmation message")]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Internal server error", typeof(ProblemDetails))]
+        [SwaggerResponse(StatusCodes.Status409Conflict, "Email already used", typeof(ActionResponse))]
+        [SwaggerResponse(StatusCodes.Status429TooManyRequests, "Too many requests", typeof(ActionResponse))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AuthRegisterExample))]
+        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status409Conflict, typeof(ConflictErrorResponseExample))]
+        [SwaggerResponseExample(StatusCodes.Status429TooManyRequests, typeof(TooManyRequestsResponseExample))]
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> RegisterAsync([FromBody] UserRegistrationDto user)
@@ -57,8 +69,14 @@ namespace DeUrgenta.User.Api.Controller
 
             if (existingUser != null)
             {
-                // User already exits, return same result as per valid email to avoid user enumeration.
-                return Ok("Email was sent");
+                //TODO: add I18n
+                //TODO: consider returning a 200 with a more complex object as indicated here
+                //https://stackoverflow.com/a/53144807/2780791
+                return Conflict(new ActionResponse
+                {
+                    Success = false,
+                    Errors = new List<string> { "Adresa de e-mail este deja utilizată" }
+                });
             }
 
             var newUser = new IdentityUser { Email = user.Email, UserName = user.Email };
@@ -66,6 +84,8 @@ namespace DeUrgenta.User.Api.Controller
 
             if (identityResult.Succeeded)
             {
+                await _userManager.AddToRoleAsync(newUser, ApiUserRoles.User);
+
                 await _applicationUserManager.CreateApplicationUserAsync(user, newUser.Id);
                 string callbackUrl = await GetCallbackUrlAsync(newUser);
 
@@ -139,8 +159,6 @@ namespace DeUrgenta.User.Api.Controller
         private async Task SendRegistrationEmail(string userName, string userEmail, string callbackUrl)
         {
             var email = new SendEmail(userEmail,
-                _senderName,
-                _senderEmail,
                 "[Aplicatia de urgenta] Confirmare adresa email",// TODO: add I18n
             EmailTemplate.AccountConfirmation);
 
@@ -153,8 +171,6 @@ namespace DeUrgenta.User.Api.Controller
         private async Task SendResetPasswordEmail(string userName, string userEmail, string callbackUrl)
         {
             var email = new SendEmail(userEmail,
-              _senderName,
-              _senderEmail,
               "[Aplicatia de urgenta] Resetare parolă",// TODO: add I18n
           EmailTemplate.ResetPassword);
 
@@ -170,7 +186,7 @@ namespace DeUrgenta.User.Api.Controller
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Something bad happened", typeof(ProblemDetails))]
         public async Task<ActionResult<LoginResponse>> Login([FromBody] UserLoginRequest user)
         {
-            var badRegistrationResponse = new LoginResponse
+            var badLoginRequest = new ActionResponse
             {
                 Errors = new List<string> {
                     "Invalid login request"
@@ -182,18 +198,20 @@ namespace DeUrgenta.User.Api.Controller
 
             if (existingUser == null)
             {
-                return BadRequest(badRegistrationResponse);
+                return BadRequest(badLoginRequest);
             }
 
             var isCorrect = await _userManager.CheckPasswordAsync(existingUser, user.Password);
 
             if (!isCorrect)
             {
-                return BadRequest(badRegistrationResponse);
+                return BadRequest(badLoginRequest);
             }
 
-            var jwtToken = _jwtService.GenerateJwtToken(existingUser);
-            Result<UserModel> userDetails = await _mediator.Send(new GetUser(existingUser.Id));
+            var userRoles = await _userManager.GetRolesAsync(existingUser);
+
+            var jwtToken = _jwtService.GenerateJwtToken(existingUser, userRoles);
+            var userDetails = await _mediator.Send(new GetUser(existingUser.Id));
 
             if (userDetails.IsFailure)
             {
@@ -235,7 +253,7 @@ namespace DeUrgenta.User.Api.Controller
 
             var user = await _userManager.FindByIdAsync(userResetPassword.UserId);
             var resToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(userResetPassword.ResetToken));
-            var res = await _userManager.ResetPasswordAsync(user,resToken, userResetPassword.NewPassword);
+            var res = await _userManager.ResetPasswordAsync(user, resToken, userResetPassword.NewPassword);
 
 
 

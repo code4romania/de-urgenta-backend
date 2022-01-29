@@ -1,12 +1,12 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Events.Api.Queries;
 using DeUrgenta.Events.Api.QueryHandlers;
 using DeUrgenta.Tests.Helpers;
 using NSubstitute;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Events.Api.Tests.QueryHandlers
@@ -28,7 +28,7 @@ namespace DeUrgenta.Events.Api.Tests.QueryHandlers
             var validator = Substitute.For<IValidateRequest<GetEvent>>();
             validator
                 .IsValidAsync(Arg.Any<GetEvent>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new GetEventHandler(validator, _dbContext);
 
@@ -36,7 +36,7 @@ namespace DeUrgenta.Events.Api.Tests.QueryHandlers
             var result = await sut.Handle(new GetEvent(new Models.EventModelRequest()), CancellationToken.None);
 
             // Assert
-            result.IsFailure.ShouldBeTrue();
+            result.IsFailure.Should().BeTrue();
         }
     }
 }

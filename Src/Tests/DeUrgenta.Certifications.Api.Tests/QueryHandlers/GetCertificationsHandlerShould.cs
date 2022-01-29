@@ -4,10 +4,10 @@ using DeUrgenta.Certifications.Api.Queries;
 using DeUrgenta.Certifications.Api.QueryHandlers;
 using DeUrgenta.Certifications.Api.Storage;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Tests.Helpers;
 using NSubstitute;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Certifications.Api.Tests.QueryHandlers
@@ -30,7 +30,7 @@ namespace DeUrgenta.Certifications.Api.Tests.QueryHandlers
             var validator = Substitute.For<IValidateRequest<GetCertifications>>();
             validator
                 .IsValidAsync(Arg.Any<GetCertifications>()) 
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new GetCertificationsHandler(validator, _dbContext, storage);
 
@@ -38,7 +38,7 @@ namespace DeUrgenta.Certifications.Api.Tests.QueryHandlers
             var result = await sut.Handle(new GetCertifications("a-sub"), CancellationToken.None);
 
             // Assert
-            result.IsFailure.ShouldBeTrue();
+            result.IsFailure.Should().BeTrue();
         }
     }
 }

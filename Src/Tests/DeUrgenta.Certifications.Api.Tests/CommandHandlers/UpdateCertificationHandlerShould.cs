@@ -7,11 +7,12 @@ using DeUrgenta.Certifications.Api.Models;
 using DeUrgenta.Certifications.Api.Storage;
 using DeUrgenta.Certifications.Api.Tests.Builders;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Domain.Api;
+using DeUrgenta.Domain.Api.Entities;
 using DeUrgenta.Tests.Helpers;
+using DeUrgenta.Tests.Helpers.Builders;
 using NSubstitute;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Certifications.Api.Tests.CommandHandlers
@@ -34,7 +35,7 @@ namespace DeUrgenta.Certifications.Api.Tests.CommandHandlers
             var validator = Substitute.For<IValidateRequest<UpdateCertification>>();
             validator
                 .IsValidAsync(Arg.Any<UpdateCertification>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new UpdateCertificationHandler(validator, _dbContext, storage);
 
@@ -42,7 +43,7 @@ namespace DeUrgenta.Certifications.Api.Tests.CommandHandlers
             var result = await sut.Handle(new UpdateCertification("a-sub", Guid.NewGuid(), new CertificationRequest()), CancellationToken.None);
 
             // Assert
-            result.IsFailure.ShouldBeTrue();
+            result.IsFailure.Should().BeTrue();
         }
 
         [Fact]
@@ -58,7 +59,7 @@ namespace DeUrgenta.Certifications.Api.Tests.CommandHandlers
             var validator = Substitute.For<IValidateRequest<UpdateCertification>>();
             validator
                 .IsValidAsync(updateCertification)
-                .Returns(Task.FromResult(true));
+                .Returns(Task.FromResult(ValidationResult.Ok));
             await SetupExistingCertification(certificationId);
 
             var sut = new UpdateCertificationHandler(validator, _dbContext, storage);
@@ -67,19 +68,15 @@ namespace DeUrgenta.Certifications.Api.Tests.CommandHandlers
             var result = await sut.Handle(updateCertification, CancellationToken.None);
 
             //Assert
-            result.IsSuccess.ShouldBeTrue();
+            result.IsSuccess.Should().BeTrue();
         }
 
         private async Task SetupExistingCertification(Guid certificationId)
         {
             var userId = Guid.NewGuid();
-            await _dbContext.Users.AddAsync(new User
-            {
-                Id = userId,
-                FirstName = TestDataProviders.RandomString(),
-                LastName = TestDataProviders.RandomString(),
-                Sub = Guid.NewGuid().ToString()
-            });
+            var user = new UserBuilder().WithId(userId).Build();
+
+            await _dbContext.Users.AddAsync(user);
             await _dbContext.Certifications.AddAsync(new Certification
             {
                 Name = TestDataProviders.RandomString(),

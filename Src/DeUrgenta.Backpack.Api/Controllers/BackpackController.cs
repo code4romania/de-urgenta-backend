@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-
 using System.Collections.Immutable;
 using DeUrgenta.Backpack.Api.Models;
 using DeUrgenta.Backpack.Api.Swagger.Backpack;
@@ -14,6 +13,7 @@ using Swashbuckle.AspNetCore.Filters;
 using System.Linq;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Backpack.Api.Queries;
+using DeUrgenta.Common.Mappers;
 
 namespace DeUrgenta.Backpack.Api.Controllers
 {
@@ -25,10 +25,12 @@ namespace DeUrgenta.Backpack.Api.Controllers
     public class BackpackController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IResultMapper _mapper;
 
-        public BackpackController(IMediator mediator)
+        public BackpackController(IMediator mediator, IResultMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -47,12 +49,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var query = new GetBackpacks(sub);
             var result = await _mediator.Send(query);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -71,12 +68,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var query = new GetMyBackpacks(sub);
             var result = await _mediator.Send(query);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -100,12 +92,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var command = new CreateBackpack(sub, backpack);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -129,12 +116,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var command = new UpdateBackpack(sub, backpackId, backpack);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -157,41 +139,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var command = new GetBackpackContributors(sub, backpackId);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Value);
-        }
-
-        /// <summary>
-        /// Invites a user to contribute to a backpack
-        /// </summary>
-        [HttpPut]
-        [Route("{backpackId:guid}/contributor/{userId:guid}/invite")]
-
-        [SwaggerResponse(StatusCodes.Status204NoContent, "Invitation sent")]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
-
-        [SwaggerRequestExample(typeof(BackpackModelRequest), typeof(AddOrUpdateBackpackRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetBackpackContributorsResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> InviteToBackpackContributorsAsync([FromRoute] Guid backpackId, [FromRoute] Guid userId)
-        {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-
-            var command = new InviteToBackpackContributors(sub, backpackId, userId);
-            var result = await _mediator.Send(command);
-
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -207,19 +155,14 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerRequestExample(typeof(BackpackModelRequest), typeof(AddOrUpdateBackpackRequestExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> RemoveContributorAsync([FromRoute] Guid backpackId, [FromRoute] Guid userId)
+        public async Task<IActionResult> RemoveContributorAsync([FromRoute] Guid backpackId, [FromRoute] Guid userId)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
 
             var command = new RemoveContributor(sub, backpackId, userId);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -234,19 +177,14 @@ namespace DeUrgenta.Backpack.Api.Controllers
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> RemoveCurrentContributorAsync([FromRoute] Guid backpackId)
+        public async Task<IActionResult> RemoveCurrentContributorAsync([FromRoute] Guid backpackId)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
 
             var command = new RemoveCurrentUserFromContributors(sub, backpackId);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
+            return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
@@ -262,19 +200,14 @@ namespace DeUrgenta.Backpack.Api.Controllers
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> DeleteBackpackAsync([FromRoute] Guid backpackId)
+        public async Task<IActionResult> DeleteBackpackAsync([FromRoute] Guid backpackId)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
 
             var command = new DeleteBackpack(sub, backpackId);
             var result = await _mediator.Send(command);
 
-            if (result.IsFailure)
-            {
-                return BadRequest();
-            }
-
-            return NoContent();
+            return await _mapper.MapToActionResult(result);
         }
     }
 }

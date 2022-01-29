@@ -15,7 +15,6 @@ namespace DeUrgenta.Infra.Extensions
                         errorCodesToAdd: null
                     )));
 
-
             return services;
         }
     }

@@ -2,12 +2,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Group.Api.Queries;
 using DeUrgenta.Group.Api.QueryHandlers;
 using DeUrgenta.Tests.Helpers;
 using NSubstitute;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Group.Api.Tests.QueriesHandlers
@@ -29,7 +29,7 @@ namespace DeUrgenta.Group.Api.Tests.QueriesHandlers
             var validator = Substitute.For<IValidateRequest<GetGroupSafeLocations>>();
             validator
                 .IsValidAsync(Arg.Any<GetGroupSafeLocations>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new GetGroupSafeLocationsHandler(validator, _dbContext);
 
@@ -37,7 +37,7 @@ namespace DeUrgenta.Group.Api.Tests.QueriesHandlers
             var result = await sut.Handle(new GetGroupSafeLocations("a-sub", Guid.NewGuid()), CancellationToken.None);
 
             // Assert
-            result.IsFailure.ShouldBeTrue();
+            result.IsFailure.Should().BeTrue();
         }
     }
 }

@@ -3,10 +3,11 @@ using System.Threading.Tasks;
 using DeUrgenta.Certifications.Api.Commands;
 using DeUrgenta.Certifications.Api.Models;
 using DeUrgenta.Certifications.Api.Validators;
-using DeUrgenta.Domain;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Common.Validation;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Tests.Helpers;
-using Shouldly;
+using DeUrgenta.Tests.Helpers.Builders;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Certifications.Api.Tests.Validators
@@ -31,10 +32,10 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             var sut = new CreateCertificationValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new CreateCertification(sub, new CertificationRequest()));
+            var result = await sut.IsValidAsync(new CreateCertification(sub, new CertificationRequest()));
 
             // Assert
-            isValid.ShouldBeFalse();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -43,21 +44,17 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             var sut = new CreateCertificationValidator(_dbContext);
 
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
-            await _dbContext.Users.AddAsync(new User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            });
+            var userSub = Guid.NewGuid().ToString();
+            var user = new UserBuilder().WithSub(userSub).Build();
 
+            await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new CreateCertification(userSub, new CertificationRequest()));
+            var result = await sut.IsValidAsync(new CreateCertification(userSub, new CertificationRequest()));
 
             // Assert
-            isValid.ShouldBeTrue();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

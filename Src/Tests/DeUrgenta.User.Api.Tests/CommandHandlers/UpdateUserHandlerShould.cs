@@ -1,13 +1,13 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Tests.Helpers;
 using DeUrgenta.User.Api.CommandHandlers;
 using DeUrgenta.User.Api.Commands;
 using DeUrgenta.User.Api.Models;
 using NSubstitute;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.User.Api.Tests.CommandHandlers
@@ -29,7 +29,7 @@ namespace DeUrgenta.User.Api.Tests.CommandHandlers
             var validator = Substitute.For<IValidateRequest<UpdateUser>>();
             validator
                 .IsValidAsync(Arg.Any<UpdateUser>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new UpdateUserHandler(validator, _dbContext);
 
@@ -37,7 +37,7 @@ namespace DeUrgenta.User.Api.Tests.CommandHandlers
             var result = await sut.Handle(new UpdateUser("a-sub", new UserRequest()), CancellationToken.None);
 
             // Assert
-            result.IsFailure.ShouldBeTrue();
+            result.IsFailure.Should().BeTrue();
         }
     }
 }

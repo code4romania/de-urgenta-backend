@@ -2,13 +2,13 @@
 using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Group.Api.CommandHandlers;
 using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Models;
 using DeUrgenta.Tests.Helpers;
 using NSubstitute;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Group.Api.Tests.CommandsHandlers
@@ -30,7 +30,7 @@ namespace DeUrgenta.Group.Api.Tests.CommandsHandlers
             var validator = Substitute.For<IValidateRequest<AddSafeLocation>>();
             validator
                 .IsValidAsync(Arg.Any<AddSafeLocation>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new AddSafeLocationHandler(validator, _dbContext);
 
@@ -38,7 +38,7 @@ namespace DeUrgenta.Group.Api.Tests.CommandsHandlers
             var result = await sut.Handle(new AddSafeLocation("a-sub", Guid.NewGuid(), new SafeLocationRequest()), CancellationToken.None);
 
             // Assert
-            result.IsFailure.ShouldBeTrue();
+            result.IsFailure.Should().BeTrue();
         }
     }
 }

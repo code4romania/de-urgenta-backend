@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.User.Api.Queries;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,11 +15,11 @@ namespace DeUrgenta.User.Api.Validators
             _context = context;
         }
 
-        public async Task<bool> IsValidAsync(GetUserLocations request)
+        public async Task<ValidationResult> IsValidAsync(GetUserLocations request)
         {
             var userExists = await _context.Users.AnyAsync(u => u.Sub == request.UserSub);
 
-            return userExists;
+            return userExists ? ValidationResult.Ok : ValidationResult.GenericValidationError;
         }
     }
 }

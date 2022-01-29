@@ -6,9 +6,9 @@ namespace DeUrgenta.Admin.Api.Validators
 {
     public class GetEventsValidator : IValidateRequest<GetEvents>
     {
-        public Task<bool> IsValidAsync(GetEvents request)
+        public Task<ValidationResult> IsValidAsync(GetEvents request)
         {
-            return Task.FromResult(true);
+            return Task.FromResult(ValidationResult.Ok);
         }
     }
 }

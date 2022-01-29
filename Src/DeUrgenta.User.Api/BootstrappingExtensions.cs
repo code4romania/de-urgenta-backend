@@ -1,16 +1,16 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using DeUrgenta.Common.Auth;
 using DeUrgenta.Common.Validation;
+using DeUrgenta.Domain.Identity;
 using DeUrgenta.Infra.Extensions;
 using DeUrgenta.User.Api.Commands;
-using DeUrgenta.User.Api.Domain;
 using DeUrgenta.User.Api.Models;
 using DeUrgenta.User.Api.Models.DTOs.Requests;
 using DeUrgenta.User.Api.Options;
 using DeUrgenta.User.Api.Queries;
 using DeUrgenta.User.Api.Services;
-using DeUrgenta.User.Api.Services.Emailing;
 using DeUrgenta.User.Api.Validators;
 using DeUrgenta.User.Api.Validators.RequestValidators;
 using FluentValidation;
@@ -25,13 +25,16 @@ namespace DeUrgenta.User.Api
     public static class BootstrappingExtensions
     {
         private const string SecurityOptionsSectionName = "JwtConfig";
+        private const string PasswordOptionsSectionName = "Passwords";
 
         public static IServiceCollection AddBearerAuth(this IServiceCollection services, IConfiguration configuration)
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             services.ConfigureAppOptions<JwtConfig>(SecurityOptionsSectionName);
+            services.ConfigureAppOptions<PasswordOptions>(PasswordOptionsSectionName);
 
             var jwtConfig = services.GetOptions<JwtConfig>(SecurityOptionsSectionName);
+            var passwordOptions = services.GetOptions<PasswordOptions>(PasswordOptionsSectionName);
 
             var key = Encoding.ASCII.GetBytes(jwtConfig.Secret);
 
@@ -43,7 +46,8 @@ namespace DeUrgenta.User.Api
                 ValidateAudience = false,
                 ValidateLifetime = true,
                 RequireExpirationTime = false,
-                ClockSkew = TimeSpan.Zero
+                ClockSkew = TimeSpan.Zero,
+                RoleClaimType = ApiUserRoles.ClaimName
             };
 
             services.AddSingleton(tokenValidationParams);
@@ -60,16 +64,12 @@ namespace DeUrgenta.User.Api
                 jwt.TokenValidationParameters = tokenValidationParams;
             });
 
-            services.Configure<IdentityOptions>(options =>
+            services.AddAuthorization(options =>
             {
-                // Password settings.
-                options.Password.RequireDigit = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequiredLength = 6;
-                options.Password.RequiredUniqueChars = 0;
+                options.AddPolicy(ApiPolicies.AdminOnly, policy => policy.RequireRole(ApiUserRoles.Admin));
             });
+
+            services.Configure<IdentityOptions>(options => options.Password = passwordOptions);
 
             services.AddTransient<IJwtService, JwtService>();
 
@@ -77,56 +77,20 @@ namespace DeUrgenta.User.Api
 
             services
                 .AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<UserDbContext>();
 
             services.AddTransient<IApplicationUserManager, ApplicationUserManager>();
             return services;
         }
 
-        public static void SetupEmailService(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddUserApiServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<IEmailBuilderService, EmailBuilderService>();
-            services.AddSingleton<ITemplateFileSelector, TemplateFileSelector>();
-            var emailType = configuration.GetValue<EmailingSystemTypes>("EMailingSystem");
+            services.Configure<GroupsConfig>(configuration.GetSection(GroupsConfig.SectionName));
 
-            switch (emailType)
-            {
-                case EmailingSystemTypes.SendGrid:
-                    services.AddSingleton(new SendGridOptions
-                    {
-                        ApiKey = configuration["SendGrid:ApiKey"],
-                        ClickTracking = configuration.GetValue<bool>("SendGrid:ClickTracking")
-                    });
-
-                    services.AddSingleton<IEmailSender, SendGridSender>();
-                    break;
-
-                case EmailingSystemTypes.Smtp:
-                    services.AddSingleton(new SmtpOptions
-                    {
-                        Host = configuration["Smtp:Host"],
-                        Port = configuration.GetValue<int>("Smtp:Port"),
-                        User = configuration["Smtp:User"],
-                        Password = configuration["Smtp:Password"]
-                    });
-
-                    services.AddSingleton<IEmailSender, SmtpSender>();
-                    break;
-            }
-        }
-
-        public static IServiceCollection AddUserApiServices(this IServiceCollection services)
-        {
             services.AddTransient<IValidateRequest<GetUser>, GetUserValidator>();
             services.AddTransient<IValidateRequest<UpdateUser>, UpdateUserValidator>();
-            services.AddTransient<IValidateRequest<GetBackpackInvites>, GetBackpackInvitesValidator>();
-            services.AddTransient<IValidateRequest<GetGroupInvites>, GetGroupInvitesValidator>();
             services.AddTransient<IValidateRequest<GetUserLocations>, GetUserLocationsValidator>();
-
-            services.AddTransient<IValidateRequest<AcceptBackpackInvite>, AcceptBackpackInviteValidator>();
-            services.AddTransient<IValidateRequest<AcceptGroupInvite>, AcceptGroupInviteValidator>();
-            services.AddTransient<IValidateRequest<RejectBackpackInvite>, RejectBackpackInviteValidator>();
-            services.AddTransient<IValidateRequest<RejectGroupInvite>, RejectGroupInviteValidator>();
 
             services.AddTransient<IValidateRequest<AddLocation>, AddLocationValidator>();
             services.AddTransient<IValidateRequest<DeleteLocation>, DeleteLocationValidator>();

@@ -12,7 +12,8 @@ namespace DeUrgenta.Backpack.Api.Swagger.BackpackItem
             {
                 Name = "Hering conserva",
                 Amount = 5,
-                ExpirationDate = DateTime.Today.AddDays(720)
+                ExpirationDate = DateTime.Today.AddDays(720),
+                Version = 3
             };
         }
     }

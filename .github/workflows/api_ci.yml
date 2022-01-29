@@ -1,4 +1,4 @@
-name: .NET
+name: .NET API
 
 on:
   push:
@@ -44,13 +44,21 @@ jobs:
       run: dotnet restore DeUrgenta.sln
     - name: Build
       run: dotnet build --no-restore /p:ContinuousIntegrationBuild=true DeUrgenta.sln
+    - name: Build Migrator
+      run: dotnet build /p:ContinuousIntegrationBuild=true DeUrgenta.Domains.Migrator.sln
     - name: Apply migrations for test db
       run: |
-        dotnet tool install --global dotnet-ef
-        dotnet ef database update  --no-build --project DeUrgenta.Domain --startup-project DeUrgenta.Api --context DeUrgentaContext --connection "Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;"
-        dotnet ef database update  --no-build --project DeUrgenta.User.Api --startup-project DeUrgenta.Api --context UserDbContext --connection "Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;"
+        cd ./DeUrgenta.Domains.Migrator/bin/Debug/net5.0
+        dotnet DeUrgenta.Domains.Migrator.dll
+      env:
+        # Connection strings
+        ConnectionStrings__DbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;Include Error Detail=true;
+        ConnectionStrings__IdentityDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;Include Error Detail=true; 
+        ConnectionStrings__I18nDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;Include Error Detail=true;
+        ConnectionStrings__JobsConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;Include Error Detail=true;
+        
     - name: Run unit & integration tests
       run: dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover DeUrgenta.sln
       env:
         # Connection string
-        ConnectionStrings__TestingDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass; 
+        ConnectionStrings__TestingDbConnectionString: Server=localhost;Port=5432;Database=de-urgenta-test-db;User Id=git-ci;Password=git-ci-pass;Include Error Detail=true; 

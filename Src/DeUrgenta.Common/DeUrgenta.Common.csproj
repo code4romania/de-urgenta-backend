@@ -4,6 +4,7 @@
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<TargetFramework>net5.0</TargetFramework>
 		<NoWarn>$(NoWarn);1591</NoWarn>
+		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 	</PropertyGroup>
 
 
@@ -12,6 +13,13 @@
 		<PackageReference Include="MediatR" Version="9.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.10" />
 		<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="6.1.0" />
+		<PackageReference Include="CSharpFunctionalExtensions" Version="2.15.1" />
+
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <ProjectReference Include="..\DeUrgenta.I18n.Service\DeUrgenta.I18n.Service.csproj" />
 	</ItemGroup>
 
 </Project>

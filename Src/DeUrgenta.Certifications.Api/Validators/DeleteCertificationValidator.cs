@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using DeUrgenta.Certifications.Api.Commands;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Certifications.Api.Validators
@@ -15,22 +15,22 @@ namespace DeUrgenta.Certifications.Api.Validators
             _context = context;
         }
 
-        public async Task<bool> IsValidAsync(DeleteCertification request)
+        public async Task<ValidationResult> IsValidAsync(DeleteCertification request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
             if (user == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
             }
 
-            var isOwner = await _context.Certifications.AnyAsync(c => c.UserId == user.Id && c.Id == request.CertificationId);
+            var certificationExist = await _context.Certifications.AnyAsync(c => c.UserId == user.Id && c.Id == request.CertificationId);
 
-            if (!isOwner)
+            if (!certificationExist)
             {
-                return false;
+                return new LocalizableValidationError("certification-not-exist", "certification-not-exist-message");
             }
 
-            return true;
+            return ValidationResult.Ok;
         }
     }
 }

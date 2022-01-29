@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
-using DeUrgenta.Domain;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Common.Validation;
+using DeUrgenta.Domain.Api;
+using DeUrgenta.Domain.Api.Entities;
 using DeUrgenta.Tests.Helpers;
+using DeUrgenta.Tests.Helpers.Builders;
 using DeUrgenta.User.Api.Commands;
 using DeUrgenta.User.Api.Models;
 using DeUrgenta.User.Api.Validators;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.User.Api.Tests.Validators
@@ -31,10 +33,10 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var sut = new UpdateLocationValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new UpdateLocation(sub, Guid.NewGuid(), new UserLocationRequest()));
+            var result = await sut.IsValidAsync(new UpdateLocation(sub, Guid.NewGuid(), new UserLocationRequest()));
 
             // Assert
-            isValid.ShouldBeFalse();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -43,21 +45,17 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var sut = new UpdateLocationValidator(_dbContext);
 
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
-            await _dbContext.Users.AddAsync(new DeUrgenta.Domain.Entities.User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            });
+            var userSub = Guid.NewGuid().ToString();
+            var user = new UserBuilder().WithSub(userSub).Build();
 
+            await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new UpdateLocation(userSub, Guid.NewGuid(), new UserLocationRequest()));
+            var result = await sut.IsValidAsync(new UpdateLocation(userSub, Guid.NewGuid(), new UserLocationRequest()));
 
             // Assert
-            isValid.ShouldBeFalse();
+            result.Should().BeOfType<GenericValidationError>();
         }
 
         [Fact]
@@ -66,14 +64,9 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var sut = new UpdateLocationValidator(_dbContext);
 
             // Arrange
-            string userSub = Guid.NewGuid().ToString();
+            var userSub = Guid.NewGuid().ToString();
+            var user = new UserBuilder().WithSub(userSub).Build();
 
-            var user = new DeUrgenta.Domain.Entities.User
-            {
-                FirstName = "Integration",
-                LastName = "Test",
-                Sub = userSub
-            };
             await _dbContext.Users.AddAsync(user);
 
             var userLocation = new UserLocation
@@ -90,10 +83,10 @@ namespace DeUrgenta.User.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            bool isValid = await sut.IsValidAsync(new UpdateLocation(userSub, userLocation.Id, new UserLocationRequest()));
+            var result = await sut.IsValidAsync(new UpdateLocation(userSub, userLocation.Id, new UserLocationRequest()));
 
             // Assert
-            isValid.ShouldBeTrue();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

@@ -6,13 +6,13 @@ using CSharpFunctionalExtensions;
 using DeUrgenta.Backpack.Api.Models;
 using DeUrgenta.Backpack.Api.Queries;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Backpack.Api.QueryHandlers
 {
-    public class GetBackpackItemsHandler : IRequestHandler<GetBackpackItems, Result<IImmutableList<BackpackItemModel>>>
+    public class GetBackpackItemsHandler : IRequestHandler<GetBackpackItems, Result<IImmutableList<BackpackItemModel>, ValidationResult>>
     {
         private readonly IValidateRequest<GetBackpackItems> _validator;
         private readonly DeUrgentaContext _context;
@@ -22,12 +22,12 @@ namespace DeUrgenta.Backpack.Api.QueryHandlers
             _validator = validator;
             _context = context;
         }
-        public async Task<Result<IImmutableList<BackpackItemModel>>> Handle(GetBackpackItems request, CancellationToken cancellationToken)
+        public async Task<Result<IImmutableList<BackpackItemModel>, ValidationResult>> Handle(GetBackpackItems request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<IImmutableList<BackpackItemModel>>("Validation failed");
+                return validationResult;
             }
 
             var backpackItems = await _context.BackpackItems
@@ -39,7 +39,8 @@ namespace DeUrgenta.Backpack.Api.QueryHandlers
                     Amount = item.Amount,
                     Name = item.Name,
                     CategoryType = item.BackpackCategory,
-                    ExpirationDate = item.ExpirationDate
+                    ExpirationDate = item.ExpirationDate,
+                    Version = item.Version
                 })
                 .ToListAsync(cancellationToken);
 

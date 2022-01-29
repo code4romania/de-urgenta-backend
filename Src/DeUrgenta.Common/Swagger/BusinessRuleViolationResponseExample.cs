@@ -9,8 +9,9 @@ namespace DeUrgenta.Common.Swagger
         {
             return new()
             {
-                Detail = "A business rule was violated. Here you will find a meaningful message of what happened.",
-                Status = 400
+                Type =  "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+                Title= "Bad Request",
+                Status =  400
             };
         }
     }

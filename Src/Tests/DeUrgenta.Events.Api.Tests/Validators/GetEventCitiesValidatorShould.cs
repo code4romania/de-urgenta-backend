@@ -1,9 +1,12 @@
-﻿using System.Threading.Tasks;
-using DeUrgenta.Domain;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using DeUrgenta.Common.Validation;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Events.Api.Queries;
 using DeUrgenta.Events.Api.Validators;
+using DeUrgenta.I18n.Service.Models;
 using DeUrgenta.Tests.Helpers;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Events.Api.Tests.Validators
@@ -27,10 +30,17 @@ namespace DeUrgenta.Events.Api.Tests.Validators
             var sut = new GetEventCitiesValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetEventCities(eventTypeId));
+            var result = await sut.IsValidAsync(new GetEventCities(eventTypeId));
 
             // Assert
-            isValid.ShouldBeFalse();
+            result
+                .Should()
+                .BeOfType<LocalizableValidationError>()
+                .Which
+                .Messages.Should().BeEquivalentTo(new Dictionary<LocalizableString, LocalizableString>
+                {
+                    { "event-type-not-exist",new LocalizableString("event-type-not-exist-message", eventTypeId) }
+                });
         }
 
         [Theory]
@@ -43,10 +53,10 @@ namespace DeUrgenta.Events.Api.Tests.Validators
             var sut = new GetEventCitiesValidator(_dbContext);
 
             // Act
-            bool isValid = await sut.IsValidAsync(new GetEventCities(eventTypeId));
+            var result = await sut.IsValidAsync(new GetEventCities(eventTypeId));
 
             // Assert
-            isValid.ShouldBeTrue();
+            result.Should().BeOfType<ValidationPassed>();
         }
     }
 }

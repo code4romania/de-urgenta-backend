@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Group.Api.Models;
 using DeUrgenta.Group.Api.Queries;
 using MediatR;
@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Group.Api.QueryHandlers
 {
-    public class GetGroupSafeLocationsHandler : IRequestHandler<GetGroupSafeLocations, Result<IImmutableList<SafeLocationResponseModel>>>
+    public class GetGroupSafeLocationsHandler : IRequestHandler<GetGroupSafeLocations, Result<IImmutableList<SafeLocationResponseModel>, ValidationResult>>
     {
         private readonly IValidateRequest<GetGroupSafeLocations> _validator;
         private readonly DeUrgentaContext _context;
@@ -23,12 +23,12 @@ namespace DeUrgenta.Group.Api.QueryHandlers
             _context = dbContext;
         }
 
-        public async Task<Result<IImmutableList<SafeLocationResponseModel>>> Handle(GetGroupSafeLocations request, CancellationToken cancellationToken)
+        public async Task<Result<IImmutableList<SafeLocationResponseModel>, ValidationResult>> Handle(GetGroupSafeLocations request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<IImmutableList<SafeLocationResponseModel>>("Validation failed");
+                return validationResult;
             }
 
             var group = await _context.Groups

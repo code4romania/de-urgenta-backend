@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Group.Api.Commands;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,12 +15,18 @@ namespace DeUrgenta.Group.Api.Validators
             _context = context;
         }
 
-        public async Task<bool> IsValidAsync(DeleteSafeLocation request)
+        public async Task<ValidationResult> IsValidAsync(DeleteSafeLocation request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
             if (user == null)
             {
-                return false;
+                return ValidationResult.GenericValidationError;
+            }
+
+            var safeLocationExists = await _context.GroupsSafeLocations.AnyAsync(gsl => gsl.Id == request.SafeLocationId);
+            if (!safeLocationExists)
+            {
+                return ValidationResult.GenericValidationError;
             }
 
             var isGroupAdmin = await _context.GroupsSafeLocations
@@ -28,10 +34,10 @@ namespace DeUrgenta.Group.Api.Validators
 
             if (!isGroupAdmin)
             {
-                return false;
+                return new LocalizableValidationError("cannot-delete-safe-location","only-group-admin-can-delete-safe-location-message");
             }
 
-            return true;
+            return ValidationResult.Ok;
         }
     }
 }

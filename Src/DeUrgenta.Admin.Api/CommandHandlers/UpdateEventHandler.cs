@@ -5,13 +5,13 @@ using CSharpFunctionalExtensions;
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Common.Models.Events;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Admin.Api.CommandHandlers
 {
-    public class UpdateEventHandler : IRequestHandler<UpdateEvent, Result<EventResponseModel>>
+    public class UpdateEventHandler : IRequestHandler<UpdateEvent, Result<EventResponseModel, ValidationResult>>
     {
         private readonly IValidateRequest<UpdateEvent> _validator;
         private readonly DeUrgentaContext _context;
@@ -22,12 +22,12 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result<EventResponseModel>> Handle(UpdateEvent request, CancellationToken cancellationToken)
+        public async Task<Result<EventResponseModel, ValidationResult>> Handle(UpdateEvent request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<EventResponseModel>("Validation failed");
+                return validationResult;
             }
 
             var eventType = await _context.EventTypes.FirstAsync(et => et.Id == request.Event.EventTypeId, cancellationToken);
@@ -35,7 +35,7 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
 
             @event.Address = request.Event.Address;
             @event.Author = request.Event.Author;
-            @event.City = request.Event.City;
+            @event.Locality = request.Event.Locality;
             @event.ContentBody = request.Event.ContentBody;
             @event.EventType = eventType;
             @event.OccursOn = request.Event.OccursOn;
@@ -52,7 +52,7 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
                 Title = @event.Title,
                 Address = @event.Address,
                 Author = @event.Author,
-                City = @event.City,
+                City = @event.Locality,
                 ContentBody = @event.ContentBody,
                 EventType = eventType.Name,
                 OccursOn = @event.OccursOn,

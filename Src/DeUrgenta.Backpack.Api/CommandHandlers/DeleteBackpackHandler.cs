@@ -3,13 +3,13 @@ using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.Backpack.Api.CommandHandlers
 {
-    public class DeleteBackpackHandler : IRequestHandler<DeleteBackpack, Result>
+    public class DeleteBackpackHandler : IRequestHandler<DeleteBackpack, Result<Unit, ValidationResult>>
     {
         private readonly IValidateRequest<DeleteBackpack> _validator;
         private readonly DeUrgentaContext _context;
@@ -20,19 +20,19 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result> Handle(DeleteBackpack request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, ValidationResult>> Handle(DeleteBackpack request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure("Validation failed");
+                return validationResult;
             }
 
             var backpack = await _context.Backpacks.FirstAsync(b => b.Id == request.BackpackId, cancellationToken);
             _context.Backpacks.Remove(backpack);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Result.Success();
+            return Unit.Value;
         }
     }
 }

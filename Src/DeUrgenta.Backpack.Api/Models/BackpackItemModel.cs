@@ -1,5 +1,5 @@
 ﻿using System;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Domain.Api.Entities;
 
 namespace DeUrgenta.Backpack.Api.Models
 {
@@ -11,5 +11,6 @@ namespace DeUrgenta.Backpack.Api.Models
         public uint Amount { get; init; }
         public DateTime? ExpirationDate { get; init; }
         public BackpackCategoryType CategoryType { get; set; }
+        public ulong Version { get; set; }
     }
 }

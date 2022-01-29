@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
-using DeUrgenta.Domain.Entities;
+using DeUrgenta.Domain.Api;
+using DeUrgenta.Domain.Api.Entities;
 using DeUrgenta.User.Api.Commands;
 using DeUrgenta.User.Api.Models;
 using MediatR;
@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeUrgenta.User.Api.CommandHandlers
 {
-    public class AddLocationHandler : IRequestHandler<AddLocation, Result<UserLocationModel>>
+    public class AddLocationHandler : IRequestHandler<AddLocation, Result<UserLocationModel, ValidationResult>>
     {
         private readonly IValidateRequest<AddLocation> _validator;
         private readonly DeUrgentaContext _context;
@@ -22,12 +22,12 @@ namespace DeUrgenta.User.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result<UserLocationModel>> Handle(AddLocation request, CancellationToken cancellationToken)
+        public async Task<Result<UserLocationModel, ValidationResult>> Handle(AddLocation request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<UserLocationModel>("Validation failed");
+                return validationResult;
             }
 
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);

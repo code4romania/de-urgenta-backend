@@ -59,34 +59,22 @@ PostgreSQL
 > you can also specify a env file at runtime with docker-compose so you don't necessarily need to take step `2.` - more info [here](https://docs.docker.com/compose/environment-variables/#using-the---env-file--option)
 ### Start a postgres server
 ```
-docker-compose -d up postgres
+docker-compose -d up migrator postgres
 ```
 
-### Creating a EF Core migration 
+### Creating a EF Core migration from console
 ```
-dotnet ef migrations add <Migration-name> --project DeUrgenta.Domain --startup-project DeUrgenta.Api --context DeUrgentaContext
-```
-### Adding EF Core migration to User.Api
-```
-DeUrgenta.User.Api> dotnet ef migrations add <Migration-name> --startup-project ..\DeUrgenta.Api\ -o Domain\Migrations --context UserDbContext
-```
-### Backend flows
-```mermaid
-graph TD
-    Controller -- Command / Query--> Mediator
-    Mediator --> CommandHandler/QueryHanlder
-    CommandHandler/QueryHanlder --> IValidateRequest
-    CommandHandler/QueryHanlder --> Database[(Database)]
+de-urgenta-backend\Src> dotnet ef migrations add <Migration-name> --project DeUrgenta.Domain.Api --startup-project DeUrgenta.Api --context DeUrgentaContext
+de-urgenta-backend\Src> dotnet ef migrations add <Migration-name> --project DeUrgenta.Domain.Identity --startup-project DeUrgenta.Api --context UserDbContext
+de-urgenta-backend\Src> dotnet ef migrations add <Migration-name> --project DeUrgenta.Domain.I18n --startup-project DeUrgenta.Api --context I18nDbContext
+de-urgenta-backend\Src> dotnet ef migrations add <Migration-name> --project DeUrgenta.Domain.RecurringJobs --startup-project DeUrgenta.RecurringJobs --context JobsContext
 ```
 
-```mermaid
-graph
-Query/CommandHandler --> Validator
-    Validator --> C{Request valid ?}
-    C -->|true| D[Your logic goes here]
-    C -->|false| E[Result.Failure]
-    D --> Database[(Database)]
-```
+### Domains migrator
+We use a special project which will create databases (if not exists) and will apply migrations for every registered context.
+Use DeUrgenta.Domains.Migrator project to initialize an empty database.
+
+
 ### Configuring storage
 In order to store certification photos you will need to have either Local or S3 storage configured. Toggle between these two options by setting the *StorageService* app setting to the appropriate value.
 
@@ -99,6 +87,22 @@ S3 storage requires having an [AWS account configured](https://docs.aws.amazon.c
     "PresignedUrlExpirationInMinutes": "10"
   }
 ```
+
+### Configuring recurring jobs
+Recurring jobs can be turned on or off or scheduled at different intervals by using the following configuration section in the RecurringJobs.sln appsettings.json file.
+```
+"RecurringJobsConfig": {
+    "ExpiredCertificationJobConfig": {
+      "IsEnabled": "true",
+      "CronExpression": "0 0 * * *",
+      "DaysBeforeExpirationDate": "30"
+    },
+    ...
+  },
+```
+Every jobs will have at least the *IsEnabled* and *CronExpression* settings, but additional settings can be added as needed.
+
+Use [crontab](https://crontab.guru/) to generate valid cron expressions.
 
 ### Using DB checkpoint for integration tests
 To configure a DB to be cleaned after integration tests are run you can enable the *UseDbCheckpoint* option in the appsettings.testing.json

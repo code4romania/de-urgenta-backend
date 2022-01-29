@@ -2,31 +2,36 @@
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Group.Api.Models;
+using DeUrgenta.Group.Api.Options;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace DeUrgenta.Group.Api.CommandHandlers
 {
-    public class UpdateGroupHandler : IRequestHandler<UpdateGroup, Result<GroupModel>>
+    public class UpdateGroupHandler : IRequestHandler<UpdateGroup, Result<GroupModel, ValidationResult>>
     {
         private readonly IValidateRequest<UpdateGroup> _validator;
         private readonly DeUrgentaContext _context;
+        private readonly GroupsConfig _groupsConfig;
 
-        public UpdateGroupHandler(IValidateRequest<UpdateGroup> validator, DeUrgentaContext context)
+        public UpdateGroupHandler(IValidateRequest<UpdateGroup> validator, DeUrgentaContext context,
+            IOptions<GroupsConfig> groupsConfig)
         {
             _validator = validator;
             _context = context;
+            _groupsConfig = groupsConfig.Value;
         }
 
-        public async Task<Result<GroupModel>> Handle(UpdateGroup request, CancellationToken cancellationToken)
+        public async Task<Result<GroupModel, ValidationResult>> Handle(UpdateGroup request, CancellationToken cancellationToken)
         {
-            var isValid = await _validator.IsValidAsync(request);
-            if (!isValid)
+            var validationResult = await _validator.IsValidAsync(request);
+            if (validationResult.IsFailure)
             {
-                return Result.Failure<GroupModel>("Validation failed");
+                return validationResult;
             }
 
             var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
@@ -44,9 +49,8 @@ namespace DeUrgenta.Group.Api.CommandHandlers
                 Id = group.Id,
                 Name = group.Name,
                 NumberOfMembers = group.GroupMembers.Count,
-                AdminId = group.AdminId,
-                AdminFirstName = group.Admin.FirstName,
-                AdminLastName = group.Admin.LastName
+                MaxNumberOfMembers = _groupsConfig.MaxUsers,
+                IsCurrentUserAdmin = group.AdminId == user.Id
             };
         }
     }

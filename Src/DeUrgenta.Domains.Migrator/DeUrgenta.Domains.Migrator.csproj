@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Figgle" Version="0.4.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.11">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Polly" Version="7.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DeUrgenta.Domain.Api\DeUrgenta.Domain.Api.csproj" />
+    <ProjectReference Include="..\DeUrgenta.Domain.I18n\DeUrgenta.Domain.I18n.csproj" />
+    <ProjectReference Include="..\DeUrgenta.Domain.Identity\DeUrgenta.Domain.Identity.csproj" />
+    <ProjectReference Include="..\DeUrgenta.Domain.RecurringJobs\DeUrgenta.Domain.RecurringJobs.csproj" />
+    <ProjectReference Include="..\DeUrgenta.Infra\DeUrgenta.Infra.csproj" />
+  </ItemGroup>
+
+</Project>

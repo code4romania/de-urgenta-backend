@@ -2,12 +2,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
-using DeUrgenta.Domain;
+using DeUrgenta.Domain.Api;
 using DeUrgenta.Group.Api.CommandHandlers;
 using DeUrgenta.Group.Api.Commands;
 using DeUrgenta.Tests.Helpers;
 using NSubstitute;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace DeUrgenta.Group.Api.Tests.CommandsHandlers
@@ -29,7 +29,7 @@ namespace DeUrgenta.Group.Api.Tests.CommandsHandlers
             var validator = Substitute.For<IValidateRequest<RemoveFromGroup>>();
             validator
                 .IsValidAsync(Arg.Any<RemoveFromGroup>())
-                .Returns(Task.FromResult(false));
+                .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new RemoveFromGroupHandler(validator, _dbContext);
 
@@ -37,7 +37,7 @@ namespace DeUrgenta.Group.Api.Tests.CommandsHandlers
             var result = await sut.Handle(new RemoveFromGroup("a-sub", Guid.NewGuid(), Guid.NewGuid()), CancellationToken.None);
 
             // Assert
-            result.IsFailure.ShouldBeTrue();
+            result.IsFailure.Should().BeTrue();
         }
     }
 }
