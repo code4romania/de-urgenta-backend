@@ -64,10 +64,7 @@ namespace DeUrgenta.User.Api
                 jwt.TokenValidationParameters = tokenValidationParams;
             });
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(ApiPolicies.AdminOnly, policy => policy.RequireRole(ApiUserRoles.Admin));
-            });
+            services.AddAuthorization(options => options.AddPolicy(ApiPolicies.AdminOnly, policy => policy.RequireRole(ApiUserRoles.Admin)));
 
             services.Configure<IdentityOptions>(options => options.Password = passwordOptions);
 

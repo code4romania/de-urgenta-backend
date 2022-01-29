@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using DeUrgenta.Backpack.Api.Options;
 using DeUrgenta.Backpack.Api.Queries;
 using DeUrgenta.Backpack.Api.QueryHandlers;
 using DeUrgenta.Common.Validation;
@@ -7,6 +8,7 @@ using DeUrgenta.Domain.Api;
 using DeUrgenta.Tests.Helpers;
 using NSubstitute;
 using FluentAssertions;
+using Microsoft.Extensions.Options;
 using Xunit;
 
 namespace DeUrgenta.Backpack.Api.Tests.QueryHandlers
@@ -15,10 +17,16 @@ namespace DeUrgenta.Backpack.Api.Tests.QueryHandlers
     public class GetMyBackpacksHandlerShould
     {
         private readonly DeUrgentaContext _dbContext;
+        private readonly IOptions<BackpacksConfig> _config;
 
         public GetMyBackpacksHandlerShould(DatabaseFixture fixture)
         {
             _dbContext = fixture.Context;
+            var options = new BackpacksConfig
+            {
+                MaxContributors = 2
+            };
+            _config = Microsoft.Extensions.Options.Options.Create(options);
         }
 
         [Fact]
@@ -30,7 +38,7 @@ namespace DeUrgenta.Backpack.Api.Tests.QueryHandlers
                 .IsValidAsync(Arg.Any<GetMyBackpacks>())
                 .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
-            var sut = new GetMyBackpacksHandler(validator, _dbContext);
+            var sut = new GetMyBackpacksHandler(validator, _dbContext, _config);
 
             // Act
             var result = await sut.Handle(new GetMyBackpacks("a-sub"), CancellationToken.None);

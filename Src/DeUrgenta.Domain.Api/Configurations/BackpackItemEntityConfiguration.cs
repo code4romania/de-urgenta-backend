@@ -29,7 +29,7 @@ namespace DeUrgenta.Domain.Api.Configurations
                 .Property(e => e.ExpirationDate);
 
             builder
-                .Property(e => e.BackpackCategory)
+                .Property(e => e.Category)
                 .IsRequired();
             
             builder

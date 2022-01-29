@@ -57,16 +57,16 @@ namespace DeUrgenta.Backpack.Api.Controllers
         /// Gets items in a backpack for a specific category
         /// </summary>
         /// <returns></returns>
-        [HttpGet("{backpackId:guid}/{categoryId:int}/items")]
+        [HttpGet("{backpackId:guid}/{itemCategory:itemCategory}/items")]
         [SwaggerResponse(StatusCodes.Status200OK, "Items from a backpack category", typeof(IImmutableList<BackpackItemModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetCategoryBackpackItemsResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<IImmutableList<BackpackItemModel>>> GetBackpackCategoryItemsAsync([FromRoute] Guid backpackId, [FromRoute] BackpackCategoryType categoryId)
+        public async Task<ActionResult<IImmutableList<BackpackItemModel>>> GetBackpackCategoryItemsAsync([FromRoute] Guid backpackId, [FromRoute] BackpackItemCategoryType itemCategory)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var query = new GetBackpackCategoryItems(sub, backpackId, categoryId);
+            var query = new GetBackpackCategoryItems(sub, backpackId, itemCategory);
             var result = await _mediator.Send(query);
 
             return await _mapper.MapToActionResult(result);

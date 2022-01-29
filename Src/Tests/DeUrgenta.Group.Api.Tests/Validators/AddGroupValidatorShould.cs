@@ -76,7 +76,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Seed groups
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
                 await _dbContext.Groups.AddAsync(new GroupBuilder().WithAdmin(user).Build());
             }

@@ -31,14 +31,14 @@ namespace DeUrgenta.Backpack.Api.QueryHandlers
             }
 
             var backpackItems = await _context.BackpackItems
-                .Where(item => item.BackpackId == request.BackpackId && item.BackpackCategory == request.CategoryId)
+                .Where(item => item.BackpackId == request.BackpackId && item.Category == request.Category)
                 .Select(item => new BackpackItemModel
                 {
                     Id = item.Id,
                     BackpackId = item.BackpackId,
                     Amount = item.Amount,
                     Name = item.Name,
-                    CategoryType = item.BackpackCategory,
+                    Category = item.Category,
                     ExpirationDate = item.ExpirationDate
                 })
                 .ToListAsync(cancellationToken);

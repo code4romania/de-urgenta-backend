@@ -34,7 +34,7 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
             var backpackItem = new BackpackItem
             {
                 Name = request.BackpackItem.Name,
-                BackpackCategory = request.BackpackItem.CategoryType,
+                Category = request.BackpackItem.Category,
                 Amount = request.BackpackItem.Amount,
                 ExpirationDate = request.BackpackItem.ExpirationDate,
                 Backpack = backpack
@@ -48,7 +48,7 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
                 Id = backpackItem.Id,
                 Name = backpackItem.Name,
                 Amount = backpackItem.Amount,
-                CategoryType = backpackItem.BackpackCategory,
+                Category = backpackItem.Category,
                 ExpirationDate = backpackItem.ExpirationDate,
                 BackpackId = request.BackpackId,
                 Version = 0

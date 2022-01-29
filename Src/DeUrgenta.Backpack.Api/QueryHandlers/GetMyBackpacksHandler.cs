@@ -4,11 +4,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Backpack.Api.Models;
+using DeUrgenta.Backpack.Api.Options;
 using DeUrgenta.Backpack.Api.Queries;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace DeUrgenta.Backpack.Api.QueryHandlers
 {
@@ -16,11 +18,13 @@ namespace DeUrgenta.Backpack.Api.QueryHandlers
     {
         private readonly IValidateRequest<GetMyBackpacks> _validator;
         private readonly DeUrgentaContext _context;
+        private readonly BackpacksConfig _config;
 
-        public GetMyBackpacksHandler(IValidateRequest<GetMyBackpacks> validator, DeUrgentaContext context)
+        public GetMyBackpacksHandler(IValidateRequest<GetMyBackpacks> validator, DeUrgentaContext context, IOptions<BackpacksConfig> config)
         {
             _validator = validator;
             _context = context;
+            _config = config.Value;
         }
 
         public async Task<Result<IImmutableList<BackpackModel>, ValidationResult>> Handle(GetMyBackpacks request, CancellationToken cancellationToken)
@@ -34,11 +38,14 @@ namespace DeUrgenta.Backpack.Api.QueryHandlers
             var backpacks = await _context.BackpacksToUsers
                 .Where(btu => btu.User.Sub == request.UserSub)
                 .Where(btu => btu.IsOwner)
-                .Select(btu => new BackpackModel
-                {
-                    Name = btu.Backpack.Name,
-                    Id = btu.Backpack.Id,
-                })
+                .GroupBy(x => new { Id = x.BackpackId, x.Backpack.Name }, btu => btu.Backpack, (key, g) =>
+                           new BackpackModel
+                           {
+                               Name = key.Name,
+                               Id = key.Id,
+                               MaxNumberOfContributors = _config.MaxContributors,
+                               NumberOfContributors = g.Count()
+                           })
                 .ToListAsync(cancellationToken);
 
             return backpacks.ToImmutableList();

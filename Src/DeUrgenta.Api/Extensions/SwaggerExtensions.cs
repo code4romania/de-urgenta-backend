@@ -5,7 +5,6 @@ using DeUrgenta.Api.Extensions.OperationFilter;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -15,7 +14,7 @@ namespace DeUrgenta.Api.Extensions
 {
     public static class SwaggerExtensions
     {
-        public static IServiceCollection AddSwaggerFor(this IServiceCollection services, Assembly[] assemblies, IConfiguration config)
+        public static IServiceCollection AddSwaggerFor(this IServiceCollection services, Assembly[] assemblies)
         {
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
@@ -57,7 +56,6 @@ namespace DeUrgenta.Api.Extensions
                     }
                 });
 
-
                 // Set the comments path for the Swagger JSON and UI.
                 foreach (var assembly in assemblies)
                 {
@@ -78,16 +76,12 @@ namespace DeUrgenta.Api.Extensions
         public static IApplicationBuilder UseConfigureSwagger(this IApplicationBuilder app)
         {
             app.UseSwagger();
-            app.UseSwaggerUI(c =>
+            app.UseSwaggerUI(c => c.ConfigObject = new ConfigObject
             {
-                c.ConfigObject = new ConfigObject
-                {
-                    Urls = new[]
+                Urls = new[]
                     {
                         new UrlDescriptor{Name = "api", Url = "/swagger/v1/swagger.json"}
                     }
-                };
-
             });
 
             return app;

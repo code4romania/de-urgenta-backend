@@ -68,15 +68,12 @@ namespace DeUrgenta.Api
 
             var applicationAssemblies = GetAssemblies();
 
-            services.AddSwaggerFor(applicationAssemblies, Configuration);
+            services.AddSwaggerFor(applicationAssemblies);
             services.AddMediatR(applicationAssemblies);
 
-            services.AddCors(o => o.AddPolicy(CorsPolicyName, builder =>
-            {
-                builder.AllowAnyOrigin()
+            services.AddCors(o => o.AddPolicy(CorsPolicyName, builder => builder.AllowAnyOrigin()
                     .AllowAnyMethod()
-                    .AllowAnyHeader();
-            }));
+                    .AllowAnyHeader()));
 
             services.SetupEmailService(Configuration);
             services.SetupStorageService(Configuration);
