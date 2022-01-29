@@ -7,6 +7,7 @@ using DeUrgenta.Common.Auth;
 using DeUrgenta.Common.Models.Dtos;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.Emailing.Service.Models;
+using DeUrgenta.User.Api.Models;
 using DeUrgenta.User.Api.Models.DTOs.Requests;
 using DeUrgenta.User.Api.Notifications;
 using DeUrgenta.User.Api.Queries;

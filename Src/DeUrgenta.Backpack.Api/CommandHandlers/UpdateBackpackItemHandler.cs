@@ -43,7 +43,6 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
                 BackpackId = backpackItem.BackpackId,
                 Amount = backpackItem.Amount,
                 Name = backpackItem.Name,
-                Amount = backpackItem.Amount,
                 Category = backpackItem.Category,
                 ExpirationDate = backpackItem.ExpirationDate,
                 Version = backpackItem.Version

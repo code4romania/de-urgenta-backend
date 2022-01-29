@@ -40,10 +40,7 @@ namespace DeUrgenta.Api.Extensions
                 {
                     { jwtSecurityScheme, Array.Empty<string>() }
                 });
-                c.CustomOperationIds(apiDesc =>
-                {
-                    return apiDesc.TryGetMethodInfo(out MethodInfo methodInfo) ? methodInfo.Name : $"{apiDesc.ActionDescriptor.RouteValues["controller"]}_{apiDesc.ActionDescriptor.RouteValues["action"]}_{apiDesc.HttpMethod}";
-                });
+                c.CustomOperationIds(apiDesc => apiDesc.TryGetMethodInfo(out var methodInfo) ? methodInfo.Name : $"{apiDesc.ActionDescriptor.RouteValues["controller"]}_{apiDesc.ActionDescriptor.RouteValues["action"]}_{apiDesc.HttpMethod}");
 
                 c.OperationFilter<AuthorizeCheckOperationFilter>();
                 c.OperationFilter<AcceptLanguageHeaderParameterOperationFilter>();
