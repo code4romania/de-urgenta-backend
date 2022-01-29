@@ -58,7 +58,7 @@ namespace DeUrgenta.RecurringJobs.Jobs
                 var computedNotificationDate = expiringItem.ExpirationDate.Value.AddDays(-_config.DaysBeforeExpirationDate);
                 var preExpirationNotification = new Notification
                 {
-                    Type = GetNotificationType(expiringItem.BackpackCategory),
+                    Type = GetNotificationType(expiringItem.Category),
                     ScheduledDate = computedNotificationDate < DateTime.Today ? DateTime.Today : computedNotificationDate,
                     ItemDetails = new ItemDetails { ItemId = expiringItem.Id },
                     UserId = backpackUser.UserId,
@@ -66,7 +66,7 @@ namespace DeUrgenta.RecurringJobs.Jobs
                 };
                 var expirationDayNotification = new Notification
                 {
-                    Type = GetNotificationType(expiringItem.BackpackCategory),
+                    Type = GetNotificationType(expiringItem.Category),
                     ScheduledDate = expiringItem.ExpirationDate.Value,
                     ItemDetails = new ItemDetails { ItemId = expiringItem.Id },
                     UserId = backpackUser.UserId,
@@ -79,18 +79,18 @@ namespace DeUrgenta.RecurringJobs.Jobs
             }
         }
 
-        private NotificationType GetNotificationType(BackpackCategoryType expiringItemBackpackCategory)
+        private NotificationType GetNotificationType(BackpackItemCategoryType backpackItemCategoryType)
         {
 
-            return expiringItemBackpackCategory switch
+            return backpackItemCategoryType switch
             {
-                BackpackCategoryType.WaterAndFood => NotificationType.BackpackWaterAndFood,
-                BackpackCategoryType.FirstAid => NotificationType.BackpackFirstAid,
-                BackpackCategoryType.Hygiene => NotificationType.BackpackHygiene,
-                BackpackCategoryType.SurvivingArticles => NotificationType.BackpackSurvivingArticles,
-                BackpackCategoryType.PapersAndDocuments => NotificationType.BackpackPapersAndDocuments,
-                BackpackCategoryType.RandomStuff => NotificationType.BackpackRandomStuff,
-                _ => throw new ArgumentOutOfRangeException(nameof(expiringItemBackpackCategory), expiringItemBackpackCategory, null)
+                BackpackItemCategoryType.WaterAndFood => NotificationType.BackpackWaterAndFood,
+                BackpackItemCategoryType.FirstAid => NotificationType.BackpackFirstAid,
+                BackpackItemCategoryType.Hygiene => NotificationType.BackpackHygiene,
+                BackpackItemCategoryType.SurvivingArticles => NotificationType.BackpackSurvivingArticles,
+                BackpackItemCategoryType.PapersAndDocuments => NotificationType.BackpackPapersAndDocuments,
+                BackpackItemCategoryType.RandomStuff => NotificationType.BackpackRandomStuff,
+                _ => throw new ArgumentOutOfRangeException(nameof(backpackItemCategoryType), backpackItemCategoryType, null)
             };
         }
     }

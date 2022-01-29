@@ -1,10 +1,12 @@
 ﻿using DeUrgenta.Backpack.Api.Commands;
+using DeUrgenta.Backpack.Api.Constraints;
 using DeUrgenta.Backpack.Api.Models;
 using DeUrgenta.Backpack.Api.Queries;
 using DeUrgenta.Backpack.Api.Validators;
 using DeUrgenta.Backpack.Api.Validators.RequestValidators;
 using DeUrgenta.Common.Validation;
 using FluentValidation;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DeUrgenta.Backpack.Api
@@ -29,6 +31,8 @@ namespace DeUrgenta.Backpack.Api
 
             services.AddTransient<IValidator<BackpackItemRequest>, BackpackItemRequestValidator>();
             services.AddTransient<IValidator<BackpackModelRequest>, BackpackModelRequestValidator>();
+
+            services.Configure<RouteOptions>(routeOptions => routeOptions.ConstraintMap.Add("itemCategory", typeof(BackpackItemCategoryConstraint)));
 
             return services;
         }

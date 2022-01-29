@@ -54,7 +54,7 @@ namespace DeUrgenta.User.Api.Services
                 roles = new[] { ApiUserRoles.User };
             }
 
-            foreach (string userRole in roles)
+            foreach (var userRole in roles)
             {
                 claimsBuilder.Add(new Claim(ApiUserRoles.ClaimName, userRole));
             }

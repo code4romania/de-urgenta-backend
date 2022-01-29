@@ -42,8 +42,9 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
 
             var backpackItem = new BackpackItemBuilder()
                 .WithExpirationDate(DateTime.Today.AddDays(daysAfterCurrentDate))
-                .WithCategory(BackpackCategoryType.WaterAndFood)
+                .WithCategory(BackpackItemCategoryType.WaterAndFood)
                 .Build();
+
             await _context.BackpackItems.AddAsync(backpackItem);
 
             var backpackToUser = new BackpackToUserBuilder().WithUser(user).WithBackpack(backpackItem.Backpack).Build();
@@ -363,13 +364,13 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
         }
 
         [Theory]
-        [InlineData(BackpackCategoryType.FirstAid, NotificationType.BackpackFirstAid)]
-        [InlineData(BackpackCategoryType.Hygiene, NotificationType.BackpackHygiene)]
-        [InlineData(BackpackCategoryType.PapersAndDocuments, NotificationType.BackpackPapersAndDocuments)]
-        [InlineData(BackpackCategoryType.RandomStuff, NotificationType.BackpackRandomStuff)]
-        [InlineData(BackpackCategoryType.SurvivingArticles, NotificationType.BackpackSurvivingArticles)]
-        [InlineData(BackpackCategoryType.WaterAndFood, NotificationType.BackpackWaterAndFood)]
-        public async Task Trigger_notification_with_Correct_type(BackpackCategoryType backpackCategoryType, NotificationType expectedType)
+        [InlineData(BackpackItemCategoryType.FirstAid, NotificationType.BackpackFirstAid)]
+        [InlineData(BackpackItemCategoryType.Hygiene, NotificationType.BackpackHygiene)]
+        [InlineData(BackpackItemCategoryType.PapersAndDocuments, NotificationType.BackpackPapersAndDocuments)]
+        [InlineData(BackpackItemCategoryType.RandomStuff, NotificationType.BackpackRandomStuff)]
+        [InlineData(BackpackItemCategoryType.SurvivingArticles, NotificationType.BackpackSurvivingArticles)]
+        [InlineData(BackpackItemCategoryType.WaterAndFood, NotificationType.BackpackWaterAndFood)]
+        public async Task Trigger_notification_with_Correct_type(BackpackItemCategoryType backpackCategoryType, NotificationType expectedType)
         {
             //Arrange
             var userId = Guid.NewGuid();

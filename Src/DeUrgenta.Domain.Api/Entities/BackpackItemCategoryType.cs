@@ -1,6 +1,6 @@
 ﻿namespace DeUrgenta.Domain.Api.Entities
 {
-    public enum BackpackCategoryType
+    public enum BackpackItemCategoryType
     {
         WaterAndFood = 1,
         Hygiene = 2,

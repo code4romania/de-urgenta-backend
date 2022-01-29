@@ -27,7 +27,7 @@ namespace DeUrgenta.Certifications.Api.Storage
             }
 
             var existingPhotos = Directory.EnumerateFiles(userDirectoryPath, $"{certificationId}.*");
-            foreach (string existingPhoto in existingPhotos)
+            foreach (var existingPhoto in existingPhotos)
             {
                 File.Delete(existingPhoto);
             }

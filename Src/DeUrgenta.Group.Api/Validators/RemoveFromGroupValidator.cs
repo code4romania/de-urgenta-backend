@@ -42,7 +42,7 @@ namespace DeUrgenta.Group.Api.Validators
                 return new LocalizableValidationError("cannot-remove-user","only-group-admin-can-remove-users-message");
             }
 
-            bool requestedUserIsInGroup = await _context
+            var requestedUserIsInGroup = await _context
                 .UsersToGroups
                 .AnyAsync(utg => utg.Group.Id == request.GroupId && utg.User.Id == request.UserId);
 

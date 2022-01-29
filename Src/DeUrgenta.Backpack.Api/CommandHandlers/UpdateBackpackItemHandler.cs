@@ -30,7 +30,7 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
             }
             var backpackItem = await _context.BackpackItems.FirstAsync(x => x.Id == request.ItemId, cancellationToken);
             backpackItem.Name = request.BackpackItem.Name;
-            backpackItem.BackpackCategory = request.BackpackItem.CategoryType;
+            backpackItem.Category = request.BackpackItem.Category;
             backpackItem.Amount = request.BackpackItem.Amount;
             backpackItem.ExpirationDate = request.BackpackItem.ExpirationDate;
             backpackItem.Version += 1;
@@ -43,7 +43,8 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
                 BackpackId = backpackItem.BackpackId,
                 Amount = backpackItem.Amount,
                 Name = backpackItem.Name,
-                CategoryType = backpackItem.BackpackCategory,
+                Amount = backpackItem.Amount,
+                Category = backpackItem.Category,
                 ExpirationDate = backpackItem.ExpirationDate,
                 Version = backpackItem.Version
             };

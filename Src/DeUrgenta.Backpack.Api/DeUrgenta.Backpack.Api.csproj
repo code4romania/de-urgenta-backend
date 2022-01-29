@@ -22,4 +22,8 @@
 	  <ProjectReference Include="..\DeUrgenta.Domain.Api\DeUrgenta.Domain.Api.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Constraints\" />
+	</ItemGroup>
+
 </Project>

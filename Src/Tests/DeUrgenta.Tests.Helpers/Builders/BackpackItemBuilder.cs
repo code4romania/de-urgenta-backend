@@ -8,7 +8,7 @@ namespace DeUrgenta.Tests.Helpers.Builders
         private Guid _id = Guid.NewGuid();
         private DateTime? _expirationDate;
         private Backpack _backpack = new BackpackBuilder().Build();
-        private BackpackCategoryType _category = BackpackCategoryType.FirstAid;
+        private BackpackItemCategoryType _itemCategory = BackpackItemCategoryType.FirstAid;
         private ulong _version;
         
         public BackpackItem Build() => new()
@@ -17,7 +17,7 @@ namespace DeUrgenta.Tests.Helpers.Builders
             Amount = 2,
             ExpirationDate = _expirationDate,
             Name = TestDataProviders.RandomString(),
-            BackpackCategory = _category,
+            Category = _itemCategory,
             BackpackId = Guid.NewGuid(),
             Backpack = _backpack,
             Version = _version
@@ -29,9 +29,9 @@ namespace DeUrgenta.Tests.Helpers.Builders
             return this;
         }
 
-        public BackpackItemBuilder WithCategory(BackpackCategoryType backpackCategoryType)
+        public BackpackItemBuilder WithCategory(BackpackItemCategoryType backpackItemCategoryType)
         {
-            _category = backpackCategoryType;
+            _itemCategory = backpackItemCategoryType;
             return this;
         }
         

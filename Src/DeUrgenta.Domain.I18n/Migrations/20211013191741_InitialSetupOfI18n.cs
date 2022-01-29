@@ -22,10 +22,7 @@ namespace DeUrgenta.Domain.I18n.Migrations
                     Name = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
                     Culture = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Languages", x => x.Id);
-                });
+                constraints: table => table.PrimaryKey("PK_Languages", x => x.Id));
 
             migrationBuilder.CreateTable(
                 name: "StringResources",

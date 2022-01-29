@@ -67,7 +67,6 @@ namespace DeUrgenta.Api.Extensions
                     }
                 });
 
-
                 // Set the comments path for the Swagger JSON and UI.
                 foreach (var assembly in assemblies)
                 {
@@ -88,16 +87,12 @@ namespace DeUrgenta.Api.Extensions
         public static IApplicationBuilder UseConfigureSwagger(this IApplicationBuilder app)
         {
             app.UseSwagger();
-            app.UseSwaggerUI(c =>
+            app.UseSwaggerUI(c => c.ConfigObject = new ConfigObject
             {
-                c.ConfigObject = new ConfigObject
-                {
-                    Urls = new[]
+                Urls = new[]
                     {
                         new UrlDescriptor{Name = "api", Url = "/swagger/v1/swagger.json"}
                     }
-                };
-
             });
 
             return app;

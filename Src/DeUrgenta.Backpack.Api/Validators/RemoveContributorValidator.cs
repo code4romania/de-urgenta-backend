@@ -43,7 +43,7 @@ namespace DeUrgenta.Backpack.Api.Validators
                 return new LocalizableValidationError("not-backpack-owner", "not-backpack-owner-delete-contributor-message");
             }
 
-            bool requestedUserIsContributor = await _context
+            var requestedUserIsContributor = await _context
                 .BackpacksToUsers
                 .AnyAsync(btu => btu.Backpack.Id == request.BackpackId && btu.User.Id == request.UserId);
 
