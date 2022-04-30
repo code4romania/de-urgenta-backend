@@ -19,7 +19,7 @@ namespace DeUrgenta.Specs.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class BackpackItemCreationFeature : object, Xunit.IClassFixture<BackpackItemCreationFeature.FixtureData>, System.IDisposable
+    public partial class GroupDeleteFeature : object, Xunit.IClassFixture<GroupDeleteFeature.FixtureData>, System.IDisposable
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
@@ -28,10 +28,10 @@ namespace DeUrgenta.Specs.Features
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "Backpack-Item-Create.feature"
+#line 1 "Group-Delete.feature"
 #line hidden
         
-        public BackpackItemCreationFeature(BackpackItemCreationFeature.FixtureData fixtureData, DeUrgenta_Specs_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public GroupDeleteFeature(GroupDeleteFeature.FixtureData fixtureData, DeUrgenta_Specs_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
             this.TestInitialize();
@@ -40,7 +40,7 @@ namespace DeUrgenta.Specs.Features
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Backpack item creation", "A user should be able to create items in a backpack", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Group delete", "A user should be able to delete groups", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -83,13 +83,7 @@ namespace DeUrgenta.Specs.Features
  testRunner.Given("Sasha is authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 6
- testRunner.And("Grisha is authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 7
- testRunner.And("Sasha creates a backpack", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 8
- testRunner.And("Grisha is a backpack contributor", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Sasha creates a group named \"Friends\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
         }
         
@@ -98,21 +92,19 @@ namespace DeUrgenta.Specs.Features
             this.TestTearDown();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Create a backpack item")]
-        [Xunit.TraitAttribute("FeatureTitle", "Backpack item creation")]
-        [Xunit.TraitAttribute("Description", "Create a backpack item")]
-        [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_items")]
-        [Xunit.TraitAttribute("Category", "backpack_item_create")]
-        public virtual void CreateABackpackItem()
+        [Xunit.SkippableFactAttribute(DisplayName="group delete should be reflected in `Friends` list of owner")]
+        [Xunit.TraitAttribute("FeatureTitle", "Group delete")]
+        [Xunit.TraitAttribute("Description", "group delete should be reflected in `Friends` list of owner")]
+        [Xunit.TraitAttribute("Category", "group")]
+        [Xunit.TraitAttribute("Category", "group_delete")]
+        public virtual void GroupDeleteShouldBeReflectedInFriendsListOfOwner()
         {
             string[] tagsOfScenario = new string[] {
-                    "backpack",
-                    "backpack_items",
-                    "backpack_item_create"};
+                    "group",
+                    "group_delete"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a backpack item", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 11
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("group delete should be reflected in `Friends` list of owner", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 9
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -134,35 +126,33 @@ this.ScenarioInitialize(scenarioInfo);
                 this.ScenarioStart();
 #line 4
 this.FeatureBackground();
+#line hidden
+#line 10
+ testRunner.When("owner deletes group named `Friends`", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 11
+ testRunner.And("owner queries for his groups", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 12
- testRunner.When("Sasha creates an item", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 13
- testRunner.Then("returned item has same properties", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-#line 14
- testRunner.And("it does not have an empty id", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Then("returned groups does not contain deleted group", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Created backpack item is visible to all backpack contributors")]
-        [Xunit.TraitAttribute("FeatureTitle", "Backpack item creation")]
-        [Xunit.TraitAttribute("Description", "Created backpack item is visible to all backpack contributors")]
-        [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_items")]
-        [Xunit.TraitAttribute("Category", "backpack_item_create")]
-        public virtual void CreatedBackpackItemIsVisibleToAllBackpackContributors()
+        [Xunit.SkippableFactAttribute(DisplayName="group update should be reflected in `groups` list of owner")]
+        [Xunit.TraitAttribute("FeatureTitle", "Group delete")]
+        [Xunit.TraitAttribute("Description", "group update should be reflected in `groups` list of owner")]
+        [Xunit.TraitAttribute("Category", "group")]
+        [Xunit.TraitAttribute("Category", "group_delete")]
+        public virtual void GroupUpdateShouldBeReflectedInGroupsListOfOwner()
         {
             string[] tagsOfScenario = new string[] {
-                    "backpack",
-                    "backpack_items",
-                    "backpack_item_create"};
+                    "group",
+                    "group_delete"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Created backpack item is visible to all backpack contributors", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 17
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("group update should be reflected in `groups` list of owner", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 15
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -184,35 +174,33 @@ this.ScenarioInitialize(scenarioInfo);
                 this.ScenarioStart();
 #line 4
 this.FeatureBackground();
+#line hidden
+#line 16
+ testRunner.When("owner deletes group named `Friends`", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 17
+ testRunner.And("owner queries for groups", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 18
- testRunner.When("Sasha creates an item", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 19
- testRunner.And("Grisha queries for backpack items", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 20
- testRunner.Then("list contains newly created item", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("returned groups does not contain deleted group", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Backpack contributors can create backpack items")]
-        [Xunit.TraitAttribute("FeatureTitle", "Backpack item creation")]
-        [Xunit.TraitAttribute("Description", "Backpack contributors can create backpack items")]
-        [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_items")]
-        [Xunit.TraitAttribute("Category", "backpack_item_create")]
-        public virtual void BackpackContributorsCanCreateBackpackItems()
+        [Xunit.SkippableFactAttribute(DisplayName="group delete can be performed only by owner")]
+        [Xunit.TraitAttribute("FeatureTitle", "Group delete")]
+        [Xunit.TraitAttribute("Description", "group delete can be performed only by owner")]
+        [Xunit.TraitAttribute("Category", "group")]
+        [Xunit.TraitAttribute("Category", "group_delete")]
+        public virtual void GroupDeleteCanBePerformedOnlyByOwner()
         {
             string[] tagsOfScenario = new string[] {
-                    "backpack",
-                    "backpack_items",
-                    "backpack_item_create"};
+                    "group",
+                    "group_delete"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Backpack contributors can create backpack items", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 23
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("group delete can be performed only by owner", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 21
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -234,35 +222,36 @@ this.ScenarioInitialize(scenarioInfo);
                 this.ScenarioStart();
 #line 4
 this.FeatureBackground();
+#line hidden
+#line 22
+ testRunner.Given("Grisha is authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 23
+ testRunner.And("is a member of Sasha\'s group", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 24
- testRunner.When("Grisha creates an item", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("Grisha deletes group created by Sasha", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 25
- testRunner.And("Sasha queries for backpack items", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 26
- testRunner.Then("list contains newly created item", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("gets BadRequest in response", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Users should be able to create items with indefinite expiration date")]
-        [Xunit.TraitAttribute("FeatureTitle", "Backpack item creation")]
-        [Xunit.TraitAttribute("Description", "Users should be able to create items with indefinite expiration date")]
-        [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_items")]
-        [Xunit.TraitAttribute("Category", "backpack_item_create")]
-        public virtual void UsersShouldBeAbleToCreateItemsWithIndefiniteExpirationDate()
+        [Xunit.SkippableFactAttribute(DisplayName="group delete cannot be performed by a member")]
+        [Xunit.TraitAttribute("FeatureTitle", "Group delete")]
+        [Xunit.TraitAttribute("Description", "group delete cannot be performed by a member")]
+        [Xunit.TraitAttribute("Category", "group")]
+        [Xunit.TraitAttribute("Category", "group_delete")]
+        public virtual void GroupDeleteCannotBePerformedByAMember()
         {
             string[] tagsOfScenario = new string[] {
-                    "backpack",
-                    "backpack_items",
-                    "backpack_item_create"};
+                    "group",
+                    "group_delete"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Users should be able to create items with indefinite expiration date", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 29
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("group delete cannot be performed by a member", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 28
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -285,33 +274,34 @@ this.ScenarioInitialize(scenarioInfo);
 #line 4
 this.FeatureBackground();
 #line hidden
+#line 29
+ testRunner.Given("Grisha is authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
 #line 30
- testRunner.When("Sasha creates an item with indefinite expiration date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("is a member of Sasha\'s group", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 31
- testRunner.Then("returned item has same properties", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.When("Grisha deletes group created by Sasha", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 32
- testRunner.And("it does not have an empty id", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Then("gets BadRequest in response", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Users that are not contributors cannot create backpack items")]
-        [Xunit.TraitAttribute("FeatureTitle", "Backpack item creation")]
-        [Xunit.TraitAttribute("Description", "Users that are not contributors cannot create backpack items")]
-        [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_items")]
-        [Xunit.TraitAttribute("Category", "backpack_item_create")]
-        public virtual void UsersThatAreNotContributorsCannotCreateBackpackItems()
+        [Xunit.SkippableFactAttribute(DisplayName="admin cant delete group with members")]
+        [Xunit.TraitAttribute("FeatureTitle", "Group delete")]
+        [Xunit.TraitAttribute("Description", "admin cant delete group with members")]
+        [Xunit.TraitAttribute("Category", "group")]
+        [Xunit.TraitAttribute("Category", "group_delete")]
+        public virtual void AdminCantDeleteGroupWithMembers()
         {
             string[] tagsOfScenario = new string[] {
-                    "backpack",
-                    "backpack_items",
-                    "backpack_item_create"};
+                    "group",
+                    "group_delete"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Users that are not contributors cannot create backpack items", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("admin cant delete group with members", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 35
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -336,10 +326,10 @@ this.ScenarioInitialize(scenarioInfo);
 this.FeatureBackground();
 #line hidden
 #line 36
- testRunner.Given("Jora is a registered user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("is a member of Sasha\'s group", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 37
- testRunner.When("Jora creates an item", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("Grisha deletes group created by Sasha", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 38
  testRunner.Then("gets BadRequest in response", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -348,20 +338,18 @@ this.FeatureBackground();
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Unauthorized users cannot create backpack items")]
-        [Xunit.TraitAttribute("FeatureTitle", "Backpack item creation")]
-        [Xunit.TraitAttribute("Description", "Unauthorized users cannot create backpack items")]
-        [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_items")]
-        [Xunit.TraitAttribute("Category", "backpack_item_create")]
-        public virtual void UnauthorizedUsersCannotCreateBackpackItems()
+        [Xunit.SkippableFactAttribute(DisplayName="group delete cannot be performed by an un-authenticated")]
+        [Xunit.TraitAttribute("FeatureTitle", "Group delete")]
+        [Xunit.TraitAttribute("Description", "group delete cannot be performed by an un-authenticated")]
+        [Xunit.TraitAttribute("Category", "group")]
+        [Xunit.TraitAttribute("Category", "group_delete")]
+        public virtual void GroupDeleteCannotBePerformedByAnUn_Authenticated()
         {
             string[] tagsOfScenario = new string[] {
-                    "backpack",
-                    "backpack_items",
-                    "backpack_item_create"};
+                    "group",
+                    "group_delete"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Unauthorized users cannot create backpack items", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("group delete cannot be performed by an un-authenticated", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 41
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -389,7 +377,7 @@ this.FeatureBackground();
  testRunner.Given("Ion is un-authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 43
- testRunner.When("Ion creates an item", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("Ion deletes group created by Sasha", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 44
  testRunner.Then("gets Unauthorized in response", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -405,12 +393,12 @@ this.FeatureBackground();
             
             public FixtureData()
             {
-                BackpackItemCreationFeature.FeatureSetup();
+                GroupDeleteFeature.FeatureSetup();
             }
             
             void System.IDisposable.Dispose()
             {
-                BackpackItemCreationFeature.FeatureTearDown();
+                GroupDeleteFeature.FeatureTearDown();
             }
         }
     }

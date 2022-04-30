@@ -53,7 +53,7 @@ namespace DeUrgenta.Specs
         {
             var uniqueId = Guid.NewGuid();
 
-            string email = $"{name}@{uniqueId}.com";
+            var email = $"{name}@{uniqueId}.com";
 
             await _dummyClient.RegisterAsync(new UserRegistrationDto()
             {

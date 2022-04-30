@@ -40,7 +40,7 @@ namespace DeUrgenta.Specs.Features
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Add Safe Location to Group", "\tA group admin should be able to manage Safe Locations in their group", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Add Safe Location to Group", "A group admin should be able to add Safe Locations in their group", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -285,18 +285,18 @@ this.FeatureBackground();
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Unauthorized users cannot add group safe locationa")]
+        [Xunit.SkippableFactAttribute(DisplayName="Unauthorized users cannot add group safe location")]
         [Xunit.TraitAttribute("FeatureTitle", "Add Safe Location to Group")]
-        [Xunit.TraitAttribute("Description", "Unauthorized users cannot add group safe locationa")]
+        [Xunit.TraitAttribute("Description", "Unauthorized users cannot add group safe location")]
         [Xunit.TraitAttribute("Category", "group")]
         [Xunit.TraitAttribute("Category", "group_safe_locations")]
-        public virtual void UnauthorizedUsersCannotAddGroupSafeLocationa()
+        public virtual void UnauthorizedUsersCannotAddGroupSafeLocation()
         {
             string[] tagsOfScenario = new string[] {
                     "group",
                     "group_safe_locations"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Unauthorized users cannot add group safe locationa", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Unauthorized users cannot add group safe location", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 33
 this.ScenarioInitialize(scenarioInfo);
 #line hidden

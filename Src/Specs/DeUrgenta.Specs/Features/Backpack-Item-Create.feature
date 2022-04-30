@@ -1,5 +1,5 @@
 ﻿Feature: Backpack item creation
-	A user should be able to create items in a backpack
+A user should be able to create items in a backpack
 
 Background: 
 	Given Sasha is authenticated user

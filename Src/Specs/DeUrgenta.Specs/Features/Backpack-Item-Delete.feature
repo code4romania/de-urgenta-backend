@@ -1,6 +1,6 @@
 ﻿Feature: Backpack item delete
-	A user should be able to delete items in a backpack.
-	Backpack contributors can delete any items in a backpack.
+A user should be able to delete items in a backpack.
+Backpack contributors can delete any items in a backpack.
 
 Background: 
 	Given Sasha is authenticated user

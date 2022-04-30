@@ -1,5 +1,5 @@
 ﻿Feature: Backpack delete
-	A user should be able to delete backpacks
+A user should be able to delete backpacks
 
 Background: 
 	Given Sasha is authenticated user
@@ -29,7 +29,6 @@ Scenario: Backpack delete cannot be performed by a contributor
 	And is a contributor to Sasha's backpack
 	When Grisha deletes backpack created by Sasha
 	Then gets BadRequest in response
-
 
 @backpack @backpack_delete
 Scenario: Backpack delete cannot be performed by an un-authenticated

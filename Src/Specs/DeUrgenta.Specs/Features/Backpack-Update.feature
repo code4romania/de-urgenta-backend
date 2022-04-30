@@ -1,5 +1,5 @@
 ﻿Feature: Backpack update
-	A user should be able to update his backpacks
+A user should be able to update his backpacks
 
 Background: 
 	Given Sasha is authenticated user

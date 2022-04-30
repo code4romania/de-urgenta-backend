@@ -1,6 +1,6 @@
 ﻿Feature: Backpack item update
-	A user should be able to update items in a backpack.
-	Backpack contributors can update any items in a backpack.
+A user should be able to update items in a backpack.
+Backpack contributors can update any items in a backpack.
 
 Background: 
 	Given Sasha is authenticated user

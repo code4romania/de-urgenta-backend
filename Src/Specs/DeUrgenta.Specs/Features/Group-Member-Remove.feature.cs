@@ -19,7 +19,7 @@ namespace DeUrgenta.Specs.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class BackpackItemCreationFeature : object, Xunit.IClassFixture<BackpackItemCreationFeature.FixtureData>, System.IDisposable
+    public partial class RemoveMemberFromGroupFeature : object, Xunit.IClassFixture<RemoveMemberFromGroupFeature.FixtureData>, System.IDisposable
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
@@ -28,10 +28,10 @@ namespace DeUrgenta.Specs.Features
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "Backpack-Item-Create.feature"
+#line 1 "Group-Member-Remove.feature"
 #line hidden
         
-        public BackpackItemCreationFeature(BackpackItemCreationFeature.FixtureData fixtureData, DeUrgenta_Specs_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public RemoveMemberFromGroupFeature(RemoveMemberFromGroupFeature.FixtureData fixtureData, DeUrgenta_Specs_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
             this.TestInitialize();
@@ -40,7 +40,7 @@ namespace DeUrgenta.Specs.Features
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Backpack item creation", "A user should be able to create items in a backpack", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Remove Member from Group", "A group admin should be able to remove members in their group", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -80,16 +80,16 @@ namespace DeUrgenta.Specs.Features
 #line 4
 #line hidden
 #line 5
- testRunner.Given("Sasha is authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("Sasha is an authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 6
- testRunner.And("Grisha is authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Sasha creates a group named \"Sashas group\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 7
- testRunner.And("Sasha creates a backpack", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Grisha is an authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 8
- testRunner.And("Grisha is a backpack contributor", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Grisha is a member of `Sasha\'s group`", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
         }
         
@@ -98,21 +98,15 @@ namespace DeUrgenta.Specs.Features
             this.TestTearDown();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Create a backpack item")]
-        [Xunit.TraitAttribute("FeatureTitle", "Backpack item creation")]
-        [Xunit.TraitAttribute("Description", "Create a backpack item")]
-        [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_items")]
-        [Xunit.TraitAttribute("Category", "backpack_item_create")]
-        public virtual void CreateABackpackItem()
+        [Xunit.SkippableFactAttribute(DisplayName="Remove member from the group")]
+        [Xunit.TraitAttribute("FeatureTitle", "Remove Member from Group")]
+        [Xunit.TraitAttribute("Description", "Remove member from the group")]
+        public virtual void RemoveMemberFromTheGroup()
         {
-            string[] tagsOfScenario = new string[] {
-                    "backpack",
-                    "backpack_items",
-                    "backpack_item_create"};
+            string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a backpack item", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 11
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Remove member from the group", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 10
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -134,35 +128,26 @@ this.ScenarioInitialize(scenarioInfo);
                 this.ScenarioStart();
 #line 4
 this.FeatureBackground();
+#line hidden
+#line 11
+ testRunner.When("Sasha Removes Grisha from `Sasha\'s group`", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 12
- testRunner.When("Sasha creates an item", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 13
- testRunner.Then("returned item has same properties", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-#line 14
- testRunner.And("it does not have an empty id", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Then("the returned group members list does not contain Grisha", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Created backpack item is visible to all backpack contributors")]
-        [Xunit.TraitAttribute("FeatureTitle", "Backpack item creation")]
-        [Xunit.TraitAttribute("Description", "Created backpack item is visible to all backpack contributors")]
-        [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_items")]
-        [Xunit.TraitAttribute("Category", "backpack_item_create")]
-        public virtual void CreatedBackpackItemIsVisibleToAllBackpackContributors()
+        [Xunit.SkippableFactAttribute(DisplayName="Remove member can be done only by group admin")]
+        [Xunit.TraitAttribute("FeatureTitle", "Remove Member from Group")]
+        [Xunit.TraitAttribute("Description", "Remove member can be done only by group admin")]
+        public virtual void RemoveMemberCanBeDoneOnlyByGroupAdmin()
         {
-            string[] tagsOfScenario = new string[] {
-                    "backpack",
-                    "backpack_items",
-                    "backpack_item_create"};
+            string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Created backpack item is visible to all backpack contributors", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 17
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Remove member can be done only by group admin", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 14
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -184,35 +169,32 @@ this.ScenarioInitialize(scenarioInfo);
                 this.ScenarioStart();
 #line 4
 this.FeatureBackground();
+#line hidden
+#line 15
+ testRunner.Given("Jora is an authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 16
+ testRunner.And("Jora is a member of `Sasha\'s group`", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 17
+ testRunner.When("Grisha Removes Jora from `Sasha\'s group`", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 18
- testRunner.When("Sasha creates an item", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 19
- testRunner.And("Grisha queries for backpack items", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 20
- testRunner.Then("list contains newly created item", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("gets a BadRequest response", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Backpack contributors can create backpack items")]
-        [Xunit.TraitAttribute("FeatureTitle", "Backpack item creation")]
-        [Xunit.TraitAttribute("Description", "Backpack contributors can create backpack items")]
-        [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_items")]
-        [Xunit.TraitAttribute("Category", "backpack_item_create")]
-        public virtual void BackpackContributorsCanCreateBackpackItems()
+        [Xunit.SkippableFactAttribute(DisplayName="Remove member is visible to group members")]
+        [Xunit.TraitAttribute("FeatureTitle", "Remove Member from Group")]
+        [Xunit.TraitAttribute("Description", "Remove member is visible to group members")]
+        public virtual void RemoveMemberIsVisibleToGroupMembers()
         {
-            string[] tagsOfScenario = new string[] {
-                    "backpack",
-                    "backpack_items",
-                    "backpack_item_create"};
+            string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Backpack contributors can create backpack items", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 23
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Remove member is visible to group members", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 20
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -234,35 +216,35 @@ this.ScenarioInitialize(scenarioInfo);
                 this.ScenarioStart();
 #line 4
 this.FeatureBackground();
+#line hidden
+#line 21
+ testRunner.Given("Jora is an authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 22
+ testRunner.And("Jora is a member of `Sasha\'s group`", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 23
+ testRunner.When("Sasha Removes Grisha from `Sasha\'s group`", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 24
- testRunner.When("Grisha creates an item", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("Jora queries for group members", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 25
- testRunner.And("Sasha queries for backpack items", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 26
- testRunner.Then("list contains newly created item", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("list contains newly created safe location", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Users should be able to create items with indefinite expiration date")]
-        [Xunit.TraitAttribute("FeatureTitle", "Backpack item creation")]
-        [Xunit.TraitAttribute("Description", "Users should be able to create items with indefinite expiration date")]
-        [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_items")]
-        [Xunit.TraitAttribute("Category", "backpack_item_create")]
-        public virtual void UsersShouldBeAbleToCreateItemsWithIndefiniteExpirationDate()
+        [Xunit.SkippableFactAttribute(DisplayName="Admin can\'t remove himself")]
+        [Xunit.TraitAttribute("FeatureTitle", "Remove Member from Group")]
+        [Xunit.TraitAttribute("Description", "Admin can\'t remove himself")]
+        public virtual void AdminCantRemoveHimself()
         {
-            string[] tagsOfScenario = new string[] {
-                    "backpack",
-                    "backpack_items",
-                    "backpack_item_create"};
+            string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Users should be able to create items with indefinite expiration date", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 29
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Admin can\'t remove himself", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 27
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -285,114 +267,99 @@ this.ScenarioInitialize(scenarioInfo);
 #line 4
 this.FeatureBackground();
 #line hidden
-#line 30
- testRunner.When("Sasha creates an item with indefinite expiration date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 28
+ testRunner.When("Sasha Removes himself from `Sasha\'s group`", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
+#line 29
+ testRunner.Then("gets a BadRequest response", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Unauthorized users cannot Remove group safe location")]
+        [Xunit.TraitAttribute("FeatureTitle", "Remove Member from Group")]
+        [Xunit.TraitAttribute("Description", "Unauthorized users cannot Remove group safe location")]
+        public virtual void UnauthorizedUsersCannotRemoveGroupSafeLocation()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Unauthorized users cannot Remove group safe location", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 31
- testRunner.Then("returned item has same properties", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 4
+this.FeatureBackground();
 #line hidden
 #line 32
- testRunner.And("it does not have an empty id", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [Xunit.SkippableFactAttribute(DisplayName="Users that are not contributors cannot create backpack items")]
-        [Xunit.TraitAttribute("FeatureTitle", "Backpack item creation")]
-        [Xunit.TraitAttribute("Description", "Users that are not contributors cannot create backpack items")]
-        [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_items")]
-        [Xunit.TraitAttribute("Category", "backpack_item_create")]
-        public virtual void UsersThatAreNotContributorsCannotCreateBackpackItems()
-        {
-            string[] tagsOfScenario = new string[] {
-                    "backpack",
-                    "backpack_items",
-                    "backpack_item_create"};
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Users that are not contributors cannot create backpack items", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 35
-this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            bool isScenarioIgnored = default(bool);
-            bool isFeatureIgnored = default(bool);
-            if ((tagsOfScenario != null))
-            {
-                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((this._featureTags != null))
-            {
-                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((isScenarioIgnored || isFeatureIgnored))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-#line 4
-this.FeatureBackground();
-#line hidden
-#line 36
- testRunner.Given("Jora is a registered user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-#line 37
- testRunner.When("Jora creates an item", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 38
- testRunner.Then("gets BadRequest in response", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [Xunit.SkippableFactAttribute(DisplayName="Unauthorized users cannot create backpack items")]
-        [Xunit.TraitAttribute("FeatureTitle", "Backpack item creation")]
-        [Xunit.TraitAttribute("Description", "Unauthorized users cannot create backpack items")]
-        [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_items")]
-        [Xunit.TraitAttribute("Category", "backpack_item_create")]
-        public virtual void UnauthorizedUsersCannotCreateBackpackItems()
-        {
-            string[] tagsOfScenario = new string[] {
-                    "backpack",
-                    "backpack_items",
-                    "backpack_item_create"};
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Unauthorized users cannot create backpack items", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 41
-this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            bool isScenarioIgnored = default(bool);
-            bool isFeatureIgnored = default(bool);
-            if ((tagsOfScenario != null))
-            {
-                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((this._featureTags != null))
-            {
-                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((isScenarioIgnored || isFeatureIgnored))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-#line 4
-this.FeatureBackground();
-#line hidden
-#line 42
  testRunner.Given("Ion is un-authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 43
- testRunner.When("Ion creates an item", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 33
+ testRunner.When("Ion Removes Safe Location `Park` from `Sasha\'s group`", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 44
+#line 34
  testRunner.Then("gets Unauthorized in response", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Non-group member can\'t add group Safe Locations")]
+        [Xunit.TraitAttribute("FeatureTitle", "Remove Member from Group")]
+        [Xunit.TraitAttribute("Description", "Non-group member can\'t add group Safe Locations")]
+        public virtual void Non_GroupMemberCantAddGroupSafeLocations()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Non-group member can\'t add group Safe Locations", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 36
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 4
+this.FeatureBackground();
+#line hidden
+#line 37
+ testRunner.Given("Jora is an authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 38
+ testRunner.When("Jora Removes Safe Location `Park` from `Sasha\'s group`", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 39
+ testRunner.Then("Jora gets a BadRequest response", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -405,12 +372,12 @@ this.FeatureBackground();
             
             public FixtureData()
             {
-                BackpackItemCreationFeature.FeatureSetup();
+                RemoveMemberFromGroupFeature.FeatureSetup();
             }
             
             void System.IDisposable.Dispose()
             {
-                BackpackItemCreationFeature.FeatureTearDown();
+                RemoveMemberFromGroupFeature.FeatureTearDown();
             }
         }
     }

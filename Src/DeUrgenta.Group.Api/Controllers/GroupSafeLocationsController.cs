@@ -23,114 +23,101 @@ namespace DeUrgenta.Group.Api.Controllers
     [Produces("application/json")]
     [Consumes("application/json")]
     [Authorize]
-    public class GroupController : ControllerBase
+    public class GroupSafeLocationsController : ControllerBase
     {
         private readonly IMediator _mediator;
         private readonly IResultMapper _mapper;
 
-        public GroupController(IMediator mediator, IResultMapper mapper)
+        public GroupSafeLocationsController(IMediator mediator, IResultMapper mapper)
         {
             _mediator = mediator;
             _mapper = mapper;
         }
 
-        /// <summary>
-        /// Gets user groups
-        /// </summary>d
-        /// <returns></returns>
-        [HttpGet("/groups")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Get groups of a user", typeof(IImmutableList<GroupModel>))]
-        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
-
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetGroupsResponseExample))]
-        [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<IImmutableList<GroupModel>>> GetGroupsAsync()
-        {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var query = new GetMyGroups(sub);
-            var result = await _mediator.Send(query);
-
-            return await _mapper.MapToActionResult(result);
-        }
 
         /// <summary>
-        /// Gets groups administered by current user
+        /// Gets group safe location
         /// </summary>
         /// <returns></returns>
-        [HttpGet("/groups/my")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Get groups of a user", typeof(IImmutableList<GroupModel>))]
+        [HttpGet("{groupId:guid}/safe-locations")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Get safe locations of a group", typeof(IImmutableList<SafeLocationResponseModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetGroupsResponseExample))]
+
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetGroupSafeLocationsResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<IImmutableList<GroupModel>>> GetMyGroupsAsync()
+        public async Task<ActionResult<IImmutableList<SafeLocationResponseModel>>> GetGroupSafeLocationsAsync([FromRoute] Guid groupId)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var query = new GetAdministeredGroups(sub);
+            var query = new GetGroupSafeLocations(sub, groupId);
             var result = await _mediator.Send(query);
 
             return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
-        /// Adds a new group
+        /// Adds a new group safe location
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [SwaggerResponse(StatusCodes.Status200OK, "New group", typeof(GroupModel))]
+        [Route("{groupId:guid}/safe-location")]
+        [SwaggerResponse(StatusCodes.Status200OK, "New group safe location", typeof(SafeLocationModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerRequestExample(typeof(GroupRequest), typeof(AddOrUpdateGroupRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateGroupResponseExample))]
+        [SwaggerRequestExample(typeof(SafeLocationRequest), typeof(AddOrUpdateSafeLocationRequestExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateSafeLocationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<GroupModel>> CreateNewGroupAsync([FromBody] GroupRequest group)
+        public async Task<ActionResult<SafeLocationResponseModel>> CreateNewSafeLocationAsync([FromRoute] Guid groupId, [FromBody] SafeLocationRequest safeLocation)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new AddGroup(sub, group);
-            var result = await _mediator.Send(command);
+            var query = new AddSafeLocation(sub, groupId, safeLocation);
+            var result = await _mediator.Send(query);
 
             return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
-        /// Updates a group
+        /// Updates a group safe location
         /// </summary>
+        /// <returns></returns>
         [HttpPut]
-        [Route("{groupId:guid}")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Updated group", typeof(GroupModel))]
+        [Route("safe-location/{locationId:guid}")]
+
+        [SwaggerResponse(StatusCodes.Status200OK, "Updated group safe location", typeof(SafeLocationResponseModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
-        [SwaggerRequestExample(typeof(GroupRequest), typeof(AddOrUpdateGroupRequestExample))]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateGroupResponseExample))]
+        [SwaggerRequestExample(typeof(SafeLocationRequest), typeof(AddOrUpdateSafeLocationRequestExample))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateSafeLocationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<GroupModel>> UpdateGroupAsync([FromRoute] Guid groupId, [FromBody] GroupRequest group)
+        public async Task<ActionResult<SafeLocationResponseModel>> UpdateSafeLocationAsync([FromRoute] Guid locationId, [FromBody] SafeLocationRequest safeLocation)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new UpdateGroup(sub, groupId, group);
-            var result = await _mediator.Send(command);
+            var query = new UpdateSafeLocation(sub, locationId, safeLocation);
+            var result = await _mediator.Send(query);
 
             return await _mapper.MapToActionResult(result);
         }
 
         /// <summary>
-        /// Delete a group
+        /// Delete a group safe location
         /// </summary>
         /// <returns></returns>
         [HttpDelete]
-        [Route("{groupId:guid}")]
-        [SwaggerResponse(StatusCodes.Status204NoContent, "Group was deleted")]
+        [Route("safe-location/{locationId:guid}")]
+
+        [SwaggerResponse(StatusCodes.Status204NoContent, "Group safe location was deleted")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<IActionResult> DeleteGroupAsync([FromRoute] Guid groupId)
+        public async Task<IActionResult> DeleteSafeLocationAsync([FromRoute] Guid locationId)
         {
             var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new DeleteGroup(sub, groupId);
+            var command = new DeleteSafeLocation(sub, locationId);
             var result = await _mediator.Send(command);
 
             return await _mapper.MapToActionResult(result);

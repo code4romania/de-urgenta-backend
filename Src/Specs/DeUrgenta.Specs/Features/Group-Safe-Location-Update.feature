@@ -1,5 +1,5 @@
-Feature: Add Safe Location to Group
-A group admin should be able to add Safe Locations in their group
+Feature: Update Safe Location to Group
+A group admin should be able to update Safe Locations in their group
 
 Background:
 	Given Sasha is an authenticated user

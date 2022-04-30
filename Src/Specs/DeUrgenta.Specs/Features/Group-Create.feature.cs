@@ -19,7 +19,7 @@ namespace DeUrgenta.Specs.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class BackpackCreationFeature : object, Xunit.IClassFixture<BackpackCreationFeature.FixtureData>, System.IDisposable
+    public partial class GroupCreationFeature : object, Xunit.IClassFixture<GroupCreationFeature.FixtureData>, System.IDisposable
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
@@ -28,10 +28,10 @@ namespace DeUrgenta.Specs.Features
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "Backpack-Create.feature"
+#line 1 "Group-Create.feature"
 #line hidden
         
-        public BackpackCreationFeature(BackpackCreationFeature.FixtureData fixtureData, DeUrgenta_Specs_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public GroupCreationFeature(GroupCreationFeature.FixtureData fixtureData, DeUrgenta_Specs_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
             this.TestInitialize();
@@ -40,7 +40,7 @@ namespace DeUrgenta.Specs.Features
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Backpack creation", "\tA user should be able to create backpacks", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Group creation", "A user should be able to create groups", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -83,7 +83,7 @@ namespace DeUrgenta.Specs.Features
  testRunner.Given("Sasha is authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 6
- testRunner.And("he creates a backpack called \"My backpack\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("he creates a group called \"My group\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
         }
         
@@ -92,18 +92,18 @@ namespace DeUrgenta.Specs.Features
             this.TestTearDown();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Create a backpack")]
-        [Xunit.TraitAttribute("FeatureTitle", "Backpack creation")]
-        [Xunit.TraitAttribute("Description", "Create a backpack")]
-        [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_create")]
-        public virtual void CreateABackpack()
+        [Xunit.SkippableFactAttribute(DisplayName="Create a group")]
+        [Xunit.TraitAttribute("FeatureTitle", "Group creation")]
+        [Xunit.TraitAttribute("Description", "Create a group")]
+        [Xunit.TraitAttribute("Category", "group")]
+        [Xunit.TraitAttribute("Category", "group_create")]
+        public virtual void CreateAGroup()
         {
             string[] tagsOfScenario = new string[] {
-                    "backpack",
-                    "backpack_create"};
+                    "group",
+                    "group_create"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a backpack", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a group", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 9
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -128,7 +128,7 @@ this.ScenarioInitialize(scenarioInfo);
 this.FeatureBackground();
 #line hidden
 #line 10
- testRunner.Then("returned backpack has same name", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("returned group has same name", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 11
  testRunner.And("it does not have an empty id", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -137,18 +137,18 @@ this.FeatureBackground();
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Query `my backpacks` should contain created backpack")]
-        [Xunit.TraitAttribute("FeatureTitle", "Backpack creation")]
-        [Xunit.TraitAttribute("Description", "Query `my backpacks` should contain created backpack")]
-        [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_create")]
-        public virtual void QueryMyBackpacksShouldContainCreatedBackpack()
+        [Xunit.SkippableFactAttribute(DisplayName="Query `my groups` should contain created group")]
+        [Xunit.TraitAttribute("FeatureTitle", "Group creation")]
+        [Xunit.TraitAttribute("Description", "Query `my groups` should contain created group")]
+        [Xunit.TraitAttribute("Category", "group")]
+        [Xunit.TraitAttribute("Category", "group_create")]
+        public virtual void QueryMyGroupsShouldContainCreatedGroup()
         {
             string[] tagsOfScenario = new string[] {
-                    "backpack",
-                    "backpack_create"};
+                    "group",
+                    "group_create"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Query `my backpacks` should contain created backpack", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Query `my groups` should contain created group", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 14
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -173,27 +173,27 @@ this.ScenarioInitialize(scenarioInfo);
 this.FeatureBackground();
 #line hidden
 #line 15
- testRunner.When("he queries for his backpacks", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("he queries for his groups", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 16
- testRunner.Then("returned backpacks contain created backpack", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("returned groups contain created group", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Query `backpacks` should contain created backpack")]
-        [Xunit.TraitAttribute("FeatureTitle", "Backpack creation")]
-        [Xunit.TraitAttribute("Description", "Query `backpacks` should contain created backpack")]
-        [Xunit.TraitAttribute("Category", "backpack")]
-        [Xunit.TraitAttribute("Category", "backpack_create")]
-        public virtual void QueryBackpacksShouldContainCreatedBackpack()
+        [Xunit.SkippableFactAttribute(DisplayName="Query `groups` should contain created group")]
+        [Xunit.TraitAttribute("FeatureTitle", "Group creation")]
+        [Xunit.TraitAttribute("Description", "Query `groups` should contain created group")]
+        [Xunit.TraitAttribute("Category", "group")]
+        [Xunit.TraitAttribute("Category", "group_create")]
+        public virtual void QueryGroupsShouldContainCreatedGroup()
         {
             string[] tagsOfScenario = new string[] {
-                    "backpack",
-                    "backpack_create"};
+                    "group",
+                    "group_create"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Query `backpacks` should contain created backpack", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Query `groups` should contain created group", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 19
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -218,23 +218,27 @@ this.ScenarioInitialize(scenarioInfo);
 this.FeatureBackground();
 #line hidden
 #line 20
- testRunner.When("he queries for backpacks", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("he queries for groups", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 21
- testRunner.Then("returned backpacks contain created backpack", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("returned groups contain created group", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="An non authenticated user cannot create backpacks")]
-        [Xunit.TraitAttribute("FeatureTitle", "Backpack creation")]
-        [Xunit.TraitAttribute("Description", "An non authenticated user cannot create backpacks")]
-        public virtual void AnNonAuthenticatedUserCannotCreateBackpacks()
+        [Xunit.SkippableFactAttribute(DisplayName="An non authenticated user cannot create groups")]
+        [Xunit.TraitAttribute("FeatureTitle", "Group creation")]
+        [Xunit.TraitAttribute("Description", "An non authenticated user cannot create groups")]
+        [Xunit.TraitAttribute("Category", "group")]
+        [Xunit.TraitAttribute("Category", "group_create")]
+        public virtual void AnNonAuthenticatedUserCannotCreateGroups()
         {
-            string[] tagsOfScenario = ((string[])(null));
+            string[] tagsOfScenario = new string[] {
+                    "group",
+                    "group_create"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("An non authenticated user cannot create backpacks", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("An non authenticated user cannot create groups", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 24
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -262,7 +266,7 @@ this.FeatureBackground();
  testRunner.Given("Ion is a non authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 26
- testRunner.When("Ion tries to create a backpack", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("Ion tries to create a group", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 27
  testRunner.Then("401 is returned", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -278,12 +282,12 @@ this.FeatureBackground();
             
             public FixtureData()
             {
-                BackpackCreationFeature.FeatureSetup();
+                GroupCreationFeature.FeatureSetup();
             }
             
             void System.IDisposable.Dispose()
             {
-                BackpackCreationFeature.FeatureTearDown();
+                GroupCreationFeature.FeatureTearDown();
             }
         }
     }
