@@ -37,8 +37,6 @@ namespace DeUrgenta.RecurringJobs.Tests
 
         public async Task InitializeAsync()
         {
-            await base.InitializeAsync();
-
             if (!_testConfig.UseDbCheckpoint)
                 return;
 
@@ -50,8 +48,6 @@ namespace DeUrgenta.RecurringJobs.Tests
 
         public async Task DisposeAsync()
         {
-            await base.DisposeAsync();
-
             if (!_testConfig.UseDbCheckpoint)
                 return;
 

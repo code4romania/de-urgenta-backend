@@ -7,6 +7,7 @@ using DeUrgenta.Common.Auth;
 using DeUrgenta.Common.Models.Dtos;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.Emailing.Service.Models;
+using DeUrgenta.User.Api.Models;
 using DeUrgenta.User.Api.Models.DTOs.Requests;
 using DeUrgenta.User.Api.Notifications;
 using DeUrgenta.User.Api.Queries;
@@ -180,7 +181,9 @@ namespace DeUrgenta.User.Api.Controller
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] UserLoginRequest user)
+        [SwaggerResponse(StatusCodes.Status200OK, "Login response", typeof(LoginResponse))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Something bad happened", typeof(ProblemDetails))]
+        public async Task<ActionResult<LoginResponse>> Login([FromBody] UserLoginRequest user)
         {
             var badLoginRequest = new ActionResponse
             {
@@ -214,11 +217,11 @@ namespace DeUrgenta.User.Api.Controller
                 return BadRequest();
             }
 
-            return Ok(new
+            return Ok(new LoginResponse
             {
-                token = jwtToken,
-                userDetails.Value.LastName,
-                userDetails.Value.FirstName,
+                Token = jwtToken,
+                LastName = userDetails.Value.LastName,
+                FirstName = userDetails.Value.FirstName,
                 Success = true
             });
         }
