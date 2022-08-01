@@ -51,7 +51,11 @@ namespace DeUrgenta.Certifications.Api
                     if (p.GetService<IHostEnvironment>().IsDevelopment())
                     {
                         //settings to use with localstack S3 service
-                        config.ServiceURL = configuration.GetValue<string>("AWS:ServiceURL");
+                        var serviceUrl = configuration.GetValue<string>("AWS:ServiceURL");
+                        if (!string.IsNullOrEmpty(serviceUrl))
+                        {
+                            config.ServiceURL = configuration.GetValue<string>("AWS:ServiceURL");
+                        }
                         config.ForcePathStyle = true;
                     }
 
