@@ -337,3 +337,5 @@ ASALocalRun/
 Src/postgres_data
 .env
 Src/DeUrgenta.Api/LocalCertificationStore
+
+.localstack/
