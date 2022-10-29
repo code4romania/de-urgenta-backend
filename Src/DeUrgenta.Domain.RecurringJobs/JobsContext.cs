@@ -1,4 +1,5 @@
-﻿using DeUrgenta.Domain.RecurringJobs.Configurations;
+﻿using System;
+using DeUrgenta.Domain.RecurringJobs.Configurations;
 using DeUrgenta.Domain.RecurringJobs.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,7 +8,9 @@ namespace DeUrgenta.Domain.RecurringJobs
     public class JobsContext : DbContext
     {
         public JobsContext(DbContextOptions<JobsContext> options) : base(options)
-        { }
+        {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        }
 
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<CertificationDetails> CertificationDetails { get; set; }
