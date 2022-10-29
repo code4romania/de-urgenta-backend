@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace DeUrgenta.RecurringJobs.Jobs.Interfaces
 {
     public interface INotificationSenderJob
     {
-        Task RunAsync();
+        Task RunAsync(CancellationToken cancellationToken);
     }
 }

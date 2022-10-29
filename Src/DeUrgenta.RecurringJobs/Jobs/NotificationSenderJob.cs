@@ -8,6 +8,7 @@ using DeUrgenta.Domain.RecurringJobs;
 using DeUrgenta.Domain.RecurringJobs.Entities;
 using DeUrgenta.RecurringJobs.Jobs.Config;
 using Microsoft.Extensions.Options;
+using System.Threading;
 
 namespace DeUrgenta.RecurringJobs.Jobs
 {
@@ -24,20 +25,20 @@ namespace DeUrgenta.RecurringJobs.Jobs
             _config = config.Value;
         }
 
-        public async Task RunAsync()
+        public async Task RunAsync(CancellationToken cancellationToken)
         {
             var notificationsToSend = await _jobsContext.Notifications
                 .Where(n => n.Status == NotificationStatus.NotSent
                                     && n.ScheduledDate.Date == DateTime.Today)
                 .Take(_config.BatchSize)
-                .ToListAsync();
+                .ToListAsync(cancellationToken: cancellationToken);
 
             foreach (var notification in notificationsToSend)
             {
                 var notificationStatus = await _notificationService.SendNotificationAsync(notification.Id);
 
                 notification.Status = notificationStatus;
-                await _jobsContext.SaveChangesAsync();
+                await _jobsContext.SaveChangesAsync(cancellationToken);
             }
         }
     }

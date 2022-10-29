@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Domain.Api.Entities;
@@ -21,16 +22,16 @@ namespace DeUrgenta.RecurringJobs.Jobs
             _config = config.Value;
         }
 
-        public async Task RunAsync()
+        public async Task RunAsync(CancellationToken cancellationToken)
         {
             var expiredInvites = await _context.Invites
                .Where(invite => (DateTime.Today - invite.SentOn).Days >= _config.DaysBeforeExpirationDate
                                 && invite.InviteStatus == InviteStatus.Sent)
-               .ToListAsync();
+               .ToListAsync(cancellationToken: cancellationToken);
 
             _context.Invites.RemoveRange(expiredInvites);
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }

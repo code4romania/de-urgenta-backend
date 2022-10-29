@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Domain.RecurringJobs;
 using DeUrgenta.Domain.RecurringJobs.Entities;
@@ -39,14 +40,14 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithStatus(NotificationStatus.NotSent)
                 .Build();
 
-            await _jobsContext.Notifications.AddAsync(notification);
+            _jobsContext.Notifications.Add(notification);
             await _jobsContext.SaveChangesAsync();
 
             var notificationService = Substitute.For<INotificationService>();
             var sut = new NotificationSenderJob(notificationService, _jobsContext, _jobConfig);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             await notificationService.Received().SendNotificationAsync(notification.Id);
@@ -60,14 +61,14 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithScheduledDate(DateTime.Now)
                 .Build();
 
-            await _jobsContext.Notifications.AddAsync(notification);
+            _jobsContext.Notifications.Add(notification);
             await _jobsContext.SaveChangesAsync();
 
             var notificationService = Substitute.For<INotificationService>();
             var sut = new NotificationSenderJob(notificationService, _jobsContext, _jobConfig);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             await notificationService.Received().SendNotificationAsync(notification.Id);
@@ -84,14 +85,14 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithStatus(status)
                 .Build();
 
-            await _jobsContext.Notifications.AddAsync(notification);
+            _jobsContext.Notifications.Add(notification);
             await _jobsContext.SaveChangesAsync();
 
             var notificationService = Substitute.For<INotificationService>();
             var sut = new NotificationSenderJob(notificationService, _jobsContext, _jobConfig);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             await notificationService.DidNotReceive().SendNotificationAsync(notification.Id);
@@ -113,14 +114,14 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithScheduledDate(scheduledDate)
                 .Build();
 
-            await _jobsContext.Notifications.AddAsync(notification);
+            _jobsContext.Notifications.Add(notification);
             await _jobsContext.SaveChangesAsync();
 
             var notificationService = Substitute.For<INotificationService>();
             var sut = new NotificationSenderJob(notificationService, _jobsContext, _jobConfig);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             await notificationService.DidNotReceive().SendNotificationAsync(notification.Id);
@@ -135,7 +136,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithStatus(NotificationStatus.NotSent)
                 .Build();
 
-            await _jobsContext.Notifications.AddAsync(notification);
+            _jobsContext.Notifications.Add(notification);
             await _jobsContext.SaveChangesAsync();
 
             var notificationService = Substitute.For<INotificationService>();
@@ -144,7 +145,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             var sut = new NotificationSenderJob(notificationService, _jobsContext, _jobConfig);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             notification.Status.Should().Be(NotificationStatus.PartlySent);

@@ -1,6 +1,6 @@
+
 using DeUrgenta.Emailing.Service;
 using DeUrgenta.Infra.Extensions;
-using DeUrgenta.RecurringJobs.Domain;
 using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using System.Threading;
+
+using System;
 using System.Threading.Tasks;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Domain.Api.Entities;
@@ -32,7 +34,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithStatus(InviteStatus.Sent)
                 .WithSentOn(DateTime.Today.AddDays(-11))
                 .Build();
-            await _dbContext.Invites.AddAsync(invite);
+            _dbContext.Invites.Add(invite);
             await _dbContext.SaveChangesAsync();
 
             var jobConfig = Substitute.For<IOptions<ExpiredInviteJobConfig>>();
@@ -43,7 +45,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             var sut = new ExpiredInviteJob(_dbContext, jobConfig);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             var remainingInvite = await _dbContext.Invites.FirstOrDefaultAsync(i => i.Id == invite.Id);
@@ -58,7 +60,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithStatus(InviteStatus.Sent)
                 .WithSentOn(DateTime.Today.AddDays(-9))
                 .Build();
-            await _dbContext.Invites.AddAsync(invite);
+            _dbContext.Invites.Add(invite);
             await _dbContext.SaveChangesAsync();
 
             var jobConfig = Substitute.For<IOptions<ExpiredInviteJobConfig>>();
@@ -69,7 +71,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             var sut = new ExpiredInviteJob(_dbContext, jobConfig);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             var remainingInvite = await _dbContext.Invites.FirstOrDefaultAsync(i => i.Id == invite.Id);
@@ -84,7 +86,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithStatus(InviteStatus.Accepted)
                 .WithSentOn(DateTime.Today.AddDays(-11))
                 .Build();
-            await _dbContext.Invites.AddAsync(invite);
+            _dbContext.Invites.Add(invite);
             await _dbContext.SaveChangesAsync();
 
             var jobConfig = Substitute.For<IOptions<ExpiredInviteJobConfig>>();
@@ -95,7 +97,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             var sut = new ExpiredInviteJob(_dbContext, jobConfig);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             var remainingInvite = await _dbContext.Invites.FirstOrDefaultAsync(i => i.Id == invite.Id);

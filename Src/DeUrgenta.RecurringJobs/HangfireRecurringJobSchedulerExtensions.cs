@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using DeUrgenta.RecurringJobs.Jobs;
 using DeUrgenta.RecurringJobs.Jobs.Config;
 using DeUrgenta.RecurringJobs.Jobs.Interfaces;
@@ -18,7 +19,7 @@ namespace DeUrgenta.RecurringJobs
             {
                 RecurringJob.AddOrUpdate<IExpiredCertificationJob>(
                     nameof(ExpiredCertificationJob),
-                    job => job.RunAsync(),
+                    job => job.RunAsync(CancellationToken.None),
                     expiredCertificationJobConfig.CronExpression,
                     TimeZoneInfo.Utc
                 );
@@ -30,7 +31,7 @@ namespace DeUrgenta.RecurringJobs
             {
                 RecurringJob.AddOrUpdate<INotificationSenderJob>(
                     nameof(NotificationSenderJob),
-                    job => job.RunAsync(),
+                    job => job.RunAsync(CancellationToken.None),
                     sendNotificationsJob.CronExpression,
                     TimeZoneInfo.Utc
                 );
@@ -42,7 +43,7 @@ namespace DeUrgenta.RecurringJobs
             {
                 RecurringJob.AddOrUpdate<INotificationCleanupJob>(
                     nameof(NotificationCleanupJob),
-                    job => job.RunAsync(),
+                    job => job.RunAsync(CancellationToken.None),
                     cleanupNotificationsJob.CronExpression,
                     TimeZoneInfo.Utc
                 );
@@ -54,7 +55,7 @@ namespace DeUrgenta.RecurringJobs
             {
                 RecurringJob.AddOrUpdate<IEventArchivalJob>(
                     nameof(EventArchivalJob),
-                    job => job.RunAsync(),
+                    job => job.RunAsync(CancellationToken.None),
                     eventArchivalJobConfig.CronExpression,
                     TimeZoneInfo.Utc
                 );
@@ -66,7 +67,7 @@ namespace DeUrgenta.RecurringJobs
             {
                 RecurringJob.AddOrUpdate<IExpiredBackpackItemJob>(
                     nameof(ExpiredBackpackItemJob),
-                    job => job.RunAsync(),
+                    job => job.RunAsync(CancellationToken.None),
                     expiredBackpackItemJobConfig.CronExpression,
                     TimeZoneInfo.Utc
                 );
@@ -78,7 +79,7 @@ namespace DeUrgenta.RecurringJobs
             {
                 RecurringJob.AddOrUpdate<IExpiredInviteJob>(
                     nameof(ExpiredInviteJob),
-                    job => job.RunAsync(),
+                    job => job.RunAsync(CancellationToken.None),
                     expiredInviteJobConfig.CronExpression,
                     TimeZoneInfo.Utc
                     );
@@ -90,7 +91,7 @@ namespace DeUrgenta.RecurringJobs
             {
                 RecurringJob.AddOrUpdate<IAcceptedInviteJob>(
                     nameof(AcceptedInviteJob),
-                    job => job.RunAsync(),
+                    job => job.RunAsync(CancellationToken.None),
                     expiredInviteJobConfig.CronExpression,
                     TimeZoneInfo.Utc
                 );
