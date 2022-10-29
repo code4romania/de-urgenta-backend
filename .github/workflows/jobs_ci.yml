@@ -48,7 +48,7 @@ jobs:
       run: dotnet build /p:ContinuousIntegrationBuild=true DeUrgenta.Domains.Migrator.sln
     - name: Apply migrations for test db
       run: |
-        cd ./DeUrgenta.Domains.Migrator/bin/Debug/net5.0
+        cd ./DeUrgenta.Domains.Migrator/bin/Debug/net6.0
         dotnet DeUrgenta.Domains.Migrator.dll
       env:
         # Connection strings
