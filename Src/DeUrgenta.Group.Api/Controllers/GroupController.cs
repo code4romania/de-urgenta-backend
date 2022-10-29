@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Immutable;
-using System.Linq;
 using System.Threading.Tasks;
+using DeUrgenta.Common.Controllers;
 using DeUrgenta.Common.Mappers;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.Group.Api.Commands;
@@ -23,7 +23,7 @@ namespace DeUrgenta.Group.Api.Controllers
     [Produces("application/json")]
     [Consumes("application/json")]
     [Authorize]
-    public class GroupController : ControllerBase
+    public class GroupController : BaseAuthController
     {
         private readonly IMediator _mediator;
         private readonly IResultMapper _mapper;
@@ -46,8 +46,7 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<IImmutableList<GroupModel>>> GetGroupsAsync()
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var query = new GetMyGroups(sub);
+            var query = new GetMyGroups(UserSub);
             var result = await _mediator.Send(query);
 
             return await _mapper.MapToActionResult(result);
@@ -64,8 +63,7 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<IImmutableList<GroupModel>>> GetMyGroupsAsync()
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var query = new GetAdministeredGroups(sub);
+            var query = new GetAdministeredGroups(UserSub);
             var result = await _mediator.Send(query);
 
             return await _mapper.MapToActionResult(result);
@@ -86,8 +84,7 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<GroupModel>> CreateNewGroupAsync([FromBody] GroupRequest group)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new AddGroup(sub, group);
+            var command = new AddGroup(UserSub, group);
             var result = await _mediator.Send(command);
 
             return await _mapper.MapToActionResult(result);
@@ -108,8 +105,7 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<GroupModel>> UpdateGroupAsync([FromRoute] Guid groupId, [FromBody] GroupRequest group)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new UpdateGroup(sub, groupId, group);
+            var command = new UpdateGroup(UserSub, groupId, group);
             var result = await _mediator.Send(command);
 
             return await _mapper.MapToActionResult(result);
@@ -129,8 +125,7 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<IImmutableList<GroupMemberModel>>> GetGroupMembersAsync([FromRoute] Guid groupId)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var query = new GetGroupMembers(sub, groupId);
+            var query = new GetGroupMembers(UserSub, groupId);
             var result = await _mediator.Send(query);
 
             return await _mapper.MapToActionResult(result);
@@ -149,8 +144,7 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult> RemoveMemberAsync([FromRoute] Guid groupId, [FromRoute] Guid userId)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new RemoveFromGroup(sub, groupId, userId);
+            var command = new RemoveFromGroup(UserSub, groupId, userId);
             var result = await _mediator.Send(command);
 
             return await _mapper.MapToActionResult(result);
@@ -169,8 +163,7 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<IActionResult> LeaveGroupAsync([FromRoute] Guid groupId)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new LeaveGroup(sub, groupId);
+            var command = new LeaveGroup(UserSub, groupId);
             var result = await _mediator.Send(command);
 
             return await _mapper.MapToActionResult(result);
@@ -190,8 +183,7 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<IActionResult> DeleteGroupAsync([FromRoute] Guid groupId)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new DeleteGroup(sub, groupId);
+            var command = new DeleteGroup(UserSub, groupId);
             var result = await _mediator.Send(command);
 
             return await _mapper.MapToActionResult(result);
@@ -209,8 +201,7 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<IImmutableList<SafeLocationResponseModel>>> GetGroupSafeLocationsAsync([FromRoute] Guid groupId)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var query = new GetGroupSafeLocations(sub, groupId);
+            var query = new GetGroupSafeLocations(UserSub, groupId);
             var result = await _mediator.Send(query);
 
             return await _mapper.MapToActionResult(result);
@@ -232,8 +223,7 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<SafeLocationResponseModel>> CreateNewSafeLocationAsync([FromRoute] Guid groupId, [FromBody] SafeLocationRequest safeLocation)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var query = new AddSafeLocation(sub, groupId, safeLocation);
+            var query = new AddSafeLocation(UserSub, groupId, safeLocation);
             var result = await _mediator.Send(query);
 
             return await _mapper.MapToActionResult(result);
@@ -256,8 +246,7 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<SafeLocationResponseModel>> UpdateSafeLocationAsync([FromRoute] Guid locationId, [FromBody] SafeLocationRequest safeLocation)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var query = new UpdateSafeLocation(sub, locationId, safeLocation);
+            var query = new UpdateSafeLocation(UserSub, locationId, safeLocation);
             var result = await _mediator.Send(query);
 
             return await _mapper.MapToActionResult(result);
@@ -278,8 +267,7 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<IActionResult> DeleteSafeLocationAsync([FromRoute] Guid locationId)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new DeleteSafeLocation(sub, locationId);
+            var command = new DeleteSafeLocation(UserSub, locationId);
             var result = await _mediator.Send(command);
 
             return await _mapper.MapToActionResult(result);

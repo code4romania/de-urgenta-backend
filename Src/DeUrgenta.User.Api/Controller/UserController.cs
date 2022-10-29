@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
+using DeUrgenta.Common.Controllers;
 using DeUrgenta.Common.Mappers;
 using DeUrgenta.Common.Models;
 using DeUrgenta.Common.Models.Dtos;
@@ -27,7 +28,7 @@ namespace DeUrgenta.User.Api.Controller
     [Produces("application/json")]
     [Consumes("application/json")]
     [Route("user")]
-    public class UserController : ControllerBase
+    public class UserController : BaseAuthController
     {
         private readonly IMediator _mediator;
         private readonly IResultMapper _mapper;
@@ -52,8 +53,7 @@ namespace DeUrgenta.User.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<UserModel>> GetUserDetailsAsync()
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var result = await _mediator.Send(new GetUser(sub));
+            var result = await _mediator.Send(new GetUser(UserSub));
 
             return await _mapper.MapToActionResult(result);
         }
@@ -72,8 +72,7 @@ namespace DeUrgenta.User.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<UserModel>> UpdateUserAsync(UserRequest user)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var result = await _mediator.Send(new UpdateUser(sub, user));
+            var result = await _mediator.Send(new UpdateUser(UserSub, user));
 
             return await _mapper.MapToActionResult(result);
         }
@@ -141,8 +140,7 @@ namespace DeUrgenta.User.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<IImmutableList<UserLocationModel>>> GetUserLocationsAsync()
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var result = await _mediator.Send(new GetUserLocations(sub));
+            var result = await _mediator.Send(new GetUserLocations(UserSub));
 
             return await _mapper.MapToActionResult(result);
         }
@@ -163,8 +161,7 @@ namespace DeUrgenta.User.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<UserLocationModel>> AddLocationAsync([FromBody] UserLocationRequest location)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var result = await _mediator.Send(new AddLocation(sub, location));
+            var result = await _mediator.Send(new AddLocation(UserSub, location));
 
             return await _mapper.MapToActionResult(result);
         }
@@ -185,8 +182,7 @@ namespace DeUrgenta.User.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<UserLocationModel>> UpdateLocationAsync([FromRoute] Guid locationId, [FromBody] UserLocationRequest location)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var result = await _mediator.Send(new UpdateLocation(sub, locationId, location));
+            var result = await _mediator.Send(new UpdateLocation(UserSub, locationId, location));
 
             return await _mapper.MapToActionResult(result);
         }
@@ -206,8 +202,7 @@ namespace DeUrgenta.User.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<IActionResult> DeleteLocationAsync([FromRoute] Guid locationId)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var result = await _mediator.Send(new DeleteLocation(sub, locationId));
+            var result = await _mediator.Send(new DeleteLocation(UserSub, locationId));
 
             return await _mapper.MapToActionResult(result);
         }

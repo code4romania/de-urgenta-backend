@@ -64,7 +64,6 @@ namespace DeUrgenta.User.Api.Controller
         public async Task<IActionResult> RegisterAsync([FromBody] UserRegistrationDto user)
         {
             var existingUser = await _userManager.FindByEmailAsync(user.Email);
-
             if (existingUser != null)
             {
                 //TODO: add I18n
@@ -138,7 +137,6 @@ namespace DeUrgenta.User.Api.Controller
         public async Task<IActionResult> ResendConfirmationEmail([FromBody] ResendConfirmationEmail request)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
-
             if (user != null)
             {
                 var hasConfirmedEmail = await _userManager.IsEmailConfirmedAsync(user);
@@ -227,7 +225,6 @@ namespace DeUrgenta.User.Api.Controller
         [Route("request-reset-password")]
         public async Task<IActionResult> RequestResetPassword([FromBody] UserEmailPasswordResetRequest changePasswordRequest)
         {
-
             var user = await _userManager.FindByEmailAsync(changePasswordRequest.Email);
 
             if (user == null)
@@ -246,13 +243,10 @@ namespace DeUrgenta.User.Api.Controller
         [Route("reset-password")]
         public async Task<IActionResult> RequestResetPassword([FromBody] UserResetPasswordRequest userResetPassword)
         {
-
             var user = await _userManager.FindByIdAsync(userResetPassword.UserId);
             var resToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(userResetPassword.ResetToken));
             var res = await _userManager.ResetPasswordAsync(user, resToken, userResetPassword.NewPassword);
-
-
-
+            
             if (!res.Succeeded)
             {
                 return BadRequest(new ActionResponse
