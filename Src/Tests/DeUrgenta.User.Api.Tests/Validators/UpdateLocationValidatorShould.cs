@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
@@ -33,7 +34,8 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var sut = new UpdateLocationValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new UpdateLocation(sub, Guid.NewGuid(), new UserLocationRequest()));
+            var result = await sut.IsValidAsync(new UpdateLocation(sub, Guid.NewGuid(), new UserLocationRequest()),
+                CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -52,7 +54,8 @@ namespace DeUrgenta.User.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new UpdateLocation(userSub, Guid.NewGuid(), new UserLocationRequest()));
+            var result = await sut.IsValidAsync(new UpdateLocation(userSub, Guid.NewGuid(), new UserLocationRequest()),
+                CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -83,7 +86,8 @@ namespace DeUrgenta.User.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new UpdateLocation(userSub, userLocation.Id, new UserLocationRequest()));
+            var result = await sut.IsValidAsync(new UpdateLocation(userSub, userLocation.Id, new UserLocationRequest()),
+                CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

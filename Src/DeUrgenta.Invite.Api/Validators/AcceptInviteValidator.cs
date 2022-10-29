@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Domain.Api.Entities;
@@ -16,15 +17,15 @@ namespace DeUrgenta.Invite.Api.Validators
             _context = context;
         }
 
-        public async Task<ValidationResult> IsValidAsync(AcceptInvite request)
+        public async Task<ValidationResult> IsValidAsync(AcceptInvite request, CancellationToken ct)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub, ct);
             if (user == null)
             {
                 return ValidationResult.GenericValidationError;
             }
 
-            var invite = await _context.Invites.FirstOrDefaultAsync(i => i.Id == request.InviteId);
+            var invite = await _context.Invites.FirstOrDefaultAsync(i => i.Id == request.InviteId, ct);
             if (invite == null)
             {
                 return ValidationResult.GenericValidationError;

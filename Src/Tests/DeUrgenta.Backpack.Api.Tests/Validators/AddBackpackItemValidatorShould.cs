@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Backpack.Api.Models;
@@ -32,7 +33,9 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new AddBackpackItemValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new AddBackpackItem(sub, Guid.NewGuid(), new BackpackItemRequest()));
+            var result = await sut.IsValidAsync(new AddBackpackItem(sub, Guid.NewGuid(),
+                new BackpackItemRequest()),
+                CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -50,7 +53,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
 
             var nonContributor = new UserBuilder().WithSub(userSub).Build();
             var contributor = new UserBuilder().WithSub(contributorSub).Build();
-           
+
             var backpack = new Domain.Api.Entities.Backpack
             {
                 Id = backpackId,
@@ -60,11 +63,14 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.Users.AddAsync(nonContributor);
             await _dbContext.Users.AddAsync(contributor);
             await _dbContext.Backpacks.AddAsync(backpack);
-            await _dbContext.BackpacksToUsers.AddAsync(new BackpackToUser { Backpack = backpack, User = contributor});
+            await _dbContext.BackpacksToUsers.AddAsync(new BackpackToUser { Backpack = backpack, User = contributor });
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new AddBackpackItem(nonContributor.Sub, backpackId, new BackpackItemRequest()));
+            var result = await sut.IsValidAsync(new AddBackpackItem(nonContributor.Sub, 
+                backpackId, 
+                new BackpackItemRequest()),
+                CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -96,7 +102,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var command = new AddBackpackItem(contributorSub, backpackId, new BackpackItemRequest());
 
             // Act
-            var result = await sut.IsValidAsync(command);
+            var result = await sut.IsValidAsync(command, CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

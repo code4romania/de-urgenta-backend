@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
@@ -34,7 +35,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new DeleteSafeLocationValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new DeleteSafeLocation(sub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new DeleteSafeLocation(sub, Guid.NewGuid()), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -54,7 +55,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new DeleteSafeLocationValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new DeleteSafeLocation(userSub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new DeleteSafeLocation(userSub, Guid.NewGuid()), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -72,7 +73,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new DeleteSafeLocationValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new DeleteSafeLocation(userSub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new DeleteSafeLocation(userSub, Guid.NewGuid()), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -101,7 +102,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new DeleteSafeLocationValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new DeleteSafeLocation(userSub, groupSafeLocation.Id));
+            var result = await sut.IsValidAsync(new DeleteSafeLocation(userSub, groupSafeLocation.Id), CancellationToken.None);
 
             // Assert
             result
@@ -134,7 +135,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new DeleteSafeLocation(userSub, groupSafeLocation.Id));
+            var result = await sut.IsValidAsync(new DeleteSafeLocation(userSub, groupSafeLocation.Id), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

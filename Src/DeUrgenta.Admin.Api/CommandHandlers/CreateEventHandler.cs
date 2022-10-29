@@ -23,14 +23,14 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result<EventResponseModel, ValidationResult>> Handle(CreateEvent request, CancellationToken cancellationToken)
+        public async Task<Result<EventResponseModel, ValidationResult>> Handle(CreateEvent request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
             }
-            var eventType = await _context.EventTypes.FirstAsync(et => et.Id == request.Event.EventTypeId, cancellationToken);
+            var eventType = await _context.EventTypes.FirstAsync(et => et.Id == request.Event.EventTypeId, ct);
 
             var @event = new Event
             {
@@ -46,8 +46,8 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
                 PublishedOn = DateTime.UtcNow
             };
 
-            await _context.Events.AddAsync(@event, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.Events.AddAsync(@event, ct);
+            await _context.SaveChangesAsync(ct);
 
             return new EventResponseModel
             {

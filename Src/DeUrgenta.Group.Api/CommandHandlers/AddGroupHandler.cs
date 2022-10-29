@@ -27,29 +27,26 @@ namespace DeUrgenta.Group.Api.CommandHandlers
             _groupsConfig = groupsConfig.Value;
         }
 
-        public async Task<Result<GroupModel, ValidationResult>> Handle(AddGroup request, CancellationToken cancellationToken)
+        public async Task<Result<GroupModel, ValidationResult>> Handle(AddGroup request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
             }
 
-            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
+            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, ct);
 
             var newBackpack = new Backpack {Name = $"Backpack for {request.Group.Name}"};
 
             var group = new Domain.Api.Entities.Group {Admin = user, Name = request.Group.Name, Backpack = newBackpack};
 
-            var newGroup = await _context.Groups.AddAsync(group, cancellationToken);
+            var newGroup = await _context.Groups.AddAsync(group, ct);
 
-            await _context.UsersToGroups.AddAsync(
-                new UserToGroup {User = user, Group = group}, cancellationToken);
+            await _context.UsersToGroups.AddAsync(new UserToGroup {User = user, Group = group}, ct);
+            await _context.BackpacksToUsers.AddAsync(new BackpackToUser {Backpack = newBackpack, User = user}, ct);
 
-            await _context.BackpacksToUsers.AddAsync(new BackpackToUser {Backpack = newBackpack, User = user},
-                cancellationToken);
-
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(ct);
 
             return new GroupModel
             {

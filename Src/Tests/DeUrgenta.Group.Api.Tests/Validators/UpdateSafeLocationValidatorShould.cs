@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
@@ -36,7 +37,8 @@ namespace DeUrgenta.Group.Api.Tests.Validators
 
             // Act
             var result =
-                await sut.IsValidAsync(new UpdateSafeLocation(sub, Guid.NewGuid(), new SafeLocationRequest()));
+                await sut.IsValidAsync(new UpdateSafeLocation(sub, Guid.NewGuid(), new SafeLocationRequest()),
+                    CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -55,7 +57,8 @@ namespace DeUrgenta.Group.Api.Tests.Validators
 
             // Act
             var result =
-                await sut.IsValidAsync(new UpdateSafeLocation(userSub, Guid.NewGuid(), new SafeLocationRequest()));
+                await sut.IsValidAsync(new UpdateSafeLocation(userSub, Guid.NewGuid(), new SafeLocationRequest())
+                , CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -73,7 +76,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
 
             var group = new GroupBuilder().WithAdmin(adminUser).Build();
 
-            var groupSafeLocation = new GroupSafeLocation {Group = group, Name = "A safe location"};
+            var groupSafeLocation = new GroupSafeLocation { Group = group, Name = "A safe location" };
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Users.AddAsync(adminUser);
@@ -86,7 +89,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             // Act
             var result =
                 await sut.IsValidAsync(new UpdateSafeLocation(userSub, groupSafeLocation.Id,
-                    new SafeLocationRequest()));
+                    new SafeLocationRequest()), CancellationToken.None);
 
             // Assert
             result
@@ -111,7 +114,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
 
             var group = new GroupBuilder().WithAdmin(user).Build();
 
-            var groupSafeLocation = new GroupSafeLocation {Group = group, Name = "A safe location"};
+            var groupSafeLocation = new GroupSafeLocation { Group = group, Name = "A safe location" };
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.Groups.AddAsync(group);
@@ -121,7 +124,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             // Act
             var result =
                 await sut.IsValidAsync(new UpdateSafeLocation(userSub, groupSafeLocation.Id,
-                    new SafeLocationRequest()));
+                    new SafeLocationRequest()), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

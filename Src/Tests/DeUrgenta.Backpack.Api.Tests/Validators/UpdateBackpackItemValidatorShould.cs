@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Backpack.Api.Models;
@@ -32,7 +33,8 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new UpdateBackpackItemValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new UpdateBackpackItem(sub, Guid.NewGuid(), new BackpackItemRequest()));
+            var result = await sut.IsValidAsync(new UpdateBackpackItem(sub, Guid.NewGuid(), new BackpackItemRequest()),
+                CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -64,7 +66,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new UpdateBackpackItemValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new UpdateBackpackItem(nonContributor.Sub, backpackId, new BackpackItemRequest()));
+            var result = await sut.IsValidAsync(new UpdateBackpackItem(nonContributor.Sub, backpackId, new BackpackItemRequest()), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -93,7 +95,8 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new UpdateBackpackItemValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new UpdateBackpackItem(contributorSub, Guid.NewGuid(), new BackpackItemRequest()));
+            var result = await sut.IsValidAsync(new UpdateBackpackItem(contributorSub, Guid.NewGuid(), new BackpackItemRequest()),
+                CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -131,7 +134,8 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new UpdateBackpackItemValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new UpdateBackpackItem(contributorSub, backpackItemId, new BackpackItemRequest()));
+            var result = await sut.IsValidAsync(new UpdateBackpackItem(contributorSub, backpackItemId, new BackpackItemRequest()),
+                CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

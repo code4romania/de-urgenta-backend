@@ -23,21 +23,21 @@ namespace DeUrgenta.Invite.Api.CommandHandlers
             _validator = validator;
         }
 
-        public async Task<Result<AcceptInviteModel, ValidationResult>> Handle(AcceptGroupInvite request, CancellationToken cancellationToken)
+        public async Task<Result<AcceptInviteModel, ValidationResult>> Handle(AcceptGroupInvite request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
             }
             
-            var group = await _context.Groups.FirstAsync(g => g.Id == request.GroupId, cancellationToken);
-            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
+            var group = await _context.Groups.FirstAsync(g => g.Id == request.GroupId, ct);
+            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, ct);
 
-            await _context.UsersToGroups.AddAsync(new UserToGroup { User = user, Group = group }, cancellationToken);
-            await _context.BackpacksToUsers.AddAsync(new BackpackToUser { Backpack = group.Backpack, User = user }, cancellationToken);
+            await _context.UsersToGroups.AddAsync(new UserToGroup { User = user, Group = group }, ct);
+            await _context.BackpacksToUsers.AddAsync(new BackpackToUser { Backpack = group.Backpack, User = user }, ct);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(ct);
 
             return new AcceptInviteModel
             {

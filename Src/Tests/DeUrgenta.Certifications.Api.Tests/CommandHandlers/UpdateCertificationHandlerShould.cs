@@ -34,7 +34,7 @@ namespace DeUrgenta.Certifications.Api.Tests.CommandHandlers
             var storage = Substitute.For<IBlobStorage>();
             var validator = Substitute.For<IValidateRequest<UpdateCertification>>();
             validator
-                .IsValidAsync(Arg.Any<UpdateCertification>())
+                .IsValidAsync(Arg.Any<UpdateCertification>(), CancellationToken.None)
                 .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new UpdateCertificationHandler(validator, _dbContext, storage);
@@ -58,7 +58,7 @@ namespace DeUrgenta.Certifications.Api.Tests.CommandHandlers
             var storage = Substitute.For<IBlobStorage>();
             var validator = Substitute.For<IValidateRequest<UpdateCertification>>();
             validator
-                .IsValidAsync(updateCertification)
+                .IsValidAsync(updateCertification, CancellationToken.None)
                 .Returns(Task.FromResult(ValidationResult.Ok));
             await SetupExistingCertification(certificationId);
 

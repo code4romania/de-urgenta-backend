@@ -23,9 +23,9 @@ namespace DeUrgenta.Backpack.Api.QueryHandlers
             _context = context;
         }
 
-        public async Task<Result<IImmutableList<BackpackContributorModel>, ValidationResult>> Handle(GetBackpackContributors request, CancellationToken cancellationToken)
+        public async Task<Result<IImmutableList<BackpackContributorModel>, ValidationResult>> Handle(GetBackpackContributors request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
@@ -37,7 +37,7 @@ namespace DeUrgenta.Backpack.Api.QueryHandlers
                 {
                     FirstName = btu.User.FirstName, LastName = btu.User.LastName, UserId = btu.User.Id,
                 })
-                .ToListAsync(cancellationToken);
+                .ToListAsync(ct);
 
             return contributors.ToImmutableList();
         }

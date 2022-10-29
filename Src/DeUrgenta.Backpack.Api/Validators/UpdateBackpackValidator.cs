@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
@@ -15,9 +16,9 @@ namespace DeUrgenta.Backpack.Api.Validators
             _context = context;
         }
 
-        public async Task<ValidationResult> IsValidAsync(UpdateBackpack request)
+        public async Task<ValidationResult> IsValidAsync(UpdateBackpack request, CancellationToken ct)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub, cancellationToken: ct);
             if (user == null)
             {
                 return ValidationResult.GenericValidationError;
@@ -25,7 +26,7 @@ namespace DeUrgenta.Backpack.Api.Validators
 
             var backpackToUser = await _context
                 .BackpacksToUsers
-                .FirstOrDefaultAsync(btu => btu.User.Id == user.Id && btu.Backpack.Id == request.BackpackId);
+                .FirstOrDefaultAsync(btu => btu.User.Id == user.Id && btu.Backpack.Id == request.BackpackId, cancellationToken: ct);
 
             if (backpackToUser == null)
             {

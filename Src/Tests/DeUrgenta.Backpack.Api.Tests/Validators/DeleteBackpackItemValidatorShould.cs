@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Backpack.Api.Validators;
@@ -32,7 +33,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new DeleteBackpackItemValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new DeleteBackpackItem(sub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new DeleteBackpackItem(sub, Guid.NewGuid()),CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -73,7 +74,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new DeleteBackpackItem(nonContributor.Sub, backpackItemId));
+            var result = await sut.IsValidAsync(new DeleteBackpackItem(nonContributor.Sub, backpackItemId), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -102,7 +103,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new DeleteBackpackItem(contributorSub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new DeleteBackpackItem(contributorSub, Guid.NewGuid()), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -139,7 +140,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new DeleteBackpackItem(contributorSub, backpackItemId));
+            var result = await sut.IsValidAsync(new DeleteBackpackItem(contributorSub, backpackItemId), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

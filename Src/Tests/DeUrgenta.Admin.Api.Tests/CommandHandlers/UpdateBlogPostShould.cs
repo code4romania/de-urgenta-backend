@@ -29,7 +29,7 @@ namespace DeUrgenta.Admin.Api.Tests.CommandHandlers
             // Arrange
             var validator = Substitute.For<IValidateRequest<UpdateBlogPost>>();
             validator
-                .IsValidAsync(Arg.Any<UpdateBlogPost>())
+                .IsValidAsync(Arg.Any<UpdateBlogPost>(), CancellationToken.None)
                 .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new UpdateBlogPostHandler(validator, _dbContext);
@@ -37,7 +37,9 @@ namespace DeUrgenta.Admin.Api.Tests.CommandHandlers
             // Act
             var result = await sut.Handle(new UpdateBlogPost(Guid.NewGuid(), new BlogPostRequest
             {
-                Author = "Test", Title = "Test", ContentBody = "<h1>Test</h1>"
+                Author = "Test",
+                Title = "Test",
+                ContentBody = "<h1>Test</h1>"
             }), CancellationToken.None);
 
             // Assert

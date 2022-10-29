@@ -23,9 +23,9 @@ namespace DeUrgenta.Group.Api.QueryHandlers
             _context = dbContext;
         }
 
-        public async Task<Result<IImmutableList<SafeLocationResponseModel>, ValidationResult>> Handle(GetGroupSafeLocations request, CancellationToken cancellationToken)
+        public async Task<Result<IImmutableList<SafeLocationResponseModel>, ValidationResult>> Handle(GetGroupSafeLocations request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
@@ -34,7 +34,7 @@ namespace DeUrgenta.Group.Api.QueryHandlers
             var group = await _context.Groups
                 .Where(g => g.Id == request.GroupId)
                 .Include(g => g.GroupSafeLocations)
-                .FirstOrDefaultAsync(cancellationToken);
+                .FirstOrDefaultAsync(ct);
 
             return group.GroupSafeLocations.Select(gsl => new SafeLocationResponseModel
             {

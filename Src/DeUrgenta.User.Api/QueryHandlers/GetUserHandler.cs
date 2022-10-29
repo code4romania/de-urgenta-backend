@@ -22,15 +22,15 @@ namespace DeUrgenta.User.Api.QueryHandlers
             _context = context;
         }
 
-        public async Task<Result<UserModel, ValidationResult>> Handle(GetUser request, CancellationToken cancellationToken)
+        public async Task<Result<UserModel, ValidationResult>> Handle(GetUser request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
             }
 
-            var user = await _context.Users.Where(x => x.Sub == request.UserSub).FirstAsync(cancellationToken);
+            var user = await _context.Users.Where(x => x.Sub == request.UserSub).FirstAsync(ct);
 
             return new UserModel
             {

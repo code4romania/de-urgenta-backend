@@ -28,7 +28,7 @@ namespace DeUrgenta.Group.Api.Tests.CommandsHandlers
             // Arrange
             var validator = Substitute.For<IValidateRequest<LeaveGroup>>();
             validator
-                .IsValidAsync(Arg.Any<LeaveGroup>())
+                .IsValidAsync(Arg.Any<LeaveGroup>(), CancellationToken.None)
                 .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new LeaveGroupHandler(validator, _dbContext);

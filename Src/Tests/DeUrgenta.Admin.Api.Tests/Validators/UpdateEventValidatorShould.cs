@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Admin.Api.Models;
@@ -47,7 +48,7 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
 
             // Act
             var eventId = Guid.NewGuid();
-            var result = await sut.IsValidAsync(new UpdateEvent(eventId, new EventRequest()));
+            var result = await sut.IsValidAsync(new UpdateEvent(eventId, new EventRequest()), CancellationToken.None);
 
             // Assert
             result
@@ -99,7 +100,7 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
                 IsArchived = false,
                 OccursOn = DateTime.Today.AddDays(30),
                 OrganizedBy = "tests"
-            }));
+            }), CancellationToken.None);
 
             // Assert
             result
@@ -148,7 +149,7 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
                 IsArchived = true,
                 OccursOn = DateTime.Today.AddDays(10),
                 OrganizedBy = "tests-new"
-            }));
+            }), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

@@ -20,27 +20,27 @@ namespace DeUrgenta.Group.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result<Unit, ValidationResult>> Handle(LeaveGroup request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, ValidationResult>> Handle(LeaveGroup request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
             }
 
             
-            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
+            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, ct);
             var groupAssignment = await _context
                 .UsersToGroups
-                .FirstAsync(utg => utg.Group.Id == request.GroupId && utg.User.Id == user.Id, cancellationToken);
+                .FirstAsync(utg => utg.Group.Id == request.GroupId && utg.User.Id == user.Id, ct);
 
             var backpackToUser = await _context
                 .BackpacksToUsers
-                .FirstAsync(btu => btu.Backpack.Id == groupAssignment.Group.Backpack.Id && btu.User.Id == user.Id, cancellationToken);
+                .FirstAsync(btu => btu.Backpack.Id == groupAssignment.Group.Backpack.Id && btu.User.Id == user.Id, ct);
 
             _context.BackpacksToUsers.Remove(backpackToUser);
             _context.UsersToGroups.Remove(groupAssignment);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(ct);
 
             return Unit.Value;
         }

@@ -23,9 +23,9 @@ namespace DeUrgenta.User.Api.QueryHandlers
             _context = context;
         }
 
-        public async Task<Result<IImmutableList<UserLocationModel>, ValidationResult>> Handle(GetUserLocations request, CancellationToken cancellationToken)
+        public async Task<Result<IImmutableList<UserLocationModel>, ValidationResult>> Handle(GetUserLocations request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
@@ -34,7 +34,7 @@ namespace DeUrgenta.User.Api.QueryHandlers
             var user = await _context.Users
                 .Include(u => u.Locations)
                 .Where(x => x.Sub == request.UserSub)
-                .FirstAsync(cancellationToken);
+                .FirstAsync(ct);
 
             return user.Locations.Select(location => new UserLocationModel
             {

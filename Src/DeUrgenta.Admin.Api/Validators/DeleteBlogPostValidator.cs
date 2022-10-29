@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
@@ -15,9 +16,9 @@ namespace DeUrgenta.Admin.Api.Validators
         {
             _context = context;
         }
-        public async Task<ValidationResult> IsValidAsync(DeleteBlogPost request)
+        public async Task<ValidationResult> IsValidAsync(DeleteBlogPost request, CancellationToken ct)
         {
-            var blog = await _context.Blogs.FirstOrDefaultAsync(x => x.Id == request.BlogPostId);
+            var blog = await _context.Blogs.FirstOrDefaultAsync(x => x.Id == request.BlogPostId, ct);
 
             return blog is not null 
                 ? ValidationResult.Ok 

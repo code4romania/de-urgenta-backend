@@ -27,7 +27,7 @@ namespace DeUrgenta.Events.Api.Tests.QueryHandlers
             // Arrange
             var validator = Substitute.For<IValidateRequest<GetEventCities>>();
             validator
-                .IsValidAsync(Arg.Any<GetEventCities>())
+                .IsValidAsync(Arg.Any<GetEventCities>(), CancellationToken.None)
                 .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new GetEventCitiesHandler(validator, _dbContext);

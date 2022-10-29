@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Admin.Api.Validators;
@@ -46,7 +47,7 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
 
             // Act
             var eventId = Guid.NewGuid();
-            var result = await sut.IsValidAsync(new DeleteEvent(eventId));
+            var result = await sut.IsValidAsync(new DeleteEvent(eventId), CancellationToken.None);
 
             // Assert
             result
@@ -84,7 +85,7 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new DeleteEvent(@event.Id));
+            var result = await sut.IsValidAsync(new DeleteEvent(@event.Id), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

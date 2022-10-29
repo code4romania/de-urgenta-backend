@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Backpack.Api.Validators;
@@ -34,7 +35,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new RemoveCurrentUserFromContributorsValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new RemoveCurrentUserFromContributors(sub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new RemoveCurrentUserFromContributors(sub, Guid.NewGuid()), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -54,7 +55,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new RemoveCurrentUserFromContributors(userSub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new RemoveCurrentUserFromContributors(userSub, Guid.NewGuid()), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -80,7 +81,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new RemoveCurrentUserFromContributors(userSub, backpack.Id));
+            var result = await sut.IsValidAsync(new RemoveCurrentUserFromContributors(userSub, backpack.Id), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -107,7 +108,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new RemoveCurrentUserFromContributors(userSub, backpack.Id));
+            var result = await sut.IsValidAsync(new RemoveCurrentUserFromContributors(userSub, backpack.Id), CancellationToken.None);
 
             // Assert
             result
@@ -145,7 +146,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new RemoveCurrentUserFromContributors(userSub, backpack.Id));
+            var result = await sut.IsValidAsync(new RemoveCurrentUserFromContributors(userSub, backpack.Id), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

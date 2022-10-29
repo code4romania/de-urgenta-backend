@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Group.Api.Queries;
@@ -15,9 +16,9 @@ namespace DeUrgenta.Group.Api.Validators
             _context = context;
         }
 
-        public async Task<ValidationResult> IsValidAsync(GetGroupMembers request)
+        public async Task<ValidationResult> IsValidAsync(GetGroupMembers request, CancellationToken ct)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub, ct);
 
             if (user == null)
             {
@@ -26,7 +27,7 @@ namespace DeUrgenta.Group.Api.Validators
 
             var isPartOfGroup = await _context
                 .UsersToGroups
-                .AnyAsync(utg => utg.User.Id == user.Id && utg.Group.Id == request.GroupId);
+                .AnyAsync(utg => utg.User.Id == user.Id && utg.Group.Id == request.GroupId, ct);
 
             if (!isPartOfGroup)
             {

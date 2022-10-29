@@ -22,15 +22,15 @@ namespace DeUrgenta.User.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result<UserLocationModel, ValidationResult>> Handle(AddLocation request, CancellationToken cancellationToken)
+        public async Task<Result<UserLocationModel, ValidationResult>> Handle(AddLocation request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
             }
 
-            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
+            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, ct);
             var location = new UserLocation
             {
                 Latitude = request.Location.Latitude,
@@ -40,8 +40,8 @@ namespace DeUrgenta.User.Api.CommandHandlers
                 User = user
             };
 
-            await _context.UserLocations.AddAsync(location, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.UserLocations.AddAsync(location, ct);
+            await _context.SaveChangesAsync(ct);
 
             return new UserLocationModel
             {

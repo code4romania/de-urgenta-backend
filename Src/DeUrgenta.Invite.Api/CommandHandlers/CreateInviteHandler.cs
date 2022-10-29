@@ -23,9 +23,9 @@ namespace DeUrgenta.Invite.Api.CommandHandlers
             _validator = validator;
         }
 
-        public async Task<Result<InviteModel, ValidationResult>> Handle(CreateInvite request, CancellationToken cancellationToken)
+        public async Task<Result<InviteModel, ValidationResult>> Handle(CreateInvite request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
@@ -38,8 +38,8 @@ namespace DeUrgenta.Invite.Api.CommandHandlers
                 Type = (Domain.Api.Entities.InviteType)request.Type,
                 DestinationId = request.DestinationId
             };
-            await _context.Invites.AddAsync(invite, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.Invites.AddAsync(invite, ct);
+            await _context.SaveChangesAsync(ct);
 
             return new InviteModel
             {

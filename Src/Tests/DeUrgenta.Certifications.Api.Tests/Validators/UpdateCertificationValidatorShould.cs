@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Certifications.Api.Commands;
 using DeUrgenta.Certifications.Api.Models;
@@ -34,7 +35,8 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             var sut = new UpdateCertificationValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new UpdateCertification(sub, Guid.NewGuid(), new CertificationRequest()));
+            var result = await sut.IsValidAsync(new UpdateCertification(sub, Guid.NewGuid(), new CertificationRequest()),
+                CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -53,7 +55,8 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new UpdateCertification(userSub, Guid.NewGuid(), new CertificationRequest()));
+            var result = await sut.IsValidAsync(new UpdateCertification(userSub, Guid.NewGuid(), new CertificationRequest()),
+                CancellationToken.None);
 
             // Assert
             result
@@ -93,7 +96,8 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new UpdateCertification(userSub, certificationId, new CertificationRequest()));
+            var result = await sut.IsValidAsync(new UpdateCertification(userSub, certificationId, new CertificationRequest()),
+                CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -124,7 +128,8 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new UpdateCertification(ownerSub, certificationId, new CertificationRequest()));
+            var result = await sut.IsValidAsync(new UpdateCertification(ownerSub, certificationId, new CertificationRequest()),
+                CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

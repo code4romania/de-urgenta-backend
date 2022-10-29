@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Invite.Api.Commands;
@@ -19,18 +20,18 @@ namespace DeUrgenta.Invite.Api.Validators
             _config = config.Value;
         }
 
-        public async Task<ValidationResult> IsValidAsync(AcceptGroupInvite request)
+        public async Task<ValidationResult> IsValidAsync(AcceptGroupInvite request, CancellationToken ct)
         {
-            var group = await _context.Groups.FirstOrDefaultAsync(g => g.Id == request.GroupId);
+            var group = await _context.Groups.FirstOrDefaultAsync(g => g.Id == request.GroupId, ct);
             if (group == null)
             {
                 return ValidationResult.GenericValidationError;
             }
 
-            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub);
+            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, ct);
 
             var noOfGroupsUserIsAMemberOf = await _context.UsersToGroups
-                .CountAsync(u => u.UserId == user.Id);
+                .CountAsync(u => u.UserId == user.Id, ct);
 
             if (noOfGroupsUserIsAMemberOf >= _config.MaxJoinedGroupsPerUser)
             {
@@ -38,7 +39,7 @@ namespace DeUrgenta.Invite.Api.Validators
             }
 
             var noOfGroupMembers = await _context.UsersToGroups
-                .CountAsync(u => u.GroupId == request.GroupId);
+                .CountAsync(u => u.GroupId == request.GroupId, ct);
 
             if (noOfGroupMembers >= _config.MaxUsers)
             {
@@ -46,7 +47,7 @@ namespace DeUrgenta.Invite.Api.Validators
             }
 
             var userIsAlreadyAMember = await _context.UsersToGroups
-                .AnyAsync(u => u.UserId == user.Id && u.GroupId == request.GroupId);
+                .AnyAsync(u => u.UserId == user.Id && u.GroupId == request.GroupId, ct);
 
             if (userIsAlreadyAMember)
             {

@@ -23,10 +23,9 @@ namespace DeUrgenta.Events.Api.QueryHandlers
             _context = context;
         }
 
-        public async Task<Result<IImmutableList<EventTypeModel>, ValidationResult>> Handle(GetEventTypes request,
-            CancellationToken cancellationToken)
+        public async Task<Result<IImmutableList<EventTypeModel>, ValidationResult>> Handle(GetEventTypes request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
@@ -38,7 +37,7 @@ namespace DeUrgenta.Events.Api.QueryHandlers
                 Id = x.Id,
                 Name = x.Name,
             })
-            .ToListAsync(cancellationToken);
+            .ToListAsync(ct);
 
             return courseTypes.ToImmutableList();
         }

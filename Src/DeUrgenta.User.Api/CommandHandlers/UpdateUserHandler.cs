@@ -20,20 +20,20 @@ namespace DeUrgenta.User.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result<Unit, ValidationResult>> Handle(UpdateUser request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, ValidationResult>> Handle(UpdateUser request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
             }
 
-            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
+            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, ct);
 
             user.FirstName = request.UserDetails.FirstName;
             user.LastName = request.UserDetails.LastName;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(ct);
 
             return Unit.Value;
         }

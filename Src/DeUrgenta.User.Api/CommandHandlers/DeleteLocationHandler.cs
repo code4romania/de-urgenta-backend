@@ -20,18 +20,18 @@ namespace DeUrgenta.User.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result<Unit, ValidationResult>> Handle(DeleteLocation request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, ValidationResult>> Handle(DeleteLocation request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
             }
 
-            var location = await _context.UserLocations.FirstAsync(l => request.LocationId == l.Id, cancellationToken);
+            var location = await _context.UserLocations.FirstAsync(l => request.LocationId == l.Id, ct);
 
             _context.UserLocations.Remove(location);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(ct);
 
             return Unit.Value;
         }

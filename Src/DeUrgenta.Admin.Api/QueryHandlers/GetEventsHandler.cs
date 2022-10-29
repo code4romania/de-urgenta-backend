@@ -24,9 +24,9 @@ namespace DeUrgenta.Admin.Api.QueryHandlers
             _context = context;
         }
 
-        public async Task<Result<PagedResult<EventResponseModel>, ValidationResult>> Handle(GetEvents request, CancellationToken cancellationToken)
+        public async Task<Result<PagedResult<EventResponseModel>, ValidationResult>> Handle(GetEvents request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
@@ -49,7 +49,7 @@ namespace DeUrgenta.Admin.Api.QueryHandlers
                     IsArchived = x.IsArchived
                 })
                 .OrderBy(x => x.OccursOn)
-                .GetPaged(request.Pagination.PageNumber, request.Pagination.PageSize);
+                .GetPaged(request.Pagination.PageNumber, request.Pagination.PageSize, ct);
 
             return pagedEvents;
         }

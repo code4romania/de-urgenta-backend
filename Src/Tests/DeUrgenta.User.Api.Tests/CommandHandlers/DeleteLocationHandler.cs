@@ -28,7 +28,7 @@ namespace DeUrgenta.User.Api.Tests.CommandHandlers
             // Arrange
             var validator = Substitute.For<IValidateRequest<DeleteLocation>>();
             validator
-                .IsValidAsync(Arg.Any<DeleteLocation>())
+                .IsValidAsync(Arg.Any<DeleteLocation>(), CancellationToken.None)
                 .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new DeleteLocationHandler(validator, _dbContext);

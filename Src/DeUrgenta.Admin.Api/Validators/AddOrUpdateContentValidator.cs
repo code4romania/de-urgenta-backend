@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.I18n.Service.Models;
@@ -15,7 +16,7 @@ namespace DeUrgenta.Admin.Api.Validators
             _languageProvider = languageProvider;
         }
 
-        public async Task<ValidationResult> IsValidAsync(AddOrUpdateContent request)
+        public async Task<ValidationResult> IsValidAsync(AddOrUpdateContent request, CancellationToken ct)
         {
 
             var language = await _languageProvider.GetLanguageByCulture(request.Culture);

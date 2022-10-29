@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Queries;
 using DeUrgenta.Backpack.Api.Validators;
@@ -31,7 +32,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new GetBackpacksValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new GetBackpacks(sub));
+            var result = await sut.IsValidAsync(new GetBackpacks(sub), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -50,7 +51,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new GetBackpacks(userSub));
+            var result = await sut.IsValidAsync(new GetBackpacks(userSub), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

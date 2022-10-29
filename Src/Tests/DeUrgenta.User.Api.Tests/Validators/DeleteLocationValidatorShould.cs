@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
@@ -32,7 +33,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var sut = new DeleteLocationValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new DeleteLocation(sub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new DeleteLocation(sub, Guid.NewGuid()),CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -51,7 +52,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new DeleteLocation(userSub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new DeleteLocation(userSub, Guid.NewGuid()), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -82,7 +83,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new DeleteLocation(userSub, userLocation.Id));
+            var result = await sut.IsValidAsync(new DeleteLocation(userSub, userLocation.Id), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

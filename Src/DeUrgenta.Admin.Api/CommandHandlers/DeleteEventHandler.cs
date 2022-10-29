@@ -20,17 +20,17 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result<Unit, ValidationResult>> Handle(DeleteEvent request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, ValidationResult>> Handle(DeleteEvent request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
             }
 
-            var eventToBeDeleted = await _context.Events.FirstAsync(b => b.Id == request.EventId, cancellationToken);
+            var eventToBeDeleted = await _context.Events.FirstAsync(b => b.Id == request.EventId, ct);
             _context.Events.Remove(eventToBeDeleted);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(ct);
 
             return Unit.Value;
         }

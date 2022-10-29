@@ -22,9 +22,9 @@ namespace DeUrgenta.Group.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result<SafeLocationResponseModel, ValidationResult>> Handle(AddSafeLocation request, CancellationToken cancellationToken)
+        public async Task<Result<SafeLocationResponseModel, ValidationResult>> Handle(AddSafeLocation request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
@@ -32,7 +32,7 @@ namespace DeUrgenta.Group.Api.CommandHandlers
 
             var group = await _context
                 .Groups
-                .FirstOrDefaultAsync(g => g.Id == request.GroupId, cancellationToken);
+                .FirstOrDefaultAsync(g => g.Id == request.GroupId, ct);
 
             var groupSafeLocation = new GroupSafeLocation
             {
@@ -42,8 +42,8 @@ namespace DeUrgenta.Group.Api.CommandHandlers
                 Group = group
             };
 
-            var newLocation = await _context.GroupsSafeLocations.AddAsync(groupSafeLocation, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
+            var newLocation = await _context.GroupsSafeLocations.AddAsync(groupSafeLocation, ct);
+            await _context.SaveChangesAsync(ct);
 
             return new SafeLocationResponseModel
             {

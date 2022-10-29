@@ -28,7 +28,7 @@ namespace DeUrgenta.User.Api.Tests.CommandHandlers
             // Arrange
             var validator = Substitute.For<IValidateRequest<AddLocation>>();
             validator
-                .IsValidAsync(Arg.Any<AddLocation>())
+                .IsValidAsync(Arg.Any<AddLocation>(), CancellationToken.None)
                 .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             UserLocationRequest userLocationRequest = new();

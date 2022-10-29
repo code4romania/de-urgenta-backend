@@ -22,7 +22,7 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
 
         public async Task<Result<StringResourceModel, ValidationResult>> Handle(AddOrUpdateContent request, CancellationToken cancellationToken)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, cancellationToken);
             if (validationResult.IsFailure)
             {
                 return validationResult;

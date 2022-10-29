@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
@@ -16,9 +17,9 @@ namespace DeUrgenta.Admin.Api.Validators
             _context = context;
         }
 
-        public async Task<ValidationResult> IsValidAsync(DeleteEvent request)
+        public async Task<ValidationResult> IsValidAsync(DeleteEvent request, CancellationToken ct)
         {
-            var @event = await _context.Events.FirstOrDefaultAsync(x => x.Id == request.EventId);
+            var @event = await _context.Events.FirstOrDefaultAsync(x => x.Id == request.EventId, ct);
 
             if (@event == null)
             {

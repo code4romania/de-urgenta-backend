@@ -31,7 +31,7 @@ namespace DeUrgenta.Invite.Api.Tests.CommandHandlers
             var request = new CreateInvite(userSub, new InviteRequest());
 
             var validator = Substitute.For<IValidateRequest<CreateInvite>>();
-            validator.IsValidAsync(request).Returns(ValidationResult.GenericValidationError);
+            validator.IsValidAsync(request, CancellationToken.None).Returns(ValidationResult.GenericValidationError);
             var sut = new CreateInviteHandler(_context, validator);
 
             //Act

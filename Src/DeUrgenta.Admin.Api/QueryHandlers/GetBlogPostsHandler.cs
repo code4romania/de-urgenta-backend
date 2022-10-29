@@ -24,9 +24,9 @@ namespace DeUrgenta.Admin.Api.QueryHandlers
         }
 
         public async Task<Result<PagedResult<BlogPostModel>, ValidationResult>> Handle(GetBlogPosts request,
-            CancellationToken cancellationToken)
+            CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
@@ -42,7 +42,7 @@ namespace DeUrgenta.Admin.Api.QueryHandlers
                         PublishedOn = x.PublishedOn
                     })
                     .OrderBy(x => x.PublishedOn)
-                    .GetPaged(request.Pagination.PageNumber, request.Pagination.PageSize)
+                    .GetPaged(request.Pagination.PageNumber, request.Pagination.PageSize, ct)
                 ;
             return pagedBlogPosts;
         }

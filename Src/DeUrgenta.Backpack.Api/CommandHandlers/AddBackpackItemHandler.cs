@@ -22,15 +22,15 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result<BackpackItemModel, ValidationResult>> Handle(AddBackpackItem request, CancellationToken cancellationToken)
+        public async Task<Result<BackpackItemModel, ValidationResult>> Handle(AddBackpackItem request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
             }
 
-            var backpack = await _context.Backpacks.FirstAsync(x => x.Id == request.BackpackId, cancellationToken);
+            var backpack = await _context.Backpacks.FirstAsync(x => x.Id == request.BackpackId, ct);
             var backpackItem = new BackpackItem
             {
                 Name = request.BackpackItem.Name,
@@ -40,8 +40,8 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
                 Backpack = backpack
             };
 
-            await _context.AddAsync(backpackItem, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.AddAsync(backpackItem, ct);
+            await _context.SaveChangesAsync(ct);
 
             return new BackpackItemModel
             {

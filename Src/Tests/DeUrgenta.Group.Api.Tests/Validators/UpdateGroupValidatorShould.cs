@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
@@ -33,7 +34,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new UpdateGroupValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new UpdateGroup(sub, Guid.NewGuid(), new GroupRequest()));
+            var result = await sut.IsValidAsync(new UpdateGroup(sub, Guid.NewGuid(), new GroupRequest()), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -52,7 +53,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new UpdateGroup(userSub, Guid.NewGuid(), new GroupRequest()));
+            var result = await sut.IsValidAsync(new UpdateGroup(userSub, Guid.NewGuid(), new GroupRequest()), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -82,7 +83,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new UpdateGroup(groupUserSub, Guid.NewGuid(), new GroupRequest()));
+            var result = await sut.IsValidAsync(new UpdateGroup(groupUserSub, Guid.NewGuid(), new GroupRequest()), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -107,7 +108,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new UpdateGroup(userSub, group.Id, new GroupRequest()));
+            var result = await sut.IsValidAsync(new UpdateGroup(userSub, group.Id, new GroupRequest()), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

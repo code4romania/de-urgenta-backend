@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Controllers;
 using DeUrgenta.Common.Mappers;
@@ -44,9 +45,9 @@ namespace DeUrgenta.Invite.Api.Controllers
         [SwaggerRequestExample(typeof(InviteRequest), typeof(AddInviteRequestExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<InviteModel>> GenerateInvite(InviteRequest request)
+        public async Task<ActionResult<InviteModel>> GenerateInvite(InviteRequest request, CancellationToken ct)
         {
-            var result = await _mediator.Send(new CreateInvite(UserSub, request));
+            var result = await _mediator.Send(new CreateInvite(UserSub, request), ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -65,9 +66,9 @@ namespace DeUrgenta.Invite.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(Guid))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<AcceptInviteModel>> AcceptInvite([FromRoute] Guid inviteId)
+        public async Task<ActionResult<AcceptInviteModel>> AcceptInvite([FromRoute] Guid inviteId, CancellationToken ct)
         {
-            var result = await _mediator.Send(new AcceptInvite(UserSub, inviteId));
+            var result = await _mediator.Send(new AcceptInvite(UserSub, inviteId), ct);
 
             return await _mapper.MapToActionResult(result);
         }

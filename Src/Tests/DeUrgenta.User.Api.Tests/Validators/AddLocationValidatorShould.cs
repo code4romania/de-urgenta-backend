@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
@@ -32,7 +33,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var sut = new AddLocationValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new AddLocation(sub, new UserLocationRequest()));
+            var result = await sut.IsValidAsync(new AddLocation(sub, new UserLocationRequest()), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -51,7 +52,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new AddLocation(userSub, new UserLocationRequest()));
+            var result = await sut.IsValidAsync(new AddLocation(userSub, new UserLocationRequest()), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

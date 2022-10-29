@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Admin.Api.Models;
 using DeUrgenta.Admin.Api.Swagger.AdminLocalization;
@@ -46,10 +47,14 @@ namespace DeUrgenta.Admin.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         [HttpGet]
-        public async Task<IActionResult> GetString(string key)
+        public async Task<IActionResult> GetString(string key, CancellationToken ct)
         {
-            var text = await _i18nProvider.Localize(key);
-            return Ok(new StringResourceModel { Key = key, Value = text });
+            var text = await _i18nProvider.Localize(key); //TODO add ct support on method
+            return Ok(new StringResourceModel
+            {
+                Key = key,
+                Value = text
+            });
         }
 
         /// <summary>
@@ -64,9 +69,9 @@ namespace DeUrgenta.Admin.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         [HttpPost]
-        public async Task<ActionResult<StringResourceModel>> AddOrUpdateContent(AddOrUpdateContentModel model)
+        public async Task<ActionResult<StringResourceModel>> AddOrUpdateContent(AddOrUpdateContentModel model, CancellationToken ct)
         {
-            var result = await _mediator.Send(new AddOrUpdateContent(model.Culture, model.Key, model.Value));
+            var result = await _mediator.Send(new AddOrUpdateContent(model.Culture, model.Key, model.Value), ct);
 
             return await _mapper.MapToActionResult(result);
         }

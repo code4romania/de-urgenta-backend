@@ -21,21 +21,21 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result<BackpackItemModel, ValidationResult>> Handle(UpdateBackpackItem request, CancellationToken cancellationToken)
+        public async Task<Result<BackpackItemModel, ValidationResult>> Handle(UpdateBackpackItem request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
             }
-            var backpackItem = await _context.BackpackItems.FirstAsync(x => x.Id == request.ItemId, cancellationToken);
+            var backpackItem = await _context.BackpackItems.FirstAsync(x => x.Id == request.ItemId, ct);
             backpackItem.Name = request.BackpackItem.Name;
             backpackItem.Category = request.BackpackItem.Category;
             backpackItem.Amount = request.BackpackItem.Amount;
             backpackItem.ExpirationDate = request.BackpackItem.ExpirationDate;
             backpackItem.Version += 1;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(ct);
 
             return new BackpackItemModel
             {

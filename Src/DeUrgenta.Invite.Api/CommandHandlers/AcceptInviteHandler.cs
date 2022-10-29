@@ -24,25 +24,25 @@ namespace DeUrgenta.Invite.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result<AcceptInviteModel, ValidationResult>> Handle(AcceptInvite request, CancellationToken cancellationToken)
+        public async Task<Result<AcceptInviteModel, ValidationResult>> Handle(AcceptInvite request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
             }
 
-            var invite = await _context.Invites.FirstAsync(i => i.Id == request.InviteId, cancellationToken);
+            var invite = await _context.Invites.FirstAsync(i => i.Id == request.InviteId, ct);
 
             if (invite.Type == InviteType.Group)
             {
                 var acceptGroupInvite = new AcceptGroupInvite(request.UserSub, invite.DestinationId);
-                return await _mediator.Send(acceptGroupInvite, cancellationToken);
+                return await _mediator.Send(acceptGroupInvite, ct);
             }
             else
             {
                 var acceptBackpackInvite = new AcceptBackpackInvite(request.UserSub, invite.DestinationId);
-                return await _mediator.Send(acceptBackpackInvite, cancellationToken);
+                return await _mediator.Send(acceptBackpackInvite, ct);
             }
         }
     }

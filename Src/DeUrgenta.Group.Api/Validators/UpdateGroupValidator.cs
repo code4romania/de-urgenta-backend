@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Group.Api.Commands;
@@ -15,16 +16,16 @@ namespace DeUrgenta.Group.Api.Validators
             _context = context;
         }
 
-        public async Task<ValidationResult> IsValidAsync(UpdateGroup request)
+        public async Task<ValidationResult> IsValidAsync(UpdateGroup request, CancellationToken ct)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub, ct);
 
             if (user == null)
             {
                 return ValidationResult.GenericValidationError;
             }
 
-            var groupExists = await _context.Groups.AnyAsync(g => g.Id == request.GroupId);
+            var groupExists = await _context.Groups.AnyAsync(g => g.Id == request.GroupId, ct);
             if (!groupExists)
             {
                 return ValidationResult.GenericValidationError;
@@ -32,7 +33,7 @@ namespace DeUrgenta.Group.Api.Validators
 
             var isGroupAdmin = await _context
                 .Groups
-                .AnyAsync(g => g.Id == request.GroupId && g.Admin.Id == user.Id);
+                .AnyAsync(g => g.Id == request.GroupId && g.Admin.Id == user.Id, ct);
 
             if (!isGroupAdmin)
             {

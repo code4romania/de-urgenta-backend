@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Admin.Api.Models;
@@ -44,10 +45,11 @@ namespace DeUrgenta.Admin.Api.Controller
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetEventsResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<PagedResult<EventResponseModel>>> GetEventsAsync([FromQuery] PaginationQueryModel pagination)
+        public async Task<ActionResult<PagedResult<EventResponseModel>>> GetEventsAsync([FromQuery] PaginationQueryModel pagination,
+            CancellationToken ct)
         {
             var query = new GetEvents(pagination);
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(query, ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -65,10 +67,11 @@ namespace DeUrgenta.Admin.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateEventResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<EventResponseModel>> CreateNewEventAsync([FromBody] EventRequest eventModel)
+        public async Task<ActionResult<EventResponseModel>> CreateNewEventAsync([FromBody] EventRequest eventModel,
+            CancellationToken ct)
         {
             var command = new CreateEvent(eventModel);
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -87,10 +90,12 @@ namespace DeUrgenta.Admin.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateEventResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<EventResponseModel>> UpdateEventAsync([FromRoute] Guid eventId, [FromBody] EventRequest eventModel)
+        public async Task<ActionResult<EventResponseModel>> UpdateEventAsync([FromRoute] Guid eventId, 
+            [FromBody] EventRequest eventModel,
+            CancellationToken ct)
         {
             var command = new UpdateEvent(eventId, eventModel);
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -107,10 +112,10 @@ namespace DeUrgenta.Admin.Api.Controller
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<IActionResult> DeleteEventAsync([FromRoute] Guid eventId)
+        public async Task<IActionResult> DeleteEventAsync([FromRoute] Guid eventId, CancellationToken ct)
         {
             var command = new DeleteEvent(eventId);
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, ct);
 
             return await _mapper.MapToActionResult(result);
         }

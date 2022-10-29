@@ -26,23 +26,23 @@ namespace DeUrgenta.Group.Api.CommandHandlers
             _groupsConfig = groupsConfig.Value;
         }
 
-        public async Task<Result<GroupModel, ValidationResult>> Handle(UpdateGroup request, CancellationToken cancellationToken)
+        public async Task<Result<GroupModel, ValidationResult>> Handle(UpdateGroup request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
             }
 
-            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
+            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, ct);
             var group = await _context
                 .Groups
                 .Include(g => g.Admin)
-                .FirstAsync(g => g.AdminId == user.Id && g.Id == request.GroupId, cancellationToken);
+                .FirstAsync(g => g.AdminId == user.Id && g.Id == request.GroupId, ct);
 
             group.Name = request.Group.Name;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(ct);
 
             return new GroupModel
             {

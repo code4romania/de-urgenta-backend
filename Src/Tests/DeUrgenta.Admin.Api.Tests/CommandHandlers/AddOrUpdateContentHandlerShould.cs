@@ -18,7 +18,7 @@ namespace DeUrgenta.Admin.Api.Tests.CommandHandlers
             // Arrange
             var validator = Substitute.For<IValidateRequest<AddOrUpdateContent>>();
             validator
-                .IsValidAsync(Arg.Any<AddOrUpdateContent>())
+                .IsValidAsync(Arg.Any<AddOrUpdateContent>(), CancellationToken.None)
                 .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new AddOrUpdateContentHandler(Substitute.For<IAmContentProvider>(), validator);

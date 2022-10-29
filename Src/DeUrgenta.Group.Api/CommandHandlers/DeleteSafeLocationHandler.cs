@@ -20,9 +20,9 @@ namespace DeUrgenta.Group.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result<Unit, ValidationResult>> Handle(DeleteSafeLocation request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, ValidationResult>> Handle(DeleteSafeLocation request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
 
             if (validationResult.IsFailure)
             {
@@ -31,10 +31,10 @@ namespace DeUrgenta.Group.Api.CommandHandlers
 
             var safeLocation =await _context
                 .GroupsSafeLocations
-                .FirstAsync(gsl => gsl.Id == request.SafeLocationId, cancellationToken);
+                .FirstAsync(gsl => gsl.Id == request.SafeLocationId, ct);
 
             _context.GroupsSafeLocations.Remove(safeLocation);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(ct);
 
             return Unit.Value;
         }

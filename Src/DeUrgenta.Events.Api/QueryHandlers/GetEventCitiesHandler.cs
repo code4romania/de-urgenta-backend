@@ -24,9 +24,9 @@ namespace DeUrgenta.Events.Api.QueryHandlers
             _context = context;
         }
 
-        public async Task<Result<IImmutableList<EventCityModel>, ValidationResult>> Handle(GetEventCities request, CancellationToken cancellationToken)
+        public async Task<Result<IImmutableList<EventCityModel>, ValidationResult>> Handle(GetEventCities request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
 
             if (validationResult.IsFailure)
             {
@@ -39,7 +39,7 @@ namespace DeUrgenta.Events.Api.QueryHandlers
                                 .Distinct()
                                 .Select(x => new EventCityModel { Name = x })
                                 .OrderBy(x => x.Name)
-                                .ToListAsync(cancellationToken);
+                                .ToListAsync(ct);
 
             return events.ToImmutableList();
 

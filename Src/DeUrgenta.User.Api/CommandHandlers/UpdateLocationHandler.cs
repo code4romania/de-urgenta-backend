@@ -20,21 +20,21 @@ namespace DeUrgenta.User.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result<Unit, ValidationResult>> Handle(UpdateLocation request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, ValidationResult>> Handle(UpdateLocation request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
             }
 
-            var location = await _context.UserLocations.FirstAsync(l => l.Id == request.LocationId, cancellationToken);
+            var location = await _context.UserLocations.FirstAsync(l => l.Id == request.LocationId, ct);
             location.Latitude = request.Location.Latitude;
             location.Longitude = request.Location.Longitude;
             location.Address = request.Location.Address;
             location.Type = request.Location.Type;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(ct);
             return Unit.Value;
         }
     }

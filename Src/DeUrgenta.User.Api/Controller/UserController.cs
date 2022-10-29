@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Controllers;
 using DeUrgenta.Common.Mappers;
@@ -51,9 +52,9 @@ namespace DeUrgenta.User.Api.Controller
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetUserResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<UserModel>> GetUserDetailsAsync()
+        public async Task<ActionResult<UserModel>> GetUserDetailsAsync(CancellationToken ct)
         {
-            var result = await _mediator.Send(new GetUser(UserSub));
+            var result = await _mediator.Send(new GetUser(UserSub), ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -70,9 +71,9 @@ namespace DeUrgenta.User.Api.Controller
         [SwaggerRequestExample(typeof(UserRequest), typeof(AddOrUpdateUserRequestExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<UserModel>> UpdateUserAsync(UserRequest user)
+        public async Task<ActionResult<UserModel>> UpdateUserAsync(UserRequest user, CancellationToken ct)
         {
-            var result = await _mediator.Send(new UpdateUser(UserSub, user));
+            var result = await _mediator.Send(new UpdateUser(UserSub, user), ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -120,10 +121,10 @@ namespace DeUrgenta.User.Api.Controller
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetUserLocationTypesResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<List<IndexedItemModel>>> GetUserLocationTypesAsync()
+        public async Task<ActionResult<List<IndexedItemModel>>> GetUserLocationTypesAsync(CancellationToken ct)
         {
             var query = new GetUserLocationTypes();
-            var locationTypes = await _mediator.Send(query);
+            var locationTypes = await _mediator.Send(query, ct);
 
             return Ok(locationTypes);
         }
@@ -138,9 +139,9 @@ namespace DeUrgenta.User.Api.Controller
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetUserLocationsResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<IImmutableList<UserLocationModel>>> GetUserLocationsAsync()
+        public async Task<ActionResult<IImmutableList<UserLocationModel>>> GetUserLocationsAsync(CancellationToken ct)
         {
-            var result = await _mediator.Send(new GetUserLocations(UserSub));
+            var result = await _mediator.Send(new GetUserLocations(UserSub), ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -159,9 +160,9 @@ namespace DeUrgenta.User.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddUserLocationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<UserLocationModel>> AddLocationAsync([FromBody] UserLocationRequest location)
+        public async Task<ActionResult<UserLocationModel>> AddLocationAsync([FromBody] UserLocationRequest location, CancellationToken ct)
         {
-            var result = await _mediator.Send(new AddLocation(UserSub, location));
+            var result = await _mediator.Send(new AddLocation(UserSub, location), ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -180,9 +181,11 @@ namespace DeUrgenta.User.Api.Controller
         [SwaggerRequestExample(typeof(UserLocationRequest), typeof(AddOrUpdateUserLocationRequestExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<UserLocationModel>> UpdateLocationAsync([FromRoute] Guid locationId, [FromBody] UserLocationRequest location)
+        public async Task<ActionResult<UserLocationModel>> UpdateLocationAsync([FromRoute] Guid locationId,
+            [FromBody] UserLocationRequest location,
+            CancellationToken ct)
         {
-            var result = await _mediator.Send(new UpdateLocation(UserSub, locationId, location));
+            var result = await _mediator.Send(new UpdateLocation(UserSub, locationId, location), ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -200,9 +203,9 @@ namespace DeUrgenta.User.Api.Controller
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<IActionResult> DeleteLocationAsync([FromRoute] Guid locationId)
+        public async Task<IActionResult> DeleteLocationAsync([FromRoute] Guid locationId, CancellationToken ct)
         {
-            var result = await _mediator.Send(new DeleteLocation(UserSub, locationId));
+            var result = await _mediator.Send(new DeleteLocation(UserSub, locationId), ct);
 
             return await _mapper.MapToActionResult(result);
         }

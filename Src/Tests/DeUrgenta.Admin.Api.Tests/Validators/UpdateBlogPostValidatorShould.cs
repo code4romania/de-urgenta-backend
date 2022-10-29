@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Admin.Api.Models;
@@ -46,7 +47,7 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
                 Author = "Test",
                 Title = "Test",
                 ContentBody = "Test"
-            }));
+            }), CancellationToken.None);
 
             // Assert
             result
@@ -82,7 +83,7 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
                 Author = "Test",
                 Title = "Test",
                 ContentBody = "Test"
-            }));
+            }), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

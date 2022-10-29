@@ -28,7 +28,7 @@ namespace DeUrgenta.Backpack.Api.Tests.CommandHandlers
             // Arrange
             var validator = Substitute.For<IValidateRequest<RemoveCurrentUserFromContributors>>();
             validator
-                .IsValidAsync(Arg.Any<RemoveCurrentUserFromContributors>())
+                .IsValidAsync(Arg.Any<RemoveCurrentUserFromContributors>(), CancellationToken.None)
                 .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new RemoveCurrentUserFromContributorsHandler(validator, _dbContext);

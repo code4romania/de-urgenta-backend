@@ -22,16 +22,16 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result<EventResponseModel, ValidationResult>> Handle(UpdateEvent request, CancellationToken cancellationToken)
+        public async Task<Result<EventResponseModel, ValidationResult>> Handle(UpdateEvent request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
             }
 
-            var eventType = await _context.EventTypes.FirstAsync(et => et.Id == request.Event.EventTypeId, cancellationToken);
-            var @event = await _context.Events.FirstAsync(e => e.Id == request.EventId, cancellationToken);
+            var eventType = await _context.EventTypes.FirstAsync(et => et.Id == request.Event.EventTypeId, ct);
+            var @event = await _context.Events.FirstAsync(e => e.Id == request.EventId, ct);
 
             @event.Address = request.Event.Address;
             @event.Author = request.Event.Author;
@@ -44,7 +44,7 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
             @event.IsArchived = request.Event.IsArchived;
             @event.PublishedOn = DateTime.UtcNow;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(ct);
 
             return new EventResponseModel
             {

@@ -21,15 +21,15 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
             _validator = validator;
             _context = context;
         }
-        public async Task<Result<BlogPostModel, ValidationResult>> Handle(CreateBlogPost request, CancellationToken cancellationToken)
+        public async Task<Result<BlogPostModel, ValidationResult>> Handle(CreateBlogPost request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
             }
 
-            var blogPost = new BlogPost()
+            var blogPost = new BlogPost
             {
                 Author = request.Blog.Author,
                 Title = request.Blog.Title,
@@ -37,8 +37,8 @@ namespace DeUrgenta.Admin.Api.CommandHandlers
                 PublishedOn = DateTime.UtcNow
             };
 
-            await _context.AddAsync(blogPost, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.AddAsync(blogPost, ct);
+            await _context.SaveChangesAsync(ct);
 
             return new BlogPostModel
             {
