@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Immutable;
-using System.Linq;
 using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Backpack.Api.Models;
 using DeUrgenta.Backpack.Api.Queries;
 using DeUrgenta.Backpack.Api.Swagger.BackpackItem;
+using DeUrgenta.Common.Controllers;
 using DeUrgenta.Common.Mappers;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.Domain.Api.Entities;
@@ -23,7 +23,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
     [Produces("application/json")]
     [Consumes("application/json")]
     [Authorize]
-    public class BackpackItemController : ControllerBase
+    public class BackpackItemController : BaseAuthController
     {
         private readonly IMediator _mediator;
         private readonly IResultMapper _mapper;
@@ -46,8 +46,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<IImmutableList<BackpackItemModel>>> GetBackpackItemsAsync([FromRoute] Guid backpackId)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var query = new GetBackpackItems(sub, backpackId);
+            var query = new GetBackpackItems(UserSub, backpackId);
             var result = await _mediator.Send(query);
 
             return await _mapper.MapToActionResult(result);
@@ -65,8 +64,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<IImmutableList<BackpackItemModel>>> GetBackpackCategoryItemsAsync([FromRoute] Guid backpackId, [FromRoute] BackpackItemCategoryType itemCategory)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var query = new GetBackpackCategoryItems(sub, backpackId, itemCategory);
+            var query = new GetBackpackCategoryItems(UserSub, backpackId, itemCategory);
             var result = await _mediator.Send(query);
 
             return await _mapper.MapToActionResult(result);
@@ -88,8 +86,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<BackpackItemModel>> CreateNewBackpackItemAsync([FromRoute] Guid backpackId, [FromBody] BackpackItemRequest backpackItem)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new AddBackpackItem(sub, backpackId, backpackItem);
+            var command = new AddBackpackItem(UserSub, backpackId, backpackItem);
             var result = await _mediator.Send(command);
 
             return await _mapper.MapToActionResult(result);
@@ -112,8 +109,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<BackpackItemModel>> UpdateBackpackItemAsync([FromRoute] Guid itemId, [FromBody] BackpackItemRequest backpackItem)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new UpdateBackpackItem(sub, itemId, backpackItem);
+            var command = new UpdateBackpackItem(UserSub, itemId, backpackItem);
             var result = await _mediator.Send(command);
 
             return await _mapper.MapToActionResult(result);
@@ -134,8 +130,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<IActionResult> DeleteBackpackItemAsync([FromRoute] Guid itemId)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new DeleteBackpackItem(sub, itemId);
+            var command = new DeleteBackpackItem(UserSub, itemId);
             var result = await _mediator.Send(command);
 
             return await _mapper.MapToActionResult(result);

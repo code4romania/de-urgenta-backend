@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Threading.Tasks;
+using DeUrgenta.Common.Controllers;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.Content.Api.Swagger.Content;
 using DeUrgenta.I18n.Service.Models;
@@ -17,7 +18,7 @@ namespace DeUrgenta.Content.Api.Controller
     [Produces("application/json")]
     [Consumes("application/json")]
     [Authorize]
-    public class ContentController : ControllerBase
+    public class ContentController : BaseAuthController
     {
         private readonly IamI18nProvider _i18NProvider;
         private readonly IAmContentProvider _contentProvider;

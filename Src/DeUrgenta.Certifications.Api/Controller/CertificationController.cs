@@ -12,7 +12,7 @@ using System.Collections.Immutable;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Swagger;
 using Microsoft.AspNetCore.Authorization;
-using System.Linq;
+using DeUrgenta.Common.Controllers;
 using DeUrgenta.Common.Mappers;
 
 namespace DeUrgenta.Certifications.Api.Controller
@@ -22,7 +22,7 @@ namespace DeUrgenta.Certifications.Api.Controller
     [Consumes("application/json")]
     [Route("certifications")]
     [Authorize]
-    public class CertificationController : ControllerBase
+    public class CertificationController : BaseAuthController
     {
         private readonly IMediator _mediator;
         private readonly IResultMapper _mapper;
@@ -46,8 +46,7 @@ namespace DeUrgenta.Certifications.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<IImmutableList<CertificationModel>>> GetCertificationsAsync()
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var query = new GetCertifications(sub);
+            var query = new GetCertifications(UserSub);
             var result = await _mediator.Send(query);
 
             return await _mapper.MapToActionResult(result);
@@ -70,8 +69,7 @@ namespace DeUrgenta.Certifications.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<CertificationModel>> CreateNewCertificationAsync([FromForm] CertificationRequest certification)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new CreateCertification(sub, certification);
+            var command = new CreateCertification(UserSub, certification);
             var result = await _mediator.Send(command);
 
             return await _mapper.MapToActionResult(result);
@@ -94,9 +92,7 @@ namespace DeUrgenta.Certifications.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<CertificationModel>> UpdateCertificationAsync([FromRoute] Guid certificationId, [FromForm] CertificationRequest certification)
         {
-
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var command = new UpdateCertification(sub, certificationId, certification);
+            var command = new UpdateCertification(UserSub, certificationId, certification);
             var result = await _mediator.Send(command);
 
             return await _mapper.MapToActionResult(result);
@@ -116,9 +112,7 @@ namespace DeUrgenta.Certifications.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<IActionResult> DeleteCertificationAsync([FromRoute] Guid certificationId)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-
-            var command = new DeleteCertification(sub, certificationId);
+            var command = new DeleteCertification(UserSub, certificationId);
             var result = await _mediator.Send(command);
 
             return await _mapper.MapToActionResult(result);

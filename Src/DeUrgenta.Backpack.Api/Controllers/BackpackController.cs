@@ -10,9 +10,9 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
-using System.Linq;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Backpack.Api.Queries;
+using DeUrgenta.Common.Controllers;
 using DeUrgenta.Common.Mappers;
 
 namespace DeUrgenta.Backpack.Api.Controllers
@@ -22,7 +22,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
     [Produces("application/json")]
     [Consumes("application/json")]
     [Authorize]
-    public class BackpackController : ControllerBase
+    public class BackpackController : BaseAuthController
     {
         private readonly IMediator _mediator;
         private readonly IResultMapper _mapper;
@@ -45,8 +45,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<IImmutableList<BackpackModel>>> GetBackpacksAsync()
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var query = new GetBackpacks(sub);
+            var query = new GetBackpacks(UserSub);
             var result = await _mediator.Send(query);
 
             return await _mapper.MapToActionResult(result);
@@ -64,8 +63,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<IImmutableList<BackpackModel>>> GetMyBackpacksAsync()
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var query = new GetMyBackpacks(sub);
+            var query = new GetMyBackpacks(UserSub);
             var result = await _mediator.Send(query);
 
             return await _mapper.MapToActionResult(result);
@@ -87,9 +85,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<BackpackModel>> CreateNewBackpackAsync([FromBody] BackpackModelRequest backpack)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-
-            var command = new CreateBackpack(sub, backpack);
+            var command = new CreateBackpack(UserSub, backpack);
             var result = await _mediator.Send(command);
 
             return await _mapper.MapToActionResult(result);
@@ -111,9 +107,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<BackpackModel>> UpdateBackpackAsync([FromRoute] Guid backpackId, [FromBody] BackpackModelRequest backpack)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-
-            var command = new UpdateBackpack(sub, backpackId, backpack);
+            var command = new UpdateBackpack(UserSub, backpackId, backpack);
             var result = await _mediator.Send(command);
 
             return await _mapper.MapToActionResult(result);
@@ -134,9 +128,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<IImmutableList<BackpackContributorModel>>> GetBackpackContributorsAsync([FromRoute] Guid backpackId)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-
-            var command = new GetBackpackContributors(sub, backpackId);
+            var command = new GetBackpackContributors(UserSub, backpackId);
             var result = await _mediator.Send(command);
 
             return await _mapper.MapToActionResult(result);
@@ -157,9 +149,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<IActionResult> RemoveContributorAsync([FromRoute] Guid backpackId, [FromRoute] Guid userId)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-
-            var command = new RemoveContributor(sub, backpackId, userId);
+            var command = new RemoveContributor(UserSub, backpackId, userId);
             var result = await _mediator.Send(command);
 
             return await _mapper.MapToActionResult(result);
@@ -179,9 +169,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<IActionResult> RemoveCurrentContributorAsync([FromRoute] Guid backpackId)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-
-            var command = new RemoveCurrentUserFromContributors(sub, backpackId);
+            var command = new RemoveCurrentUserFromContributors(UserSub, backpackId);
             var result = await _mediator.Send(command);
 
             return await _mapper.MapToActionResult(result);
@@ -202,9 +190,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<IActionResult> DeleteBackpackAsync([FromRoute] Guid backpackId)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-
-            var command = new DeleteBackpack(sub, backpackId);
+            var command = new DeleteBackpack(UserSub, backpackId);
             var result = await _mediator.Send(command);
 
             return await _mapper.MapToActionResult(result);

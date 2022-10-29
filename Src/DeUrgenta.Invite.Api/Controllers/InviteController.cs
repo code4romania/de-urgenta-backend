@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
+using DeUrgenta.Common.Controllers;
 using DeUrgenta.Common.Mappers;
 using DeUrgenta.Common.Swagger;
 using DeUrgenta.Invite.Api.Commands;
@@ -20,7 +20,7 @@ namespace DeUrgenta.Invite.Api.Controllers
     [Produces("application/json")]
     [Consumes("application/json")]
     [ApiController]
-    public class InviteController : ControllerBase
+    public class InviteController : BaseAuthController
     {
         private readonly IMediator _mediator;
         private readonly IResultMapper _mapper;
@@ -46,8 +46,7 @@ namespace DeUrgenta.Invite.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<InviteModel>> GenerateInvite(InviteRequest request)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var result = await _mediator.Send(new CreateInvite(sub, request));
+            var result = await _mediator.Send(new CreateInvite(UserSub, request));
 
             return await _mapper.MapToActionResult(result);
         }
@@ -68,8 +67,7 @@ namespace DeUrgenta.Invite.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<AcceptInviteModel>> AcceptInvite([FromRoute] Guid inviteId)
         {
-            var sub = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            var result = await _mediator.Send(new AcceptInvite(sub, inviteId));
+            var result = await _mediator.Send(new AcceptInvite(UserSub, inviteId));
 
             return await _mapper.MapToActionResult(result);
         }
