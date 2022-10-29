@@ -30,7 +30,7 @@ namespace DeUrgenta.Invite.Api.Validators
 
             var inviteTypeValidator = _validatorFactory.GetCreateValidatorInstance(request.Type);
 
-            return await inviteTypeValidator.ValidateAsync(request);
+            return await inviteTypeValidator.ValidateAsync(request, ct);
         }
     }
 }

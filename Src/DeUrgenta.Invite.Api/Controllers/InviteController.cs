@@ -35,8 +35,6 @@ namespace DeUrgenta.Invite.Api.Controllers
         /// <summary>
         /// Generate an invite to a group or backpack
         /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
         [HttpPost]
         [SwaggerResponse(StatusCodes.Status200OK, "Invite created")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
@@ -49,14 +47,12 @@ namespace DeUrgenta.Invite.Api.Controllers
         {
             var result = await _mediator.Send(new CreateInvite(UserSub, request), ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
         /// Accept an invite to a group or backpack 
         /// </summary>
-        /// <param name="inviteId"></param>
-        /// <returns></returns>
         [HttpGet]
         [Route("{inviteId:guid}")]
         [SwaggerResponse(StatusCodes.Status200OK, "Accept invite ro group or backpack", typeof(AcceptInviteModel))]
@@ -70,7 +66,7 @@ namespace DeUrgenta.Invite.Api.Controllers
         {
             var result = await _mediator.Send(new AcceptInvite(UserSub, inviteId), ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
     }
 }

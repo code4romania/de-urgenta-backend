@@ -49,7 +49,7 @@ namespace DeUrgenta.Admin.Api.Controller
         [HttpGet]
         public async Task<IActionResult> GetString(string key, CancellationToken ct)
         {
-            var text = await _i18nProvider.Localize(key); //TODO add ct support on method
+            var text = await _i18nProvider.Localize(key, ct);
             return Ok(new StringResourceModel
             {
                 Key = key,
@@ -73,7 +73,7 @@ namespace DeUrgenta.Admin.Api.Controller
         {
             var result = await _mediator.Send(new AddOrUpdateContent(model.Culture, model.Key, model.Value), ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
     }
 }

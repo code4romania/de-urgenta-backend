@@ -38,7 +38,6 @@ namespace DeUrgenta.Admin.Api.Controller
         /// <summary>
         /// Get all events events
         /// </summary>
-        /// <returns></returns>
         [HttpGet("/admin/events")]
         [SwaggerResponse(StatusCodes.Status200OK, "Events", typeof(PagedResult<EventResponseModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
@@ -51,13 +50,12 @@ namespace DeUrgenta.Admin.Api.Controller
             var query = new GetEvents(pagination);
             var result = await _mediator.Send(query, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
         /// Adds a new event
         /// </summary>
-        /// <returns></returns>
         [HttpPost]
         [SwaggerResponse(StatusCodes.Status200OK, "New event", typeof(EventResponseModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
@@ -73,7 +71,7 @@ namespace DeUrgenta.Admin.Api.Controller
             var command = new CreateEvent(eventModel);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
@@ -97,7 +95,7 @@ namespace DeUrgenta.Admin.Api.Controller
             var command = new UpdateEvent(eventId, eventModel);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
@@ -117,7 +115,7 @@ namespace DeUrgenta.Admin.Api.Controller
             var command = new DeleteEvent(eventId);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
     }
 }

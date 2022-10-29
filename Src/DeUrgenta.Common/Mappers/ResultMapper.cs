@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using DeUrgenta.Common.Extensions;
@@ -18,14 +19,14 @@ namespace DeUrgenta.Common.Mappers
             _i18nProvider = i18NProvider;
         }
 
-        public async Task<ActionResult<T>> MapToActionResult<T>(Result<T, ValidationResult> result)
+        public async Task<ActionResult<T>> MapToActionResult<T>(Result<T, ValidationResult> result, CancellationToken ct)
         {
-           result = await TranslateResult(result);
+            result = await TranslateResult(result, ct);
 
             return result.ToActionResult();
         }
 
-        private async Task<Result<T, ValidationResult>> TranslateResult<T>(Result<T, ValidationResult> result)
+        private async Task<Result<T, ValidationResult>> TranslateResult<T>(Result<T, ValidationResult> result, CancellationToken ct)
         {
             if (result.IsFailure && result.Error is LocalizableValidationError error)
             {
@@ -33,8 +34,8 @@ namespace DeUrgenta.Common.Mappers
 
                 foreach (var errorMessage in error.Messages)
                 {
-                    var translatedKey = await _i18nProvider.Localize(errorMessage.Key);
-                    var translatedValue = await _i18nProvider.Localize(errorMessage.Value);
+                    var translatedKey = await _i18nProvider.Localize(errorMessage.Key, ct);
+                    var translatedValue = await _i18nProvider.Localize(errorMessage.Value, ct);
 
                     translatedErrorMessages.Add(translatedKey, translatedValue);
                 }
@@ -46,9 +47,9 @@ namespace DeUrgenta.Common.Mappers
             return result;
         }
 
-        public async Task<ActionResult> MapToActionResult(Result<Unit, ValidationResult> result)
+        public async Task<ActionResult> MapToActionResult(Result<Unit, ValidationResult> result, CancellationToken ct)
         {
-            result = await TranslateResult(result);
+            result = await TranslateResult(result, ct);
 
             return result.ToActionResult();
         }

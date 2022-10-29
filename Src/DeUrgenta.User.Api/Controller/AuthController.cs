@@ -51,7 +51,6 @@ namespace DeUrgenta.User.Api.Controller
         /// <summary>
         /// Tries to create a new user account
         /// </summary>
-        /// <returns></returns>
         [SwaggerResponse(StatusCodes.Status200OK, "User account creation confirmation message")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Internal server error", typeof(ProblemDetails))]
         [SwaggerResponse(StatusCodes.Status409Conflict, "Email already used", typeof(ActionResponse))]
@@ -62,7 +61,7 @@ namespace DeUrgenta.User.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status429TooManyRequests, typeof(TooManyRequestsResponseExample))]
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> RegisterAsync([FromBody] UserRegistrationDto user)
+        public async Task<IActionResult> RegisterAsync([FromBody] UserRegistrationDto user, CancellationToken ct)
         {
             var existingUser = await _userManager.FindByEmailAsync(user.Email);
             if (existingUser != null)
@@ -84,7 +83,7 @@ namespace DeUrgenta.User.Api.Controller
             {
                 await _userManager.AddToRoleAsync(newUser, ApiUserRoles.User);
 
-                await _applicationUserManager.CreateApplicationUserAsync(user, newUser.Id);
+                await _applicationUserManager.CreateApplicationUserAsync(user, newUser.Id, ct);
                 var callbackUrl = await GetCallbackUrlAsync(newUser);
 
                 await SendRegistrationEmail(newUser.UserName, user.Email, callbackUrl);
@@ -129,7 +128,8 @@ namespace DeUrgenta.User.Api.Controller
             var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(confirmationRequest.Code));
             var result = await _userManager.ConfirmEmailAsync(user, code);
 
-            if (result.Succeeded) { return Ok(); }
+            if (result.Succeeded)
+            { return Ok(); }
             return BadRequest();
         }
 
@@ -247,7 +247,7 @@ namespace DeUrgenta.User.Api.Controller
             var user = await _userManager.FindByIdAsync(userResetPassword.UserId);
             var resToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(userResetPassword.ResetToken));
             var res = await _userManager.ResetPasswordAsync(user, resToken, userResetPassword.NewPassword);
-            
+
             if (!res.Succeeded)
             {
                 return BadRequest(new ActionResponse

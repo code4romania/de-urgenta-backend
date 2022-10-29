@@ -33,7 +33,6 @@ namespace DeUrgenta.Events.Api.Controller
         /// <summary>
         /// Gets event types
         /// </summary>
-        /// <returns></returns>
         [HttpGet]
         [Route("types")]
 
@@ -47,13 +46,12 @@ namespace DeUrgenta.Events.Api.Controller
             var query = new GetEventTypes();
             var result = await _mediator.Send(query, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
         /// Gets event cities
         /// </summary>
-        /// <returns></returns>
         [HttpGet]
         [Route("cities")]
 
@@ -67,13 +65,12 @@ namespace DeUrgenta.Events.Api.Controller
             var query = new GetEventCities(eventTypeId);
             var result = await _mediator.Send(query, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
         /// Gets events list by city and/or type id
         /// </summary>
-        /// <returns></returns>
         [HttpGet]
         [Route("/events")]
 
@@ -82,12 +79,12 @@ namespace DeUrgenta.Events.Api.Controller
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetEventResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<IImmutableList<EventResponseModel>>> GetEventsAsync([FromQuery]EventModelRequest filter, CancellationToken ct)
+        public async Task<ActionResult<IImmutableList<EventResponseModel>>> GetEventsAsync([FromQuery] EventModelRequest filter, CancellationToken ct)
         {
             var command = new GetEvent(filter);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
     }
 }

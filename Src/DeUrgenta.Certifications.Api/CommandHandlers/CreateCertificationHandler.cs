@@ -52,7 +52,8 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
                 photoUrl = await _storage.SaveAttachmentAsync(certification.Id,
                     user.Sub,
                     request.Photo.OpenReadStream(),
-                    Path.GetExtension(request.Photo.FileName));
+                    Path.GetExtension(request.Photo.FileName),
+                    ct);
             }
 
             return new CertificationModel

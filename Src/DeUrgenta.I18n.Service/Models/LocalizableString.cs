@@ -47,7 +47,8 @@ namespace DeUrgenta.I18n.Service.Models
             }
 
             var sameKey = other.Key == Key;
-            if (!sameKey) return false;
+            if (!sameKey)
+                return false;
 
             if (Params == null && other.Params == null)
             {
@@ -59,7 +60,7 @@ namespace DeUrgenta.I18n.Service.Models
                 return false;
             }
 
-            return string.Join(",", Params) == string.Join(",", other.Params);
+            return other.Params != null && Params != null && string.Join(",", Params) == string.Join(",", other.Params);
         }
 
         public override int GetHashCode()

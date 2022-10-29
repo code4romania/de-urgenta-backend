@@ -37,7 +37,6 @@ namespace DeUrgenta.Backpack.Api.Controllers
         /// <summary>
         /// Gets backpacks for current user in which he either is contributor or owner.
         /// </summary>
-        /// <returns></returns>
         [HttpGet("/backpacks")]
         [SwaggerResponse(StatusCodes.Status200OK, "User backpacks", typeof(IImmutableList<BackpackModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
@@ -49,13 +48,12 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var query = new GetBackpacks(UserSub);
             var result = await _mediator.Send(query, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
         /// Gets backpacks for current user for which he is owner.
         /// </summary>
-        /// <returns></returns>
         [HttpGet("/backpacks/my")]
         [SwaggerResponse(StatusCodes.Status200OK, "User backpacks", typeof(IImmutableList<BackpackModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
@@ -67,13 +65,12 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var query = new GetMyBackpacks(UserSub);
             var result = await _mediator.Send(query, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
         /// Adds a new backpack
         /// </summary>
-        /// <returns></returns>
         [HttpPost]
 
         [SwaggerResponse(StatusCodes.Status200OK, "New backpack", typeof(BackpackModel))]
@@ -90,7 +87,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var command = new CreateBackpack(UserSub, backpack);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
@@ -114,7 +111,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var command = new UpdateBackpack(UserSub, backpackId, backpack);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
@@ -136,7 +133,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var command = new GetBackpackContributors(UserSub, backpackId);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
@@ -157,7 +154,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var command = new RemoveContributor(UserSub, backpackId, userId);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
@@ -177,13 +174,12 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var command = new RemoveCurrentUserFromContributors(UserSub, backpackId);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
         /// Delete a backpack
         /// </summary>
-        /// <returns></returns>
         [HttpDelete]
         [Route("{backpackId:guid}")]
 
@@ -198,7 +194,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var command = new DeleteBackpack(UserSub, backpackId);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
     }
 }

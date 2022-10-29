@@ -38,7 +38,6 @@ namespace DeUrgenta.Backpack.Api.Controllers
         /// <summary>
         /// Gets items in a backpack
         /// </summary>
-        /// <returns></returns>
         [HttpGet("{backpackId:guid}/items")]
         [SwaggerResponse(StatusCodes.Status200OK, "Items from a backpack", typeof(IImmutableList<BackpackItemModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
@@ -51,13 +50,12 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var query = new GetBackpackItems(UserSub, backpackId);
             var result = await _mediator.Send(query, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
         /// Gets items in a backpack for a specific category
         /// </summary>
-        /// <returns></returns>
         [HttpGet("{backpackId:guid}/{itemCategory:itemCategory}/items")]
         [SwaggerResponse(StatusCodes.Status200OK, "Items from a backpack category", typeof(IImmutableList<BackpackItemModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
@@ -71,13 +69,12 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var query = new GetBackpackCategoryItems(UserSub, backpackId, itemCategory);
             var result = await _mediator.Send(query, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
         /// Adds a new backpack item
         /// </summary>
-        /// <returns></returns>
         [HttpPost("{backpackId:guid}")]
 
         [SwaggerResponse(StatusCodes.Status200OK, "New backpack item", typeof(BackpackItemModel))]
@@ -95,13 +92,12 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var command = new AddBackpackItem(UserSub, backpackId, backpackItem);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
         /// Updates a backpack item
         /// </summary>
-        /// <returns></returns>
         [HttpPut]
         [Route("item/{itemId:guid}")]
 
@@ -120,13 +116,12 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var command = new UpdateBackpackItem(UserSub, itemId, backpackItem);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
         /// Delete a backpack item
         /// </summary>
-        /// <returns></returns>
         [HttpDelete]
         [Route("item/{itemId:guid}")]
 
@@ -141,7 +136,7 @@ namespace DeUrgenta.Backpack.Api.Controllers
             var command = new DeleteBackpackItem(UserSub, itemId);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
     }
 }

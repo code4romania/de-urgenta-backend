@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Invite.Api.Commands;
@@ -19,9 +20,9 @@ namespace DeUrgenta.Invite.Api.Validators
             _config = config.Value;
         }
 
-        public async Task<ValidationResult> ValidateAsync(CreateInvite request)
+        public async Task<ValidationResult> ValidateAsync(CreateInvite request, CancellationToken ct)
         {
-            var group = await _context.Groups.FirstOrDefaultAsync(g => g.Id == request.DestinationId);
+            var group = await _context.Groups.FirstOrDefaultAsync(g => g.Id == request.DestinationId, ct);
             if (group == null)
             {
                 return ValidationResult.GenericValidationError;
@@ -29,7 +30,8 @@ namespace DeUrgenta.Invite.Api.Validators
 
             var userIsGroupMember = await _context.UsersToGroups
                 .AnyAsync(u => u.UserId == request.UserId
-                                     && u.GroupId == request.DestinationId);
+                                     && u.GroupId == request.DestinationId,
+                    ct);
 
             if (!userIsGroupMember)
             {

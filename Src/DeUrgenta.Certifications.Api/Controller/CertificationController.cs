@@ -37,7 +37,6 @@ namespace DeUrgenta.Certifications.Api.Controller
         /// <summary>
         /// Gets user certifications
         /// </summary>
-        /// <returns></returns>
         [HttpGet]
 
         [SwaggerResponse(StatusCodes.Status200OK, "User certifications", typeof(IImmutableList<CertificationModel>))]
@@ -50,13 +49,12 @@ namespace DeUrgenta.Certifications.Api.Controller
             var query = new GetCertifications(UserSub);
             var result = await _mediator.Send(query, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
         /// Adds a new certification
         /// </summary>
-        /// <returns></returns>
         [HttpPost]
         [Consumes("multipart/form-data")]
 
@@ -74,7 +72,7 @@ namespace DeUrgenta.Certifications.Api.Controller
             var command = new CreateCertification(UserSub, certification);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
@@ -92,14 +90,14 @@ namespace DeUrgenta.Certifications.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateCertificationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<CertificationModel>> UpdateCertificationAsync([FromRoute] Guid certificationId, 
+        public async Task<ActionResult<CertificationModel>> UpdateCertificationAsync([FromRoute] Guid certificationId,
             [FromForm] CertificationRequest certification,
             CancellationToken ct)
         {
             var command = new UpdateCertification(UserSub, certificationId, certification);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
@@ -119,7 +117,7 @@ namespace DeUrgenta.Certifications.Api.Controller
             var command = new DeleteCertification(UserSub, certificationId);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
     }
 }

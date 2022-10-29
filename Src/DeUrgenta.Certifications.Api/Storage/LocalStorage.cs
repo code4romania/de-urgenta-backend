@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Certifications.Api.Storage.Config;
 using Microsoft.Extensions.Options;
@@ -16,7 +17,7 @@ namespace DeUrgenta.Certifications.Api.Storage
             _config = config.CurrentValue;
         }
 
-        public async Task<string> SaveAttachmentAsync(Guid certificationId, string userSub, Stream attachment, string extension)
+        public async Task<string> SaveAttachmentAsync(Guid certificationId, string userSub, Stream attachment, string extension, CancellationToken ct)
         {
             var filePath = $"{userSub}/{certificationId}{extension}";
 
@@ -35,7 +36,7 @@ namespace DeUrgenta.Certifications.Api.Storage
             using (var targetStream = File.Create(Path.Combine(_config.Path, filePath)))
             {
                 attachment.Seek(0, SeekOrigin.Begin);
-                await attachment.CopyToAsync(targetStream);
+                await attachment.CopyToAsync(targetStream, ct);
             }
 
             return $"{_config.StaticFilesRequestPath}/{filePath}";
