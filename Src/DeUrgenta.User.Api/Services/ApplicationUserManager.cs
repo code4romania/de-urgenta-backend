@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Domain.Api.Entities;
 using DeUrgenta.User.Api.Models.DTOs.Requests;
@@ -14,11 +15,11 @@ namespace DeUrgenta.User.Api.Services
             _context = context;
         }
 
-        public async Task CreateApplicationUserAsync(UserRegistrationDto user, string userSub)
+        public async Task CreateApplicationUserAsync(UserRegistrationDto user, string userSub, CancellationToken ct)
         {
             var newUser = new DeUrgenta.Domain.Api.Entities.User
             {
-                FirstName =  user.FirstName,
+                FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
                 Sub = userSub
@@ -31,15 +32,15 @@ namespace DeUrgenta.User.Api.Services
 
             var userToBackpack = new BackpackToUser
             {
-                Backpack = userBackpack, 
-                User = newUser, 
+                Backpack = userBackpack,
+                User = newUser,
                 IsOwner = true
             };
 
-            await _context.Backpacks.AddAsync(userBackpack);
-            await _context.Users.AddAsync(newUser);
-            await _context.BackpacksToUsers.AddAsync(userToBackpack);
-            await _context.SaveChangesAsync();
+            _context.Backpacks.Add(userBackpack);
+            _context.Users.Add(newUser);
+            _context.BackpacksToUsers.Add(userToBackpack);
+            await _context.SaveChangesAsync(ct);
         }
     }
 }

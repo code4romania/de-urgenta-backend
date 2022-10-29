@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Amazon.S3;
 using Amazon.S3.Model;
@@ -20,7 +21,7 @@ namespace DeUrgenta.Certifications.Api.Storage
             _config = config.CurrentValue;
         }
 
-        public async Task<string> SaveAttachmentAsync(Guid certificationId, string userSub, Stream attachment, string extension)
+        public async Task<string> SaveAttachmentAsync(Guid certificationId, string userSub, Stream attachment, string extension, CancellationToken ct)
         {
             var fileKey = $"{userSub}/{certificationId}";
             new FileExtensionContentTypeProvider().TryGetContentType(extension, out var contentType);
@@ -32,7 +33,7 @@ namespace DeUrgenta.Certifications.Api.Storage
                 InputStream = attachment,
                 ContentType = contentType
             };
-            await _s3Client.PutObjectAsync(request);
+            await _s3Client.PutObjectAsync(request, ct);
 
             return GetPreSignedUrl(fileKey);
         }

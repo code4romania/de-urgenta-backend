@@ -4,7 +4,6 @@ using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Primitives;
 
 namespace DeUrgenta.Backpack.Api.Validators
 {

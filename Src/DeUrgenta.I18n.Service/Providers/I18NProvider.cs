@@ -18,26 +18,27 @@ namespace DeUrgenta.I18n.Service.Providers
             _languageProvider = languageProvider;
         }
 
-        public async Task<StringResourceModel> GetStringResource(string resourceKey, Guid languageId)
+        public async Task<StringResourceModel> GetStringResource(string resourceKey, Guid languageId, CancellationToken ct)
         {
             var resource = await _context
                 .StringResources
                 .FirstOrDefaultAsync(x => x.Key.Trim().ToLower() == resourceKey.Trim().ToLower()
-                    && x.LanguageId == languageId);
+                    && x.LanguageId == languageId,
+                    ct);
 
             return resource == null
                 ? null
                 : new StringResourceModel { Id = resource.Id, Value = resource.Value, Key = resource.Key };
         }
 
-        public async Task<string> Localize(string resourceKey, params object[] args)
+        public async Task<string> Localize(string resourceKey, CancellationToken ct, params object[] args)
         {
             var currentCulture = Thread.CurrentThread.CurrentUICulture.Name;
 
             var language = await _languageProvider.GetLanguageByCulture(currentCulture);
             if (language != null)
             {
-                var stringResource = await GetStringResource(resourceKey, language.Id);
+                var stringResource = await GetStringResource(resourceKey, language.Id, ct);
                 if (stringResource == null || string.IsNullOrEmpty(stringResource.Value))
                 {
                     return resourceKey;
@@ -51,9 +52,9 @@ namespace DeUrgenta.I18n.Service.Providers
             return resourceKey;
         }
 
-        public async Task<string> Localize(LocalizableString resource)
+        public async Task<string> Localize(LocalizableString resource, CancellationToken ct)
         {
-            return await Localize(resource.Key, resource.Params);
+            return await Localize(resource.Key, ct, resource.Params);
         }
     }
 }

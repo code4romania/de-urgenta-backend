@@ -38,7 +38,6 @@ namespace DeUrgenta.Group.Api.Controllers
         /// <summary>
         /// Gets user groups
         /// </summary>d
-        /// <returns></returns>
         [HttpGet("/groups")]
         [SwaggerResponse(StatusCodes.Status200OK, "Get groups of a user", typeof(IImmutableList<GroupModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
@@ -50,13 +49,12 @@ namespace DeUrgenta.Group.Api.Controllers
             var query = new GetMyGroups(UserSub);
             var result = await _mediator.Send(query, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
         /// Gets groups administered by current user
         /// </summary>
-        /// <returns></returns>
         [HttpGet("/groups/my")]
         [SwaggerResponse(StatusCodes.Status200OK, "Get groups of a user", typeof(IImmutableList<GroupModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
@@ -67,13 +65,12 @@ namespace DeUrgenta.Group.Api.Controllers
             var query = new GetAdministeredGroups(UserSub);
             var result = await _mediator.Send(query, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
         /// Adds a new group
         /// </summary>
-        /// <returns></returns>
         [HttpPost]
         [SwaggerResponse(StatusCodes.Status200OK, "New group", typeof(GroupModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
@@ -88,7 +85,7 @@ namespace DeUrgenta.Group.Api.Controllers
             var command = new AddGroup(UserSub, group);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
@@ -104,14 +101,14 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateGroupResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<GroupModel>> UpdateGroupAsync([FromRoute] Guid groupId, 
+        public async Task<ActionResult<GroupModel>> UpdateGroupAsync([FromRoute] Guid groupId,
             [FromBody] GroupRequest group,
             CancellationToken ct)
         {
             var command = new UpdateGroup(UserSub, groupId, group);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
@@ -131,7 +128,7 @@ namespace DeUrgenta.Group.Api.Controllers
             var query = new GetGroupMembers(UserSub, groupId);
             var result = await _mediator.Send(query, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
@@ -150,7 +147,7 @@ namespace DeUrgenta.Group.Api.Controllers
             var command = new RemoveFromGroup(UserSub, groupId, userId);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
@@ -169,13 +166,12 @@ namespace DeUrgenta.Group.Api.Controllers
             var command = new LeaveGroup(UserSub, groupId);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
         /// Delete a group
         /// </summary>
-        /// <returns></returns>
         [HttpDelete]
         [Route("{groupId:guid}")]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Group was deleted")]
@@ -189,13 +185,12 @@ namespace DeUrgenta.Group.Api.Controllers
             var command = new DeleteGroup(UserSub, groupId);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
         /// Gets group safe location
         /// </summary>
-        /// <returns></returns>
         [HttpGet("{groupId:guid}/safe-locations")]
         [SwaggerResponse(StatusCodes.Status200OK, "Get safe locations of a group", typeof(IImmutableList<SafeLocationResponseModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
@@ -208,13 +203,12 @@ namespace DeUrgenta.Group.Api.Controllers
             var query = new GetGroupSafeLocations(UserSub, groupId);
             var result = await _mediator.Send(query, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
         /// Adds a new group safe location
         /// </summary>
-        /// <returns></returns>
         [HttpPost]
         [Route("{groupId:guid}/safe-location")]
         [SwaggerResponse(StatusCodes.Status200OK, "New group safe location", typeof(SafeLocationModel))]
@@ -232,13 +226,12 @@ namespace DeUrgenta.Group.Api.Controllers
             var query = new AddSafeLocation(UserSub, groupId, safeLocation);
             var result = await _mediator.Send(query, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
         /// Updates a group safe location
         /// </summary>
-        /// <returns></returns>
         [HttpPut]
         [Route("safe-location/{locationId:guid}")]
 
@@ -251,19 +244,18 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<SafeLocationResponseModel>> UpdateSafeLocationAsync([FromRoute] Guid locationId,
-            [FromBody] SafeLocationRequest safeLocation, 
+            [FromBody] SafeLocationRequest safeLocation,
             CancellationToken ct)
         {
             var query = new UpdateSafeLocation(UserSub, locationId, safeLocation);
             var result = await _mediator.Send(query, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
         /// Delete a group safe location
         /// </summary>
-        /// <returns></returns>
         [HttpDelete]
         [Route("safe-location/{locationId:guid}")]
 
@@ -278,7 +270,7 @@ namespace DeUrgenta.Group.Api.Controllers
             var command = new DeleteSafeLocation(UserSub, locationId);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
     }
 }

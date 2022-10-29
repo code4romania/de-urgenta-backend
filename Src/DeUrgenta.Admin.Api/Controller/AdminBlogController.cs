@@ -37,7 +37,6 @@ namespace DeUrgenta.Admin.Api.Controller
         /// <summary>
         /// Gets blog posts
         /// </summary>
-        /// <returns></returns>
         [HttpGet("posts")]
         [SwaggerResponse(StatusCodes.Status200OK, "Blog posts", typeof(PagedResult<BlogPostModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
@@ -48,14 +47,13 @@ namespace DeUrgenta.Admin.Api.Controller
         {
             var query = new GetBlogPosts(pagination);
             var result = await _mediator.Send(query, ct);
-            
-            return await _mapper.MapToActionResult(result);
+
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
         /// Adds a new blog post
         /// </summary>
-        /// <returns></returns>
         [HttpPost("post")]
         [SwaggerResponse(StatusCodes.Status200OK, "New blog post", typeof(BlogPostModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
@@ -70,7 +68,7 @@ namespace DeUrgenta.Admin.Api.Controller
             var command = new CreateBlogPost(blogPost);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
@@ -92,7 +90,7 @@ namespace DeUrgenta.Admin.Api.Controller
             var command = new UpdateBlogPost(blogPostId, blogPost);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
@@ -110,7 +108,7 @@ namespace DeUrgenta.Admin.Api.Controller
             var command = new DeleteBlogPost(blogPostId);
             var result = await _mediator.Send(command, ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
     }
 }

@@ -43,7 +43,7 @@ namespace DeUrgenta.Content.Api.Controller
         [HttpGet]
         public async Task<ActionResult<StringResourceModel>> GetAvailableContent([FromQuery] string key, CancellationToken ct)
         {
-            var text = await _i18NProvider.Localize(key);
+            var text = await _i18NProvider.Localize(key, ct);
             return Ok(new StringResourceModel { Key = key, Value = text });
         }
 
@@ -66,7 +66,7 @@ namespace DeUrgenta.Content.Api.Controller
 
             if (!hasLanguageHeader) return BadRequest();
 
-            var languageKeys = await _contentProvider.GetAvailableContentKeys(langVal.ToString());
+            var languageKeys = await _contentProvider.GetAvailableContentKeys(langVal.ToString(), ct);
 
             return Ok(languageKeys);
         }

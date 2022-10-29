@@ -46,7 +46,6 @@ namespace DeUrgenta.User.Api.Controller
         /// <summary>
         /// Gets user info about current user
         /// </summary>
-        /// <returns></returns>
         [HttpGet("whoami")]
         [SwaggerResponse(StatusCodes.Status200OK, "Get details about an user", typeof(UserModel))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
@@ -56,13 +55,12 @@ namespace DeUrgenta.User.Api.Controller
         {
             var result = await _mediator.Send(new GetUser(UserSub), ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
         /// Updates user info
         /// </summary>
-        /// <returns></returns>
         [HttpPost]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Update successful")]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "A business rule was violated", typeof(ProblemDetails))]
@@ -75,7 +73,7 @@ namespace DeUrgenta.User.Api.Controller
         {
             var result = await _mediator.Send(new UpdateUser(UserSub, user), ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
 
@@ -113,7 +111,6 @@ namespace DeUrgenta.User.Api.Controller
         /// <summary>
         /// Gets user location types
         /// </summary>
-        /// <returns></returns>
         [AllowAnonymous]
         [HttpGet("location-types")]
         [SwaggerResponse(StatusCodes.Status200OK, "Get available location types", typeof(IImmutableList<IndexedItemModel>))]
@@ -132,7 +129,6 @@ namespace DeUrgenta.User.Api.Controller
         /// <summary>
         /// Gets user locations
         /// </summary>
-        /// <returns></returns>
         [HttpGet("locations")]
         [SwaggerResponse(StatusCodes.Status200OK, "Get locations of current user", typeof(IImmutableList<UserLocationModel>))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
@@ -143,13 +139,12 @@ namespace DeUrgenta.User.Api.Controller
         {
             var result = await _mediator.Send(new GetUserLocations(UserSub), ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
         /// Adds a new user location
         /// </summary>
-        /// <returns></returns>
         [HttpPost]
         [Route("location")]
         [SwaggerResponse(StatusCodes.Status200OK, "new user location", typeof(UserLocationModel))]
@@ -164,13 +159,12 @@ namespace DeUrgenta.User.Api.Controller
         {
             var result = await _mediator.Send(new AddLocation(UserSub, location), ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
         /// Updates user location
         /// </summary>
-        /// <returns></returns>
         [HttpPut]
         [Route("location/{locationId:guid}")]
 
@@ -187,13 +181,12 @@ namespace DeUrgenta.User.Api.Controller
         {
             var result = await _mediator.Send(new UpdateLocation(UserSub, locationId, location), ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
 
         /// <summary>
         /// Delete an user location
         /// </summary>
-        /// <returns></returns>
         [HttpDelete]
         [Route("location/{locationId:guid}")]
 
@@ -207,7 +200,7 @@ namespace DeUrgenta.User.Api.Controller
         {
             var result = await _mediator.Send(new DeleteLocation(UserSub, locationId), ct);
 
-            return await _mapper.MapToActionResult(result);
+            return await _mapper.MapToActionResult(result, ct);
         }
     }
 }
