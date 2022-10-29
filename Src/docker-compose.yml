@@ -31,12 +31,18 @@
         context: .
         dockerfile: Dockerfile
       environment:
+        ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT} 
         ASPNETCORE_URLS: ${ASPNETCORE_URLS}
         ConnectionStrings__DbConnectionString: ${DB_CONNECTION_STRING}
         ConnectionStrings__IdentityDbConnectionString: ${DB_CONNECTION_STRING}
         ConnectionStrings__I18nDbConnectionString: ${DB_CONNECTION_STRING}
         HealthChecksUI__HealthChecks__0__Uri: ${HEALTHCHECKSUI__HEALTHCHECKS__0__URI}
         SendGrid__ApiKey: ${EMAIL_SENDGRID_APIKEY}
+        STORAGESERVICE: ${STORAGESERVICE}
+        AWS__ServiceURL: ${AWS__SERVICEURL}
+        AWS__AWS_ACCESS_KEY_ID: ${AWS__AWS_ACCESS_KEY_ID}
+        AWS__AWS_SECRET_ACCESS_KEY: ${AWS__AWS_SECRET_ACCESS_KEY}
+        AWS__Region: ${AWS__Region}
       ports:
         - 5040:80
       restart: unless-stopped
@@ -59,3 +65,19 @@
       ports:
         - 5041:80
       restart: unless-stopped
+
+    local-stack:
+      container_name: deurgenta_localstack_s3
+      image: localstack/localstack:1.0.3
+      ports: 
+        - '4566-4583:4566-4583'
+      environment:
+        DEBUG: 1
+        SERVICES: s3
+        EDGE_PORT: 4566
+        AWS_DEFAULT_REGION: eu-central-1
+        AWS_ACCESS_KEY_ID: key
+        AWS_SECRET_ACCESS_KEY: key
+      volumes:
+        - './.localstack:/tmp/localstack'
+        - '/var/run/docker.sock:/var/run/docker.sock'
