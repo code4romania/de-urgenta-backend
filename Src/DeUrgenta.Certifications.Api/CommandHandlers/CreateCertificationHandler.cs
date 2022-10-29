@@ -26,15 +26,15 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
             _storage = storage;
         }
 
-        public async Task<Result<CertificationModel, ValidationResult>> Handle(CreateCertification request, CancellationToken cancellationToken)
+        public async Task<Result<CertificationModel, ValidationResult>> Handle(CreateCertification request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
             }
 
-            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
+            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, ct);
             var certification = new Certification
             {
                 Name = request.Name,
@@ -43,8 +43,8 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
                 IssuingAuthority = request.IssuingAuthority
             };
 
-            await _context.Certifications.AddAsync(certification, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.Certifications.AddAsync(certification, ct);
+            await _context.SaveChangesAsync(ct);
 
             string photoUrl = null;
             if (request.Photo != null)

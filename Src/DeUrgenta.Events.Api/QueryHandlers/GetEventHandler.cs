@@ -24,9 +24,9 @@ namespace DeUrgenta.Events.Api.QueryHandlers
             _context = context;
         }
 
-        public async Task<Result<IImmutableList<EventResponseModel>, ValidationResult>> Handle(GetEvent request, CancellationToken cancellationToken)
+        public async Task<Result<IImmutableList<EventResponseModel>, ValidationResult>> Handle(GetEvent request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
@@ -52,7 +52,7 @@ namespace DeUrgenta.Events.Api.QueryHandlers
                                                  EventType = x.EventType.Name,
                                                  IsArchived = x.IsArchived
                                              })
-                                             .ToListAsync(cancellationToken);
+                                             .ToListAsync(ct);
 
             return events.ToImmutableList();
         }

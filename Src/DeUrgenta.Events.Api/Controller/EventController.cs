@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
 using System.Collections.Immutable;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Mappers;
 using DeUrgenta.Common.Swagger;
@@ -41,10 +42,10 @@ namespace DeUrgenta.Events.Api.Controller
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetEventTypesResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<IImmutableList<EventTypeModel>>> GetEventTypesAsync()
+        public async Task<ActionResult<IImmutableList<EventTypeModel>>> GetEventTypesAsync(CancellationToken ct)
         {
             var query = new GetEventTypes();
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(query, ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -61,10 +62,10 @@ namespace DeUrgenta.Events.Api.Controller
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetEventCitiesResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<IImmutableList<EventCityModel>>> GetEventCitiesAsync([FromQuery] int? eventTypeId)
+        public async Task<ActionResult<IImmutableList<EventCityModel>>> GetEventCitiesAsync([FromQuery] int? eventTypeId, CancellationToken ct)
         {
             var query = new GetEventCities(eventTypeId);
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(query, ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -81,10 +82,10 @@ namespace DeUrgenta.Events.Api.Controller
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetEventResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<IImmutableList<EventResponseModel>>> GetEventsAsync([FromQuery]EventModelRequest filter)
+        public async Task<ActionResult<IImmutableList<EventResponseModel>>> GetEventsAsync([FromQuery]EventModelRequest filter, CancellationToken ct)
         {
             var command = new GetEvent(filter);
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, ct);
 
             return await _mapper.MapToActionResult(result);
         }

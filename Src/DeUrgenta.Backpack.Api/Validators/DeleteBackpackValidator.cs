@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
@@ -15,21 +16,23 @@ namespace DeUrgenta.Backpack.Api.Validators
             _context = context;
         }
 
-        public async Task<ValidationResult> IsValidAsync(DeleteBackpack request)
+        public async Task<ValidationResult> IsValidAsync(DeleteBackpack request, CancellationToken ct)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub, ct);
             if (user == null)
             {
                 return ValidationResult.GenericValidationError;
             }
 
-            var backpackExists = await _context.Backpacks.AnyAsync(b => b.Id == request.BackpackId);
+            var backpackExists = await _context.Backpacks.AnyAsync(b => b.Id == request.BackpackId, ct);
             if (!backpackExists)
             {
                 return ValidationResult.GenericValidationError;
             }
 
-            var isOwner = await _context.BackpacksToUsers.AnyAsync(btu => btu.User.Id == user.Id && btu.Backpack.Id == request.BackpackId && btu.IsOwner);
+            var isOwner = await _context.BackpacksToUsers.AnyAsync(btu => btu.User.Id == user.Id 
+                                                                          && btu.Backpack.Id == request.BackpackId 
+                                                                          && btu.IsOwner, ct);
 
             if (!isOwner)
             {

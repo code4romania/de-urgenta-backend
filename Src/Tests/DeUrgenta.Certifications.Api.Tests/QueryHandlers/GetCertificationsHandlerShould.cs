@@ -29,7 +29,7 @@ namespace DeUrgenta.Certifications.Api.Tests.QueryHandlers
             var storage = Substitute.For<IBlobStorage>();
             var validator = Substitute.For<IValidateRequest<GetCertifications>>();
             validator
-                .IsValidAsync(Arg.Any<GetCertifications>()) 
+                .IsValidAsync(Arg.Any<GetCertifications>(), CancellationToken.None) 
                 .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new GetCertificationsHandler(validator, _dbContext, storage);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Admin.Api.Validators;
@@ -40,7 +41,7 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
 
             // Act
             var blogPostId = Guid.NewGuid();
-            var result = await sut.IsValidAsync(new DeleteBlogPost(blogPostId));
+            var result = await sut.IsValidAsync(new DeleteBlogPost(blogPostId), CancellationToken.None);
 
             // Assert
             result
@@ -71,7 +72,7 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new DeleteBlogPost(blogPost.Id));
+            var result = await sut.IsValidAsync(new DeleteBlogPost(blogPost.Id), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

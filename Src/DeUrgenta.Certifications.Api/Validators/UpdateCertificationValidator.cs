@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using DeUrgenta.Certifications.Api.Commands;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
@@ -14,15 +15,17 @@ namespace DeUrgenta.Certifications.Api.Validators
         {
             _context = context;
         }
-        public async Task<ValidationResult> IsValidAsync(UpdateCertification request)
+
+        public async Task<ValidationResult> IsValidAsync(UpdateCertification request, CancellationToken ct)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub, ct);
             if (user == null)
             {
                 return ValidationResult.GenericValidationError;
             }
 
-            var certificationExists = await _context.Certifications.AnyAsync(c => c.UserId == user.Id && c.Id == request.CertificationId);
+            var certificationExists = await _context.Certifications.AnyAsync(c => c.UserId == user.Id 
+                && c.Id == request.CertificationId, ct);
 
             if (!certificationExists)
             {

@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Admin.Api.Models;
@@ -42,11 +43,11 @@ namespace DeUrgenta.Admin.Api.Controller
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetBlogPostsResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<PagedResult<BlogPostModel>>> GetBlogPostsAsync(
-            [FromQuery] PaginationQueryModel pagination)
+        public async Task<ActionResult<PagedResult<BlogPostModel>>> GetBlogPostsAsync([FromQuery] PaginationQueryModel pagination,
+            CancellationToken ct)
         {
             var query = new GetBlogPosts(pagination);
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(query, ct);
             
             return await _mapper.MapToActionResult(result);
         }
@@ -63,10 +64,11 @@ namespace DeUrgenta.Admin.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateBlogPostResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<BlogPostModel>> CreateNewBlogPostAsync([FromBody] BlogPostRequest blogPost)
+        public async Task<ActionResult<BlogPostModel>> CreateNewBlogPostAsync([FromBody] BlogPostRequest blogPost,
+            CancellationToken ct)
         {
             var command = new CreateBlogPost(blogPost);
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -84,10 +86,11 @@ namespace DeUrgenta.Admin.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         public async Task<ActionResult<BlogPostModel>> UpdateBlogPostAsync([FromRoute] Guid blogPostId,
-            [FromBody] BlogPostRequest blogPost)
+            [FromBody] BlogPostRequest blogPost,
+            CancellationToken ct)
         {
             var command = new UpdateBlogPost(blogPostId, blogPost);
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -102,10 +105,10 @@ namespace DeUrgenta.Admin.Api.Controller
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<IActionResult> DeleteBlogPostAsync([FromRoute] Guid blogPostId)
+        public async Task<IActionResult> DeleteBlogPostAsync([FromRoute] Guid blogPostId, CancellationToken ct)
         {
             var command = new DeleteBlogPost(blogPostId);
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, ct);
 
             return await _mapper.MapToActionResult(result);
         }

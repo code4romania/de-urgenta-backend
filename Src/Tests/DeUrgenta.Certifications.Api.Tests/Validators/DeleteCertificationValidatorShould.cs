@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Certifications.Api.Commands;
 using DeUrgenta.Certifications.Api.Validators;
@@ -34,7 +35,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             var sut = new DeleteCertificationValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new DeleteCertification(sub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new DeleteCertification(sub, Guid.NewGuid()), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -53,7 +54,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new DeleteCertification(userSub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new DeleteCertification(userSub, Guid.NewGuid()), CancellationToken.None);
 
             // Assert
             result
@@ -93,7 +94,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new DeleteCertification(userSub, certificationId));
+            var result = await sut.IsValidAsync(new DeleteCertification(userSub, certificationId), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -124,7 +125,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new DeleteCertification(ownerSub, certificationId));
+            var result = await sut.IsValidAsync(new DeleteCertification(ownerSub, certificationId), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

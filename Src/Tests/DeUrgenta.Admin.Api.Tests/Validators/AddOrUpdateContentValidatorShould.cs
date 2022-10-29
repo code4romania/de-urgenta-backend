@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Admin.Api.Validators;
@@ -29,7 +30,7 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
             // Act
             var requestCulture = "culture";
 
-            var result = await sut.IsValidAsync(new AddOrUpdateContent(requestCulture, "key", "value"));
+            var result = await sut.IsValidAsync(new AddOrUpdateContent(requestCulture, "key", "value"), CancellationToken.None);
 
             // Assert
             result
@@ -61,7 +62,7 @@ namespace DeUrgenta.Admin.Api.Tests.Validators
             var sut = new AddOrUpdateContentValidator(languageProvider);
 
             // Act
-            var result = await sut.IsValidAsync(new AddOrUpdateContent("culture", "key", "value"));
+            var result = await sut.IsValidAsync(new AddOrUpdateContent("culture", "key", "value"), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

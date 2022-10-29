@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using DeUrgenta.Admin.Api.Commands;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
@@ -16,9 +17,9 @@ namespace DeUrgenta.Admin.Api.Validators
             _context = context;
         }
 
-        public async Task<ValidationResult> IsValidAsync(UpdateEvent request)
+        public async Task<ValidationResult> IsValidAsync(UpdateEvent request, CancellationToken ct)
         {
-            var eventExists = await _context.Events.AnyAsync(x => x.Id == request.EventId);
+            var eventExists = await _context.Events.AnyAsync(x => x.Id == request.EventId, ct);
             if (!eventExists)
             {
                 return new LocalizableValidationError("event-not-exist",new LocalizableString("event-not-exist-message", request.EventId));

@@ -26,24 +26,24 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
             _config = config.Value;
         }
 
-        public async Task<Result<BackpackModel, ValidationResult>> Handle(CreateBackpack request, CancellationToken cancellationToken)
+        public async Task<Result<BackpackModel, ValidationResult>> Handle(CreateBackpack request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
             }
 
-            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
+            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, ct);
 
             var backpack = new Domain.Api.Entities.Backpack { Name = request.Backpack.Name };
             var backpackToUser = new BackpackToUser { Backpack = backpack, User = user, IsOwner = true };
             
-            await _context.Backpacks.AddAsync(backpack, cancellationToken);
-            await _context.BackpacksToUsers.AddAsync(backpackToUser, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.Backpacks.AddAsync(backpack, ct);
+            await _context.BackpacksToUsers.AddAsync(backpackToUser, ct);
+            await _context.SaveChangesAsync(ct);
 
-            var contributorsCount = await _context.BackpacksToUsers.CountAsync(b => b.BackpackId == backpack.Id, cancellationToken);
+            var contributorsCount = await _context.BackpacksToUsers.CountAsync(b => b.BackpackId == backpack.Id, ct);
 
             return new BackpackModel
             {

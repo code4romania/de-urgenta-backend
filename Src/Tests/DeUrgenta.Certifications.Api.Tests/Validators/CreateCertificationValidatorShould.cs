@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Certifications.Api.Commands;
 using DeUrgenta.Certifications.Api.Models;
@@ -32,7 +33,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             var sut = new CreateCertificationValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new CreateCertification(sub, new CertificationRequest()));
+            var result = await sut.IsValidAsync(new CreateCertification(sub, new CertificationRequest()), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -51,7 +52,7 @@ namespace DeUrgenta.Certifications.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new CreateCertification(userSub, new CertificationRequest()));
+            var result = await sut.IsValidAsync(new CreateCertification(userSub, new CertificationRequest()), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

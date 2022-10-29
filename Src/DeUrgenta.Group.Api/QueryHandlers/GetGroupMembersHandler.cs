@@ -24,9 +24,9 @@ namespace DeUrgenta.Group.Api.QueryHandlers
             _context = context;
         }
 
-        public async Task<Result<IImmutableList<GroupMemberModel>, ValidationResult>> Handle(GetGroupMembers request, CancellationToken cancellationToken)
+        public async Task<Result<IImmutableList<GroupMemberModel>, ValidationResult>> Handle(GetGroupMembers request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
@@ -46,7 +46,7 @@ namespace DeUrgenta.Group.Api.QueryHandlers
                     IsGroupAdmin = x.Group.AdminId == x.User.Id,
                     HasValidCertification = x.HasValidCertification
                 })
-                .ToListAsync(cancellationToken);
+                .ToListAsync(ct);
 
             return groupMembers.ToImmutableList();
         }

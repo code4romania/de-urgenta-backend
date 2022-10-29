@@ -28,7 +28,7 @@ namespace DeUrgenta.Group.Api.Tests.QueriesHandlers
             // Arrange
             var validator = Substitute.For<IValidateRequest<GetGroupSafeLocations>>();
             validator
-                .IsValidAsync(Arg.Any<GetGroupSafeLocations>())
+                .IsValidAsync(Arg.Any<GetGroupSafeLocations>(), CancellationToken.None)
                 .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new GetGroupSafeLocationsHandler(validator, _dbContext);

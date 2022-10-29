@@ -28,7 +28,7 @@ namespace DeUrgenta.Certifications.Api.Tests.CommandHandlers
             // Arrange
             var validator = Substitute.For<IValidateRequest<DeleteCertification>>();
             validator
-                .IsValidAsync(Arg.Any<DeleteCertification>())
+                .IsValidAsync(Arg.Any<DeleteCertification>(), CancellationToken.None)
                 .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new DeleteCertificationHandler(validator, _dbContext);

@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Controllers;
 using DeUrgenta.Common.Swagger;
@@ -40,7 +41,7 @@ namespace DeUrgenta.Content.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         [HttpGet]
-        public async Task<ActionResult<StringResourceModel>> GetAvailableContent([FromQuery] string key)
+        public async Task<ActionResult<StringResourceModel>> GetAvailableContent([FromQuery] string key, CancellationToken ct)
         {
             var text = await _i18NProvider.Localize(key);
             return Ok(new StringResourceModel { Key = key, Value = text });
@@ -58,7 +59,7 @@ namespace DeUrgenta.Content.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         [HttpGet("content_keys")]
-        public async Task<ActionResult<IImmutableList<string>>> GetAvailableContentKeys()
+        public async Task<ActionResult<IImmutableList<string>>> GetAvailableContentKeys(CancellationToken ct)
         {
             var hasLanguageHeader = HttpContext.Request.Headers
             .TryGetValue("Accept-Language", out var langVal);
@@ -82,7 +83,7 @@ namespace DeUrgenta.Content.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
         [HttpGet("languages")]
-        public async Task<ActionResult<IImmutableList<LanguageModel>>> GetAvailableLanguages()
+        public async Task<ActionResult<IImmutableList<LanguageModel>>> GetAvailableLanguages(CancellationToken ct)
         {
             var languages = await _languageProvider.GetLanguages();
             return Ok(languages);

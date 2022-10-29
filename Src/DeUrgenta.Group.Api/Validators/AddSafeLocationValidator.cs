@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Group.Api.Commands;
@@ -19,15 +20,15 @@ namespace DeUrgenta.Group.Api.Validators
             _config = config.Value;
         }
 
-        public async Task<ValidationResult> IsValidAsync(AddSafeLocation request)
+        public async Task<ValidationResult> IsValidAsync(AddSafeLocation request, CancellationToken ct)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub, ct);
             if (user == null)
             {
                 return ValidationResult.GenericValidationError;
             }
 
-            var group = await _context.Groups.FirstOrDefaultAsync(g => g.Id == request.GroupId);
+            var group = await _context.Groups.FirstOrDefaultAsync(g => g.Id == request.GroupId, ct);
             if (group == null)
             {
                 return ValidationResult.GenericValidationError;

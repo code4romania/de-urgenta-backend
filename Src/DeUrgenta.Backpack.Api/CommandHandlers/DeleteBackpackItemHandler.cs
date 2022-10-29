@@ -20,17 +20,17 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result<Unit, ValidationResult>> Handle(DeleteBackpackItem request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, ValidationResult>> Handle(DeleteBackpackItem request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
             }
 
-            var backpackItem = await _context.BackpackItems.FirstAsync(x => x.Id == request.ItemId, cancellationToken);
+            var backpackItem = await _context.BackpackItems.FirstAsync(x => x.Id == request.ItemId, ct);
             _context.BackpackItems.Remove(backpackItem);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(ct);
 
             return Unit.Value;
         }

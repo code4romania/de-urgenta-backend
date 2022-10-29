@@ -25,21 +25,21 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
             _validator = validator;
         }
 
-        public async Task<Result<CertificationModel, ValidationResult>> Handle(UpdateCertification request, CancellationToken cancellationToken)
+        public async Task<Result<CertificationModel, ValidationResult>> Handle(UpdateCertification request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
             }
 
             var certification = await _context.Certifications
-                .FirstAsync(c => c.Id == request.CertificationId, cancellationToken);
+                .FirstAsync(c => c.Id == request.CertificationId, ct);
             certification.Name = request.Certification.Name;
             certification.IssuingAuthority = request.Certification.IssuingAuthority;
             certification.ExpirationDate = request.Certification.ExpirationDate;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(ct);
 
             string photoUrl = null;
             if (request.Certification.Photo != null)

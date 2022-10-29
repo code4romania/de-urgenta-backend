@@ -28,7 +28,7 @@ namespace DeUrgenta.Admin.Api.Tests.CommandHandlers
             // Arrange
             var validator = Substitute.For<IValidateRequest<CreateBlogPost>>();
             validator
-                .IsValidAsync(Arg.Any<CreateBlogPost>())
+                .IsValidAsync(Arg.Any<CreateBlogPost>(), CancellationToken.None)
                 .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new CreateBlogPostHandler(validator, _dbContext);

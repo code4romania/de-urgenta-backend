@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
 using System.Collections.Immutable;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Swagger;
 using Microsoft.AspNetCore.Authorization;
@@ -44,10 +45,10 @@ namespace DeUrgenta.Certifications.Api.Controller
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetCertificationsResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<IImmutableList<CertificationModel>>> GetCertificationsAsync()
+        public async Task<ActionResult<IImmutableList<CertificationModel>>> GetCertificationsAsync(CancellationToken ct)
         {
             var query = new GetCertifications(UserSub);
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(query, ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -67,10 +68,11 @@ namespace DeUrgenta.Certifications.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateCertificationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<CertificationModel>> CreateNewCertificationAsync([FromForm] CertificationRequest certification)
+        public async Task<ActionResult<CertificationModel>> CreateNewCertificationAsync([FromForm] CertificationRequest certification,
+            CancellationToken ct)
         {
             var command = new CreateCertification(UserSub, certification);
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -90,10 +92,12 @@ namespace DeUrgenta.Certifications.Api.Controller
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateCertificationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<CertificationModel>> UpdateCertificationAsync([FromRoute] Guid certificationId, [FromForm] CertificationRequest certification)
+        public async Task<ActionResult<CertificationModel>> UpdateCertificationAsync([FromRoute] Guid certificationId, 
+            [FromForm] CertificationRequest certification,
+            CancellationToken ct)
         {
             var command = new UpdateCertification(UserSub, certificationId, certification);
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -110,10 +114,10 @@ namespace DeUrgenta.Certifications.Api.Controller
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<IActionResult> DeleteCertificationAsync([FromRoute] Guid certificationId)
+        public async Task<IActionResult> DeleteCertificationAsync([FromRoute] Guid certificationId, CancellationToken ct)
         {
             var command = new DeleteCertification(UserSub, certificationId);
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, ct);
 
             return await _mapper.MapToActionResult(result);
         }

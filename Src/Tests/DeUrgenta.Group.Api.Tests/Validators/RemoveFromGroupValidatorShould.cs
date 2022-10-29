@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
@@ -34,7 +35,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new RemoveFromGroupValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new RemoveFromGroup(sub, Guid.NewGuid(), Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new RemoveFromGroup(sub, Guid.NewGuid(), Guid.NewGuid()), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -59,7 +60,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new RemoveFromGroup(userSub, group.Id, admin.Id));
+            var result = await sut.IsValidAsync(new RemoveFromGroup(userSub, group.Id, admin.Id), CancellationToken.None);
 
             // Assert
             result
@@ -92,7 +93,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new RemoveFromGroup(userSub, group.Id, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new RemoveFromGroup(userSub, group.Id, Guid.NewGuid()), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -116,7 +117,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new RemoveFromGroup(userSub, Guid.NewGuid(), groupUser.Id));
+            var result = await sut.IsValidAsync(new RemoveFromGroup(userSub, Guid.NewGuid(), groupUser.Id), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -148,7 +149,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new RemoveFromGroup(groupUserSub, group.Id, nonGroupUser.Id));
+            var result = await sut.IsValidAsync(new RemoveFromGroup(groupUserSub, group.Id, nonGroupUser.Id), CancellationToken.None);
 
             // Assert
             result
@@ -185,7 +186,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new RemoveFromGroup(userSub, group.Id, groupUser.Id));
+            var result = await sut.IsValidAsync(new RemoveFromGroup(userSub, group.Id, groupUser.Id), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

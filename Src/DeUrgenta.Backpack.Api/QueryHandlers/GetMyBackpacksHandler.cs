@@ -27,9 +27,9 @@ namespace DeUrgenta.Backpack.Api.QueryHandlers
             _config = config.Value;
         }
 
-        public async Task<Result<IImmutableList<BackpackModel>, ValidationResult>> Handle(GetMyBackpacks request, CancellationToken cancellationToken)
+        public async Task<Result<IImmutableList<BackpackModel>, ValidationResult>> Handle(GetMyBackpacks request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
@@ -46,7 +46,7 @@ namespace DeUrgenta.Backpack.Api.QueryHandlers
                                MaxNumberOfContributors = _config.MaxContributors,
                                NumberOfContributors = g.Count()
                            })
-                .ToListAsync(cancellationToken);
+                .ToListAsync(ct);
 
             return backpacks.ToImmutableList();
         }

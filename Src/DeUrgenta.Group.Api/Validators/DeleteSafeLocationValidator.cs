@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Group.Api.Commands;
@@ -15,22 +16,22 @@ namespace DeUrgenta.Group.Api.Validators
             _context = context;
         }
 
-        public async Task<ValidationResult> IsValidAsync(DeleteSafeLocation request)
+        public async Task<ValidationResult> IsValidAsync(DeleteSafeLocation request, CancellationToken ct)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Sub == request.UserSub, ct);
             if (user == null)
             {
                 return ValidationResult.GenericValidationError;
             }
 
-            var safeLocationExists = await _context.GroupsSafeLocations.AnyAsync(gsl => gsl.Id == request.SafeLocationId);
+            var safeLocationExists = await _context.GroupsSafeLocations.AnyAsync(gsl => gsl.Id == request.SafeLocationId, ct);
             if (!safeLocationExists)
             {
                 return ValidationResult.GenericValidationError;
             }
 
             var isGroupAdmin = await _context.GroupsSafeLocations
-                .AnyAsync(gsl => gsl.Group.Admin.Id == user.Id && gsl.Id == request.SafeLocationId);
+                .AnyAsync(gsl => gsl.Group.Admin.Id == user.Id && gsl.Id == request.SafeLocationId, ct);
 
             if (!isGroupAdmin)
             {

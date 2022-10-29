@@ -23,19 +23,19 @@ namespace DeUrgenta.Invite.Api.CommandHandlers
             _validator = validator;
         }
 
-        public async Task<Result<AcceptInviteModel, ValidationResult>> Handle(AcceptBackpackInvite request, CancellationToken cancellationToken)
+        public async Task<Result<AcceptInviteModel, ValidationResult>> Handle(AcceptBackpackInvite request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
             }
 
-            var backpack = await _context.Backpacks.FirstAsync(b => b.Id == request.BackpackId, cancellationToken);
-            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
+            var backpack = await _context.Backpacks.FirstAsync(b => b.Id == request.BackpackId, ct);
+            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, ct);
 
-            await _context.BackpacksToUsers.AddAsync(new BackpackToUser { User = user, Backpack = backpack }, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.BackpacksToUsers.AddAsync(new BackpackToUser { User = user, Backpack = backpack }, ct);
+            await _context.SaveChangesAsync(ct);
 
             return new AcceptInviteModel
             {

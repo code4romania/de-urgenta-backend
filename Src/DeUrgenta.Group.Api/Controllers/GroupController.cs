@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Immutable;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Controllers;
 using DeUrgenta.Common.Mappers;
@@ -44,10 +45,10 @@ namespace DeUrgenta.Group.Api.Controllers
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetGroupsResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<IImmutableList<GroupModel>>> GetGroupsAsync()
+        public async Task<ActionResult<IImmutableList<GroupModel>>> GetGroupsAsync(CancellationToken ct)
         {
             var query = new GetMyGroups(UserSub);
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(query, ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -61,10 +62,10 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Something bad happened", typeof(ProblemDetails))]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetGroupsResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<IImmutableList<GroupModel>>> GetMyGroupsAsync()
+        public async Task<ActionResult<IImmutableList<GroupModel>>> GetMyGroupsAsync(CancellationToken ct)
         {
             var query = new GetAdministeredGroups(UserSub);
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(query, ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -82,10 +83,10 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateGroupResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<GroupModel>> CreateNewGroupAsync([FromBody] GroupRequest group)
+        public async Task<ActionResult<GroupModel>> CreateNewGroupAsync([FromBody] GroupRequest group, CancellationToken ct)
         {
             var command = new AddGroup(UserSub, group);
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -103,10 +104,12 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateGroupResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<GroupModel>> UpdateGroupAsync([FromRoute] Guid groupId, [FromBody] GroupRequest group)
+        public async Task<ActionResult<GroupModel>> UpdateGroupAsync([FromRoute] Guid groupId, 
+            [FromBody] GroupRequest group,
+            CancellationToken ct)
         {
             var command = new UpdateGroup(UserSub, groupId, group);
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -123,10 +126,10 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetGroupMembersResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<IImmutableList<GroupMemberModel>>> GetGroupMembersAsync([FromRoute] Guid groupId)
+        public async Task<ActionResult<IImmutableList<GroupMemberModel>>> GetGroupMembersAsync([FromRoute] Guid groupId, CancellationToken ct)
         {
             var query = new GetGroupMembers(UserSub, groupId);
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(query, ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -142,10 +145,10 @@ namespace DeUrgenta.Group.Api.Controllers
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult> RemoveMemberAsync([FromRoute] Guid groupId, [FromRoute] Guid userId)
+        public async Task<ActionResult> RemoveMemberAsync([FromRoute] Guid groupId, [FromRoute] Guid userId, CancellationToken ct)
         {
             var command = new RemoveFromGroup(UserSub, groupId, userId);
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -161,10 +164,10 @@ namespace DeUrgenta.Group.Api.Controllers
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<IActionResult> LeaveGroupAsync([FromRoute] Guid groupId)
+        public async Task<IActionResult> LeaveGroupAsync([FromRoute] Guid groupId, CancellationToken ct)
         {
             var command = new LeaveGroup(UserSub, groupId);
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -181,10 +184,10 @@ namespace DeUrgenta.Group.Api.Controllers
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<IActionResult> DeleteGroupAsync([FromRoute] Guid groupId)
+        public async Task<IActionResult> DeleteGroupAsync([FromRoute] Guid groupId, CancellationToken ct)
         {
             var command = new DeleteGroup(UserSub, groupId);
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -199,10 +202,11 @@ namespace DeUrgenta.Group.Api.Controllers
 
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetGroupSafeLocationsResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<IImmutableList<SafeLocationResponseModel>>> GetGroupSafeLocationsAsync([FromRoute] Guid groupId)
+        public async Task<ActionResult<IImmutableList<SafeLocationResponseModel>>> GetGroupSafeLocationsAsync([FromRoute] Guid groupId,
+            CancellationToken ct)
         {
             var query = new GetGroupSafeLocations(UserSub, groupId);
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(query, ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -221,10 +225,12 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateSafeLocationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<SafeLocationResponseModel>> CreateNewSafeLocationAsync([FromRoute] Guid groupId, [FromBody] SafeLocationRequest safeLocation)
+        public async Task<ActionResult<SafeLocationResponseModel>> CreateNewSafeLocationAsync([FromRoute] Guid groupId,
+            [FromBody] SafeLocationRequest safeLocation,
+            CancellationToken ct)
         {
             var query = new AddSafeLocation(UserSub, groupId, safeLocation);
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(query, ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -244,10 +250,12 @@ namespace DeUrgenta.Group.Api.Controllers
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(AddOrUpdateSafeLocationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<ActionResult<SafeLocationResponseModel>> UpdateSafeLocationAsync([FromRoute] Guid locationId, [FromBody] SafeLocationRequest safeLocation)
+        public async Task<ActionResult<SafeLocationResponseModel>> UpdateSafeLocationAsync([FromRoute] Guid locationId,
+            [FromBody] SafeLocationRequest safeLocation, 
+            CancellationToken ct)
         {
             var query = new UpdateSafeLocation(UserSub, locationId, safeLocation);
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(query, ct);
 
             return await _mapper.MapToActionResult(result);
         }
@@ -265,10 +273,10 @@ namespace DeUrgenta.Group.Api.Controllers
 
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(BusinessRuleViolationResponseExample))]
         [SwaggerResponseExample(StatusCodes.Status500InternalServerError, typeof(ApplicationErrorResponseExample))]
-        public async Task<IActionResult> DeleteSafeLocationAsync([FromRoute] Guid locationId)
+        public async Task<IActionResult> DeleteSafeLocationAsync([FromRoute] Guid locationId, CancellationToken ct)
         {
             var command = new DeleteSafeLocation(UserSub, locationId);
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, ct);
 
             return await _mapper.MapToActionResult(result);
         }

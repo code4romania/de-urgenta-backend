@@ -26,10 +26,9 @@ namespace DeUrgenta.Certifications.Api.QueryHandlers
             _storage = storage;
         }
 
-        public async Task<Result<IImmutableList<CertificationModel>, ValidationResult>> Handle(GetCertifications request,
-            CancellationToken cancellationToken)
+        public async Task<Result<IImmutableList<CertificationModel>, ValidationResult>> Handle(GetCertifications request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
@@ -45,7 +44,7 @@ namespace DeUrgenta.Certifications.Api.QueryHandlers
                 ExpirationDate = x.ExpirationDate,
                 PhotoUrl = _storage.GetAttachment(x.Id, request.UserSub)
             })
-            .ToListAsync(cancellationToken);
+            .ToListAsync(ct);
 
             return certifications.ToImmutableList();
         }

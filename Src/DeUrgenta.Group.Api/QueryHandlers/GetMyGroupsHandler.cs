@@ -28,17 +28,16 @@ namespace DeUrgenta.Group.Api.QueryHandlers
             _groupsConfig = groupsConfig.Value;
         }
 
-        public async Task<Result<IImmutableList<GroupModel>, ValidationResult>> Handle(GetMyGroups request,
-            CancellationToken cancellationToken)
+        public async Task<Result<IImmutableList<GroupModel>, ValidationResult>> Handle(GetMyGroups request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
 
             if (validationResult.IsFailure)
             {
                 return validationResult;
             }
 
-            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, cancellationToken);
+            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, ct);
 
             var groups = await _context
                 .UsersToGroups
@@ -54,7 +53,7 @@ namespace DeUrgenta.Group.Api.QueryHandlers
                     MaxNumberOfMembers = _groupsConfig.MaxUsers,
                     IsCurrentUserAdmin = g.AdminId == user.Id
                 })
-                .ToListAsync(cancellationToken);
+                .ToListAsync(ct);
 
             return groups.ToImmutableList();
         }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Events.Api.Queries;
 using DeUrgenta.Events.Api.Validators;
@@ -18,7 +19,7 @@ namespace DeUrgenta.Events.Api.Tests.Validators
             var sut = new GetEventTypesValidator();
 
             // Act
-            var result = await sut.IsValidAsync(new GetEventTypes());
+            var result = await sut.IsValidAsync(new GetEventTypes(), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

@@ -35,7 +35,7 @@ namespace DeUrgenta.Group.Api.Tests.CommandsHandlers
             // Arrange
             var validator = Substitute.For<IValidateRequest<AddGroup>>();
             validator
-                .IsValidAsync(Arg.Any<AddGroup>())
+                .IsValidAsync(Arg.Any<AddGroup>(), CancellationToken.None)
                 .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new AddGroupHandler(validator, _dbContext, _groupsConfig);
@@ -53,7 +53,7 @@ namespace DeUrgenta.Group.Api.Tests.CommandsHandlers
             // Arrange
             var validator = Substitute.For<IValidateRequest<AddGroup>>();
             validator
-                .IsValidAsync(Arg.Any<AddGroup>())
+                .IsValidAsync(Arg.Any<AddGroup>(), CancellationToken.None)
                 .Returns(Task.FromResult(ValidationResult.Ok));
 
             var userId = Guid.NewGuid();

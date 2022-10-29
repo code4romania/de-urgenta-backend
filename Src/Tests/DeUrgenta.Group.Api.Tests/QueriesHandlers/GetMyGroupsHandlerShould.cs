@@ -36,7 +36,7 @@ namespace DeUrgenta.Group.Api.Tests.QueriesHandlers
             // Arrange
             var validator = Substitute.For<IValidateRequest<GetMyGroups>>();
             validator
-                .IsValidAsync(Arg.Any<GetMyGroups>())
+                .IsValidAsync(Arg.Any<GetMyGroups>(), CancellationToken.None)
                 .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new GetMyGroupsHandler(validator, _dbContext, _groupsConfig);
@@ -54,7 +54,7 @@ namespace DeUrgenta.Group.Api.Tests.QueriesHandlers
             // Arrange
             var validator = Substitute.For<IValidateRequest<GetMyGroups>>();
             validator
-                .IsValidAsync(Arg.Any<GetMyGroups>())
+                .IsValidAsync(Arg.Any<GetMyGroups>(), CancellationToken.None)
                 .Returns(Task.FromResult(ValidationResult.Ok));
 
             var userId = Guid.NewGuid();

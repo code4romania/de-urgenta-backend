@@ -19,17 +19,17 @@ namespace DeUrgenta.Certifications.Api.CommandHandlers
             _validator = validator;
             _context = context;
         }
-        public async Task<Result<Unit, ValidationResult>> Handle(DeleteCertification request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, ValidationResult>> Handle(DeleteCertification request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
             }
 
-            var certification = await _context.Certifications.FirstAsync(c => c.Id == request.CertificationId, cancellationToken);
+            var certification = await _context.Certifications.FirstAsync(c => c.Id == request.CertificationId, ct);
             _context.Certifications.Remove(certification);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(ct);
 
             return Unit.Value;
         }

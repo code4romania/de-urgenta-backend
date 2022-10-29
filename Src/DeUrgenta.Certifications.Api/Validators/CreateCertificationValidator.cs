@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using DeUrgenta.Certifications.Api.Commands;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
@@ -15,9 +16,9 @@ namespace DeUrgenta.Certifications.Api.Validators
             _context = context;
         }
 
-        public async Task<ValidationResult> IsValidAsync(CreateCertification request)
+        public async Task<ValidationResult> IsValidAsync(CreateCertification request, CancellationToken ct)
         {
-            var isExistingUser = await _context.Users.AnyAsync(u => u.Sub == request.UserSub);
+            var isExistingUser = await _context.Users.AnyAsync(u => u.Sub == request.UserSub, ct);
 
             return isExistingUser ? ValidationResult.Ok : ValidationResult.GenericValidationError;
         }

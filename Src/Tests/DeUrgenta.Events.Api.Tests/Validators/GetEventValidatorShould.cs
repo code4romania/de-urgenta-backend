@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
@@ -30,7 +31,8 @@ namespace DeUrgenta.Events.Api.Tests.Validators
             var sut = new GetEventValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new GetEvent(new Models.EventModelRequest { EventTypeId = eventTypeId }));
+            var result = await sut.IsValidAsync(new GetEvent(new Models.EventModelRequest { EventTypeId = eventTypeId }),
+                CancellationToken.None);
 
             // Assert
             result
@@ -52,7 +54,8 @@ namespace DeUrgenta.Events.Api.Tests.Validators
             var sut = new GetEventValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new GetEvent(new Models.EventModelRequest { EventTypeId = eventTypeId }));
+            var result = await sut.IsValidAsync(new GetEvent(new Models.EventModelRequest { EventTypeId = eventTypeId }),
+                CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

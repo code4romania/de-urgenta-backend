@@ -20,9 +20,9 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
             _context = context;
         }
 
-        public async Task<Result<Unit, ValidationResult>> Handle(RemoveContributor request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, ValidationResult>> Handle(RemoveContributor request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
@@ -30,10 +30,10 @@ namespace DeUrgenta.Backpack.Api.CommandHandlers
 
             var backpackToUser = await _context
                 .BackpacksToUsers
-                .FirstAsync(btu => btu.User.Id == request.UserId && btu.Backpack.Id == request.BackpackId, cancellationToken);
+                .FirstAsync(btu => btu.User.Id == request.UserId && btu.Backpack.Id == request.BackpackId, ct);
             _context.BackpacksToUsers.Remove(backpackToUser);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(ct);
 
             return Unit.Value;
         }

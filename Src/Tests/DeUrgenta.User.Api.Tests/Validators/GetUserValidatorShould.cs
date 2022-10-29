@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
@@ -31,7 +32,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             var sut = new GetUserValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new GetUser(sub));
+            var result = await sut.IsValidAsync(new GetUser(sub), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -50,7 +51,7 @@ namespace DeUrgenta.User.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new GetUser(userSub));
+            var result = await sut.IsValidAsync(new GetUser(userSub), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

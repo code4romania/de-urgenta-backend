@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
@@ -32,7 +33,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetGroupMembersValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new GetGroupMembers(sub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new GetGroupMembers(sub, Guid.NewGuid()), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -50,7 +51,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetGroupMembersValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new GetGroupMembers(userSub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new GetGroupMembers(userSub, Guid.NewGuid()), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -73,7 +74,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetGroupMembersValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new GetGroupMembers(userSub, group.Id));
+            var result = await sut.IsValidAsync(new GetGroupMembers(userSub, group.Id), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -102,7 +103,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetGroupMembersValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new GetGroupMembers(userSub, group.Id));
+            var result = await sut.IsValidAsync(new GetGroupMembers(userSub, group.Id), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();
@@ -128,7 +129,7 @@ namespace DeUrgenta.Group.Api.Tests.Validators
             var sut = new GetGroupMembersValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new GetGroupMembers(userSub, group.Id));
+            var result = await sut.IsValidAsync(new GetGroupMembers(userSub, group.Id), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
@@ -16,9 +17,11 @@ namespace DeUrgenta.User.Api.Validators
             _context = context;
         }
 
-        public async Task<ValidationResult> IsValidAsync(UpdateLocation request)
+        public async Task<ValidationResult> IsValidAsync(UpdateLocation request, CancellationToken ct)
         {
-            var locationExists = await _context.Users.AnyAsync(u => u.Sub == request.UserSub && u.Locations.Any(l => l.Id == request.LocationId));
+            var locationExists = await _context.Users.AnyAsync(u => u.Sub == request.UserSub
+                                                                    && u.Locations.Any(l => l.Id == request.LocationId),
+                ct);
 
             return locationExists ? ValidationResult.Ok : ValidationResult.GenericValidationError;
         }

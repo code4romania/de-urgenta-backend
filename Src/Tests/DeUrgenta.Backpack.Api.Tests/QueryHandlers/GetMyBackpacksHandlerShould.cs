@@ -35,7 +35,7 @@ namespace DeUrgenta.Backpack.Api.Tests.QueryHandlers
             // Arrange
             var validator = Substitute.For<IValidateRequest<GetMyBackpacks>>();
             validator
-                .IsValidAsync(Arg.Any<GetMyBackpacks>())
+                .IsValidAsync(Arg.Any<GetMyBackpacks>(), CancellationToken.None)
                 .Returns(Task.FromResult(ValidationResult.GenericValidationError));
 
             var sut = new GetMyBackpacksHandler(validator, _dbContext, _config);

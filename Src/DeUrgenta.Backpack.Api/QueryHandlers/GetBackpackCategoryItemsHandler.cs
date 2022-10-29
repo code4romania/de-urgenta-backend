@@ -22,9 +22,10 @@ namespace DeUrgenta.Backpack.Api.QueryHandlers
             _validator = validator;
             _context = context;
         }
-        public async Task<Result<IImmutableList<BackpackItemModel>, ValidationResult>> Handle(GetBackpackCategoryItems request, CancellationToken cancellationToken)
+        
+        public async Task<Result<IImmutableList<BackpackItemModel>, ValidationResult>> Handle(GetBackpackCategoryItems request, CancellationToken ct)
         {
-            var validationResult = await _validator.IsValidAsync(request);
+            var validationResult = await _validator.IsValidAsync(request, ct);
             if (validationResult.IsFailure)
             {
                 return validationResult;
@@ -41,7 +42,7 @@ namespace DeUrgenta.Backpack.Api.QueryHandlers
                     Category = item.Category,
                     ExpirationDate = item.ExpirationDate
                 })
-                .ToListAsync(cancellationToken);
+                .ToListAsync(ct);
 
             return backpackItems.ToImmutableList();
         }

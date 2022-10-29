@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Backpack.Api.Validators;
@@ -34,7 +35,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new DeleteBackpackValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new DeleteBackpack(sub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new DeleteBackpack(sub, Guid.NewGuid()), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -52,7 +53,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new DeleteBackpackValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new DeleteBackpack(userSub, Guid.NewGuid()));
+            var result = await sut.IsValidAsync(new DeleteBackpack(userSub, Guid.NewGuid()), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -83,7 +84,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new DeleteBackpackValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new DeleteBackpack(userSub, backpack.Id));
+            var result = await sut.IsValidAsync(new DeleteBackpack(userSub, backpack.Id), CancellationToken.None);
 
             // Assert
             result
@@ -116,7 +117,7 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new DeleteBackpack(userSub, backpack.Id));
+            var result = await sut.IsValidAsync(new DeleteBackpack(userSub, backpack.Id), CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

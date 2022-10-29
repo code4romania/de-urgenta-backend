@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Backpack.Api.Commands;
 using DeUrgenta.Backpack.Api.Models;
@@ -33,7 +34,8 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             var sut = new UpdateBackpackValidator(_dbContext);
 
             // Act
-            var result = await sut.IsValidAsync(new UpdateBackpack(sub, Guid.NewGuid(), new BackpackModelRequest()));
+            var result = await sut.IsValidAsync(new UpdateBackpack(sub, Guid.NewGuid(), new BackpackModelRequest()),
+                CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -52,7 +54,8 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new UpdateBackpack(userSub, Guid.NewGuid(), new BackpackModelRequest()));
+            var result = await sut.IsValidAsync(new UpdateBackpack(userSub, Guid.NewGuid(), new BackpackModelRequest()),
+                CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -85,7 +88,8 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new UpdateBackpack(backpackContributorSub, Guid.NewGuid(), new BackpackModelRequest()));
+            var result = await sut.IsValidAsync(new UpdateBackpack(backpackContributorSub, Guid.NewGuid(), new BackpackModelRequest())
+            , CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<GenericValidationError>();
@@ -114,7 +118,8 @@ namespace DeUrgenta.Backpack.Api.Tests.Validators
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var result = await sut.IsValidAsync(new UpdateBackpack(userSub, backpack.Id, new BackpackModelRequest()));
+            var result = await sut.IsValidAsync(new UpdateBackpack(userSub, backpack.Id, new BackpackModelRequest()), 
+                CancellationToken.None);
 
             // Assert
             result.Should().BeOfType<ValidationPassed>();

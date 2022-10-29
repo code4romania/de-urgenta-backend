@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using DeUrgenta.Common.Validation;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Invite.Api.Commands;
@@ -19,25 +20,25 @@ namespace DeUrgenta.Invite.Api.Validators
             _config = config.Value;
         }
 
-        public async Task<ValidationResult> IsValidAsync(AcceptBackpackInvite request)
+        public async Task<ValidationResult> IsValidAsync(AcceptBackpackInvite request, CancellationToken ct)
         {
-            var backpack = await _context.Backpacks.FirstOrDefaultAsync(b => b.Id == request.BackpackId);
+            var backpack = await _context.Backpacks.FirstOrDefaultAsync(b => b.Id == request.BackpackId, ct);
             if (backpack == null)
             {
                 return ValidationResult.GenericValidationError;
             }
 
-            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub);
+            var user = await _context.Users.FirstAsync(u => u.Sub == request.UserSub, ct);
 
             var userIsAlreadyAContributor = await _context.BackpacksToUsers
-                .AnyAsync(u => u.UserId == user.Id && u.BackpackId == request.BackpackId);
+                .AnyAsync(u => u.UserId == user.Id && u.BackpackId == request.BackpackId, ct);
 
             if (userIsAlreadyAContributor)
             {
                 return new LocalizableValidationError("cannot-accept-invite", "already-backpack-contributor");
             }
 
-            var existingContributors = await _context.BackpacksToUsers.CountAsync(b => b.BackpackId == request.BackpackId);
+            var existingContributors = await _context.BackpacksToUsers.CountAsync(b => b.BackpackId == request.BackpackId, ct);
             if (existingContributors >= _config.MaxContributors)
             {
                 return new LocalizableValidationError("cannot-accept-invite", "max-backpack-contributors-reached");
