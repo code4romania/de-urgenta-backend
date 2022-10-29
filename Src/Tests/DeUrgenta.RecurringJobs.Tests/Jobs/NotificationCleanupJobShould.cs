@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Domain.RecurringJobs;
 using DeUrgenta.Domain.RecurringJobs.Entities;
@@ -28,13 +29,13 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithStatus(NotificationStatus.Sent)
                 .Build();
 
-            await _jobsContext.Notifications.AddAsync(notification);
+            _jobsContext.Notifications.Add(notification);
             await _jobsContext.SaveChangesAsync();
 
             var sut = new NotificationCleanupJob(_jobsContext);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             var deletedNotification = _jobsContext.Notifications.FirstOrDefault(n => n.Id == notification.Id);
@@ -52,13 +53,13 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithStatus(status)
                 .Build();
 
-            await _jobsContext.Notifications.AddAsync(notification);
+            _jobsContext.Notifications.Add(notification);
             await _jobsContext.SaveChangesAsync();
 
             var sut = new NotificationCleanupJob(_jobsContext);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             var deletedNotification = _jobsContext.Notifications.FirstOrDefault(n => n.Id == notification.Id);

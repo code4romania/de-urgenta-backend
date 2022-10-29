@@ -1,8 +1,8 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Domain.Api.Entities;
-using DeUrgenta.Domain.RecurringJobs;
 using DeUrgenta.RecurringJobs.Jobs;
 using DeUrgenta.RecurringJobs.Jobs.Config;
 using DeUrgenta.Tests.Helpers;
@@ -29,7 +29,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
         {
             //Arrange
             var eventType = new EventType { Name = "TestType" };
-            eventType = _context.EventTypes.AddAsync(eventType).Result.Entity;
+            eventType = _context.EventTypes.Add(eventType).Entity;
             await _context.SaveChangesAsync();
 
             var eventEntity = new EventBuilder()
@@ -37,7 +37,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithDate(DateTime.UnixEpoch)
                 .Build();
 
-            await _context.Events.AddAsync(eventEntity);
+            _context.Events.Add(eventEntity);
             await _context.SaveChangesAsync();
 
             var jobConfig = Substitute.For<IOptionsMonitor<EventArchivalJobConfig>>();
@@ -46,7 +46,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             var sut = new EventArchivalJob(_context);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
 
@@ -58,7 +58,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
         {
             //Arrange
             var eventType = new EventType { Name = "TestType" };
-            eventType = _context.EventTypes.AddAsync(eventType).Result.Entity;
+            eventType = _context.EventTypes.Add(eventType).Entity;
             await _context.SaveChangesAsync();
 
             var eventEntity = new EventBuilder()
@@ -66,7 +66,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithDate(DateTime.Today.AddDays(1))
                 .Build();
 
-            await _context.Events.AddAsync(eventEntity);
+            _context.Events.Add(eventEntity);
             await _context.SaveChangesAsync();
 
             var jobConfig = Substitute.For<IOptionsMonitor<EventArchivalJobConfig>>();
@@ -75,7 +75,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             var sut = new EventArchivalJob(_context);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             eventEntity.IsArchived.Should().BeFalse();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Domain.RecurringJobs;
@@ -42,8 +43,8 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithExpirationDate(DateTime.Today.AddDays(daysAfterCurrentDate))
                 .Build();
 
-            await _context.Users.AddAsync(user);
-            await _context.Certifications.AddAsync(certification);
+            _context.Users.Add(user);
+            _context.Certifications.Add(certification);
             await _context.SaveChangesAsync();
 
             var jobConfig = Substitute.For<IOptionsMonitor<ExpiredCertificationJobConfig>>();
@@ -55,7 +56,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             var sut = new ExpiredCertificationJob(_context, _jobsContext, jobConfig);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             var notificationsAdded = _jobsContext.Notifications.Where(n => n.UserId == userId).ToList();
@@ -94,8 +95,8 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithExpirationDate(DateTime.Today.AddDays(11))
                 .Build();
 
-            await _context.Users.AddAsync(user);
-            await _context.Certifications.AddAsync(certification);
+            _context.Users.Add(user);
+            _context.Certifications.Add(certification);
             await _context.SaveChangesAsync();
 
             var jobConfig = Substitute.For<IOptionsMonitor<ExpiredCertificationJobConfig>>();
@@ -107,7 +108,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             var sut = new ExpiredCertificationJob(_context, _jobsContext, jobConfig);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             var notificationsAdded = _jobsContext.Notifications.Where(n => n.UserId == userId).ToList();
@@ -125,8 +126,8 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithExpirationDate(DateTime.Today.AddDays(-11))
                 .Build();
 
-            await _context.Users.AddAsync(user);
-            await _context.Certifications.AddAsync(certification);
+            _context.Users.Add(user);
+            _context.Certifications.Add(certification);
             await _context.SaveChangesAsync();
 
             var jobConfig = Substitute.For<IOptionsMonitor<ExpiredCertificationJobConfig>>();
@@ -138,7 +139,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             var sut = new ExpiredCertificationJob(_context, _jobsContext, jobConfig);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             var notificationsAdded = _jobsContext.Notifications.Where(n => n.UserId == userId).ToList();
@@ -157,8 +158,8 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithExpirationDate(DateTime.Today.AddDays(8))
                 .Build();
 
-            await _context.Users.AddAsync(user);
-            await _context.Certifications.AddAsync(certification);
+            _context.Users.Add(user);
+            _context.Certifications.Add(certification);
 
             var notification = new NotificationBuilder()
                 .WithScheduledDate(DateTime.Today.AddDays(1))
@@ -167,7 +168,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithStatus(NotificationStatus.NotSent)
                 .Build();
 
-            await _jobsContext.AddAsync(notification);
+            _jobsContext.Add(notification);
 
             await _context.SaveChangesAsync();
             await _jobsContext.SaveChangesAsync();
@@ -181,7 +182,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             var sut = new ExpiredCertificationJob(_context, _jobsContext, jobConfig);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             var notificationsAdded = _jobsContext.Notifications
@@ -201,8 +202,8 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithExpirationDate(DateTime.Today.AddDays(8))
                 .Build();
 
-            await _context.Users.AddAsync(user);
-            await _context.Certifications.AddAsync(certification);
+            _context.Users.Add(user);
+            _context.Certifications.Add(certification);
 
             var notification = new NotificationBuilder()
                 .WithScheduledDate(DateTime.Today.AddDays(1))
@@ -210,7 +211,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithCertificationId(Guid.NewGuid())
                 .Build();
 
-            await _jobsContext.AddAsync(notification);
+            _jobsContext.Add(notification);
 
             await _context.SaveChangesAsync();
             await _jobsContext.SaveChangesAsync();
@@ -224,7 +225,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             var sut = new ExpiredCertificationJob(_context, _jobsContext, jobConfig);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             var notificationsAdded = _jobsContext.Notifications
@@ -266,8 +267,8 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithExpirationDate(DateTime.Today.AddDays(8))
                 .Build();
 
-            await _context.Users.AddAsync(user);
-            await _context.Certifications.AddAsync(certification);
+            _context.Users.Add(user);
+            _context.Certifications.Add(certification);
 
             var notification = new NotificationBuilder()
                 .WithScheduledDate(DateTime.Today.AddDays(-1))
@@ -276,7 +277,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithStatus(status)
                 .Build();
 
-            await _jobsContext.AddAsync(notification);
+            _jobsContext.Add(notification);
 
             await _context.SaveChangesAsync();
             await _jobsContext.SaveChangesAsync();
@@ -290,7 +291,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             var sut = new ExpiredCertificationJob(_context, _jobsContext, jobConfig);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             var notificationsAdded = _jobsContext.Notifications

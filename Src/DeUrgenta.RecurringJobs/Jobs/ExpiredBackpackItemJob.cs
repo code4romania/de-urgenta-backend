@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Domain.Api.Entities;
@@ -14,10 +15,10 @@ namespace DeUrgenta.RecurringJobs.Jobs
 {
     public class ExpiredBackpackItemJob : IExpiredBackpackItemJob
     {
-        private DeUrgentaContext _context;
-        private JobsContext _jobsContext;
+        private readonly DeUrgentaContext _context;
+        private readonly JobsContext _jobsContext;
 
-        private ExpiredBackpackItemJobConfig _config;
+        private readonly ExpiredBackpackItemJobConfig _config;
 
         public ExpiredBackpackItemJob(DeUrgentaContext context, JobsContext jobsContext, IOptions<ExpiredBackpackItemJobConfig> config)
         {
@@ -26,13 +27,13 @@ namespace DeUrgenta.RecurringJobs.Jobs
             _config = config.Value;
         }
 
-        public async Task RunAsync()
+        public async Task RunAsync(CancellationToken cancellationToken)
         {
             var expiredItems = await _context.BackpackItems
                 .Where(b => b.ExpirationDate != null
                     && (b.ExpirationDate.Value - DateTime.Today).Days <= _config.DaysBeforeExpirationDate
                     && b.ExpirationDate.Value >= DateTime.Today)
-                .ToListAsync();
+                .ToListAsync(cancellationToken: cancellationToken);
 
             foreach (var expiringItem in expiredItems)
             {
@@ -40,7 +41,7 @@ namespace DeUrgenta.RecurringJobs.Jobs
                     .Where(n => n.ItemDetails.ItemId == expiringItem.Id
                                 && n.ScheduledDate >= DateTime.Today)
                     .Select(n => n.ItemDetails.ItemId)
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken: cancellationToken);
 
                 if (scheduledNotifications.Count != 0)
                 {
@@ -52,8 +53,7 @@ namespace DeUrgenta.RecurringJobs.Jobs
                         bi => bi.BackpackId,
                         bu => bu.BackpackId,
                         (bi, bu) => new { bu.UserId, bi.Id })
-                    .FirstOrDefaultAsync(b => b.Id == expiringItem.Id);
-
+                    .FirstOrDefaultAsync(b => b.Id == expiringItem.Id, cancellationToken: cancellationToken);
 
                 var computedNotificationDate = expiringItem.ExpirationDate.Value.AddDays(-_config.DaysBeforeExpirationDate);
                 var preExpirationNotification = new Notification
@@ -73,9 +73,9 @@ namespace DeUrgenta.RecurringJobs.Jobs
                     Status = NotificationStatus.NotSent
                 };
 
-                await _jobsContext.AddAsync(preExpirationNotification);
-                await _jobsContext.AddAsync(expirationDayNotification);
-                await _jobsContext.SaveChangesAsync();
+                _jobsContext.Add(preExpirationNotification);
+                _jobsContext.Add(expirationDayNotification);
+                await _jobsContext.SaveChangesAsync(cancellationToken);
             }
         }
 

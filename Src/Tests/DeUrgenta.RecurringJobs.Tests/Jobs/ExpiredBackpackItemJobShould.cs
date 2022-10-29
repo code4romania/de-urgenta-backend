@@ -15,6 +15,7 @@ using DeUrgenta.Tests.Helpers.Builders;
 using FluentAssertions;
 using DeUrgenta.RecurringJobs.Jobs;
 using DeUrgenta.RecurringJobs.Jobs.Config;
+using System.Threading;
 
 namespace DeUrgenta.RecurringJobs.Tests.Jobs
 {
@@ -38,17 +39,17 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             //Arrange
             var userId = Guid.NewGuid();
             var user = new UserBuilder().WithId(userId).Build();
-            await _context.Users.AddAsync(user);
+            _context.Users.Add(user);
 
             var backpackItem = new BackpackItemBuilder()
                 .WithExpirationDate(DateTime.Today.AddDays(daysAfterCurrentDate))
                 .WithCategory(BackpackItemCategoryType.WaterAndFood)
                 .Build();
 
-            await _context.BackpackItems.AddAsync(backpackItem);
+            _context.BackpackItems.Add(backpackItem);
 
             var backpackToUser = new BackpackToUserBuilder().WithUser(user).WithBackpack(backpackItem.Backpack).Build();
-            await _context.BackpacksToUsers.AddAsync(backpackToUser);
+            _context.BackpacksToUsers.Add(backpackToUser);
 
             await _context.SaveChangesAsync();
 
@@ -60,7 +61,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             var sut = new ExpiredBackpackItemJob(_context, _jobsContext, jobConfig);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             var notificationsAdded = _jobsContext.Notifications.Where(n => n.UserId == userId).ToList();
@@ -94,15 +95,15 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             //Arrange
             var userId = Guid.NewGuid();
             var user = new UserBuilder().WithId(userId).Build();
-            await _context.Users.AddAsync(user);
+            _context.Users.Add(user);
 
             var backpackItem = new BackpackItemBuilder()
                 .WithExpirationDate(DateTime.Today.AddDays(11))
                 .Build();
-            await _context.BackpackItems.AddAsync(backpackItem);
+            _context.BackpackItems.Add(backpackItem);
 
             var backpackToUser = new BackpackToUserBuilder().WithUser(user).WithBackpack(backpackItem.Backpack).Build();
-            await _context.BackpacksToUsers.AddAsync(backpackToUser);
+            _context.BackpacksToUsers.Add(backpackToUser);
 
             await _context.SaveChangesAsync();
 
@@ -114,7 +115,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             var sut = new ExpiredBackpackItemJob(_context, _jobsContext, jobConfig);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             var notificationsAdded = _jobsContext.Notifications.Where(n => n.UserId == userId).ToList();
@@ -127,15 +128,15 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             //Arrange
             var userId = Guid.NewGuid();
             var user = new UserBuilder().WithId(userId).Build();
-            await _context.Users.AddAsync(user);
+            _context.Users.Add(user);
 
             var backpackItem = new BackpackItemBuilder()
                 .WithExpirationDate(DateTime.Today.AddDays(11))
                 .Build();
-            await _context.BackpackItems.AddAsync(backpackItem);
+            _context.BackpackItems.Add(backpackItem);
 
             var backpackToUser = new BackpackToUserBuilder().WithUser(user).WithBackpack(backpackItem.Backpack).Build();
-            await _context.BackpacksToUsers.AddAsync(backpackToUser);
+            _context.BackpacksToUsers.Add(backpackToUser);
 
             await _context.SaveChangesAsync();
 
@@ -148,7 +149,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             var sut = new ExpiredBackpackItemJob(_context, _jobsContext, jobConfig);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             var notificationsAdded = _jobsContext.Notifications.Where(n => n.UserId == userId).ToList();
@@ -161,15 +162,15 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             //Arrange
             var userId = Guid.NewGuid();
             var user = new UserBuilder().WithId(userId).Build();
-            await _context.Users.AddAsync(user);
+            _context.Users.Add(user);
 
             var backpackItem = new BackpackItemBuilder()
                 .WithExpirationDate(DateTime.Today.AddDays(8))
                 .Build();
-            await _context.BackpackItems.AddAsync(backpackItem);
+            _context.BackpackItems.Add(backpackItem);
 
             var backpackToUser = new BackpackToUserBuilder().WithUser(user).WithBackpack(backpackItem.Backpack).Build();
-            await _context.BackpacksToUsers.AddAsync(backpackToUser);
+            _context.BackpacksToUsers.Add(backpackToUser);
 
             var notification = new NotificationBuilder()
                 .WithScheduledDate(DateTime.Today.AddDays(1))
@@ -178,7 +179,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithStatus(NotificationStatus.NotSent)
                 .Build();
 
-            await _jobsContext.AddAsync(notification);
+            _jobsContext.Add(notification);
 
             await _context.SaveChangesAsync();
             await _jobsContext.SaveChangesAsync();
@@ -191,7 +192,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             var sut = new ExpiredBackpackItemJob(_context, _jobsContext, jobConfig);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             var notificationsAdded = _jobsContext.Notifications
@@ -206,15 +207,15 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             //Arrange
             var userId = Guid.NewGuid();
             var user = new UserBuilder().WithId(userId).Build();
-            await _context.Users.AddAsync(user);
+            _context.Users.Add(user);
 
             var backpackItem = new BackpackItemBuilder()
                 .WithExpirationDate(null)
                 .Build();
-            await _context.BackpackItems.AddAsync(backpackItem);
+            _context.BackpackItems.Add(backpackItem);
 
             var backpackToUser = new BackpackToUserBuilder().WithUser(user).WithBackpack(backpackItem.Backpack).Build();
-            await _context.BackpacksToUsers.AddAsync(backpackToUser);
+            _context.BackpacksToUsers.Add(backpackToUser);
 
             await _context.SaveChangesAsync();
 
@@ -226,7 +227,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             var sut = new ExpiredBackpackItemJob(_context, _jobsContext, jobConfig);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             var notificationsAdded = _jobsContext.Notifications.Where(n => n.UserId == userId).ToList();
@@ -239,15 +240,15 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             //Arrange
             var userId = Guid.NewGuid();
             var user = new UserBuilder().WithId(userId).Build();
-            await _context.Users.AddAsync(user);
+            _context.Users.Add(user);
 
             var backpackItem = new BackpackItemBuilder()
                 .WithExpirationDate(DateTime.Today.AddDays(8))
                 .Build();
-            await _context.BackpackItems.AddAsync(backpackItem);
+            _context.BackpackItems.Add(backpackItem);
 
             var backpackToUser = new BackpackToUserBuilder().WithUser(user).WithBackpack(backpackItem.Backpack).Build();
-            await _context.BackpacksToUsers.AddAsync(backpackToUser);
+            _context.BackpacksToUsers.Add(backpackToUser);
 
             var notification = new NotificationBuilder()
                 .WithScheduledDate(DateTime.Today.AddDays(1))
@@ -255,7 +256,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithItemId(Guid.NewGuid())
                 .Build();
 
-            await _jobsContext.AddAsync(notification);
+            _jobsContext.Add(notification);
 
             await _context.SaveChangesAsync();
             await _jobsContext.SaveChangesAsync();
@@ -268,7 +269,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             var sut = new ExpiredBackpackItemJob(_context, _jobsContext, jobConfig);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             var notificationsAdded = _jobsContext.Notifications
@@ -305,15 +306,15 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             //Arrange
             var userId = Guid.NewGuid();
             var user = new UserBuilder().WithId(userId).Build();
-            await _context.Users.AddAsync(user);
+            _context.Users.Add(user);
 
             var backpackItem = new BackpackItemBuilder()
                 .WithExpirationDate(DateTime.Today.AddDays(8))
                 .Build();
-            await _context.BackpackItems.AddAsync(backpackItem);
+            _context.BackpackItems.Add(backpackItem);
 
             var backpackToUser = new BackpackToUserBuilder().WithUser(user).WithBackpack(backpackItem.Backpack).Build();
-            await _context.BackpacksToUsers.AddAsync(backpackToUser);
+            _context.BackpacksToUsers.Add(backpackToUser);
 
             var notification = new NotificationBuilder()
                 .WithScheduledDate(DateTime.Today.AddDays(-1))
@@ -322,7 +323,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                 .WithStatus(status)
                 .Build();
 
-            await _jobsContext.AddAsync(notification);
+            _jobsContext.Add(notification);
 
             await _context.SaveChangesAsync();
             await _jobsContext.SaveChangesAsync();
@@ -335,7 +336,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             var sut = new ExpiredBackpackItemJob(_context, _jobsContext, jobConfig);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             var notificationsAdded = _jobsContext.Notifications
@@ -350,7 +351,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
                     Type = NotificationType.BackpackFirstAid,
                     ScheduledDate = DateTime.Today
                 },
-                new()
+                new() 
                 {
                     ItemDetails = new ItemDetails{ ItemId = backpackItem.Id },
                     UserId = userId,
@@ -375,16 +376,16 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             //Arrange
             var userId = Guid.NewGuid();
             var user = new UserBuilder().WithId(userId).Build();
-            await _context.Users.AddAsync(user);
+            _context.Users.Add(user);
 
             var backpackItem = new BackpackItemBuilder()
                 .WithExpirationDate(DateTime.Today.AddDays(8))
                 .WithCategory(backpackCategoryType)
                 .Build();
-            await _context.BackpackItems.AddAsync(backpackItem);
+            _context.BackpackItems.Add(backpackItem);
 
             var backpackToUser = new BackpackToUserBuilder().WithUser(user).WithBackpack(backpackItem.Backpack).Build();
-            await _context.BackpacksToUsers.AddAsync(backpackToUser);
+            _context.BackpacksToUsers.Add(backpackToUser);
 
             await _context.SaveChangesAsync();
             await _jobsContext.SaveChangesAsync();
@@ -397,7 +398,7 @@ namespace DeUrgenta.RecurringJobs.Tests.Jobs
             var sut = new ExpiredBackpackItemJob(_context, _jobsContext, jobConfig);
 
             //Act
-            await sut.RunAsync();
+            await sut.RunAsync(CancellationToken.None);
 
             //Assert
             var notificationsAdded = _jobsContext.Notifications.Where(n => n.UserId == userId).ToList();

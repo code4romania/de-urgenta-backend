@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using DeUrgenta.Domain.Api;
 using DeUrgenta.Domain.RecurringJobs;
@@ -25,12 +26,12 @@ namespace DeUrgenta.RecurringJobs.Jobs
             _config = config.CurrentValue;
         }
 
-        public async Task RunAsync()
+        public async Task RunAsync(CancellationToken cancellationToken)
         {
             var expiringCertifications = await _context.Certifications
                 .Where(c => (c.ExpirationDate - DateTime.Today).Days <= _config.DaysBeforeExpirationDate
                                     && c.ExpirationDate >= DateTime.Today)
-                .ToListAsync();
+                .ToListAsync(cancellationToken: cancellationToken);
 
             foreach (var expiringCertification in expiringCertifications)
             {
@@ -38,7 +39,7 @@ namespace DeUrgenta.RecurringJobs.Jobs
                     .Where(n => n.CertificationDetails.CertificationId == expiringCertification.Id
                                         && n.ScheduledDate >= DateTime.Today)
                     .Select(n => n.CertificationDetails.CertificationId)
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken: cancellationToken);
 
                 if (scheduledNotifications.Count != 0)
                 {
@@ -63,9 +64,9 @@ namespace DeUrgenta.RecurringJobs.Jobs
                     Status = NotificationStatus.NotSent
                 };
 
-                await _jobsContext.AddAsync(preExpirationNotification);
-                await _jobsContext.AddAsync(expirationDayNotification);
-                await _jobsContext.SaveChangesAsync();
+                _jobsContext.Add(preExpirationNotification);
+                _jobsContext.Add(expirationDayNotification);
+                await _jobsContext.SaveChangesAsync(cancellationToken);
             }
         }
     }
