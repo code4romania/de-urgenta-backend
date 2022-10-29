@@ -40,7 +40,6 @@ namespace DeUrgenta.Certifications.Api
             }
             else
             {
-                //services.AddDefaultAWSOptions(configuration.GetAWSOptions());
                 services.AddSingleton<IAmazonS3>(p =>
                 {
                     var config = new AmazonS3Config
