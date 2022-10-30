@@ -1,4 +1,5 @@
-﻿using DeUrgenta.Common.Auth;
+﻿using System;
+using DeUrgenta.Common.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,7 @@ namespace DeUrgenta.Domain.Identity
         public UserDbContext(DbContextOptions<UserDbContext> options)
             : base(options)
         {
-
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

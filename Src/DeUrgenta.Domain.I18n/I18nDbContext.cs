@@ -1,4 +1,5 @@
-﻿using DeUrgenta.Domain.I18n.Configuration;
+﻿using System;
+using DeUrgenta.Domain.I18n.Configuration;
 using DeUrgenta.Domain.I18n.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,7 @@ namespace DeUrgenta.Domain.I18n
 
         public I18nDbContext(DbContextOptions<I18nDbContext> options) : base(options)
         {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
