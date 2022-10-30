@@ -1,3 +1,4 @@
+using System;
 using DeUrgenta.Domain.Api.Configurations;
 using DeUrgenta.Domain.Api.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ namespace DeUrgenta.Domain.Api
     {
         public DeUrgentaContext(DbContextOptions<DeUrgentaContext> options) : base(options)
         {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
         public DbSet<Backpack> Backpacks { get; set; }
