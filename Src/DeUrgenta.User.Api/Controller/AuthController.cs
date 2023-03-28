@@ -14,6 +14,7 @@ using DeUrgenta.User.Api.Queries;
 using DeUrgenta.User.Api.Services;
 using DeUrgenta.User.Api.Swagger.Auth;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -259,6 +260,24 @@ namespace DeUrgenta.User.Api.Controller
 
             return Ok();
 
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("refresh-token")]
+        public async Task<IActionResult> RequestRefreshJwtToken() {
+
+            var userEmail = User.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
+            var user = await _userManager.FindByEmailAsync(userEmail);
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+            var newJwtToken = _jwtService.GenerateJwtToken(user, userRoles);
+
+            return Ok(new {
+                Email = userEmail,
+                Token = newJwtToken,
+                Success = true
+            });
         }
     }
 }
